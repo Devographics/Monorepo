@@ -104,7 +104,7 @@ const Button = styled.button.attrs(
                     pointer-events: none;
                     border-style: solid;
                     .secondary-bg & {
-                        background: ${color('backgroundAlt3')};
+                        background: ${color('backgroundAlt2')};
                     }
                 }
             `

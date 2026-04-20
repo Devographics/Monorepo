@@ -13,6 +13,7 @@ export const FilterSearch = ({ stateStuff }: { stateStuff: FreeformAnswersState 
             }}
         >
             <input
+                className="filter-search-input"
                 type="text"
                 value={searchFilter || ''}
                 onChange={e => {

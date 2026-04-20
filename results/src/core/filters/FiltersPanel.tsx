@@ -400,7 +400,7 @@ export const TabsTrigger_ = styled(Tabs.Trigger)`
     }
     &[data-state='inactive'] {
         opacity: 0.6;
-        background: var(--backgroundAlt3Color);
+        background: var(--backgroundAlt2Color);
     }
 `
 

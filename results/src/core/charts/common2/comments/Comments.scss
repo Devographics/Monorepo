@@ -179,7 +179,7 @@
     font-size: 0.85rem;
     border-radius: 50px;
     border: none;
-    background: var(--backgroundAlt3Color);
+    background: var(--backgroundAlt2Color);
     text-align: left;
     border: 2px solid transparent;
     text-shadow: 1px 1px #00000099;
@@ -238,7 +238,7 @@
     font-size: 0.7rem;
     border-radius: 30px;
     padding: 2px 8px;
-    background: var(--color, var(--backgroundAlt3Color));
+    background: var(--color, var(--backgroundAlt2Color));
     // background: var(--color);
     text-shadow: 1px 1px #000000bb;
     font-weight: bold;
@@ -269,21 +269,24 @@
 }
 .filter-section-experience {
     .comment-filter-item-used {
-        background-color: #129dc0;
+        background-color: var(--experienceUsedColor);
     }
     .comment-filter-item-heard {
-        background-color: #aeefff;
+        background-color: var(--experienceHeardColor);
     }
     .comment-filter-item-never_heard {
-        background-color: #8b8085;
+        background-color: var(--experienceNeverHeardColor);
     }
 }
 .filter-section-sentiment {
     .comment-filter-item-positive {
-        background-color: #5ce593;
+        background-color: var(--sentimentPositiveColor);
     }
     .comment-filter-item-negative {
-        background-color: #e45959;
+        background-color: var(--sentimentNegativeColor);
+    }
+    .comment-filter-item-neutral {
+        background-color: var(--sentimentNeutralColor);
     }
 }
 .token-items {
