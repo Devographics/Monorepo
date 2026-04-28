@@ -101,12 +101,16 @@ export const getAppName = (appName: AppName) => {
     return appNameGlobal
 }
 
-const getValue = (variable: EnvVariable, defaultValues: DefaultConfigValues = {}) => {
+// set by current app globally in code
+const globalDefaultValues: DefaultConfigValues = {}
+
+const getValue = (variable: EnvVariable, localDefaultValues: DefaultConfigValues = {}) => {
     const { id, aliases } = variable
     // For Next.js public variables build,
     // we CAN'T move process.env to a variable like const env = process.env,
     // because Next rely on build-time injection when detecting process.env[something] explicitely
-    const value = defaultValues[id] || process.env[id] || envMapGlobal[id]
+    const value =
+        globalDefaultValues[id] || localDefaultValues[id] || process.env[id] || envMapGlobal[id]
     if (value) {
         return { id, value }
     } else if (aliases) {
@@ -181,6 +185,10 @@ type GetEnvVarOptions = {
 }
 
 export const getEnvVarMetadata = (id: EnvVar) => getVariables().find(v => v.id === id)
+
+export const setEnvVar = (id: EnvVar, value: string | number | boolean) => {
+    globalDefaultValues[id] = value
+}
 
 export const getEnvVar = (id: EnvVar, options: GetEnvVarOptions = {}) => {
     const { hardFail, calledFrom } = options

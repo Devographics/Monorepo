@@ -1,0 +1,31 @@
+type ColorTheme {
+    lightOnDark: ColorThemeVersion
+    darkOnLight: ColorThemeVersion
+}
+
+type ColorThemeVersion {
+    primary: StandardTheme
+    background: StandardTheme
+    text: StandardTheme
+    experience: ExperienceTheme
+    sentiment: SentimentTheme
+    scale: [String]
+}
+
+type StandardTheme {
+    default: String
+    alt: String
+    alt2: String
+}
+
+type ExperienceTheme {
+    heard: String
+    used: String
+    never_heard: String
+}
+
+type SentimentTheme {
+    positive: String
+    negative: String
+    neutral: String
+}

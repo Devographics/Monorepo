@@ -89,6 +89,7 @@ export async function addRatios(
             interest: roundRatio(interest),
             usage: roundRatio(usage),
             retention: roundRatio(retention),
+            satifaction: roundRatio(retention),
             positivity: roundRatio(positivity),
             positivityRelative: roundRatio(positivityRelative),
             appreciation: roundRatio(appreciation)

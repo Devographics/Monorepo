@@ -21,6 +21,7 @@ import { AppName } from '@devographics/types'
 import {
     EnvVar,
     getConfig,
+    setEnvVar,
     getEnvVar,
     parseEnvVariableArray,
     setAppName
@@ -43,6 +44,8 @@ import { getEntitiesLoadMethod, loadOrGetEntities } from './load/entities'
 import { getLocaleIds, getLocalesLoadMethod } from './load/locales/locales'
 import { getLikeHandler } from './routes/like'
 import { getLikesHandler } from './routes/likes'
+
+setEnvVar(EnvVar.APP_NAME, AppName.API)
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })

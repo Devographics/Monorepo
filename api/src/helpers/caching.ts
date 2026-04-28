@@ -47,7 +47,7 @@ export const computeKey = (funcOrFuncName: Function | string, funcOptions?: any)
         )
     }
 
-    return `${getEnvVar(EnvVar.APP_NAME)}__func_${name}(${serializedOptions})`
+    return `${getEnvVar(EnvVar.APP_NAME, { hardFail: true })}__func_${name}(${serializedOptions})`
 }
 
 /**

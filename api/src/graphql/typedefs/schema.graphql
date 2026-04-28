@@ -7,6 +7,7 @@
 #import "./features.graphql"
 #import "./comments.graphql"
 #import "./data_explorer.graphql"
+#import "./color_theme.graphql"
 
 scalar JSON
 scalar JSONObject
@@ -74,7 +75,10 @@ type EditionMetadata {
 
     tshirt: TshirtDefinition
 
+    # deprecated
     colors: Colors
+
+    colorTheme: ColorTheme
 
     enableReadingList: Boolean
     enableChartSponsorships: Boolean
@@ -429,6 +433,9 @@ type RatiosData {
 
     # used positive / used
     retention: Float
+    # switch back to satisfaction after all
+    # keep retention for backwards compability
+    satisfaction: Float
 
     # all positive / total
     positivity: Float
