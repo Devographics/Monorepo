@@ -15,7 +15,7 @@ export const Axis = ({
 }: {
     variant: 'top' | 'bottom'
     ticks: Tick[]
-    question: QuestionMetadata
+    question?: QuestionMetadata
     labelId?: string
     formatValue: FormatValueType
 }) => {

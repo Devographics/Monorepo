@@ -59,12 +59,12 @@ export const useTicks = (xScale: d3.ScaleLinear<number, number, never>) => {
 export const useBoxplotData = ({
     bucket,
     xScale,
-    yScale,
+    // yScale,
     isReversed = false
 }: {
     bucket: Bucket
     xScale: d3.ScaleLinear<number, number, never>
-    yScale: d3.ScaleBand<string>
+    // yScale: d3.ScaleBand<string>
     isReversed?: boolean
 }) => {
     if (!bucket.percentilesByFacet) {

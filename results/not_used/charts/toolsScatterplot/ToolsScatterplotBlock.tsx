@@ -1,5 +1,8 @@
 import './Scatterplot.scss'
 import React from 'react'
+import { ToolsScatterplotBlockData } from './types'
+import { useChartData } from './hooks'
+import ToolsQuadrantsChart from './ToolsScatterplotChart'
 import { AllToolsData, SectionMetadata, StandardQuestionData } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { useI18n } from '@devographics/react-i18n'
@@ -7,9 +10,10 @@ import { useTheme } from 'styled-components'
 import { DataSeries } from 'core/filters/types'
 import { ChartFooter, ChartWrapper, Legend, Note } from '../common2'
 import ChartShare from '../common2/ChartShare'
-import { ScatterplotChartState, useChartState } from './chartState'
+import { ScatterplotChartState, useChartState } from './v2/chartState'
 import { BlockComponentProps } from 'core/types'
-import { ScatterplotChart } from './ScatterplotChart'
+import { ScatterplotChart2 } from './v2/ScatterplotChart2'
+import { useChartValues } from './v2/chartValues'
 
 export const ToolsScatterplotBlock = ({
     block,
@@ -25,9 +29,13 @@ export const ToolsScatterplotBlock = ({
     const { getString } = useI18n()
     const theme = useTheme()
     const toolSections = useToolSections()
+    const metric = 'retention'
+    const chartData = useChartData(data, metric)
+    // const tabularData = useTabularData(data, metric)
 
     const chartState = useChartState()
 
+    const { highlighted, setHighlighted } = chartState
     const legendItems = toolSections.map((section: SectionMetadata) => ({
         id: section.id,
         label: getString(`sections.${section.id}.title`)?.t,
@@ -39,8 +47,15 @@ export const ToolsScatterplotBlock = ({
             <>
                 <Legend<ScatterplotChartState> items={legendItems} chartState={chartState} />
 
-                <ScatterplotChart chartState={chartState} data={data} />
+                <ScatterplotChart2 chartState={chartState} data={data} />
 
+                <ToolsQuadrantsChart
+                    className={`ToolsScatterplotChart `}
+                    data={chartData}
+                    metric={metric}
+                    currentCategory={highlighted}
+                    setCurrentCategory={setHighlighted}
+                />
                 <Note block={block} />
                 <ChartFooter
                     right={

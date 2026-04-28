@@ -25,7 +25,7 @@ export const AxisV = <ChartStateType,>({
 }: {
     variant: 'left' | 'right'
     ticks: Tick[]
-    question: QuestionMetadata
+    question?: QuestionMetadata
     labelId?: string
     formatValue: FormatValueType
     chartState: ChartStateType

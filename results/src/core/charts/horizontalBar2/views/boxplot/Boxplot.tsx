@@ -135,7 +135,7 @@ const BoxplotRow = (props: BoxplotRowProps) => {
     const theme = useTheme()
 
     const { view } = chartState
-    const boxData = useBoxplotData({ bucket, xScale, yScale, isReversed })
+    const boxData = useBoxplotData({ bucket, xScale, isReversed })
     if (!bucket.percentilesByFacet || !boxData) {
         return null
     }
