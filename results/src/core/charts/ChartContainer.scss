@@ -1,0 +1,81 @@
+@import '../../stylesheets/_breakpoints.scss';
+
+.chart-container-outer {
+    position: relative;
+}
+
+.chart-container {
+    svg {
+        display: block;
+    }
+
+    @include small-medium {
+        overflow-x: scroll;
+    }
+
+    .multiexp-row-chart & {
+        @include small-medium {
+            overflow-x: visible;
+        }
+    }
+}
+
+.chart-container-inner {
+    &.chart-container-inner-expand {
+        @include small {
+            min-width: 500px;
+        }
+        @include medium {
+            max-width: auto;
+            min-width: 800px;
+            padding-bottom: var(--spacing);
+        }
+    }
+}
+
+.chart-container-indicator {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+
+    svg {
+        display: block;
+        stroke: var(--linkColor);
+        opacity: 0.5;
+        overflow: visible;
+    }
+
+    &-left,
+    &-right {
+        top: 0;
+        bottom: 0;
+        width: 20px;
+    }
+    &-left {
+        left: 10px;
+    }
+    &-right {
+        right: 10px;
+        transform: rotate(180deg);
+    }
+    &-top,
+    &-bottom {
+        left: 0;
+        right: 0;
+        height: 20px;
+    }
+    &-top {
+        top: 10px;
+        transform: rotate(90deg);
+    }
+    &-bottom {
+        bottom: 10px;
+        transform: rotate(-90deg);
+    }
+
+    @include medium-large {
+        display: none;
+    }
+}

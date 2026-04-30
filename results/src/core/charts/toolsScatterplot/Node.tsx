@@ -1,8 +1,9 @@
 import React from 'react'
-import styled, { useTheme } from 'styled-components'
+import { useTheme } from 'styled-components'
 import { NodeData } from './types'
 import { ScatterplotChartState } from './chartState'
 import { crosshairConfig } from './Crosshair'
+import './Node.scss'
 
 type NodeProps = {
     chartState: ScatterplotChartState
@@ -47,14 +48,18 @@ export const Node = ({ chartState, node }: NodeProps) => {
         >
             <circle r={nodeCaptureRadius} fill="red" opacity={0} />
             <circle r={nodeRadius} fill={color} />
-            <LabelGroup
+            <g
+                className={`scatterplot-node-label scatterplot-node-label-${
+                    isCurrentItem ? 'hover' : ''
+                }`}
                 opacity={labelOpacity}
                 // transform={to(
                 //     [transition.labelOffset],
                 //     (labelOffset: number) => `translate(${12 + labelOffset},${1})`
                 // )}
             >
-                <LabelRect
+                <rect
+                    className="scatterplot-node-label-rect"
                     x={20}
                     y={crosshairConfig.labelHeight * -0.5}
                     width={label && label.length * 8 + 12}
@@ -64,32 +69,10 @@ export const Node = ({ chartState, node }: NodeProps) => {
                     ry={2}
                     opacity={labelBackgroundOpacity}
                 />
-                <LabelText
-                    x={26}
-                    $isHover={isCurrentItem}
-                    alignmentBaseline="middle"
-                    fill={theme.colors.text}
-                >
+                <text className="scatterplot-node-label-text" x={26} alignmentBaseline="middle">
                     {label}
-                </LabelText>
-            </LabelGroup>
+                </text>
+            </g>
         </g>
     )
 }
-
-const LabelGroup = styled.g`
-    pointer-events: none;
-`
-
-const LabelRect = styled.rect`
-    fill: ${({ theme }) => theme.colors.backgroundInverted};
-`
-
-const LabelText = styled.text<{
-    $isHover: boolean
-}>`
-    fill: ${({ $isHover, theme }) => ($isHover ? theme.colors.textInverted : theme.colors.text)};
-    font-size: ${({ theme }) => theme.typography.size.small};
-    font-weight: ${({ $isHover, theme }) =>
-        $isHover ? theme.typography.weight.medium : theme.typography.weight.light};
-`

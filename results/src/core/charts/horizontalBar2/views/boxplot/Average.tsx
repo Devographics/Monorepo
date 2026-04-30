@@ -1,7 +1,8 @@
 import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { BoxProps, STROKE_WIDTH } from './Percentiles'
-import { Dot, DotProps, InsufficientData_, ValueLabel } from './Dot'
+import { Dot, DotProps, ValueLabel } from './Dot'
+import { InsufficientData } from './InsufficientData'
 
 export const AverageBox = ({
     stroke,
@@ -32,15 +33,9 @@ export const AverageBox = ({
 
     return bucket.hasInsufficientData ? (
         <g>
-            <InsufficientData_
-                className="insufficient-data"
-                width={`${contentWidth}px`}
-                textAnchor="start"
-                alignmentBaseline="middle"
-                y={rowHeight / 2 + 3}
-            >
+            <InsufficientData width={`${contentWidth}px`} y={rowHeight / 2 + 3}>
                 {getString('charts.insufficient_data')?.t}
-            </InsufficientData_>
+            </InsufficientData>
         </g>
     ) : (
         <>

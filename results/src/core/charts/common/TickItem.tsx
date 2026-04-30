@@ -1,6 +1,6 @@
 import React from 'react'
 import { TickItemProps } from '@types/index'
-import styled, { useTheme } from 'styled-components'
+import { useTheme } from 'styled-components'
 import { useI18n } from '@devographics/react-i18n'
 import TooltipComponent from 'core/components/Tooltip'
 import { getSocialLinks } from 'core/charts/common/TickItemLinks'
@@ -198,7 +198,5 @@ export const TickItem = (tick: TickItemProps) => {
         </g>
     )
 }
-
-const ShowMore_ = styled.g``
 
 export default TickItem

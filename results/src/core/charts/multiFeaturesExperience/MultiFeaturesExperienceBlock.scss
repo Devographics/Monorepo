@@ -1,0 +1,33 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
+.multiexp-feature-name-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.multiexp-popover-wrapper {
+    margin-left: var(--halfSpacing);
+}
+
+.multiexp-row {
+    display: grid;
+    grid-template-columns: minmax(200px, auto) 1fr;
+    column-gap: var(--spacing);
+    row-gap: var(--halfSpacing);
+    align-items: center;
+}
+
+.multiexp-row-feature {
+    font-weight: bold;
+    margin: 0;
+}
+
+.multiexp-row-chart {
+    margin: 0;
+
+    @include small-medium {
+        max-width: calc(
+            100vw - 40px - 30px - 20px
+        ); /* total width - page padding - year width - gap */
+    }
+}

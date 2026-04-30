@@ -5,7 +5,8 @@ import { useDefaultColorScale } from '../../../common2/helpers/colors'
 import { DEFAULT } from '@devographics/constants'
 import { HorizontalBarChartState } from '../../types'
 import { Percentiles } from '@devographics/types'
-import { Dot, DotProps, InsufficientData_, ValueLabel } from './Dot'
+import { Dot, DotProps, ValueLabel } from './Dot'
+import { InsufficientData } from './InsufficientData'
 
 export const STROKE_WIDTH = 1
 
@@ -63,15 +64,9 @@ export const PercentilesBox = ({
 
     return bucket.hasInsufficientData ? (
         <g>
-            <InsufficientData_
-                className="insufficient-data"
-                width={`${contentWidth}px`}
-                textAnchor="start"
-                alignmentBaseline="middle"
-                y={rowHeight / 2 + 3}
-            >
+            <InsufficientData width={`${contentWidth}px`} y={rowHeight / 2 + 3}>
                 {getString('charts.insufficient_data')?.t}
-            </InsufficientData_>
+            </InsufficientData>
         </g>
     ) : (
         <>

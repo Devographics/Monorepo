@@ -8,12 +8,11 @@ import { KeydownContextProvider } from 'core/helpers/keydownContext'
 import { mergePageContext } from 'core/helpers/pageHelpers'
 import { I18nContextProvider } from '@devographics/react-i18n'
 // import PageMetaDebug from './pages/PageMetaDebug'
-import { GlobalStyle } from 'core/theme'
+import { fontSize, fontWeight, GlobalStyle } from 'core/theme'
 import MainLayout from 'core/layout/MainLayout'
 import ReportLayout from 'core/report/ReportLayout'
 import theme from 'Theme/index.ts'
 import { PageContextValue } from 'core/types'
-import { fontWeight } from 'core/theme'
 
 interface LayoutProps {
     context: any
@@ -53,7 +52,11 @@ const ThemedLayout = (props: LayoutProps) => {
         '--secondaryFontFamily': `${theme.typography.fontFamily2}`,
         '--fontLight': fontWeight('light'),
         '--fontMedium': fontWeight('medium'),
-        '--fontBold': fontWeight('bold')
+        '--fontBold': fontWeight('bold'),
+        '--fontSizeSmaller': fontSize('smaller'),
+        '--fontSizeSmall': fontSize('small'),
+        '--fontSizeMedium': fontSize('medium'),
+        '--fontSizeLarge': fontSize('large')
     }
     return (
         // @ts-expect-errors legacy

@@ -1,9 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
-import { useI18n } from '@devographics/react-i18n'
-import { fontSize, fontWeight } from 'core/theme'
 import Tip from 'core/components/Tooltip'
 import { BoxProps } from './Percentiles'
+import './Dot.scss'
 
 export const DOT_RADIUS = 10
 
@@ -12,15 +10,6 @@ export interface DotProps {
     strokeWidth: number
     rowHeight: number
 }
-
-export const InsufficientData_ = styled.text`
-    fill: ${({ theme }) => theme.colors.text};
-    opacity: 0.7;
-    text-transform: uppercase;
-    font-weight: ${fontWeight('bold')};
-    font-size: ${fontSize('smaller')};
-    text-align: center;
-`
 
 export const Dot = ({
     xCoord,
@@ -73,7 +62,7 @@ export const ValueLabel = ({
         <Tip
             trigger={
                 <g transform={`translate(${xCoord}, ${rowHeight / 2})`}>
-                    <Background_
+                    <rect
                         height={valueLabelHeight}
                         width={valueLabelWidth}
                         x={-valueLabelWidth / 2}
@@ -84,7 +73,7 @@ export const ValueLabel = ({
                         // fill={`url(#${gradient?.id})`}
                         fill="#333"
                     />
-                    <Text_
+                    <text
                         className="boxplot-chart-label"
                         stroke={stroke}
                         textAnchor="middle"
@@ -92,7 +81,7 @@ export const ValueLabel = ({
                         fontSize="11"
                     >
                         {p50ValueLabel}
-                    </Text_>
+                    </text>
                 </g>
             }
             contents={label}
@@ -100,9 +89,3 @@ export const ValueLabel = ({
         />
     )
 }
-
-export const Text_ = styled.text`
-    cursor: default;
-`
-
-export const Background_ = styled.rect``

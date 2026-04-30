@@ -7,41 +7,41 @@
         'topLeft topMiddle topRight'
         'middleLeft middleMiddle middleRight'
         'bottomLeft bottomMiddle bottomRight';
-}
 
-.chart-axis-horizontal.chart-axis-top {
-    grid-area: topMiddle;
-}
-
-.chart-axis-horizontal.chart-axis-bottom {
-    grid-area: bottomMiddle;
-}
-
-.chart-axis-vertical.chart-axis-left {
-    grid-area: middleLeft;
-}
-
-.chart-axis-vertical.chart-axis-right {
-    grid-area: middleRight;
-}
-.scatterplot-chart-inner {
-    position: relative;
-    grid-area: middleMiddle;
-    width: 100%;
-    svg {
-        width: 100%;
-        height: 100%;
-        overflow: visible;
+    .chart-axis-horizontal.chart-axis-top {
+        grid-area: topMiddle;
     }
 
-    .chart-row-gridlines,
-    .chart-columns-gridlines {
-        height: 100%;
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        pointer-events: none;
+    .chart-axis-horizontal.chart-axis-bottom {
+        grid-area: bottomMiddle;
+    }
+
+    .chart-axis-vertical.chart-axis-left {
+        grid-area: middleLeft;
+    }
+
+    .chart-axis-vertical.chart-axis-right {
+        grid-area: middleRight;
+    }
+    .scatterplot-chart-inner {
+        position: relative;
+        grid-area: middleMiddle;
+        width: 100%;
+        svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .chart-row-gridlines,
+        .chart-columns-gridlines {
+            height: 100%;
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
     }
 }

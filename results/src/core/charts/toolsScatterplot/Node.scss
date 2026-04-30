@@ -1,0 +1,17 @@
+.scatterplot-node-label {
+    pointer-events: none;
+}
+
+.scatterplot-node-label-rect {
+    fill: var(--backgroundInvertedColor);
+}
+
+.scatterplot-node-label-text {
+    fill: var(--textColor);
+    font-size: var(--fontSizeSmall);
+    font-weight: var(--fontLight);
+    .scatterplot-node-label-hover & {
+        fill: var(--textColorInverted);
+        font-weight: var(--fontMedium);
+    }
+}

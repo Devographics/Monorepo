@@ -11,7 +11,6 @@
 import HorizontalBarBlock2 from 'core/charts/horizontalBar2'
 import { CardinalitiesBlock } from 'core/charts/cardinalities'
 import VerticalBarBlock2 from 'core/charts/verticalBar2'
-import PeopleBlock from 'core/charts/people'
 // import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
 import MultiItemsExperienceBlock from 'core/charts/multiItemsExperience'
 import MultiItemsRatiosBlock from 'core/charts/multiItemsRatios'
@@ -45,7 +44,6 @@ const chartBlocks = {
     VerticalBarBlock2,
     TimeSeriesByDateBlock,
     RatiosByEdition,
-    PeopleBlock,
 
     MultiItemsExperienceBlock,
     MultiItemsRatiosBlock,

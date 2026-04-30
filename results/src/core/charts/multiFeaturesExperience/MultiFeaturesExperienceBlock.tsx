@@ -1,19 +1,16 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import get from 'lodash/get'
-import styled from 'styled-components'
 import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import GaugeBarChart from 'core/charts_not_used/generic/GaugeBarChart'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useLegends } from 'core/helpers/legends'
-import { mq, spacing } from 'core/theme'
 import { useI18n } from '@devographics/react-i18n'
-import { getTableData, groupDataByYears } from 'core/helpers/datatables'
+import { getTableData } from 'core/helpers/datatables'
 import Popover from 'core/components/Popover'
 import CodeExample from 'core/components/CodeExample'
 import { CodeIcon } from '@devographics/icons'
 import T from 'core/i18n/T'
+import './MultiFeaturesExperienceBlock.scss'
 
 // convert relative links into absolute MDN links
 const parseMDNLinks = content =>
@@ -60,13 +57,13 @@ export const MultiFeaturesExperienceBlock = ({
             data={data}
             block={block}
         >
-            <Row>
+            <dl className="multiexp-row">
                 {data.map(feature => (
                     <>
-                        <RowFeature>
+                        <dt className="multiexp-row-feature">
                             <FeatureName {...feature.entity} />
-                        </RowFeature>
-                        <RowChart className="FeatureExperienceBlock__RowChart">
+                        </dt>
+                        <dd className="multiexp-row-chart">
                             <ChartContainer height={40} fit={true} className="FeatureChart">
                                 <GaugeBarChart
                                     keys={keys}
@@ -77,19 +74,19 @@ export const MultiFeaturesExperienceBlock = ({
                                     i18nNamespace={i18nNamespace}
                                 />
                             </ChartContainer>
-                        </RowChart>
+                        </dd>
                     </>
                 ))}
-            </Row>
+            </dl>
         </Block>
     )
 }
 
 const FeatureName = ({ name, homepage, example }) => (
-    <FeatureNameWrapper>
+    <div className="multiexp-feature-name-wrapper">
         {homepage?.url ? <a href={homepage.url}>{name}</a> : <span>{name}</span>}
         {example && (
-            <PopoverWrapper>
+            <div className="multiexp-popover-wrapper">
                 <Popover
                     trigger={
                         <span>
@@ -100,41 +97,9 @@ const FeatureName = ({ name, homepage, example }) => (
                 >
                     <CodeExample {...example} />
                 </Popover>
-            </PopoverWrapper>
+            </div>
         )}
-    </FeatureNameWrapper>
+    </div>
 )
-
-const FeatureNameWrapper = styled.div`
-    display: flex;
-    align-items: center;
-`
-
-const PopoverWrapper = styled.div`
-    margin-left: ${spacing(0.5)};
-`
-
-const Row = styled.dl`
-    display: grid;
-    grid-template-columns: minmax(200px, auto) 1fr;
-    column-gap: ${spacing()};
-    row-gap: ${spacing(0.5)};
-    align-items: center;
-    /* margin-bottom: ${spacing()}; */
-`
-
-const RowFeature = styled.dt`
-    font-weight: bold;
-    margin: 0;
-`
-const RowChart = styled.dd`
-    margin: 0;
-
-    @media ${mq.smallMedium} {
-        max-width: calc(
-            100vw - 40px - 30px - 20px
-        ); /* total width - page padding - year width - gap */
-    }
-`
 
 export default MultiFeaturesExperienceBlock

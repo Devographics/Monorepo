@@ -1,7 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
-import { LinkIcon, NpmIcon, TwitterIcon, GitHubIcon, MastodonIcon } from '@devographics/icons'
-import get from 'lodash/get'
+import { NpmIcon, TwitterIcon, GitHubIcon, MastodonIcon } from '@devographics/icons'
 
 export const socialLinks = [
     // { name: 'homepage', icon: LinkIcon },

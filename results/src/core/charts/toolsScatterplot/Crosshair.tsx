@@ -1,8 +1,9 @@
 import React from 'react'
-import styled, { useTheme } from 'styled-components'
+import { useTheme } from 'styled-components'
 import { ScatterplotChartState } from './chartState'
 import { ScatterplotChartValues } from './chartValues'
 import { NodeData } from './types'
+import './Crosshair.scss'
 
 export const crosshairConfig = {
     labelWidth: 70,
@@ -26,7 +27,7 @@ export const Crosshair = ({ chartState, nodes, innerHeight }: CrossHairProps) =>
     if (!node) return null
 
     return (
-        <Group>
+        <g className="scatterplot-crosshair-group">
             <line
                 className="Scatterplot__Crosshair__Line"
                 y1={node.y}
@@ -54,14 +55,14 @@ export const Crosshair = ({ chartState, nodes, innerHeight }: CrossHairProps) =>
                     ry={2}
                     fill={theme.colors.backgroundInverted}
                 />
-                <Label
-                    className="Scatterplot__Crosshair__Label"
+                <text
+                    className="scatterplot-crosshair-label"
                     x={crosshairConfig.labelWidth * -0.5}
                     textAnchor="middle"
                     dominantBaseline="central"
                 >
                     {node.formattedY}
-                </Label>
+                </text>
             </g>
             <g transform={`translate(${node.x},${innerHeight + 8})`}>
                 <rect
@@ -72,14 +73,14 @@ export const Crosshair = ({ chartState, nodes, innerHeight }: CrossHairProps) =>
                     ry={2}
                     fill={theme.colors.backgroundInverted}
                 />
-                <Label
-                    className="Scatterplot__Crosshair__Label"
+                <text
+                    className="scatterplot-crosshair-label"
                     y={crosshairConfig.labelHeight / 2}
                     textAnchor="middle"
                     dominantBaseline="central"
                 >
                     {node.formattedX}
-                </Label>
+                </text>
             </g>
             <g transform={`translate(${node.x},${node.y})`}>
                 <circle
@@ -89,14 +90,6 @@ export const Crosshair = ({ chartState, nodes, innerHeight }: CrossHairProps) =>
                     fill="none"
                 />
             </g>
-        </Group>
+        </g>
     )
 }
-
-const Group = styled.g`
-    pointer-events: none;
-`
-
-const Label = styled.text`
-    font-size: ${({ theme }) => theme.typography.size.small};
-`
