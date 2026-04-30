@@ -11,7 +11,7 @@ export const getExternalDataResolver = (id: string) => {
         const { question } = data
         const externalData = question.externalData
         const { currentEdition } = externalData
-        const _metadata = { id }
+        const _metadata = { id, hasExternalData: true }
         return { id, _metadata, responses: { ...data, currentEdition } }
     }
     return resolver
