@@ -65,7 +65,6 @@ export const generateSurveysTypeObjects = async ({ surveys }: { surveys: SurveyA
         // type for a single kind of survey (state of js, state of css, etc.)
         addToTypeObjects(generateSurveyType({ survey, path }))
         addToTypeObjects(generateSurveyEditionsEnumType({ survey, path }))
-        addToTypeObjects(generateResponsesType({ survey, path }))
         addToTypeObjects(generateFeaturesEnumType({ survey, path }))
         addToTypeObjects(generateToolsEnumType({ survey, path }))
 

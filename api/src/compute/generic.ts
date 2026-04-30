@@ -409,58 +409,66 @@ export async function genericComputeFunction(
         }
     }
 
-    const dbPath = getDbPath(question, responsesType)
+    let totalRespondentsByYear, completionByYear, results, pipeline
 
-    if (!dbPath) {
-        throw new Error(
-            `No dbPath found for question id ${question.id} with subfield ${responsesType}`
-        )
+    const useExternalData = !!question.externalData
+    if (useExternalData) {
+        // question data is loaded not from db, but instead from hardcoded
+        // external dataset (for example YAML definition in api.yml)
+        results = question.externalData
+    } else {
+        const dbPath = getDbPath(question, responsesType)
+
+        if (!dbPath) {
+            throw new Error(
+                `No dbPath found for question id ${question.id} with subfield ${responsesType}`
+            )
+        }
+
+        const matchOptions = {
+            survey,
+            edition,
+            editionCount,
+            selectedEditionId,
+            dbPath,
+            filters,
+            questionObjects
+        }
+        const match = await getMatch(matchOptions)
+
+        if (isDebug) {
+            await logToFile(`${logPath}/computeArguments.json`, computeArguments)
+            await logToFile(`${logPath}/axis1.json`, axis1)
+            await logToFile(`${logPath}/axis2.json`, axis2)
+            await logToFile(`${logPath}/match.json`, match)
+        }
+
+        // TODO: merge these counts into the main aggregation pipeline if possible
+        totalRespondentsByYear = await runStage(computeParticipationByYear, [
+            { context, survey, logPath, isDebug }
+        ])
+        completionByYear = await runStage(computeCompletionByYear, [
+            { context, matchOptions, survey, dbPath, logPath, isDebug }
+        ])
+
+        const pipelineProps = {
+            surveyId: survey.id,
+            selectedEditionId,
+            editionCount,
+            filters,
+            axis1,
+            axis2,
+            responsesType,
+            showNoAnswer,
+            survey,
+            edition,
+            questionObjects
+        }
+
+        pipeline = await runStage(getGenericPipeline, [pipelineProps])
+
+        results = await runStage(getData, [db, survey, pipeline])
     }
-
-    const matchOptions = {
-        survey,
-        edition,
-        editionCount,
-        selectedEditionId,
-        dbPath,
-        filters,
-        questionObjects
-    }
-    const match = await getMatch(matchOptions)
-
-    if (isDebug) {
-        await logToFile(`${logPath}/computeArguments.json`, computeArguments)
-        await logToFile(`${logPath}/axis1.json`, axis1)
-        await logToFile(`${logPath}/axis2.json`, axis2)
-        await logToFile(`${logPath}/match.json`, match)
-    }
-
-    // TODO: merge these counts into the main aggregation pipeline if possible
-    const totalRespondentsByYear = await runStage(computeParticipationByYear, [
-        { context, survey, logPath, isDebug }
-    ])
-    const completionByYear = await runStage(computeCompletionByYear, [
-        { context, matchOptions, survey, dbPath, logPath, isDebug }
-    ])
-
-    const pipelineProps = {
-        surveyId: survey.id,
-        selectedEditionId,
-        editionCount,
-        filters,
-        axis1,
-        axis2,
-        responsesType,
-        showNoAnswer,
-        survey,
-        edition,
-        questionObjects
-    }
-
-    const pipeline = await runStage(getGenericPipeline, [pipelineProps])
-
-    let results = await runStage(getData, [db, survey, pipeline])
-
     if (isDebug) {
         // console.log(
         //     `// Using collection ${
@@ -485,7 +493,7 @@ export async function genericComputeFunction(
         await logToFile(`${logPath}/database.yml`, { db: db.namespace, normalizedCollectionName })
     }
 
-    if (!axis2) {
+    if (!axis2 && !useExternalData) {
         // TODO: get rid of this by rewriting the mongo aggregation
         // if no facet is specified, move default buckets down one level
         await runStage(moveFacetBucketsToDefaultBuckets, [results])
@@ -521,7 +529,9 @@ export async function genericComputeFunction(
 
         await runStage(addMissingBuckets, [results, axis2, axis1])
 
-        await runStage(addCompletionCounts, [results, totalRespondentsByYear, completionByYear])
+        if (totalRespondentsByYear && completionByYear) {
+            await runStage(addCompletionCounts, [results, totalRespondentsByYear, completionByYear])
+        }
 
         // optionally add overall, non-facetted bucket as a point of comparison
         // note: for now, disable this for sentiment questions to avoid infinite loops
@@ -597,7 +607,9 @@ export async function genericComputeFunction(
     } else {
         results = await runStage(addMissingBuckets, [results, axis1])
 
-        await runStage(addCompletionCounts, [results, totalRespondentsByYear, completionByYear])
+        if (totalRespondentsByYear && completionByYear) {
+            await runStage(addCompletionCounts, [results, totalRespondentsByYear, completionByYear])
+        }
 
         await runStage(addPercentages, [results])
 

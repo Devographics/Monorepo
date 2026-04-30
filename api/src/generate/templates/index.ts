@@ -9,6 +9,7 @@ export * from './section_tools_ratios'
 
 export * from './completion_stats'
 export * from './knowledge_score'
+export * from './external_data'
 // export * from './age_grouped'
 // export * from './years_grouped'
 // export * from './current_total_annual_compensation_grouped'

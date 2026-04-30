@@ -130,6 +130,7 @@ export const currentEditionResolver: ResolverType = async (parent, args, context
     )
     return result[0]
 }
+
 export const getEditionResolver =
     ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
     (parent, args, context, info) => {

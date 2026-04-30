@@ -296,6 +296,22 @@ type GroupsMetadata {
     upperBound: Float
 }
 
+type Responses {
+    """
+    Processed data for all editions of this survey
+    """
+    allEditions(editionCount: Int, editionId: AllEditionsID): [ResponseEditionData]
+    """
+    Processed data for the current edition of this survey (as indicated by the parent field)
+    """
+    currentEdition: ResponseEditionData
+    """
+    (DEPRECATED)
+    Raw answer for the current edition of this survey
+    """
+    rawData(token: String): RawData
+}
+
 # no need for default values here because we already specify default values
 # inside genericComputeFunction
 input Parameters {
@@ -898,4 +914,14 @@ type CardinalitiesItem {
 type Codebook {
     entities: [Entity]
     entitiesCount: Int
+}
+
+type ExternalData {
+    id: String
+    _metadata: ExternalDataMetadata
+    responses: Responses
+}
+
+type ExternalDataMetadata {
+    id: String
 }
