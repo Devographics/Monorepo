@@ -18,7 +18,7 @@ import {
 } from '../../types'
 // import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../../external_apis'
-import { computeKey, useCache } from '../../helpers/caching'
+import { computeKey, LogOptions, useCache } from '../../helpers/caching'
 import { getEntity } from '../../load/entities'
 import compact from 'lodash/compact.js'
 import { getEntities } from '../../load/entities'
@@ -424,7 +424,7 @@ async function getAppearsInResponses({
             context,
             funcOptions,
             enableCache,
-            enableLog: false
+            enableLog: LogOptions.NONE
         })
         // only keep data for the edition we actually need
         const currentEdition = allEditions.find(e => e.editionId === edition.id)

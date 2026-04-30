@@ -1,7 +1,7 @@
 import { Option, ResponsesTypes, ResultsSubFieldEnum } from '@devographics/types'
 import { getGenericCacheKey, genericComputeFunction } from '../compute'
 import { specialBucketIds } from '../compute/stages'
-import { useCache } from '../helpers/caching'
+import { LogOptions, useCache } from '../helpers/caching'
 import { QuestionApiObject, RequestContext, ExecutionContext } from '../types'
 import { disallowFields } from './helpers'
 import sortBy from 'lodash/sortBy.js'
@@ -98,7 +98,7 @@ export const getDynamicOptions = async ({
             context,
             funcOptions,
             enableCache,
-            enableLog: true
+            enableLog: LogOptions.ON_MISS
         }
         const result = await useCache(useCacheOptions)
 

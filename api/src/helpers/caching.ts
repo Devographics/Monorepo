@@ -50,6 +50,14 @@ export const computeKey = (funcOrFuncName: Function | string, funcOptions?: any)
     return `${getEnvVar(EnvVar.APP_NAME, { hardFail: true })}__func_${name}(${serializedOptions})`
 }
 
+export const LogOptions = {
+    NONE: 'none',
+    ALL: 'all',
+    ON_MISS: 'on_miss'
+} as const
+
+export type LogOption = (typeof LogOptions)[keyof typeof LogOptions]
+
 /**
  * Cache results in a dedicated Redis db to improve performance,
  * if the result isn't already available in the db, it will be created.
@@ -61,10 +69,11 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     // args?: ArgumentTypes<F>
     key?: string
     enableCache?: boolean
-    enableLog?: boolean
+    enableLog?: LogOption
 }): Promise<ResultType<F>> => {
+    let isCacheMiss = false
     const startedAt = new Date()
-    const { func, context, key, funcOptions = {}, enableLog = true } = options
+    const { func, context, key, funcOptions = {}, enableLog = LogOptions.ALL } = options
     const { isDebug = false } = context || {}
 
     const cacheType = getEnvVar(EnvVar.CACHE_TYPE, { default: CacheTypes.LOCAL })
@@ -95,6 +104,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
             verb = '✅ Cache hit'
             value = existingCachedValue
         } else {
+            isCacheMiss = true
             verb = '⭕ Cache miss'
             value = await func(funcOptionsWithContext)
             if (value) {
@@ -110,7 +120,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
         }
     }
     const finishedAt = new Date()
-    if (enableLog) {
+    if (enableLog === LogOptions.ALL || (isCacheMiss && enableLog === LogOptions.ON_MISS)) {
         const settings = { isDebug, enableCache, cacheType }
         const settingsLogs = JSON.stringify(settings)
         console.log(
