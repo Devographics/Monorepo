@@ -256,6 +256,10 @@
         i18nNamespace: tools
         template: multiple_options2_combined
 
+      - id: coding_agents_assistants_resources
+        items: [sentry_mcp]
+        template: recommended_resources
+
 - id: other_tools
   path: /other-tools
   blocks:
@@ -295,9 +299,9 @@
         parameters:
             cutoff: 5
 
-      # - id: tools_others_resources
-      #   items: [fm-enterprise-ui-dev, fm-react-native-v2]
-      #   template: recommended_resources
+      - id: other_tools_resources
+        items: [sentry_seer]
+        template: recommended_resources
 - id: usage
   path: /usage
   blocks:
@@ -339,9 +343,9 @@
       - id: ai_running_locally
         template: single_option2_combined
 
-      # - id: usage_resources
-      #   items: [fm-professional, fm-react]
-      #   template: recommended_resources
+      - id: usage_resources
+        items: [gitnation]
+        template: recommended_resources
 
 - id: risks_pain_points
   path: /risks-pain-points
