@@ -39,7 +39,7 @@ const getStyledLink = component => styled(component)`
     } */
 
     @media ${mq.smallMedium} {
-        margin-bottom: ${spacing(0.5)};
+        margin-bottom: var(--halfSpacing);
         display: block;
     }
 
@@ -231,8 +231,8 @@ const BlockItem = ({ block, closeSidebar, page }) => {
 const InternalLinks_ = styled.div`
     display: flex;
     flex-direction: column;
-    gap: ${spacing(0.5)};
-    margin-bottom: ${spacing(0.5)};
+    gap: var(--halfSpacing);
+    margin-bottom: var(--halfSpacing);
 `
 
 const InternalLinkWrapper_ = styled.div`
@@ -284,7 +284,7 @@ const NavContainer = styled.nav`
     flex-grow: 1;
     /* display: flex; */
     /* flex-direction: column; */
-    padding: ${spacing(1.5)} ${spacing()};
+    padding: ${spacing(1.5)} var(--spacing);
     overflow-y: auto;
 
     @media ${mq.smallMedium} {

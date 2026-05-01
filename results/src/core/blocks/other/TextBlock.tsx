@@ -8,7 +8,7 @@ import { BlockVariantDefinition } from 'core/types'
 
 const Content = styled.div`
     li {
-        margin-bottom: ${spacing(0.5)};
+        margin-bottom: var(--halfSpacing);
     }
     p:last-child {
         margin-bottom: 0;

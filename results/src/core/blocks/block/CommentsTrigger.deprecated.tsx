@@ -4,7 +4,7 @@ import ModalTrigger from 'core/components/ModalTrigger'
 import T from 'core/i18n/T'
 import { secondaryFontMixin, spacing } from 'core/theme'
 import { CommentIcon } from '@devographics/icons'
-import { runQuery } from 'core/explorer/data'
+import { runQuery } from 'core/helpers/data'
 import newGithubIssueUrl from 'new-github-issue-url'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useBlockTitle } from 'core/helpers/blockHelpers'
@@ -426,18 +426,18 @@ const CommentCount = styled.span`
 const CommentsList = styled.div`
     /* display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: ${spacing()};
-    row-gap: ${spacing()}; */
+    column-gap: var(--spacing);
+    row-gap: var(--spacing); */
 `
 
 export const CommentItem_ = styled.div`
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
 `
 
 export const CommentMessageWrapper = styled.div`
     border-radius: 5px;
     background: ${({ theme }) => theme.colors.backgroundAlt2};
-    padding: ${spacing()};
+    padding: var(--spacing);
     position: relative;
 `
 

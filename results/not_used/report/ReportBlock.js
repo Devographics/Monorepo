@@ -47,9 +47,9 @@ const Essay = styled.div`
     code {
         background: ${color('backgroundAlt')};
         padding: 3px 6px;
-        font-weight: ${fontWeight('medium')};
+        font-weight: var(--fontMedium);
         color: ${color('contrast')};
         border: 1px dotted ${color('contrast')};
-        font-size: ${fontSize('smallish')};
+        font-size: var(--fontSizeSmallish);
     }
 `

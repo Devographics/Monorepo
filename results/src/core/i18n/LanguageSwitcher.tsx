@@ -153,7 +153,7 @@ export const LanguageSwitcherContents = () => {
 //     }
 
 //     @media ${mq.smallMedium} {
-//         font-size: ${fontSize('small')};
+//         font-size: var(--fontSizeSmall);
 //     }
 // `
 
@@ -204,7 +204,7 @@ export const LanguageSwitcherContents = () => {
 // `
 
 const LanguageSwitcherHelp = styled.div`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     padding-top: ${spacing(1)};
     margin-top: ${spacing(1)};
     border-top: ${props => props.theme.separationBorder};

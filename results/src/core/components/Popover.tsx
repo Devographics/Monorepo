@@ -147,7 +147,7 @@ const PopoverToggle = styled.button`
     }
 
     @media ${mq.smallMedium} {
-        font-size: ${fontSize('small')};
+        font-size: var(--fontSizeSmall);
     }
 
     &:focus {

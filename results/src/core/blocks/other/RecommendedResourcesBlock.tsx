@@ -119,7 +119,7 @@ const Job = ({ job }: { job: RecommendedResourceJob }) => {
 
 const List = styled.div`
     background: ${({ theme }) => theme.colors.backgroundAlt};
-    padding: ${spacing()};
+    padding: var(--spacing);
     /* margin-top: ${spacing(1)}; */
     @media ${mq.large} {
         display: grid;
@@ -133,12 +133,12 @@ const Title = styled.h4`
 `
 
 const Description = styled.div`
-    font-size: ${fontSize('smallish')};
+    font-size: var(--fontSizeSmallish);
 `
 
 const Resource = styled.div`
     @media ${mq.small} {
-        margin-bottom: ${spacing()};
+        margin-bottom: var(--spacing);
     }
     @media ${mq.mediumLarge} {
         display: flex;
@@ -149,7 +149,7 @@ const ResourceImage = styled.div`
     @media ${mq.small} {
         width: 60px;
         float: right;
-        margin: 0 0 ${spacing()} ${spacing()};
+        margin: 0 0 var(--spacing) var(--spacing);
     }
 
     @media ${mq.mediumLarge} {
@@ -169,7 +169,7 @@ const ImageLink = styled.a`
     width: 100%;
     border-radius: 100%;
     padding: ${({ padding }) => (padding ? padding + 'px' : 0)};
-    border: 3px solid ${({ theme }) => theme.colors.border};
+    border: 3px solid var(--borderColor);
     border-radius: 100%;
     aspect-ratio: 1/1;
     overflow: hidden;
@@ -184,17 +184,17 @@ const ResourceContent = styled.div`
 `
 
 export const Sponsoring = styled.div`
-    font-weight: ${fontWeight('bold')};
+    font-weight: var(--fontBold);
     font-size: ${fontSize('smaller')};
     text-align: center;
-    margin-top: ${spacing()};
+    margin-top: var(--spacing);
 `
 
 const ResourceTeacher = styled.div`
     text-align: center;
-    margin-top: ${spacing(0.5)};
-    font-size: ${fontSize('small')};
-    font-weight: ${fontWeight('bold')};
+    margin-top: var(--halfSpacing);
+    font-size: var(--fontSizeSmall);
+    font-weight: var(--fontBold);
 `
 
 const ResourceCompany = styled.div`

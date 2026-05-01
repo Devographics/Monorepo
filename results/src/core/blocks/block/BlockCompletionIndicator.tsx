@@ -52,7 +52,7 @@ const BlockCompletionIndicator = ({
 }
 
 const Container = styled.div`
-    margin-left: ${spacing(0.5)};
+    margin-left: var(--halfSpacing);
     position: relative;
     padding: 2px;
 

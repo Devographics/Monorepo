@@ -174,22 +174,22 @@ const Details_ = styled.div``
 const DetailsUnit_ = styled.div`
     display: flex;
     justify-content: center;
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
 `
 
 const DetailsLegend_ = styled.div`
     display: flex;
     justify-content: center;
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
 `
 const DetailsGrid_ = styled.div``
 
 const DetailsExplanation_ = styled.div`
-    margin-top: ${spacing()};
+    margin-top: var(--spacing);
     em {
         font-style: normal;
-        /* font-weight: ${fontWeight('bold')}; */
-        color: ${({ theme }) => theme.colors.link};
+        /* font-weight: var(--fontBold); */
+        color: var(--linkColor);
     }
 `
 const DetailsExplanationHeading_ = styled.h3``

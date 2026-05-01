@@ -44,9 +44,9 @@ const LegendItem = ({ type, unit, tProps }) => {
 
 const MainLegend_ = styled.div`
     color: ${({ theme }) => theme.colors.textAlt};
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     display: flex;
-    gap: ${spacing()};
+    gap: var(--spacing);
     @media ${mq.small} {
         flex-direction: column;
         justify-content: center;

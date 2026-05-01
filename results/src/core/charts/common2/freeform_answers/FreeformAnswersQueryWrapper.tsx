@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import T from 'core/i18n/T'
-import { runQuery } from 'core/explorer/data'
+import { runQuery } from 'core/helpers/data'
 import { RawDataItem, StandardQuestionData, Bucket } from '@devographics/types'
 import { FreeformAnswers } from './FreeformAnswers'
 import { CommentsCommonProps } from '../comments/types'

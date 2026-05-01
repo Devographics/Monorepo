@@ -94,7 +94,7 @@ const Heading_ = styled.div`
     margin-bottom: ${GRID_GAP}px;
     @media ${mq.smallMedium} {
         flex-direction: column;
-        gap: ${spacing()};
+        gap: var(--spacing);
         justify-content: center;
         align-items: center;
     }
@@ -128,7 +128,7 @@ const EditButton_ = styled(Button)`
     &:hover,
     &:focus {
         polygon {
-            stroke: ${({ theme }) => theme.colors.link};
+            stroke: var(--linkColor);
         }
     }
     cursor: pointer;
@@ -140,7 +140,7 @@ const HeadingRight_ = styled.div`
     display: flex;
     @media ${mq.smallMedium} {
         flex-direction: column;
-        gap: ${spacing()};
+        gap: var(--spacing);
         justify-content: center;
         align-items: center;
     }

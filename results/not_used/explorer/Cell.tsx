@@ -134,7 +134,7 @@ const CellCount_ = styled.div`
 const CellCountInner_ = styled.div`
     opacity: 0.2;
     line-height: 1;
-    /* font-weight: ${fontWeight('bold')}; */
+    /* font-weight: var(--fontBold); */
     @media ${mq.small} {
         font-size: 1rem;
     }

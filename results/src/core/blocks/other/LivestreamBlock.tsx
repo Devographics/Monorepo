@@ -15,7 +15,7 @@ const Livestream = styled.div`
     max-width: 700px;
     margin: 0 auto;
     background: ${({ theme }) => theme.colors.backgroundAlt};
-    padding: ${spacing()};
+    padding: var(--spacing);
     margin-bottom: ${spacing(2)};
 `
 

@@ -59,7 +59,7 @@ const StyledBlockTitle = styled.div`
     position: relative;
     z-index: 10;
     /* .Block__Title__Share {
-        margin-left: ${spacing(0.5)};
+        margin-left: var(--halfSpacing);
     } */
 
     &:hover {

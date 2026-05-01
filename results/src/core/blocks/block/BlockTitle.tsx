@@ -7,7 +7,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { usePageContext } from 'core/helpers/pageContext'
 import SharePermalink from 'core/share/SharePermalink'
 import { getBlockTitle, useBlockTitle, useBlockTitleKeys } from 'core/helpers/blockHelpers'
-import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
+// import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 import { useEntities } from 'core/helpers/entities'
 import { BlockVariantDefinition } from 'core/types'
 import { getBlockSeriesData } from 'core/helpers/data'
@@ -102,9 +102,9 @@ const BlockTitle = ({
                             )} */}
                             {/* <BlockQuestionTooltip block={block} /> */}
                             {/* {isFreeformQuestion && <FreeformIndicator showLabel={false} />} */}
-                            {!isCapturing && enableChartSponsorships && (
+                            {/* {!isCapturing && enableChartSponsorships && (
                                 <BlockSponsor block={block} />
-                            )}
+                            )} */}
                         </div>
                     </BlockTitleText>
                     {/* <Popover trigger={<More />}>
@@ -145,14 +145,14 @@ const StyledBlockTitle = styled.div`
         isCapturing &&
         css`
             border-bottom: ${props => props.theme.separationBorder};
-            padding-bottom: ${spacing(0.5)};
+            padding-bottom: var(--halfSpacing);
             margin-bottom: ${spacing(1)};
         `}
     display: flex;
     align-items: center;
     justify-content: space-between;
     /* .Block__Title__Share {
-        margin-left: ${spacing(0.5)};
+        margin-left: var(--halfSpacing);
     } */
 
     &:hover {
@@ -201,7 +201,7 @@ const LeftPart_ = styled.div`
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        gap: ${spacing(0.5)};
+        gap: var(--halfSpacing);
     }
 `
 

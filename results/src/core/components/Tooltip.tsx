@@ -6,7 +6,7 @@ import * as RadixTooltip from '@radix-ui/react-tooltip'
 
 export const getTooltipContent = element => styled(element)`
     background: var(--backgroundAltColor);
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     padding: ${spacing(0.3)} ${spacing(0.6)};
     border: 1px solid ${props => props.theme.colors.border};
     z-index: 10000;

@@ -219,13 +219,13 @@ const ValueSegmentArray = ({
 
 const Values_ = styled.div`
     display: flex;
-    gap: ${spacing(0.5)};
+    gap: var(--halfSpacing);
     flex-direction: column;
 `
 
 const Value_ = styled.div`
     display: flex;
-    gap: ${spacing(0.5)};
+    gap: var(--halfSpacing);
     align-items: center;
 `
 

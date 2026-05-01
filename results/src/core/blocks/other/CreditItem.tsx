@@ -54,7 +54,7 @@ export default CreditItem
 const CreditItemDiv = styled.div`
     display: flex;
     align-items: center;
-    gap: ${spacing()};
+    gap: var(--spacing);
 `
 
 const CreditAvatar_ = styled.div``
@@ -71,13 +71,13 @@ const Name = styled.h4`
 `
 
 const Twitter = styled.div`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
 `
 
 const Company = styled.div`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
 `
 
 const Role = styled.div`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
 `

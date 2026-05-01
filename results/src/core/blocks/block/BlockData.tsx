@@ -142,10 +142,10 @@ export const FiltersExport = ({ filtersState }: { filtersState: CustomizationDef
     )
 }
 const ExportWrapper = styled.div`
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
     display: flex;
     flex-wrap: wrap;
-    gap: ${spacing(0.5)};
+    gap: var(--halfSpacing);
 `
 
 export const ExportButton = styled(Button)`
@@ -162,17 +162,17 @@ export const AutoSelectText = ({ value }) => {
 }
 
 export const Message_ = styled.div`
-    margin-top: ${spacing(0.5)};
-    font-size: ${fontSize('small')};
+    margin-top: var(--halfSpacing);
+    font-size: var(--fontSizeSmall);
 `
 
 export const TextArea = styled.textarea`
     width: 100%;
-    font-size: ${fontSize('small')};
-    padding: ${spacing(0.5)};
+    font-size: var(--fontSizeSmall);
+    padding: var(--halfSpacing);
     border: 0;
     border-radius: 2px;
-    background: ${({ theme }) => theme.colors.background};
+    background: var(--backgroundColor);
     color: ${({ theme }) => theme.colors.text};
 
     &:focus {

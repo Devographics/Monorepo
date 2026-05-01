@@ -129,8 +129,8 @@ const Content = styled.div<{ size: string }>`
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.75);
 
     @media ${mq.small} {
-        top: ${spacing()};
-        left: ${spacing()};
+        top: var(--spacing);
+        left: var(--spacing);
         width: calc(100vw - 40px);
     }
     @media ${mq.mediumLarge} {
@@ -147,7 +147,7 @@ const Inner = styled.div`
     overflow-x: hidden;
     width: 100%;
     @media ${mq.small} {
-        padding: ${spacing()};
+        padding: var(--spacing);
         max-height: calc(100vh - 60px);
     }
     @media ${mq.mediumLarge} {

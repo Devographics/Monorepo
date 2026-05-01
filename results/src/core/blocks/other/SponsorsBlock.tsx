@@ -48,7 +48,7 @@ const Container = styled.div`
 
 const Header = styled.h3`
     text-align: center;
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
 `
 
 const SponsorList = styled.div`
@@ -62,7 +62,7 @@ const SponsorList = styled.div`
 
 const Sponsor = styled.div`
     @media ${mq.smallMedium} {
-        margin-bottom: ${spacing()};
+        margin-bottom: var(--spacing);
         &:last-child {
             margin: 0;
         }
@@ -85,7 +85,7 @@ const SponsorLogo = styled.div`
         width: 100%;
     }
 
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
 
     &:last-child {
         margin: 0;
@@ -101,9 +101,9 @@ const SponsorDescription = styled.div`
 `
 const Support = styled.div`
     text-align: center;
-    margin-top: ${spacing(0.5)};
+    margin-top: var(--halfSpacing);
     margin-bottom: ${spacing(2)};
-    font-size: ${fontSize('smallish')};
+    font-size: var(--fontSizeSmallish);
 `
 
 export default SponsorsBlock

@@ -47,7 +47,7 @@ const TitleBlock = ({ block, pageData, blockIndex, variantIndex }) => {
 const BlockWrapper = styled.section``
 
 const VariantWrapper = styled.div`
-    padding: ${spacing()};
+    padding: var(--spacing);
 `
 
 export default TitleWrapper

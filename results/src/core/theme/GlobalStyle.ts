@@ -43,12 +43,12 @@ export const GlobalStyle = createGlobalStyle`
     h5,
     h6 {
         /* ${secondaryFontMixin} */
-        margin: 0 0 ${spacing()} 0;
+        margin: 0 0 var(--spacing) 0;
     }
     
     a {
         text-decoration: none;
-        font-weight: ${fontWeight('bold')};
+        font-weight: var(--fontBold);
         
         &,
         &:link,
@@ -67,7 +67,7 @@ export const GlobalStyle = createGlobalStyle`
     p,
     ul,
     ol {
-        margin: 0 0 ${spacing()} 0;
+        margin: 0 0 var(--spacing) 0;
         
         @media ${mq.small} {
             line-height: 1.6;
@@ -141,7 +141,7 @@ export const GlobalStyle = createGlobalStyle`
         display: grid;
         grid-template-columns: 1fr 100px;
         .hint-text{
-            margin-right: ${spacing()};
+            margin-right: var(--spacing);
         }
         .hint-diagram{
             background: url("/images/bracket_diagram.svg");

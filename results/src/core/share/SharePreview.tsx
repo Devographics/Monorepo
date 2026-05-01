@@ -8,7 +8,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 
 const Container = styled.div`
     border-radius: 3px;
-    border: 1px solid ${({ theme }) => theme.colors.border};
+    border: 1px solid var(--borderColor);
 `
 
 const Meta = styled.div`
@@ -33,12 +33,12 @@ const Image = styled.img`
 `
 
 const Domain = styled.span`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
 `
 const Legend = styled.div`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     text-align: center;
-    margin-top: ${spacing(0.5)};
+    margin-top: var(--halfSpacing);
     color: ${props => props.theme.colors.textAlt};
 `
 

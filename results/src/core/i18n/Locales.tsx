@@ -21,14 +21,14 @@ const Item = styled.span`
     align-items: center;
     white-space: nowrap;
     @media ${mq.smallMedium} {
-        font-size: ${fontSize('small')};    
+        font-size: var(--fontSizeSmall);    
     }
     @media ${mq.large} {
         font-size: ${fontSize('medium')};
     }
     
     &._is-current {
-        font-weight: ${fontWeight('bold')};
+        font-weight: var(--fontBold);
     }
 }
 `

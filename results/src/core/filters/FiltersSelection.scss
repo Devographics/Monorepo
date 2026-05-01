@@ -1,0 +1,11 @@
+.filters-selection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+}
+
+.filters-series-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+}

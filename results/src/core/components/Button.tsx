@@ -13,10 +13,10 @@ const Button = styled.button.attrs(
     ${({ variant }) => {
         if (variant === 'link') {
             return css`
-                color: ${({ theme }) => theme.colors.link} !important;
+                color: var(--linkColor) !important;
                 padding: 0 !important;
                 display: inline-block !important;
-                font-weight: ${fontWeight('bold')} !important;
+                font-weight: var(--fontBold) !important;
                 border: none !important;
                 background: none !important;
                 cursor: pointer !important;
@@ -31,7 +31,7 @@ const Button = styled.button.attrs(
                 gap: 5px;
                 align-items: center;
                 text-align: center;
-                font-weight: ${fontWeight('bold')};
+                font-weight: var(--fontBold);
                 border: 1px dashed;
                 box-shadow: 0 0 0 rgba(0, 0, 0, 0);
                 transition: all 300ms ease-out;
@@ -60,8 +60,8 @@ const Button = styled.button.attrs(
                 ${props => {
                     if (props.size === 'small') {
                         return css`
-                            font-size: ${fontSize('small')};
-                            padding: ${spacing(0.2)} ${spacing(0.5)};
+                            font-size: var(--fontSizeSmall);
+                            padding: ${spacing(0.2)} var(--halfSpacing);
                         `
                     }
 
@@ -80,10 +80,10 @@ const Button = styled.button.attrs(
                     }
 
                     return css`
-                        padding: ${spacing(0.5)} ${spacing(1)};
+                        padding: var(--halfSpacing) ${spacing(1)};
 
                         @media ${mq.small} {
-                            font-size: ${fontSize('small')};
+                            font-size: var(--fontSizeSmall);
                         }
 
                         @media ${mq.mediumLarge} {

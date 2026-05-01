@@ -114,7 +114,7 @@ const Series = ({ allFilters, series, index, block, stateStuff }: SeriesProps) =
 export const Series_ = styled.div`
     border: 1px solid ${({ theme }) => theme.colors.borderAlt};
     border-radius: 3px;
-    padding: ${spacing()};
+    padding: var(--spacing);
     position: relative;
     background: ${({ theme }) => theme.colors.backgroundAlt};
 `
@@ -122,7 +122,7 @@ export const Series_ = styled.div`
 const ActiveSeries_ = styled(Series_)`
     display: flex;
     flex-direction: column;
-    gap: ${spacing()};
+    gap: var(--spacing);
 `
 
 const DeleteSeries_ = styled(Button)`
@@ -152,19 +152,19 @@ const SeriesTop_ = styled.div`
 const EmptyCondition_ = styled(Condition_)`
     display: grid;
     place-items: center;
-    padding: ${spacing()};
+    padding: var(--spacing);
 `
 
 const SeriesHeading_ = styled.h3`
     display: flex;
     align-items: center;
-    gap: ${spacing(0.5)};
+    gap: var(--halfSpacing);
 `
 
 const Conditions_ = styled.div`
     display: flex;
     flex-direction: column;
-    gap: ${spacing(0.5)};
+    gap: var(--halfSpacing);
 `
 
 export default Series

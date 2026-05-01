@@ -143,7 +143,7 @@ const Contents_ = styled.div`
     text-shadow: 1px 1px black;
     pre {
         background: rgba(0, 0, 0, 0.35);
-        padding: ${spacing()};
+        padding: var(--spacing);
         border-radius: 5px;
         box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.15);
     }

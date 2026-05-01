@@ -10,7 +10,7 @@ import { I18nContextProvider } from '@devographics/react-i18n'
 // import PageMetaDebug from './pages/PageMetaDebug'
 import { fontSize, fontWeight, GlobalStyle } from 'core/theme'
 import MainLayout from 'core/layout/MainLayout'
-import ReportLayout from 'core/report/ReportLayout'
+// import ReportLayout from 'core/report/ReportLayout'
 import theme from 'Theme/index.ts'
 import { PageContextValue } from 'core/types'
 
@@ -55,8 +55,10 @@ const ThemedLayout = (props: LayoutProps) => {
         '--fontBold': fontWeight('bold'),
         '--fontSizeSmaller': fontSize('smaller'),
         '--fontSizeSmall': fontSize('small'),
+        '--fontSizeSmallish': fontSize('smallish'),
         '--fontSizeMedium': fontSize('medium'),
-        '--fontSizeLarge': fontSize('large')
+        '--fontSizeLarge': fontSize('large'),
+        '--fontSizeLargest': fontSize('largest')
     }
     return (
         // @ts-expect-errors legacy
@@ -72,11 +74,12 @@ const ThemedLayout = (props: LayoutProps) => {
           }
       `}</style>
             <div>
-                {props.context.id === 'report' ? (
+                {/* {props.context.id === 'report' ? (
                     <ReportLayout {...props} />
                 ) : (
                     <MainLayout {...props} />
-                )}
+                )} */}
+                <MainLayout {...props} />
             </div>
         </ThemeProvider>
     )

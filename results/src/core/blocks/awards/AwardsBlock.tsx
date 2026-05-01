@@ -1,9 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
-import { mq, spacing } from 'core/theme'
 import AwardBlock from 'core/blocks/awards/AwardBlock'
 import { Entity } from '@devographics/types'
 import { BlockWithAwards } from 'core/types'
+import './AwardsBlock.scss'
 
 /**
  * All awards categories
@@ -19,21 +18,11 @@ const AwardsBlock = ({
     block: BlockWithAwards
     data: Array<Entity>
 }) => (
-    <Wrapper>
+    <div className="awards-wrapper">
         {block.awards.map(award => (
             <AwardBlock key={award.id} block={award} entities={entities} />
         ))}
-    </Wrapper>
+    </div>
 )
-
-const Wrapper = styled.div`
-    margin-bottom: var(--quadrupleSpacing);
-    @media ${mq.mediumLarge} {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        column-gap: ${spacing(6)};
-        row-gap: ${spacing(4)};
-    }
-`
 
 export default AwardsBlock

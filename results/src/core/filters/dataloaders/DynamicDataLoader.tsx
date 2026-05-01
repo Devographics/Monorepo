@@ -9,7 +9,7 @@ import FacetDataLoader from './FacetDataLoader'
 import { DataLoaderFooter } from './DataLoaderFooter'
 import { DataLoaderError } from './DataLoaderError'
 import styled from 'styled-components'
-import Loading from 'core/explorer/Loading'
+import Loading from 'core/components/Loading'
 import { FilterLegend, useChartFilters } from '../helpers'
 import BlockLegends from 'core/blocks/block/BlockLegends'
 

@@ -32,12 +32,12 @@ const Container = styled.div`
 `
 
 const Heading = styled.h3`
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: var(--halfSpacing);
     font-size: ${props => props.theme.typography.size.larger};
 `
 
 const Description = styled.div`
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
 `
 
 export default NewsletterBlock

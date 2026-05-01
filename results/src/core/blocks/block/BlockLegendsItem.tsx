@@ -141,17 +141,17 @@ const Container = styled.tr`
 `
 
 const ChipWrapper = styled.th`
-    padding: ${spacing(0.25)} ${spacing(0.5)} ${spacing(0.25)};
+    padding: ${spacing(0.25)} var(--halfSpacing) ${spacing(0.25)};
 `
 const Chip = styled.div``
 
 const KeyLabel = styled.th`
-    padding: ${spacing(0.25)} ${spacing(0.5)} ${spacing(0.25)} 0;
+    padding: ${spacing(0.25)} var(--halfSpacing) ${spacing(0.25)} 0;
     text-align: left;
 `
 
 const Label = styled.td`
-    padding: ${spacing(0.2)} ${spacing(0.5)} ${spacing(0.25)} 0;
+    padding: ${spacing(0.2)} var(--halfSpacing) ${spacing(0.25)} 0;
     width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -161,6 +161,6 @@ const Label = styled.td`
 `
 
 const Value = styled.td`
-    padding: ${spacing(0.25)} ${spacing(0.5)} ${spacing(0.25)} 0;
+    padding: ${spacing(0.25)} var(--halfSpacing) ${spacing(0.25)} 0;
 `
 export default BlockLegendsItem

@@ -1,7 +1,7 @@
 import './CustomVariant.scss'
 import { useI18n } from '@devographics/react-i18n'
 import { AllQuestionData } from '@devographics/types'
-import Loading from 'core/explorer/Loading'
+import Loading from 'core/components/Loading'
 import { DataLoaderError } from 'core/filters/dataloaders/DataLoaderError'
 import {
     CreateVariantType,

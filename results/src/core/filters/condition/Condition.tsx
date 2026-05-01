@@ -106,7 +106,7 @@ export const Condition_ = styled.div`
 
 const DeleteWrapper_ = styled.div`
     border-left: 1px dashed ${({ theme }) => theme.colors.borderAlt};
-    padding: 0 ${spacing()};
+    padding: 0 var(--spacing);
     display: flex;
     align-items: center;
     min-width: 73px;
@@ -115,7 +115,7 @@ const DeleteWrapper_ = styled.div`
 const ActiveCondition_ = styled(Condition_)`
     display: flex;
     /* grid-template-columns: auto minmax(0, 1fr); */
-    /* gap: ${spacing()}; */
+    /* gap: var(--spacing); */
     justify-content: space-between;
     /* align-items: center; */
 `
@@ -147,18 +147,18 @@ const And_ = styled.div`
 `
 
 const Segments_ = styled.div`
-    padding: ${spacing()};
+    padding: var(--spacing);
     /* display: flex;
-    gap: ${spacing()}; */
+    gap: var(--spacing); */
     display: grid;
     grid-auto-columns: minmax(0, 1fr);
     grid-auto-flow: column;
-    column-gap: ${spacing()};
+    column-gap: var(--spacing);
     @media ${mq.smallMedium} {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: ${spacing(0.5)};
+        gap: var(--halfSpacing);
     }
 `
 export default Condition

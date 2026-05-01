@@ -57,17 +57,16 @@ const BlockChart = (props: BlockChartProps) => {
 
     return (
         <div>
+            aaaaaaaaaaaaaa
             <BlockDescriptionContents block={block} />
             {entity && !isCapturing && <BlockLinks entity={entity} />}
             <BlockFooter {...props} />
-
             {legends && legendPosition === 'top' && <BlockLegends {...legendProps_} />}
             {modeProps && switcherPosition === 'top' && (
                 <SwitcherWrapper>
                     <BlockUnitsSelector {...modeProps} />
                 </SwitcherWrapper>
             )}
-
             <div className="Block__Contents">
                 {error ? <div className="error">{error}</div> : children}
             </div>
@@ -113,7 +112,7 @@ const SwitcherWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: ${spacing()};
+    margin-top: var(--spacing);
 `
 
 const Description = styled.div`

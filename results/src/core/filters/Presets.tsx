@@ -261,14 +261,14 @@ const Preset = ({ preset, setCustomPresets, setFiltersState, isCustom }: PresetP
 
 const Presets_ = styled.div`
     display: flex;
-    gap: ${spacing()};
+    gap: var(--spacing);
     flex-wrap: wrap;
 `
 
 const PresetWrapper_ = styled.div`
     display: flex;
     align-items: center;
-    gap: ${spacing(0.5)};
+    gap: var(--halfSpacing);
 `
 
 const Label_ = styled.div``
@@ -280,7 +280,7 @@ const Preset_ = styled(Button)`
 
 const SavePreset_ = styled(Button)`
     border-radius: 20px;
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
 `
 
 const DeletePreset_ = styled(Button)`

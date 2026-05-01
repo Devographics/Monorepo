@@ -81,8 +81,8 @@ const Container = styled.table`
     .rawchartmode & {
         display: none;
     }
-    font-size: ${fontSize('small')};
-    /* margin-top: ${spacing()}; */
+    font-size: var(--fontSizeSmall);
+    /* margin-top: var(--spacing); */
     margin-top: ${({ position }) => (position === 'bottom' ? spacing() : 0)};
     margin-bottom: ${({ position }) => (position === 'top' ? spacing() : 0)};
     width: 100%;
@@ -91,10 +91,10 @@ const Container = styled.table`
         if (props.withFrame) {
             return css`
                 border: 1px solid ${color('border')};
-                padding: ${spacing(0.5)};
+                padding: var(--halfSpacing);
 
                 @media ${mq.small} {
-                    padding: ${spacing(0.5)};
+                    padding: var(--halfSpacing);
                 }
             `
         }
@@ -129,7 +129,7 @@ const ContainerInner = styled.tbody`
                 justify-content: space-between; */
 
                 @media ${mq.small} {
-                    margin-top: ${spacing()};
+                    margin-top: var(--spacing);
                 }
             `
         }

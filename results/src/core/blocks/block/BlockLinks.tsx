@@ -90,17 +90,17 @@ const List = styled.ul`
     align-items: center;
     padding: 0;
     margin: 0;
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
 `
 const Item = styled.li`
-    margin-right: ${spacing(0.5)};
+    margin-right: var(--halfSpacing);
     &:last-child {
         margin: 0;
     }
 `
 
 const Link = styled(Button)`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     padding: 2px 12px;
     border-radius: 20px;
     border: 1px solid transparent;
@@ -109,5 +109,5 @@ const Link = styled(Button)`
 `
 
 const ResourcesTitle_ = styled.h4`
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: var(--halfSpacing);
 `

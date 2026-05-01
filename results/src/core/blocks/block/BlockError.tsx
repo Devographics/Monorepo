@@ -1,5 +1,4 @@
 import React from 'react'
-import Block from 'core/blocks/block/BlockVariant'
 import get from 'lodash/get'
 import BlockDebug from 'core/blocks/block/BlockDebug'
 import { BlockVariantDefinition } from 'core/types'

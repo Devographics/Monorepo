@@ -47,7 +47,7 @@ import {
     CombinedBucketData,
     FacetBucket
 } from '@devographics/types'
-import { runQuery } from 'core/explorer/data'
+import { runQuery } from 'core/helpers/data'
 // import { spacing, mq, fontSize } from 'core/theme'
 import get from 'lodash/get'
 import { getBlockDataPath } from 'core/helpers/data'

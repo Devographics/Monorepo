@@ -121,14 +121,14 @@ const DataTable = styled.table`
     td,
     th {
         padding: 0.75rem 0.45rem;
-        border: 1px solid ${({ theme }) => theme.colors.border};
+        border: 1px solid var(--borderColor);
         margin: 0;
-        font-size: ${fontSize('small')};
+        font-size: var(--fontSizeSmall);
     }
 `
 
 const Title = styled.h4`
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: var(--halfSpacing);
 `
 
 export default Tables

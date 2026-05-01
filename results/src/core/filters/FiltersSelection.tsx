@@ -1,16 +1,11 @@
 import React from 'react'
-import Series from './Series'
-import styled from 'styled-components'
+import Series, { Series_ } from './Series'
 import T from 'core/i18n/T'
-import { spacing } from 'core/theme'
 import Button from 'core/components/Button'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getNewSeries } from './helpers'
 import { maxSeriesCount } from './constants'
 import { usePageContext } from 'core/helpers/pageContext'
-import { Series_ } from './Series'
-import Presets from './Presets'
-import Options from './Options'
 import {
     CustomizationDefinition,
     PanelState,
@@ -18,6 +13,8 @@ import {
     FilterItem
 } from './types'
 import { BlockVariantDefinition } from 'core/types'
+import './FiltersSelection.scss'
+import styled from 'styled-components'
 
 interface FiltersSelectionProps {
     allFilters: FilterItem[]
@@ -46,14 +43,14 @@ const FiltersSelection = ({ allFilters, block, stateStuff }: FiltersSelectionPro
         })
     }
     return (
-        <Wrapper_>
+        <div className="filters-selection">
             <div className="filters-section">
                 <div className="filters-section-controls">
                     <div className="filters-section-description">
                         <T k="filters.filters.description" html={true} md={true} />
                     </div>
                     {/* <Presets stateStuff={stateStuff} /> */}
-                    <SeriesList_>
+                    <div className="filters-series-list">
                         {/* <Options filtersState={filtersState} setFiltersState={setFiltersState} /> */}
                         {filtersState?.filters?.map(
                             (series: CustomizationFiltersSeries, index: number) => (
@@ -74,7 +71,7 @@ const FiltersSelection = ({ allFilters, block, stateStuff }: FiltersSelectionPro
                                 </Button>
                             </EmptySeries_>
                         )}
-                    </SeriesList_>
+                    </div>
                 </div>
                 {/* <div className="filters-section-image">
                     <FiltersImage />
@@ -83,34 +80,14 @@ const FiltersSelection = ({ allFilters, block, stateStuff }: FiltersSelectionPro
                     </figcaption>
                 </div> */}
             </div>
-        </Wrapper_>
+        </div>
     )
 }
-
-export const Wrapper_ = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: ${spacing()};
-`
-
-export const Description_ = styled.div`
-    p:last-child {
-        margin: 0;
-    }
-`
-
-export const FiltersTop_ = styled.div``
-
-const SeriesList_ = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: ${spacing()};
-`
 
 const EmptySeries_ = styled(Series_)`
     display: grid;
     place-items: center;
-    padding: ${spacing()};
+    padding: var(--spacing);
 `
 
 const FiltersImage = () => {

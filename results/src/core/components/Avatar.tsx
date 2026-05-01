@@ -1,6 +1,4 @@
 import React from 'react'
-import { spacing, mq, fontSize } from 'core/theme'
-import styled from 'styled-components'
 import './Avatar.scss'
 
 const getUrl = entity => entity?.homepage?.url || entity?.twitter?.url

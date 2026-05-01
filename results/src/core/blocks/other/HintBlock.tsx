@@ -113,17 +113,17 @@ const HintContainer = styled.div`
     }
     background: ${color('backgroundAlt')};
     display: grid;
-    column-gap: ${spacing()};
+    column-gap: var(--spacing);
     align-items: center;
     ${animate(bgGlow)}
     /* background: radial-gradient(circle at 2% 3%, rgba(252,228,145,0.5) 0%, rgba(252,228,145,0.3) 100%); */
 
     @media ${mq.small} {
-        padding: ${spacing()};
+        padding: var(--spacing);
         grid-template-columns: 30px auto;
     }
     @media ${mq.mediumLarge} {
-        padding: ${spacing()};
+        padding: var(--spacing);
         grid-template-columns: 60px auto;
     }
 `
@@ -133,7 +133,7 @@ const HintBulb = styled.div`
     place-items: center;
 
     @media ${mq.small} {
-        margin-bottom: ${spacing(0.5)};
+        margin-bottom: var(--halfSpacing);
     }
 `
 
@@ -179,7 +179,7 @@ const HintBulbInner = styled.div`
 `
 
 const HintContent = styled.div`
-    font-size: ${fontSize('smallish')};
+    font-size: var(--fontSizeSmallish);
     p:last-child {
         margin: 0;
     }

@@ -1,11 +1,10 @@
 import React from 'react'
 import T from 'core/i18n/T'
-import { FiltersTop_, Description_, Wrapper_ } from './FiltersSelection'
-import { Options_, Option_ } from './Options'
 import cloneDeep from 'lodash/cloneDeep'
 import { FilterItem, PanelState } from './types'
 import { ItemSelectOptions } from './condition/FieldSegment'
 import { BlockVariantDefinition } from 'core/types'
+import './FacetSelection.scss'
 
 // NOTE: we shouldn't need to disable any facet if we limit legend to facets that actually
 // have data and use proper default cutoff
@@ -26,7 +25,7 @@ const FacetSelection = ({ block, allFilters, stateStuff, axisIndex }: FacetSelec
     const { filtersState, setFiltersState } = stateStuff
     const enabledFacets = allFilters.filter(f => !disabledFacets.includes(f.id))
     return (
-        <Wrapper_>
+        <div className="facet-selection">
             <div className="filters-section">
                 <div className="filters-section-controls">
                     <div className="filters-section-description">
@@ -65,7 +64,7 @@ const FacetSelection = ({ block, allFilters, stateStuff, axisIndex }: FacetSelec
                     </figcaption>
                 </div> */}
             </div>
-        </Wrapper_>
+        </div>
     )
 }
 

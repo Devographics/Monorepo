@@ -129,7 +129,7 @@ const Description = styled.div`
 `
 
 const DescriptionIntro = styled.div`
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
 `
 
 const TshirtButton = styled(Button)`
@@ -139,7 +139,7 @@ const TshirtButton = styled(Button)`
 `
 
 const Designer = styled.div`
-    margin-top: ${spacing()};
+    margin-top: var(--spacing);
     background: ${props => props.theme.colors.backgroundAlt};
     padding: ${spacing(1)};
     h5,
@@ -147,7 +147,7 @@ const Designer = styled.div`
         margin-bottom: ${spacing(0.25)};
     }
     p {
-        font-size: ${fontSize('smallish')};
+        font-size: var(--fontSizeSmallish);
         margin: 0;
     }
 `

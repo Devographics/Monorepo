@@ -121,5 +121,5 @@ const Input_ = styled.input`
 const Form_ = styled.form`
     align-items: center;
     display: flex;
-    gap: ${spacing(0.5)};
+    gap: var(--halfSpacing);
 `

@@ -75,13 +75,13 @@ const Container = styled.footer`
 const Nav = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: ${spacing()};
+    gap: var(--spacing);
     align-items: center;
     justify-content: center;
 `
 
 const Notes = styled.div`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     text-align: center;
 
     @media ${mq.small} {

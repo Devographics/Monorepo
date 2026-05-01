@@ -1,8 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
+import './AwardIcon.scss'
 
 export const AwardIcon2 = () => (
-    <Icon>
+    <div className="award-icon">
         <svg
             width="100%"
             height="100%"
@@ -21,12 +21,7 @@ export const AwardIcon2 = () => (
                 </text>
             </g>
         </svg>
-    </Icon>
+    </div>
 )
 
-const Icon = styled.div`
-    path {
-        stroke: ${({ theme }) => theme.colors.background};
-    }
-`
 export default AwardIcon2

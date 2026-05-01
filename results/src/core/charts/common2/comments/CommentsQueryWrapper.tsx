@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import T from 'core/i18n/T'
-import { runQuery } from 'core/explorer/data'
+import { runQuery } from 'core/helpers/data'
 import { StandardQuestionData } from '@devographics/types'
 import { Comments } from './Comments'
 import { CommentsCommonProps, CommentsData } from './types'

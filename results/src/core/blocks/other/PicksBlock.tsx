@@ -96,7 +96,7 @@ const PickContent = styled.div`
     position: relative;
     margin-bottom: ${spacing(0.75)};
     @media ${mq.small} {
-        padding: ${spacing(0.75)} ${spacing()} ${spacing()} ${spacing()};
+        padding: ${spacing(0.75)} var(--spacing) var(--spacing) var(--spacing);
     }
     @media ${mq.mediumLarge} {
         padding: ${spacing(1)} ${spacing(1.5)} ${spacing(1.5)} ${spacing(1.5)};
@@ -120,7 +120,7 @@ const PickContent = styled.div`
 `
 
 const PickTitle = styled.h3`
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: var(--halfSpacing);
     a,
     a:link,
     a:visited,
@@ -134,23 +134,23 @@ const PickTitleLink = styled.a`
 `
 
 const Description = styled.div`
-    font-size: ${fontSize('smallish')};
+    font-size: var(--fontSizeSmallish);
     p {
         margin: 0;
     }
 `
 
 const PicksIntroMobile = styled.div`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     text-align: center;
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: var(--halfSpacing);
     color: ${({ theme }) => theme.colors.textAlt};
     @media ${mq.mediumLarge} {
         display: none;
     }
 `
 const PicksIntro = styled.div`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     text-align: right;
     position: absolute;
     bottom: -30px;
@@ -175,8 +175,8 @@ const PickImage = styled.div`
     width: ${imageWidth};
 
     div {
-        background: ${({ theme }) => theme.colors.border};
-        border: 2px solid ${({ theme }) => theme.colors.border};
+        background: var(--borderColor);
+        border: 2px solid var(--borderColor);
         position: relative;
         z-index: 10;
         overflow: hidden;
@@ -209,7 +209,7 @@ const PickName = styled.h4`
     margin: 0;
 `
 const PickBio = styled.div`
-    font-size: ${fontSize('smallish')};
+    font-size: var(--fontSizeSmallish);
 `
 
 export default PicksBlock

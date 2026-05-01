@@ -3,12 +3,12 @@ import styled, { useTheme, keyframes } from 'styled-components'
 import Confetti from 'react-confetti'
 import tinycolor from 'tinycolor2'
 import { useI18n } from '@devographics/react-i18n'
-import { mq, spacing, fontSize } from 'core/theme'
 import AwardIcon from './AwardIcon'
 import T from 'core/i18n/T'
 import { getItemLabel } from 'core/helpers/labels'
 import { Entity } from '@devographics/types'
 import { Award } from 'core/types'
+import './AwardBlock.scss'
 
 /**
  * Awards for one category (= winner and runner ups for this category)
@@ -38,19 +38,19 @@ const AwardBlock = ({
     const runnerUps = awardsWithEntities.slice(1)
 
     return (
-        <Container className={`Award Award--${isRevealed ? 'show' : 'hide'}`} id={type}>
-            <Heading className="Award__Heading">{translate(`award.${type}.title`)}</Heading>
-            <Description className="Award__Description">
+        <div className={`award-container Award Award--${isRevealed ? 'show' : 'hide'}`} id={type}>
+            <h3 className="award-heading Award__Heading">{translate(`award.${type}.title`)}</h3>
+            <div className="award-description Award__Description">
                 <T k={`award.${type}.description`} />
-            </Description>
-            <ElementContainer className="Award__Element__Container">
+            </div>
+            <div className="award-element-container Award__Element__Container">
                 <Element className="Award__Element" onClick={handleClick}>
-                    <FrontSide className="Award__Element__Face Award__Element__Face--front">
+                    <div className="award-side award-side-front Award__Element__Face Award__Element__Face--front">
                         <AwardIcon />
-                    </FrontSide>
-                    <BackSide className="Award__Element__Face Award__Element__Face--back">
+                    </div>
+                    <div className="award-side award-side-back Award__Element__Face Award__Element__Face--back">
                         {isRevealed && (
-                            <ConfettiContainer>
+                            <div className="award-confetti-container">
                                 <Confetti
                                     width={500}
                                     height={300}
@@ -61,7 +61,7 @@ const AwardBlock = ({
                                     confettiSource={{ x: 200, y: 100, w: 100, h: 100 }}
                                     colors={theme.colors.distinct}
                                 />
-                            </ConfettiContainer>
+                            </div>
                         )}
                         {/* <PeriodicElement
                             tool={winner.id}
@@ -69,30 +69,33 @@ const AwardBlock = ({
                             symbol={periodicTableData.tools[winner.id] || '??'}
                             number={`#1` || '?'}
                         /> */}
-                        <Winner>
+                        <div className="award-winner">
                             {winner.entity ? (
                                 <EntityItem id={winner.id} entity={winner.entity} />
                             ) : (
                                 'Error: no entity found'
                             )}
-                        </Winner>
-                    </BackSide>
+                        </div>
+                    </div>
                 </Element>
-            </ElementContainer>
-            <Comment className="Award__Comment">
+            </div>
+            <div className="award-comment Award__Comment">
                 <T k={`award.${type}.comment`} md={true} values={{ value: winner.value }} />
                 {/* <ShareBlock
                     title={`${translate(`award.${type}.title`)}`}
                     block={block}
                     className="Award__Share"
                 /> */}
-            </Comment>
+            </div>
             <div className="Awards__RunnerUps">
-                <RunnerUpsHeading className="Awards__RunnerUps__Heading">
+                <h4 className="award-runnersup-heading Awards__RunnerUps__Heading">
                     <T k="awards.runner_ups" />
-                </RunnerUpsHeading>
+                </h4>
                 {runnerUps.map((runnerUp, i) => (
-                    <RunnerUpsItem key={runnerUp.id} className="Awards__RunnerUps__Item">
+                    <div
+                        key={runnerUp.id}
+                        className="awards-runnersup-item Awards__RunnerUps__Item"
+                    >
                         {i + 2}.{' '}
                         {runnerUp.entity ? (
                             <EntityItem id={runnerUp.id} entity={runnerUp.entity} />
@@ -100,10 +103,10 @@ const AwardBlock = ({
                             'Error: no entity found'
                         )}
                         {runnerUp.value ? `: ${runnerUp.value}` : ''}
-                    </RunnerUpsItem>
+                    </div>
                 ))}
             </div>
-        </Container>
+        </div>
     )
 }
 
@@ -125,39 +128,6 @@ AwardBlock.propTypes = {
     }).isRequired
 }
 */
-
-const Container = styled.div`
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    @media ${mq.smallMedium} {
-        margin-bottom: ${spacing(3)};
-    }
-
-    .Award__Share {
-        margin-bottom: ${spacing()};
-    }
-`
-
-const Heading = styled.h3`
-    margin-bottom: ${spacing(0.25)};
-    font-size: 1.5rem;
-`
-
-const Description = styled.div`
-    margin-bottom: ${spacing()};
-    font-size: ${fontSize('smallish')};
-`
-
-const ElementContainer = styled.div`
-    position: relative;
-    height: 150px;
-    width: 150px;
-    perspective: 800px;
-    margin-bottom: ${spacing()};
-`
 
 const getGlowColor = (color: any, alpha: number) => tinycolor(color).setAlpha(alpha).toRgbString()
 
@@ -205,7 +175,7 @@ const Element = styled.div`
     transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform: rotateY(0deg) scale(0.75);
     cursor: pointer;
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
 
     svg {
         display: block;
@@ -236,106 +206,5 @@ const Element = styled.div`
         transform: rotateY(540deg) scale(1);
     }
 `
-
-const Side = styled.div`
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    backface-visibility: hidden;
-`
-
-const FrontSide = styled(Side)`
-    background: ${({ theme }) => theme.colors.backgroundAlt};
-    padding: ${spacing(0.5)};
-
-    svg {
-        .bg {
-            transition: all 150ms ease-in;
-            stroke: $navy;
-            stroke-width: 15;
-        }
-        .fg {
-            fill: ${({ theme }) => theme.colors.link};
-
-            text {
-                font-size: 250px;
-            }
-        }
-    }
-
-    .Award__Element:hover & {
-        .bg {
-            stroke: rgba($teal, 0.5);
-        }
-    }
-`
-
-const BackSide = styled(Side)`
-    background: ${({ theme }) => theme.colors.background};
-    transform: rotateY(180deg);
-    font-size: ${fontSize('largest')};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`
-
-const Comment = styled.div`
-    transition: ease-in opacity 500ms 500ms;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    p {
-        margin-bottom: ${spacing(0.5)};
-    }
-
-    .Award--hide & {
-        opacity: 0;
-    }
-    .Award--show &,
-    .capture & {
-        opacity: 1;
-    }
-`
-
-const RunnerUpsHeading = styled.h4`
-    transition: ease-in opacity 500ms 1000ms;
-    opacity: 0;
-    margin-bottom: 0;
-
-    .Award--show &,
-    .capture & {
-        opacity: 1;
-    }
-`
-
-const RunnerUpsItem = styled.div`
-    opacity: 0;
-    font-size: ${fontSize('smallish')};
-
-    .Award--show &,
-    .capture & {
-        opacity: 1;
-    }
-
-    &:nth-child(2) {
-        transition: ease-in opacity 300ms 1500ms;
-    }
-    &:nth-child(3) {
-        transition: ease-in opacity 300ms 1800ms;
-    }
-`
-
-const ConfettiContainer = styled.div`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-
-    canvas {
-        transform: translate(-50%, -50%);
-    }
-`
-
-const Winner = styled.div``
 
 export default memo(AwardBlock)

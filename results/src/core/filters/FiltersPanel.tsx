@@ -2,7 +2,7 @@ import './FiltersPanel.scss'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
-import { spacing, fontSize, mq } from 'core/theme'
+import { spacing } from 'core/theme'
 import Button from 'core/components/Button'
 import {
     CreateVariantType,
@@ -23,7 +23,7 @@ import FiltersSelection from './FiltersSelection'
 import { BlockVariantDefinition } from '../types/index'
 import { useStickyState, getFiltersLink } from './helpers'
 import { CheckIcon, EditIcon } from '@devographics/icons'
-import { CustomizationDefinition, PanelState, SupportedMode } from './types'
+import { CustomizationDefinition, PanelState } from './types'
 import { useAllFilters } from 'core/charts/hooks'
 import { useEntities } from 'core/helpers/entities'
 import ModalTrigger from 'core/components/ModalTrigger'
@@ -132,9 +132,9 @@ const FiltersPanel = ({
 
     const hasFilters = filtersState.filters && filtersState.filters.length > 0
     return (
-        <Filters_>
-            <FiltersTop_>
-                <Heading_>
+        <div className="filters">
+            <div className="filters-top">
+                <h3 className="filters-heading">
                     <span className="filters-heading-title">{chartName}</span>
                     <span className="filters-heading-separator">–</span>
                     <span className="filters-heading-subtitle">
@@ -162,7 +162,7 @@ const FiltersPanel = ({
                             <T k="filters.create_variant" />
                         )}
                     </span>
-                </Heading_>
+                </h3>
                 <a
                     href="https://github.com/Devographics/docs/blob/main/results/filters.md"
                     target="_blank"
@@ -170,7 +170,7 @@ const FiltersPanel = ({
                 >
                     <T k="filters.docs" />
                 </a>
-            </FiltersTop_>
+            </div>
             <div className="filters-sections">
                 {customizationModes.includes('facets') && (
                     <>
@@ -191,8 +191,8 @@ const FiltersPanel = ({
                     <AdvancedOptions {...props} />
                 </Details>
             </div>
-            <FiltersBottom_>
-                <FooterLeft_>
+            <div className="filters-bottom">
+                <ul className="filters-footer-left">
                     <li>
                         <GraphQLTrigger
                             block={block}
@@ -209,9 +209,9 @@ const FiltersPanel = ({
                             setFiltersState={setFiltersState}
                         />
                     </li>
-                </FooterLeft_>
+                </ul>
 
-                <FooterRight_>
+                <div className="filters-footer-right">
                     {id && (
                         <Button
                             variant="link"
@@ -235,12 +235,12 @@ const FiltersPanel = ({
                     <Button onClick={handleSubmit}>
                         <T k="filters.submit" />
                     </Button>
-                </FooterRight_>
-            </FiltersBottom_>
+                </div>
+            </div>
             {/* <pre>
                 <code>{JSON.stringify(filtersState, null, 2)}</code>
             </pre> */}
-        </Filters_>
+        </div>
     )
 }
 
@@ -342,59 +342,16 @@ export const FiltersExport = ({
     )
 }
 
-const Message_ = styled.div`
-    margin-top: ${spacing(0.5)};
-    font-size: ${fontSize('small')};
-`
-
-export const FiltersTop_ = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: ${spacing()};
-    @media ${mq.smallMedium} {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: ${spacing(0.5)};
-    }
-`
-
-export const Heading_ = styled.h3`
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    @media ${mq.smallMedium} {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: ${spacing(0.5)};
-    }
-    .filters-heading-title {
-    }
-    .filters-heading-separator {
-        @media ${mq.smallMedium} {
-            display: none;
-        }
-    }
-    .filters-heading-subtitle {
-        display: flex;
-        align-items: center;
-        gap: ${spacing(0.5)};
-    }
-`
-
 export const TabsTrigger_ = styled(Tabs.Trigger)`
     border: ${props => props.theme.border};
     background: ${props => props.theme.colors.backgroundAlt};
     /* border: 1px solid ${props => props.theme.colors.border}; */
     border-radius: 3px 3px 0 0;
-    padding: ${spacing(0.5)};
+    padding: var(--halfSpacing);
     cursor: pointer;
-    margin-right: ${spacing(0.5)};
+    margin-right: var(--halfSpacing);
     margin-bottom: -1px;
-    font-size: ${fontSize('smallish')};
+    font-size: var(--fontSizeSmallish);
     &[data-state='active'] {
         border-bottom: 0;
     }
@@ -405,38 +362,8 @@ export const TabsTrigger_ = styled(Tabs.Trigger)`
 `
 
 export const Tab_ = styled(Tabs.Content)`
-    border-top: 1px solid ${({ theme }) => theme.colors.border};
-    padding-top: ${spacing()};
-`
-
-const Filters_ = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: ${spacing()};
-`
-
-const FiltersBottom_ = styled.div`
-    border-top: 1px solid ${({ theme }) => theme.colors.border};
-    padding-top: ${spacing()};
-    display: flex;
-    justify-content: space-between;
-`
-
-const FooterLeft_ = styled.ul`
-    display: flex;
-    gap: ${spacing()};
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    li {
-        text-align: center;
-    }
-`
-const FooterRight_ = styled.div`
-    display: flex;
-    gap: ${spacing()};
-    align-items: center;
+    border-top: 1px solid var(--borderColor);
+    padding-top: var(--spacing);
 `
 
 const CopyLink_ = styled(Button)`

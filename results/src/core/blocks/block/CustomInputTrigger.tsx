@@ -97,8 +97,8 @@ const TextFieldWrapper = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 250px;
-    column-gap: ${spacing()};
-    margin-bottom: ${spacing()};
+    column-gap: var(--spacing);
+    margin-bottom: var(--spacing);
 `
 
 const TextFieldContainer = styled.div`
@@ -117,6 +117,6 @@ const GraphQLTextArea = styled(AutoSelectText)`
 
 const Error = styled.p`
     color: ${({ theme }) => theme.colors.textError};
-    margin-top: ${spacing()};
+    margin-top: var(--spacing);
 `
 export default CustomInputTrigger

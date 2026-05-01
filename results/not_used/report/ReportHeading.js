@@ -39,7 +39,7 @@ const Heading = styled.h2`
     width: 100vw;
     margin-left: calc(50% - 50vw);
     padding: 0 ${spacing(2)};
-    font-weight: ${fontWeight('bold')};
+    font-weight: var(--fontBold);
     display: flex;
     flex-direction: column;
     align-items: center;

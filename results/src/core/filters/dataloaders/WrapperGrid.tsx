@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import Loading from 'core/explorer/Loading'
+import Loading from 'core/components/Loading'
 import { spacing, fontSize } from 'core/theme'
 import Tooltip from 'core/components/Tooltip'
 import isEmpty from 'lodash/isEmpty'
@@ -79,7 +79,7 @@ const GridWrapper_ = styled.div`
             : css`
                   display: flex;
                   flex-direction: column;
-                  gap: ${spacing()};
+                  gap: var(--spacing);
               `}
 `
 
@@ -88,17 +88,17 @@ const GridItem_ = styled.div`
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: ${spacing()};
+    gap: var(--spacing);
 `
 
 const Legend_ = styled.h4`
     background: ${({ theme }) => theme.colors.backgroundAlt};
-    padding: ${spacing(0.25)} ${spacing(0.5)};
+    padding: ${spacing(0.25)} var(--halfSpacing);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     margin: 0;
     font-weight: normal;
     .operator {

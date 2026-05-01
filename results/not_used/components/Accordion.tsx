@@ -32,12 +32,12 @@ export const AccordionItem = styled(Accordion.Item)`
 `
 const StyledHeader = styled(Accordion.Header)`
     /* background: ${({ theme }) => theme.colors.backgroundAlt}; */
-    padding: ${spacing(0.5)};
+    padding: var(--halfSpacing);
     margin: 0;
 `
 const StyledTrigger = styled(Accordion.Trigger)`
     all: unset;
-    font-size: ${fontSize('smallish')};
+    font-size: var(--fontSizeSmallish);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -51,12 +51,12 @@ const AccordionContentInner = ({ children, ...props }, forwardedRef) => (
 export const AccordionContent = React.forwardRef(AccordionContentInner)
 
 const StyledContent = styled(Accordion.Content)`
-    padding: ${spacing(0.5)};
+    padding: var(--halfSpacing);
     background: ${({ theme }) => theme.colors.backgroundAlt2};
     border-top: 1px dashed ${({ theme }) => theme.colors.border};
 `
 const StyledContentText = styled.div`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     p:last-child {
         margin: 0;
     }

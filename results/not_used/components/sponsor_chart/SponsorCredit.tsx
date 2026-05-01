@@ -40,7 +40,7 @@ const Username = styled.div`
 
 const UsernameInner = styled.div`
     padding: 3px 8px;
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
 `
 
 const ImageWrapper = styled.div`
@@ -53,7 +53,7 @@ const ImageWrapper = styled.div`
 `
 
 const SponsorLink = styled.a`
-    margin-left: ${spacing(0.5)};
+    margin-left: var(--halfSpacing);
     border: 2px solid ${({ theme }) => theme.colors.borderAlt2};
     background: ${({ theme }) => theme.colors.backgroundAlt};
     display: flex;

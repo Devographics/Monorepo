@@ -181,7 +181,7 @@ const PageMain = styled.div`
     overflow-y: visible;
 
     @media ${mq.smallMedium} {
-        padding: ${spacing()};
+        padding: var(--spacing);
     }
 
     @media ${mq.large} {

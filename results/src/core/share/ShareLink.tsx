@@ -28,7 +28,7 @@ const Link = styled.a`
     &:focus {
         svg path,
         svg circle {
-            fill: ${({ theme }) => theme.colors.link};
+            fill: var(--linkColor);
         }
     }
 
@@ -36,7 +36,7 @@ const Link = styled.a`
         transition: none;
         flex-grow: 1;
         text-align: center;
-        padding: ${spacing()} ${spacing(0.33)};
+        padding: var(--spacing) ${spacing(0.33)};
 
         &:not(:last-child) {
             border-right: ${({ theme }) => theme.separationBorder};
@@ -62,12 +62,12 @@ const Link = styled.a`
 `
 
 const Label = styled.span`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
 `
 
 const Icon = styled.span`
     display: flex;
-    margin-right: ${spacing()};
+    margin-right: var(--spacing);
 `
 
 const LinkWithLabel = styled(Button)`

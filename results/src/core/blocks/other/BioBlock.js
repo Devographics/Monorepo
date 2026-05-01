@@ -44,8 +44,8 @@ const BioContent = styled.div`
 `
 
 const BioBio = styled.div`
-    padding: ${spacing()};
-    font-size: ${fontSize('smallish')};
+    padding: var(--spacing);
+    font-size: var(--fontSizeSmallish);
 `
 
 const BioPhoto = styled.div`
@@ -54,7 +54,7 @@ const BioPhoto = styled.div`
     @media ${mq.smallMedium} {
         max-width: 120px;
         margin: 0 auto;
-        padding-top: ${spacing()};
+        padding-top: var(--spacing);
     }
 
     img {

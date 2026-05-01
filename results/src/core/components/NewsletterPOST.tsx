@@ -130,11 +130,11 @@ const Input_ = styled.input`
 const Form_ = styled.form`
     align-items: center;
     display: flex;
-    gap: ${spacing(0.5)};
+    gap: var(--halfSpacing);
 `
 
 const Error_ = styled.div`
     color: #fe6a6a;
-    margin-top: ${spacing()};
-    font-weight: ${fontWeight('bold')};
+    margin-top: var(--spacing);
+    font-weight: var(--fontBold);
 `

@@ -1,0 +1,25 @@
+.code-example {
+    position: relative;
+    padding: calc(var(--spacing) * 1.5) calc(var(--spacing) * 2);
+}
+
+.code-example-language {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--linkColor);
+    padding: calc(var(--spacing) * 0.1) calc(var(--spacing) * 0.4);
+    text-transform: uppercase;
+    font-size: var(--fontSizeSmall);
+    text-shadow: #000000cc 0px 1px 2px;
+}
+
+.code-example-pre {
+    /* max-width: 300px; */
+    overflow-x: scroll;
+    margin: 0;
+}
+
+.code-example-code {
+    font-weight: var(--fontMedium);
+}

@@ -31,7 +31,7 @@ export const Note_ = styled.div`
         display: none;
     }
     background: ${props => props.theme.colors.backgroundAlt};
-    padding: ${spacing()};
+    padding: var(--spacing);
     margin-top: ${spacing(2)};
     font-size: ${props => props.theme.typography.size.small};
     p,

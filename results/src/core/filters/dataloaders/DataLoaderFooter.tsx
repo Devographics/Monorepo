@@ -31,7 +31,7 @@ const Footer_ = styled.section`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: ${spacing()};
+    gap: var(--spacing);
 `
 
 const Button_ = styled(Button)`

@@ -45,7 +45,7 @@ const ShareOptions = styled.div`
 `
 
 const ShareOptionsHeading = styled.h4`
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: var(--halfSpacing);
     text-align: center;
 `
 

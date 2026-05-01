@@ -41,7 +41,7 @@ export const Options_ = styled(Series_)`
 export const Option_ = styled.div`
     display: flex;
     flex-direction: column;
-    gap: ${spacing(0.5)};
+    gap: var(--halfSpacing);
 `
 
 export default Options

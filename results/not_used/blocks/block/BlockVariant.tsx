@@ -59,6 +59,7 @@ const BlockVariant = (props: PropsWithChildren<BlockVariantProps>) => {
                     {...titleProps}
                 />
             )} */}
+                aaaxxxxxxxxxxx
                 <ShareBlockDebug block={block} />
                 {isCapturing ? (
                     <BlockChart {...props}>{children}</BlockChart>
@@ -183,15 +184,15 @@ const TabsIcon = styled.div`
 `
 
 const TabWrapper = styled.div`
-    padding: ${spacing(0.5)};
+    padding: var(--halfSpacing);
     margin-top: ${spacing(0.25)};
     border-radius: 3px 3px 0px 0;
     @media ${mq.mediumLarge} {
         margin-top: 0;
         margin-left: -1px;
         border-radius: 0 3px 3px 0;
-        margin-bottom: ${spacing()};
-        padding-left: ${spacing()};
+        margin-bottom: var(--spacing);
+        padding-left: var(--spacing);
     }
     &:has([data-state='active']) {
         background: ${props => props.theme.colors.background};
@@ -235,8 +236,8 @@ const SideArea = styled.div`
 
     @media ${mq.mediumLarge} {
         padding-top: ${spacing(2)};
-        padding-right: ${spacing(0.5)};
-        margin-left: ${spacing()};
+        padding-right: var(--halfSpacing);
+        margin-left: var(--spacing);
     }
 `
 

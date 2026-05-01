@@ -56,7 +56,7 @@ const SponsorIconWrapper = styled(Button)`
     display: grid;
     place-items: center;
     /* padding: 4px; */
-    margin-left: ${spacing(0.5)};
+    margin-left: var(--halfSpacing);
     padding: 0px;
     opacity: 0.4;
     &:hover {
@@ -137,26 +137,26 @@ const ModalHeader = styled.div`
         column-gap: ${spacing(2)};
     }
 
-    /* padding-bottom: ${spacing()}; */
+    /* padding-bottom: var(--spacing); */
     margin-bottom: ${spacing(2)};
     /* border-bottom: 1px dashed ${({ theme }) => theme.colors.border}; */
     background: ${({ theme }) => theme.colors.backgroundInverted};
     color: ${({ theme }) => theme.colors.textInverted};
-    padding: ${spacing()};
+    padding: var(--spacing);
     border-radius: 4px;
     box-shadow: 6px 6px 0px 0px ${({ theme }) => theme.colors.backgroundAlt2},
-        12px 12px 0px 0px ${({ theme }) => theme.colors.background};
+        12px 12px 0px 0px var(--backgroundColor);
 `
 const Contents = styled.div``
 
 const Title = styled.h2`
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: var(--halfSpacing);
 `
 const Description = styled.div`
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: var(--halfSpacing);
 `
 const SponsorButton = styled(Button)`
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: var(--halfSpacing);
     &,
     &:link,
     &:visited {
@@ -188,7 +188,7 @@ const ImageWrapper = styled.div`
     max-height: 180px;
     overflow: hidden;
     border-radius: 3px;
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: var(--halfSpacing);
     border: 6px solid ${({ theme }) => theme.colors.borderAlt};
     position: relative;
 `
@@ -198,7 +198,7 @@ const Image = styled.img`
 `
 
 export const ChartId = styled.div`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     /* color: ${({ theme }) => theme.colors.textAlt}; */
     text-align: center;
 `
@@ -213,7 +213,7 @@ export const ChartIdCode = styled.code`
 
 const HowItWorks = styled.h3``
 const HowItWorksContents = styled.div`
-    font-size: ${fontSize('smallish')};
+    font-size: var(--fontSizeSmallish);
 `
 
 const FaqItem = ({ faqId }: { faqId: string }) => (

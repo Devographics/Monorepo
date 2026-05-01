@@ -256,7 +256,7 @@ const DataExplorerBlock = ({
 const Wrapper_ = styled.div``
 
 const Description_ = styled.div`
-    margin-top: ${spacing()};
+    margin-top: var(--spacing);
 `
 
 const Details_ = styled.div`

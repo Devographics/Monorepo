@@ -84,7 +84,7 @@ const MiddleContent = styled.div`
 
 const SidebarToggle = styled.button`
     background: ${props => props.theme.colors.background};
-    padding: 0 ${spacing(0.5)};
+    padding: 0 var(--halfSpacing);
     cursor: pointer;
     border: 0;
     display: flex;

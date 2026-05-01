@@ -183,12 +183,12 @@ const ExportContents = styled.div`
 
     .react-tabs__tab-panel {
         background: ${({ theme }) => theme.colors.backgroundInverted};
-        padding: ${spacing(0.5)};
+        padding: var(--halfSpacing);
         color: ${({ theme }) => theme.colors.textInverted};
     }
 
     p {
-        padding: ${spacing(0.5)};
+        padding: var(--halfSpacing);
         margin: 0;
     }
 `
@@ -207,12 +207,12 @@ const ButtonWrapper = styled.div`
 
 const ExportButton = styled(Button)`
     @media ${mq.mediumLarge} {
-        margin-left: ${spacing(0.5)};
+        margin-left: var(--halfSpacing);
     }
 `
 
 const Icon = styled.svg`
-    stroke: ${({ theme }) => theme.colors.link};
+    stroke: var(--linkColor);
     height: 16px;
     width: 16px;
 
@@ -222,18 +222,18 @@ const Icon = styled.svg`
 `
 
 const Message = styled.div`
-    margin-top: ${spacing(0.5)};
+    margin-top: var(--halfSpacing);
     max-width: 600px;
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
 `
 
 const TextArea = styled.textarea`
     width: 100%;
-    font-size: ${fontSize('small')};
-    padding: ${spacing(0.5)};
+    font-size: var(--fontSizeSmall);
+    padding: var(--halfSpacing);
     border: 0;
     border-radius: 2px;
-    background: ${({ theme }) => theme.colors.background};
+    background: var(--backgroundColor);
     color: ${({ theme }) => theme.colors.text};
 
     &:focus {

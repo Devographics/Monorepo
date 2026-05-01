@@ -48,7 +48,7 @@ const Wrapper = styled.div`
     @media ${mq.small} {
         display: flex;
         flex-direction: column;
-        gap: ${spacing()};
+        gap: var(--spacing);
     }
     @media ${mq.mediumLarge} {
         display: grid;
@@ -62,14 +62,14 @@ const Takeaway_ = styled.section`
     font-size: ${fontSize('large')};
     background: ${({ theme }) => theme.colors.backgroundAlt};
     border-radius: 30px;
-    padding: ${spacing()};
+    padding: var(--spacing);
 `
 
 const Heading_ = styled.h3`
     text-transform: uppercase;
     color: ${({ theme }) => theme.colors.textAlt};
     margin-bottom: ${spacing(0.25)};
-    font-weight: ${fontWeight('medium')};
+    font-weight: var(--fontMedium);
     font-size: ${fontSize('large')};
 `
 const Content_ = styled.div``

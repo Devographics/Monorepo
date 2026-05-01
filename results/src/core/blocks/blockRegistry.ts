@@ -56,7 +56,7 @@ const chartBlocks = {
 /* ----------------------------  Blocks  -------------------------------- */
 /* ---------------------------------------------------------------------- */
 
-import DataExplorerBlock from 'core/explorer/DataExplorerBlock'
+// import DataExplorerBlock from 'core/explorer/DataExplorerBlock'
 
 import TextBlock from 'core/blocks/other/TextBlock'
 // import ImageBlock from 'core/blocks/other/ImageBlock'
@@ -79,7 +79,7 @@ import FigureBlock from 'core/blocks/other/FigureBlock'
 import HintBlock from 'core/blocks/other/HintBlock'
 import AboutBlock from 'core/blocks/other/AboutBlock'
 import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
-import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlock'
+// import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlock'
 import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 
 import HighlightBlock from 'core/blocks/other/HighlightBlock'
@@ -107,10 +107,10 @@ const otherBlocks = {
     CreditsBlock,
     AboutBlock,
     HowToHelpBlock,
-    SponsorFinishBlock,
+    // SponsorFinishBlock,
     LivestreamBlock,
     TakeawaysBlock,
-    DataExplorerBlock,
+    // DataExplorerBlock,
     HighlightBlock,
     FigureBlock
 }

@@ -1,0 +1,136 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
+.award-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include small-medium {
+        margin-bottom: var(--tripleSpacing);
+    }
+
+    .award-share {
+        margin-bottom: var(--spacing);
+    }
+}
+
+.award-heading {
+    margin-bottom: var(--quarterSpacing);
+    font-size: 1.5rem;
+}
+
+.award-description {
+    margin-bottom: var(--spacing);
+    font-size: var(--fontSizeSmallish);
+}
+
+.award-element-container {
+    position: relative;
+    height: 150px;
+    width: 150px;
+    perspective: 800px;
+    margin-bottom: var(--spacing);
+}
+
+.award-side {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+}
+
+.award-side-front {
+    background: var(--backgroundAltColor);
+    padding: var(--halfSpacing);
+
+    svg {
+        .bg {
+            transition: all 150ms ease-in;
+            stroke: #232840;
+            stroke-width: 15;
+        }
+        .fg {
+            fill: var(--linkColor);
+
+            text {
+                font-size: 250px;
+            }
+        }
+    }
+
+    .Award__Element:hover & {
+        .bg {
+            stroke: rgba(#41c7c7, 0.5);
+        }
+    }
+}
+
+.award-side-back {
+    background: var(--backgroundColor);
+    transform: rotateY(180deg);
+    font-size: var(--fontSizeLargest);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.award-comment {
+    transition: ease-in opacity 500ms 500ms;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    p {
+        margin-bottom: var(--halfSpacing);
+    }
+
+    .Award--hide & {
+        opacity: 0;
+    }
+    .Award--show &,
+    .capture & {
+        opacity: 1;
+    }
+}
+
+.award-runnersup-heading {
+    transition: ease-in opacity 500ms 1000ms;
+    opacity: 0;
+    margin-bottom: 0;
+
+    .Award--show &,
+    .capture & {
+        opacity: 1;
+    }
+}
+
+.award-runnersup-item {
+    opacity: 0;
+    font-size: var(--fontSizeSmallish);
+
+    .Award--show &,
+    .capture & {
+        opacity: 1;
+    }
+
+    &:nth-child(2) {
+        transition: ease-in opacity 300ms 1500ms;
+    }
+    &:nth-child(3) {
+        transition: ease-in opacity 300ms 1800ms;
+    }
+}
+
+.award-confetti-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    canvas {
+        transform: translate(-50%, -50%);
+    }
+}
+
+.award-winner {
+}

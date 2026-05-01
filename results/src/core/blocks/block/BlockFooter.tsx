@@ -9,14 +9,14 @@ const Footer = styled.div`
     .rawchartmode & {
         display: none;
     }
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
 `
 
 const Respondents = styled.div`
-    font-size: ${fontSize('small')};
+    font-size: var(--fontSizeSmall);
     text-align: center;
     color: ${props => props.theme.colors.textAlt};
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: var(--halfSpacing);
 `
 
 const Units = styled.div`

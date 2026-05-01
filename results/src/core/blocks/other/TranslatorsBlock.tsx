@@ -45,20 +45,20 @@ const Container = styled.div`
 
 const Header = styled.h3`
     text-align: center;
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
 `
 
 const Locales = styled.div`
     display: grid;
     @media ${mq.smallMedium} {
         grid-template-columns: 1fr 1fr;
-        column-gap: ${spacing(0.5)};
-        row-gap: ${spacing(0.5)};
+        column-gap: var(--halfSpacing);
+        row-gap: var(--halfSpacing);
     }
     @media ${mq.large} {
         grid-template-columns: 1fr 1fr 1fr;
-        column-gap: ${spacing()};
-        row-gap: ${spacing()};
+        column-gap: var(--spacing);
+        row-gap: var(--spacing);
     }
 `
 

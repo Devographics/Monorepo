@@ -230,7 +230,7 @@ export const BlockHeader = styled.div`
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: flex-end;
-    gap: ${spacing(0.5)}; */
+    gap: var(--halfSpacing); */
     min-width: 100%;
     width: max-content;
     border-bottom: ${props => props.theme.border};
@@ -266,9 +266,9 @@ export const Tab_ = styled.div`
     /* border: 1px solid ${props => props.theme.colors.border}; */
     border-radius: 3px 3px 0 0;
     cursor: pointer;
-    margin-right: ${spacing(0.5)};
+    margin-right: var(--halfSpacing);
     margin-bottom: -1px;
-    font-size: ${fontSize('smallish')};
+    font-size: var(--fontSizeSmallish);
     display: flex;
     align-items: center;
     /* gap: 5px; */
@@ -284,23 +284,23 @@ export const Tab_ = styled.div`
         width: 24px;
         display: grid;
         place-items: center;
-        margin-right: ${spacing(0.5)};
+        margin-right: var(--halfSpacing);
     }
     button {
         color: var(--textColor);
     }
 `
 export const TabsTrigger = styled(Tabs.Trigger)`
-    padding: ${spacing(0.5)};
+    padding: var(--halfSpacing);
     border: 0;
     background: none;
 `
 
 const BlockHeaderTop_ = styled.div`
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
     display: flex;
     flex-direction: column;
-    gap: ${spacing(0.5)};
+    gap: var(--halfSpacing);
 `
 
 const CustomizeButton_ = styled(Button)`

@@ -123,13 +123,13 @@ const ShareButton = styled(Button)`
 `
 
 const Icon = styled.svg`
-    stroke: ${({ theme }) => theme.colors.link};
+    stroke: var(--linkColor);
     height: 16px;
     width: 16px;
 
     ${ShareButton}:hover &,
     .ShareBlock._is-visible & {
-        stroke: ${({ theme }) => theme.colors.link};
+        stroke: var(--linkColor);
     }
 `
 

@@ -43,8 +43,8 @@ const DataModal_ = styled.div``
 
 const Tab_ = styled(Tabs.Content)`
     border: 1px solid ${({ theme }) => theme.colors.border};
-    padding: ${spacing()};
-    background: ${({ theme }) => theme.colors.background};
+    padding: var(--spacing);
+    background: var(--backgroundColor);
 `
 
 export default DataModal

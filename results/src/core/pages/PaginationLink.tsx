@@ -13,7 +13,7 @@ const StyledLink = styled(PageLink)`
     overflow: hidden;
     text-overflow: ellipsis;
     justify-content: ${props => (props.type === 'previous' ? 'flex-start' : 'flex-end')};
-    padding: ${spacing()};
+    padding: var(--spacing);
 
     @media ${mq.smallMedium} {
         font-size: ${fontSize('smaller')};

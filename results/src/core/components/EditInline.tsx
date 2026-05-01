@@ -12,7 +12,7 @@ const EditInline = ({ defaultValue }: { defaultValue: string }) => {
     // TODO: it should probably be called "initialValue" or "currentValue" instead
     const [contents, setContents] = useState(defaultValue)
     return (
-        <div>
+        <div className="edit-inline">
             {isTextfield ? (
                 <Wrapper>
                     <Input
