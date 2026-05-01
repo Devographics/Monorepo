@@ -125,7 +125,7 @@ const Content = styled.div<{ size: string }>`
     /* padding: 0; */
     overscroll-behavior: contain;
     border-radius: 10px;
-    background: ${color('backgroundAlt')};
+    background: var(--backgroundAltColor);
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.75);
 
     @media ${mq.small} {

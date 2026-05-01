@@ -4,6 +4,7 @@ import styled, { css, keyframes } from 'styled-components'
 import { mq, spacing, fontSize, color } from 'core/theme'
 import T from 'core/i18n/T'
 import { useInView } from 'react-intersection-observer'
+import './HintBlock.scss'
 
 // From 0 (top) to 1(bottom), where in the viewport should the trigger happen
 const buffer = 0.2
@@ -24,8 +25,8 @@ const HintBlock = ({ block, data }) => {
     })
 
     return (
-        <HintContainer className="Block" ref={hintRef} animate={inView}>
-            <HintBulb>
+        <HintContainer_ className="hint-container Block" ref={hintRef} animate={inView}>
+            <div className="hint-bulb">
                 <HintBulbInner animate={inView}>
                     <span className="bulb" role="img" aria-label="Lightbulb Emoji">
                         💡
@@ -40,11 +41,11 @@ const HintBlock = ({ block, data }) => {
                         <span />
                     </span>
                 </HintBulbInner>
-            </HintBulb>
-            <HintContent>
+            </div>
+            <div className="hint-content">
                 <T k={`hints.${id}`} md={true} values={variables} />
-            </HintContent>
-        </HintContainer>
+            </div>
+        </HintContainer_>
     )
 }
 
@@ -72,7 +73,7 @@ const spark = keyframes`
 
 const bgGlow = keyframes`
   0% {
-    /* background: ${color('backgroundAlt')}; */
+    /* background: var(--backgroundAltColor); */
     background: radial-gradient(circle at 2% 3%, rgba(252,228,145,0) 0%, rgba(252,228,145,0) 100%);
 
   }
@@ -106,37 +107,9 @@ HintBlock.propTypes = {
     section: PropTypes.string
 }
 
-const HintContainer = styled.div`
-    margin-bottom: ${spacing(3)};
-    @media ${mq.large} {
-        margin-bottom: ${spacing(4)};
-    }
-    background: ${color('backgroundAlt')};
-    display: grid;
-    column-gap: var(--spacing);
-    align-items: center;
+const HintContainer_ = styled.div`
     ${animate(bgGlow)}
-    /* background: radial-gradient(circle at 2% 3%, rgba(252,228,145,0.5) 0%, rgba(252,228,145,0.3) 100%); */
-
-    @media ${mq.small} {
-        padding: var(--spacing);
-        grid-template-columns: 30px auto;
-    }
-    @media ${mq.mediumLarge} {
-        padding: var(--spacing);
-        grid-template-columns: 60px auto;
-    }
 `
-
-const HintBulb = styled.div`
-    display: grid;
-    place-items: center;
-
-    @media ${mq.small} {
-        margin-bottom: var(--halfSpacing);
-    }
-`
-
 const HintBulbInner = styled.div`
     position: relative;
     .bulb {
@@ -175,13 +148,6 @@ const HintBulbInner = styled.div`
         top: -20%;
         right: -10%;
         transform: rotate(30deg);
-    }
-`
-
-const HintContent = styled.div`
-    font-size: var(--fontSizeSmallish);
-    p:last-child {
-        margin: 0;
     }
 `
 

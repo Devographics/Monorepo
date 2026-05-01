@@ -1,0 +1,38 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
+.hint-container {
+    margin-bottom: var(--tripleSpacing);
+    @include large {
+        margin-bottom: var(--quadrupleSpacing);
+    }
+    background: var(--backgroundAltColor);
+    display: grid;
+    column-gap: var(--spacing);
+    align-items: center;
+    /* background: radial-gradient(circle at 2% 3%, rgba(252,228,145,0.5) 0%, rgba(252,228,145,0.3) 100%); */
+
+    @include small {
+        padding: var(--spacing);
+        grid-template-columns: 30px auto;
+    }
+    @include medium-large {
+        padding: var(--spacing);
+        grid-template-columns: 60px auto;
+    }
+}
+
+.hint-bulb {
+    display: grid;
+    place-items: center;
+
+    @include small {
+        margin-bottom: var(--halfSpacing);
+    }
+}
+
+.hint-content {
+    font-size: var(--fontSizeSmallish);
+    p:last-child {
+        margin: 0;
+    }
+}

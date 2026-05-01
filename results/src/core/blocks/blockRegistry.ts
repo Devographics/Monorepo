@@ -78,7 +78,7 @@ import CreditsBlock from 'core/blocks/other/CreditsBlock'
 import FigureBlock from 'core/blocks/other/FigureBlock'
 import HintBlock from 'core/blocks/other/HintBlock'
 import AboutBlock from 'core/blocks/other/AboutBlock'
-import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
+// import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
 // import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlock'
 import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 
@@ -106,7 +106,7 @@ const otherBlocks = {
     HintBlock,
     CreditsBlock,
     AboutBlock,
-    HowToHelpBlock,
+    // HowToHelpBlock,
     // SponsorFinishBlock,
     LivestreamBlock,
     TakeawaysBlock,

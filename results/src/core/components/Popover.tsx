@@ -165,7 +165,7 @@ const PopoverPopup = styled.div`
     top: 125%;
     left: 50%;
     padding: ${props => (props.addPadding ? spacing(1) : 0)};
-    background: ${color('backgroundAlt')};
+    background: var(--backgroundAltColor);
     border: ${props => props.theme.separationBorder};
     transform: translateX(-50%);
     z-index: ${zIndex('popover')};

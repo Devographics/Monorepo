@@ -39,7 +39,7 @@ const Introduction = styled.div`
 
     @media ${mq.large} {
         font-size: ${props => props.theme.typography.size.large};
-        margin-bottom: ${spacing(4)};
+        margin-bottom: var(--quadrupleSpacing);
     }
 `
 

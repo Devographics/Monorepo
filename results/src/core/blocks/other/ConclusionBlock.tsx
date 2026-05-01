@@ -50,7 +50,7 @@ const Conclusion = styled.div`
     @media ${mq.large} {
         max-width: 700px;
         margin: 0 auto;
-        margin-bottom: ${spacing(4)};
+        margin-bottom: var(--quadrupleSpacing);
         font-size: 1.1rem;
     }
     .first-line {

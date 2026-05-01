@@ -95,11 +95,11 @@ const Button = styled.button.attrs(
                 &:hover, &:focus {
                     text-decoration: none;
                     box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
-                    background: ${color('backgroundAlt')};
+                    background: var(--backgroundAltColor);
                 }
 
                 &.Button--selected {
-                    background: ${color('backgroundAlt')};
+                    background: var(--backgroundAltColor);
                     cursor: default;
                     pointer-events: none;
                     border-style: solid;

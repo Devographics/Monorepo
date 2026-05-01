@@ -213,10 +213,10 @@ const Wrapper = styled.section`
     ${props =>
         props.withMargin &&
         css`
-            margin-bottom: ${spacing(3)};
+            margin-bottom: var(--tripleSpacing);
 
             @media ${mq.large} {
-                margin-bottom: ${spacing(4)};
+                margin-bottom: var(--quadrupleSpacing);
             }
         `}
 `

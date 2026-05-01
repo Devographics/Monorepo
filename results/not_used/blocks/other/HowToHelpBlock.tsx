@@ -15,7 +15,7 @@ const HowToHelp = styled.div`
     @media ${mq.large} {
         max-width: 700px;
         margin: 0 auto;
-        margin-bottom: ${spacing(4)};
+        margin-bottom: var(--quadrupleSpacing);
     }
 `
 

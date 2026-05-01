@@ -185,7 +185,7 @@ const PageMain = styled.div`
     }
 
     @media ${mq.large} {
-        padding: ${spacing(3)};
+        padding: var(--tripleSpacing);
     }
 `
 

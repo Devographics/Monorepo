@@ -58,7 +58,7 @@ const SponsorList = styled.div`
     @media ${mq.large} {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        column-gap: ${spacing(4)};
+        column-gap: var(--quadrupleSpacing);
     }
 `
 

@@ -82,7 +82,7 @@ const PicksContainer = styled.div`
 `
 
 const Pick = styled.div`
-    margin-bottom: ${spacing(4)};
+    margin-bottom: var(--quadrupleSpacing);
 `
 
 const triangleWidth = 2

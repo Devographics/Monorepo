@@ -124,7 +124,7 @@ const List = styled.div`
     @media ${mq.large} {
         display: grid;
         grid-template-columns: auto auto;
-        grid-gap: ${spacing(3)};
+        grid-gap: var(--tripleSpacing);
     }
 `
 

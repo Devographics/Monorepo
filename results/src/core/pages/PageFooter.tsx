@@ -65,7 +65,7 @@ const PageFooter = () => {
 
 const Container = styled.footer`
     @media ${mq.small} {
-        margin-top: ${spacing(4)};
+        margin-top: var(--quadrupleSpacing);
     }
     @media ${mq.mediumLarge} {
         margin-top: ${spacing(6)};
@@ -85,7 +85,7 @@ const Notes = styled.div`
     text-align: center;
 
     @media ${mq.small} {
-        margin-top: ${spacing(4)};
+        margin-top: var(--quadrupleSpacing);
     }
     @media ${mq.mediumLarge} {
         margin-top: ${spacing(6)};
