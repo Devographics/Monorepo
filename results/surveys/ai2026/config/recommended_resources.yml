@@ -20,5 +20,5 @@
   id: sentry_seer
   description: >
       Seer is the AI debugger that uses Sentry context – like errors, traces, logs, replays, and commit history– to flag breaking changes, automatically root cause issues in production, and fix what you missed.
-  url: https://sentry.io/product/seer/?utm_source=state_of_ai&utm_medium=website&utm_campaign=ai2026
+  url: https://blog.sentry.io/introducing-seer-agent/?utm_source=state_of_ai&utm_medium=website&utm_campaign=ai2026
   image: https://assets.devographics.com/other/sentry_seer.png

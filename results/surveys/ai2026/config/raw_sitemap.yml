@@ -715,11 +715,11 @@
 - id: conclusion
   path: /conclusion
   blocks:
-      - id: conclusion_ashok
+      - id: conclusion_the_primeagen
         template: conclusion
         variables:
-            author: ashok_gelal
-            entities: '"ashok_gelal"'
+            author: the_primeagen
+            entities: '"the_primeagen"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
