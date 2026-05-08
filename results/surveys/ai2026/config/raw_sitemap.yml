@@ -230,6 +230,10 @@
         i18nNamespace: tools
         template: multiple_options2_combined
 
+      - id: models_resources
+        items: [fm-prompt-engineering, fm-ai-developer-setup]
+        template: recommended_resources
+
 - id: coding_agents_assistants
   path: /coding-agents-assistants
   blocks:
@@ -257,7 +261,7 @@
         template: multiple_options2_combined
 
       - id: coding_agents_assistants_resources
-        items: [sentry_mcp]
+        items: [fm-ai-engineering-fundamentals, fm-agents-fundamentals]
         template: recommended_resources
 
 - id: other_tools
@@ -344,7 +348,7 @@
         template: single_option2_combined
 
       - id: usage_resources
-        items: [gitnation]
+        items: [sentry_mcp]
         template: recommended_resources
 
 - id: risks_pain_points
@@ -362,6 +366,9 @@
       - id: ai_happiness
         template: happiness2
 
+      - id: risks_pain_points_resources
+        items: [fm-mcp]
+        template: recommended_resources
 # - id: resources
 #   path: /resources
 #   blocks:
@@ -429,6 +436,10 @@
 
       - id: reach_agi
         template: opinion2
+
+      - id: risks_pain_points_resources
+        items: [fm-neural-networks]
+        template: recommended_resources
 
 # - id: awards
 #   path: /awards

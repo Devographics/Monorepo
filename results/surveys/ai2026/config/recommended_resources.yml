@@ -22,3 +22,65 @@
       Seer is the AI debugger that uses Sentry context – like errors, traces, logs, replays, and commit history– to flag breaking changes, automatically root cause issues in production, and fix what you missed.
   url: https://blog.sentry.io/introducing-seer-agent/?utm_source=state_of_ai&utm_medium=website&utm_campaign=ai2026
   image: https://assets.devographics.com/other/sentry_seer.png
+
+# fem
+
+- name: |
+      Practical Prompt Engineering
+  id: fm-prompt-engineering
+  description: >
+      Learn prompting techniques that work consistently across Claude, ChatGPT, Copilot, and Cursor. Transform vague project ideas into structure, actionable development plans.
+  url: https://frontendmasters.com/courses/prompt-engineering/
+  image: https://static.frontendmasters.com/assets/teachers/goldfarb/thumb@2x.webp
+  teacher: Sabrina Goldfarb
+  company: GitHub
+
+- name: |
+      AI Agents Fundamentals, v2
+  id: fm-agents-fundamentals
+  description: >
+      Learn the foundations of agent development like tool calling, agent loops, and and evals. Add human-in-the-loop approvals for higher-stakes operations.
+  url: https://frontendmasters.com/courses/ai-agents-v2/
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+  teacher: Scott Moss
+  company: Netflix
+
+- name: |
+      Craft a Professional AI Developer Setup
+  id: fm-ai-developer-setup
+  description: >
+      Boost your coding productivity with AI-assisted tools and agents. Use Cursor and Claude Code for precise inline edits or to delegate larger tasks to background agents.
+  url: https://frontendmasters.com/courses/pro-ai/
+  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
+  teacher: Steve Kinney
+  company: Temporal
+
+- name: |
+      AI Engineering Fundamentals
+  id: fm-ai-engineering-fundamentals
+  description: >
+      Add an agentic chat interface to an existing application. Then establish a rigorous eval harness to systematically improve the agent through context engineering, advanced tool use, RAG, and reliable production feedback loops.
+  url: https://frontendmasters.com/courses/ai-engineering/
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+  teacher: Scott Moss
+  company: Netflix
+
+- name: |
+      MCP: Learn the Universal Language for AI Integration
+  id: fm-mcp
+  description: >
+      Dive into the Model Context Protocol and code an MCP server from scratch! Leverage external APIs, interact with custom applications, and learn security best-practices to ensure safe AI agent deployment.
+  url: https://frontendmasters.com/courses/mcp/
+  image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.webp
+  teacher: Brian Holt
+  company: Neon
+
+- name: |
+      Hard Parts of Neural Networks
+  id: fm-neural-networks
+  description: >
+      Through hands-on examples such as fraud detection and image recognition, you'll build robust mental models for foundational AI concepts like data preprocessing, probability, training, and prediction.
+  url: https://frontendmasters.com/courses/hard-parts-ai/
+  image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
+  teacher: Will Sentance
+  company: Codesmith
