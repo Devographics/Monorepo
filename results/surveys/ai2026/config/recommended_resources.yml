@@ -4,8 +4,27 @@
   id: gitnation
   description: >
       Learn the latest trends directly from early-adopters and tech authors at GitNation.com.
-  url: https://gitnation.com/?utm_source=Influencer&utm_medium=stateofreact2024
+  url: https://gitnation.com/?utm_source=Influencer&utm_medium=stateofai2026
   image: https://assets.devographics.com/sponsors/gitnation_square.svg
+
+# clerk
+
+- name: Clerk
+  id: clerk
+  description: >
+      Need more than sign-in? Clerk gives you full stack auth and user management — so you can launch faster, scale easier, and stay focused on building your business.
+  url: https://clerk.com/?utm_source=state_of_ai&utm_medium=website&utm_campaign=ai2026
+  image: https://assets.devographics.com/sponsors/clerk-avatar-circle-primary-dark.svg
+
+# tokyodev
+
+- name: |
+      TokyoDev: Japan Needs International Developers
+  id: td-article
+  description: |
+      How Japan's labor shortage equals career opportunities for certain international software developers.
+  url: https://www.tokyodev.com/articles/japan-needs-international-developers?utm_source=stateofai&utm_medium=website&utm_campaign=ai2026
+  image: https://assets.devographics.com/other/tokyodev-intl-dev-article.jpg
 
 # sentry
 
@@ -30,7 +49,7 @@
   id: fm-prompt-engineering
   description: >
       Learn prompting techniques that work consistently across Claude, ChatGPT, Copilot, and Cursor. Transform vague project ideas into structure, actionable development plans.
-  url: https://frontendmasters.com/courses/prompt-engineering/
+  url: https://frontendmasters.com/courses/prompt-engineering/?utm_source=state_of_ai&utm_medium=website&utm_campaign=ai2026
   image: https://static.frontendmasters.com/assets/teachers/goldfarb/thumb@2x.webp
   teacher: Sabrina Goldfarb
   company: GitHub
@@ -40,7 +59,7 @@
   id: fm-agents-fundamentals
   description: >
       Learn the foundations of agent development like tool calling, agent loops, and and evals. Add human-in-the-loop approvals for higher-stakes operations.
-  url: https://frontendmasters.com/courses/ai-agents-v2/
+  url: https://frontendmasters.com/courses/ai-agents-v2/?utm_source=state_of_ai&utm_medium=website&utm_campaign=ai2026
   image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
   teacher: Scott Moss
   company: Netflix
@@ -50,7 +69,7 @@
   id: fm-ai-developer-setup
   description: >
       Boost your coding productivity with AI-assisted tools and agents. Use Cursor and Claude Code for precise inline edits or to delegate larger tasks to background agents.
-  url: https://frontendmasters.com/courses/pro-ai/
+  url: https://frontendmasters.com/courses/pro-ai/?utm_source=state_of_ai&utm_medium=website&utm_campaign=ai2026
   image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
   teacher: Steve Kinney
   company: Temporal
@@ -60,7 +79,7 @@
   id: fm-ai-engineering-fundamentals
   description: >
       Add an agentic chat interface to an existing application. Then establish a rigorous eval harness to systematically improve the agent through context engineering, advanced tool use, RAG, and reliable production feedback loops.
-  url: https://frontendmasters.com/courses/ai-engineering/
+  url: https://frontendmasters.com/courses/ai-engineering/?utm_source=state_of_ai&utm_medium=website&utm_campaign=ai2026
   image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
   teacher: Scott Moss
   company: Netflix
@@ -70,7 +89,7 @@
   id: fm-mcp
   description: >
       Dive into the Model Context Protocol and code an MCP server from scratch! Leverage external APIs, interact with custom applications, and learn security best-practices to ensure safe AI agent deployment.
-  url: https://frontendmasters.com/courses/mcp/
+  url: https://frontendmasters.com/courses/mcp/?utm_source=state_of_ai&utm_medium=website&utm_campaign=ai2026
   image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.webp
   teacher: Brian Holt
   company: Neon
@@ -80,7 +99,7 @@
   id: fm-neural-networks
   description: >
       Through hands-on examples such as fraud detection and image recognition, you'll build robust mental models for foundational AI concepts like data preprocessing, probability, training, and prediction.
-  url: https://frontendmasters.com/courses/hard-parts-ai/
+  url: https://frontendmasters.com/courses/hard-parts-ai/?utm_source=state_of_ai&utm_medium=website&utm_campaign=ai2026
   image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
   teacher: Will Sentance
   company: Codesmith

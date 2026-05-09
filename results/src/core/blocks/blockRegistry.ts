@@ -76,6 +76,8 @@ import NotFoundBlock from 'core/blocks/other/NotFoundBlock'
 import CreditsBlock from 'core/blocks/other/CreditsBlock'
 
 import FigureBlock from 'core/blocks/other/FigureBlock'
+import MidpageResourceBlock from 'core/blocks/other/MidpageResourceBlock'
+
 import HintBlock from 'core/blocks/other/HintBlock'
 import AboutBlock from 'core/blocks/other/AboutBlock'
 // import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
@@ -112,7 +114,8 @@ const otherBlocks = {
     TakeawaysBlock,
     // DataExplorerBlock,
     HighlightBlock,
-    FigureBlock
+    FigureBlock,
+    MidpageResourceBlock
 }
 
 export default { ...chartBlocks, ...otherBlocks }

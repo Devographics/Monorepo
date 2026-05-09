@@ -26,7 +26,9 @@ export const happiness: TemplateFunction = options => {
 
     const questionSegment = question.id?.replace('_happiness', '')
     const happinessDbFieldName =
-        question.id && specialFieldNames.includes(question.id) ? questionSegment : section.id
+        question.id && specialFieldNames.includes(question.id)
+            ? questionSegment
+            : question.sectionId || section.id
 
     const output: QuestionTemplateOutput = {
         defaultSort: 'options',
