@@ -1,6 +1,9 @@
 @import '../../../stylesheets/_breakpoints.scss';
 
 .figure-block {
+    // background: var(--backgroundAltColor);
+    padding: calc(var(--spacing) * 1.5);
+    border: 1px solid var(--backgroundAlt2Color);
     @include small {
         text-align: center;
     }
@@ -12,6 +15,7 @@
     margin-bottom: calc(var(--spacing) * 4);
 }
 .figure-block-number {
+    line-height: 1;
     @include small {
         font-size: 3.5rem;
     }
@@ -25,7 +29,8 @@
         font-size: 1.2rem;
     }
     @include medium-large {
-        border-left: 1px solid var(--textColor);
+        // border-left: 1px solid var(--textColor);
+        border-left: 1px solid var(--backgroundAlt2Color);
         padding-left: var(--doubleSpacing);
         font-size: 1.5rem;
     }

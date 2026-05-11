@@ -50,15 +50,15 @@ const ThemedLayout = (props: LayoutProps) => {
         '--tripleSpacing': `${theme.dimensions.spacing * 3}px`,
         '--quadrupleSpacing': `${theme.dimensions.spacing * 4}px`,
         '--secondaryFontFamily': `${theme.typography.fontFamily2}`,
-        '--fontLight': fontWeight('light'),
-        '--fontMedium': fontWeight('medium'),
-        '--fontBold': fontWeight('bold'),
-        '--fontSizeSmaller': fontSize('smaller'),
-        '--fontSizeSmall': fontSize('small'),
-        '--fontSizeSmallish': fontSize('smallish'),
-        '--fontSizeMedium': fontSize('medium'),
-        '--fontSizeLarge': fontSize('large'),
-        '--fontSizeLargest': fontSize('largest')
+        '--fontLight': theme.typography.weight.light,
+        '--fontMedium': theme.typography.weight.medium,
+        '--fontBold': theme.typography.weight.bold,
+        '--fontSizeSmaller': theme.typography.size.smaller,
+        '--fontSizeSmall': theme.typography.size.small,
+        '--fontSizeSmallish': theme.typography.size.smallish,
+        '--fontSizeMedium': theme.typography.size.medium,
+        '--fontSizeLarge': theme.typography.size.large,
+        '--fontSizeLargest': theme.typography.size.largest
     }
     return (
         // @ts-expect-errors legacy

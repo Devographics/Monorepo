@@ -216,13 +216,33 @@
       # - id: tool_modal_hint
       #   template: hint
 
+      - id: figure_claude_use_increase
+        template: figure
+        variables:
+            value: 26
+            unit: percentage
+
       - id: models_ratios
         template: multi_items_ratios
         i18nNamespace: tools
 
+      # - id: tools_ratios_over_time
+      #   template: multi_items_ratios
+      #   i18nNamespace: tools
+      #   # queryOptions:
+      #   # sectionId: _all_libraries
+      #   variables:
+      #       enableMultiSection: true
+
       - id: models_others
         i18nNamespace: tools
         template: multiple_options2_freeform
+
+      - id: figure_average_model_use
+        template: figure
+        variables:
+            value: 4
+            unit: count
 
       - template: cardinalities
 
@@ -255,6 +275,12 @@
         template: multiple_options2_freeform
 
       - template: cardinalities
+
+      - id: figure_claude_paying_users
+        template: figure
+        variables:
+            value: 58
+            unit: percentage
 
       - id: coding_agents_assistants_paid_for
         i18nNamespace: tools
@@ -314,6 +340,12 @@
       - id: ai_uses
         template: multiple_options2_combined
 
+      - id: figure_ai_generated_code_balance
+        template: figure
+        variables:
+            value: 8
+            unit: percentage
+
       - id: ai_generated_code_balance
         template: multiple_options2
         showAverage: true
@@ -324,6 +356,12 @@
 
       - id: ai_code_refactoring_reasons
         template: multiple_options2_combined
+
+      - id: figure_ai_code_generation_frequency
+        template: figure
+        variables:
+            value: 61
+            unit: percentage
 
       - id: ai_code_generation_frequency
         template: single_option2
@@ -356,6 +394,12 @@
   blocks:
       - id: ai_risks
         template: multiple_options2_combined
+
+      - id: figure_ai_pain_points
+        template: figure
+        variables:
+            value: -17
+            unit: percentage
 
       - id: ai_pain_points
         template: multiple_options2_combined
@@ -413,6 +457,12 @@
   blocks:
       - template: page_introduction
 
+      - id: figure_integral_workflow
+        template: figure
+        variables:
+            value: 72
+            unit: percentage
+
       - id: integral_workflow
         template: opinion2
 
@@ -433,6 +483,12 @@
 
       - id: ai_quality_improving
         template: opinion2
+
+      - id: figure_reach_agi
+        template: figure
+        variables:
+            value: 27
+            unit: percentage
 
       - id: reach_agi
         template: opinion2
