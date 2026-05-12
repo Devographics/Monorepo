@@ -13,6 +13,9 @@ import { USED_PTS, HEARD_PTS } from "~/lib/responses/helpers";
 import useSWR from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
 import { T, useI18n } from "@devographics/react-i18n";
+import ShareTwitter from "../share/ShareTwitter";
+import ShareBluesky from "../share/ShareBluesky";
+import ShareMastodon from "../share/ShareMastodon";
 
 const Features = ({
   features,
@@ -75,7 +78,7 @@ const Score = ({
   response: any;
   edition: EditionMetadata;
 }) => {
-  const { t } = useI18n()
+  const { t } = useI18n();
   const containerRef = useRef<HTMLInputElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const { known, total, score, usage, awareness } = getKnowledgeScore({
@@ -96,9 +99,8 @@ const Score = ({
   const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;
 
-  const text = t(
-    "thanks.share_score_message",
-    {
+  const getBody = (source: "twitter" | "bluesky" | "mastodon") => {
+    const text = t("thanks.share_score_message", {
       // TODO: at the time of writing (09/2023) translations include an additional %
       // need to check if we keep the % around
       score,
@@ -109,8 +111,9 @@ const Score = ({
       awareness_count: awareness.count,
       usage_count: usage.count,
       rank,
-    }
-  )
+    });
+    return text;
+  };
 
   // if (loading) return <Components.Loading />;
   // if (error) return <span>Could not load entities</span>;
@@ -154,11 +157,7 @@ const Score = ({
               />{" "}
               +&nbsp;
               {awareness.count}&times;{HEARD_PTS}{" "}
-              <T
-                token="thanks.point"
-                className="score-suffix"
-                fallback="pt."
-              />
+              <T token="thanks.point" className="score-suffix" fallback="pt." />
             </Tooltip>
           }
         >
@@ -194,11 +193,7 @@ const Score = ({
                 />
               )}
             </div>
-            <T
-              token="thanks.points"
-              className="score-suffix"
-              fallback="pts."
-            />
+            <T token="thanks.points" className="score-suffix" fallback="pts." />
           </div>
         </OverlayTrigger>
         <div className="score-ratio">
@@ -214,22 +209,24 @@ const Score = ({
               awareness_count: `<span class="score-number score-number-counted heard">${awareness.count}</span>`,
               awareness_score: `<span class="score-percentage heard" title="${t(
                 "thanks.score_awareness_explanation",
-                { awareness_total: awareness.total }
-              )
-                }">${awareness.score}%</span>`,
+                { awareness_total: awareness.total },
+              )}">${awareness.score}%</span>`,
               knowledgeRankingFromTop: `<span class="score-number score-rank">${rank}%</span>`,
             }}
           />
         </div>
-        <div className="score-share">
-          <Button
+        <div className="score-share ShareSite__Content">
+          {/* <Button
             target="_blank"
             href={`https://twitter.com/intent/tweet/?text=${encodeURIComponent(
               text,
             )}`}
           >
             <T token="thanks.share_on_twitter" />
-          </Button>
+          </Button> */}
+          <ShareTwitter showLabel={true} text={getBody("twitter")} />
+          <ShareBluesky showLabel={true} text={getBody("bluesky")} />
+          <ShareMastodon showLabel={true} text={getBody("mastodon")} />
         </div>
         {/* {unknownFeatures.length > 0 && (
           <Features features={unknownFeatures} limit={10} />

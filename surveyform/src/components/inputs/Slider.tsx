@@ -57,7 +57,10 @@ export const Slider = (props: FormInputProps) => {
                   ) : (
                     <div className="form-option">
                       <div className="form-option-item">
-                        <span className="form-option-label form-option-label-numeric">
+                        <span
+                          data-label={i18n.base}
+                          className="form-option-label form-option-label-numeric"
+                        >
                           {i + 1}
                         </span>
                       </div>

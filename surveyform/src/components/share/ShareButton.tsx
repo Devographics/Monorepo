@@ -19,7 +19,15 @@ const icons = {
   email: EmailIcon,
 };
 
-const ShareButton = ({ id, href }: { id: string; href: string }) => {
+const ShareButton = ({
+  id,
+  href,
+  showLabel,
+}: {
+  id: string;
+  href: string;
+  showLabel?: boolean;
+}) => {
   const { t } = useI18n();
   const Icon = icons[id];
   const label = t(`share.${id}`);
@@ -35,7 +43,7 @@ const ShareButton = ({ id, href }: { id: string; href: string }) => {
       <div aria-hidden="true" className={`${s.share_button_inner}`}>
         <Icon />
       </div>
-      <span className="sr-only">{label}</span>
+      <span className={showLabel ? "" : "sr-only"}>{label}</span>
     </a>
   );
 };

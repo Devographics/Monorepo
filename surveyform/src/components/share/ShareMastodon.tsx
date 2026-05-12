@@ -5,11 +5,14 @@ import ShareButton from "./ShareButton";
 const ShareMastodon = ({
   text,
   trackingId,
+  showLabel,
 }: {
   text: string;
   trackingId?: string;
+  showLabel?: boolean;
 }) => (
   <ShareButton
+    showLabel={showLabel}
     id="mastodon"
     href={`https://tootpick.org/#text=${encodeURIComponent(text)}
 `}

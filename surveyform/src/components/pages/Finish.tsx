@@ -4,7 +4,6 @@ import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import ReadingListResults from "~/components/reading_list/ReadingListResults";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import { ThanksBackButton } from "./ThanksBackButton";
-import { DynamicT } from "@devographics/react-i18n";
 import { Button } from "../ui/Button";
 import GoalMeter from "../common/GoalMeter";
 // import { useCurrentUser } from "~/lib/users/hooks";
@@ -14,6 +13,7 @@ import s from "./Finish.module.scss";
 import { rscTotalResponses } from "~/lib/responses/stats";
 import { getEditionImageUrl } from "@devographics/helpers";
 import { publicConfig } from "~/config/public";
+import { T } from "@devographics/react-i18n";
 
 const goal = 1000;
 
@@ -44,7 +44,7 @@ export const Finish = async ({
     currentProgressCount !== undefined &&
     responsesGoal !== undefined;
   const featureSections = edition.sections.filter(
-    (section) => section.slug === "features"
+    (section) => section.slug === "features",
   );
   const showScore = enableScore && response && featureSections.length > 0;
   const enableReadingList = edition.enableReadingList;
@@ -58,13 +58,8 @@ export const Finish = async ({
         edition={edition}
         response={response}
       />
-      {/* <div className="survey-message survey-finished">
-        <DynamicT token="general.thanks1" />
-      </div> */}
 
-      {showScore && <Score response={response} edition={edition} />}
-
-      <h1 className={`${s.finish_page_image} survey-image survey-image-small`}>
+      {/* <h1 className={`${s.finish_page_image} survey-image survey-image-small`}>
         {imageUrl && (
           <img
             src={imageUrl}
@@ -72,10 +67,18 @@ export const Finish = async ({
             //quality={100}
           />
         )}
-      </h1>
+      </h1> */}
+
+      <div className="survey-message survey-finished">
+        <T token="general.thanks1" />
+      </div>
+
+      {showScore && <Score response={response} edition={edition} />}
+
       {/* <div>
-        <DynamicT token="general.thanks2" />
+        <T token="finish.share_colleagues" />
       </div> */}
+
       {showGoal && (
         <GoalMeter
           edition={edition}

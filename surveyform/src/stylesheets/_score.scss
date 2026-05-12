@@ -10,7 +10,11 @@
   position: relative;
   --used-color: var(--accent-color);
   --heard-color: var(--accent-color-2);
-  background-image: linear-gradient(to right, var(--used-color) calc(var(--usage-ratio) * 100%), var(--heard-color) 0);
+  background-image: linear-gradient(
+    to right,
+    var(--used-color) calc(var(--usage-ratio) * 100%),
+    var(--heard-color) 0
+  );
   background-origin: border-box;
 
   .used {
@@ -20,8 +24,6 @@
   .heard {
     --color: var(--heard-color);
   }
-
-
 }
 
 .score-calculation {
@@ -90,7 +92,7 @@
   font-size: typography.$smallish-font;
   @include typography.font-regular;
 }
-.score-features-items{
+.score-features-items {
   display: inline;
 }
 .score-feature {
