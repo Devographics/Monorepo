@@ -86,6 +86,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
             messageId
             slug
             intlId
+            randomizeSectionSequence
             questions {
               id
               intlId

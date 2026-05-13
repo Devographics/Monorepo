@@ -138,6 +138,8 @@ type SectionMetadata {
     # translations
     translationKeys: SectionTranslationKeys
     translations: [SectionTranslation]
+    # whether to always show this section in the same sequence, or out of order
+    randomizeSectionSequence: Boolean
 }
 type SectionTranslationKeys {
     name: String

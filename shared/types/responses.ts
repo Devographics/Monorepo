@@ -20,6 +20,7 @@ export interface ResponseDocument extends Omit<Document, '_id'> {
     knowledgeScore?: number
     isFinished?: boolean
     lastSavedAt?: any
+    sectionSequence?: string[]
     [key: string]: any
 }
 
