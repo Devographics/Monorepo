@@ -7,7 +7,6 @@ import {
   FeaturesOptions,
   OPTION_NA,
   DbPathsEnum,
-  SectionSequence,
 } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 import { getEditionQuestions } from "../surveys/helpers/getEditionQuestions";
@@ -100,7 +99,7 @@ export const getKnowledgeScore = ({
   edition: EditionMetadata;
 }) => {
   const scoredQuestions = getEditionQuestions(edition).filter(
-    (q) => q.countsTowardScore
+    (q) => q.countsTowardScore,
   );
 
   const overall = new ScoredFeatures();
@@ -143,7 +142,7 @@ export const getKnowledgeScore = ({
       if ([FeaturesOptions.HEARD, FeaturesOptions.USED].includes(value)) {
         overall.counted.push(question.id);
         (value === FeaturesOptions.HEARD ? awareness : usage).counted.push(
-          question.id
+          question.id,
         );
       }
     }
@@ -209,7 +208,7 @@ export const getSectionCompletionPercentage = ({
   if (!questionsCount) return null;
 
   const completedQuestions = completableQuestions.filter((question) =>
-    questionIsCompleted({ edition, question, response })
+    questionIsCompleted({ edition, question, response }),
   );
 
   const completedQuestionsCount = completedQuestions.length;
