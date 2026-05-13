@@ -5,6 +5,7 @@ import { ErrorBoundary } from "~/components/error";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import { FormStateContextProvider } from "./FormStateContext";
 import { FormPropsContext } from "./FormPropsContext";
+import { getSectionsInSequence } from "~/lib/responses/helpers";
 
 export const FormSection = (props: {
   edition: EditionMetadata;
@@ -20,12 +21,18 @@ export const FormSection = (props: {
     sectionNumber,
     readOnly,
   } = props;
-  const section = edition.sections[sectionNumber - 1];
+
+  const sectionsInSequence = getSectionsInSequence(
+    edition.sections,
+    originalResponse?.sectionSequence,
+  );
 
   // number is 1-based, so use 0-based index instead
   const sectionIndex = sectionNumber - 1;
-  const previousSection = edition.sections[sectionIndex - 1];
-  const nextSection = edition.sections[sectionIndex + 1];
+
+  const section = sectionsInSequence[sectionIndex];
+  const previousSection = sectionsInSequence[sectionIndex - 1];
+  const nextSection = sectionsInSequence[sectionIndex + 1];
 
   const enableReadingList = !readOnly && edition.enableReadingList;
 

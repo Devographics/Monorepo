@@ -7,6 +7,7 @@ import {
   FeaturesOptions,
   OPTION_NA,
   DbPathsEnum,
+  SectionSequence,
 } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 import { getEditionQuestions } from "../surveys/helpers/getEditionQuestions";
@@ -252,4 +253,32 @@ export const questionIsCompleted = ({
     answerIsNotEmpty(answer) ||
     answerIsNotEmpty(otherAnswer);
   return isCompleted;
+};
+
+/*
+Example section sequence:
+
+  ["colors", "layout", "usage"...]
+
+  note: includes all sections, so both randomized and non-randomized sections
+
+*/
+export const getSectionsInSequence = (
+  sections: SectionMetadata[],
+  sectionSequence?: string[],
+) => {
+  if (sectionSequence) {
+    return sectionSequence.map((sectionId) => {
+      const newSection = sections.find((s) => s.id === sectionId);
+      if (newSection) {
+        return newSection;
+      } else {
+        throw new Error(
+          `getSectionsInSequence: could not find section for custom sequence id ${sectionId}`,
+        );
+      }
+    });
+  } else {
+    return sections;
+  }
 };

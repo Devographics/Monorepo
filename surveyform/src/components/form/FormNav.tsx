@@ -9,7 +9,10 @@
 import { useState, useEffect } from "react";
 import { T, useI18n } from "@devographics/react-i18n";
 import FormNavItem from "./FormNavItem";
-import { getCompletionPercentage } from "~/lib/responses/helpers";
+import {
+  getCompletionPercentage,
+  getSectionsInSequence,
+} from "~/lib/responses/helpers";
 import { Button } from "~/components/ui/Button";
 import { Loading } from "~/components/ui/Loading";
 import { useEdition } from "../SurveyContext/Provider";
@@ -38,7 +41,11 @@ const FormNav = (props: FormLayoutProps) => {
 
   const { edition } = useEdition();
 
-  const sections = edition.sections; //surveys.find((o) => o.slug === survey.slug)?.outline;
+  const sections = getSectionsInSequence(
+    edition.sections,
+    response?.sectionSequence,
+  );
+
   if (!sections) {
     throw new Error(`Survey or outline not found for slug ${edition.id}`);
   }

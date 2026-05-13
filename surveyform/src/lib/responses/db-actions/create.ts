@@ -2,14 +2,27 @@ import { connectToRedis } from "~/lib/server/redis";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { Actions } from "~/lib/validation";
 import { fetchEditionMetadata } from "@devographics/fetch";
-import { EditionMetadata } from "@devographics/types";
+import { EditionMetadata, SectionMetadata } from "@devographics/types";
 import { getResponseSchema } from "~/lib/responses/schema";
 import { restoreTypes, runFieldCallbacks, OnCreateProps } from "~/lib/schemas";
 import type { PrefilledResponse, ResponseDocument } from "@devographics/types";
 import { HandlerError } from "~/lib/handler-error";
 import { validateResponse } from "./validate";
+import shuffle from "lodash/shuffle.js";
 
 export const duplicateResponseErrorId = "duplicate_response";
+
+function shuffleSections(sections: SectionMetadata[]): SectionMetadata[] {
+  const randomizedSections = sections.filter(
+    (section) => section.randomizeSectionSequence === true,
+  );
+  const shuffled = shuffle(randomizedSections);
+
+  let shuffledIndex = 0;
+  return sections.map((item) =>
+    item.randomizeSectionSequence ? shuffled[shuffledIndex++] : item,
+  );
+}
 
 export async function createResponse({
   currentUser,
@@ -89,6 +102,15 @@ export async function createResponse({
 
   // validate response
   validateResponse({ ...props, serverData });
+
+  // add custom section sequence if needed
+  const randomizedSections = edition.sections.filter(
+    (s) => s.randomizeSectionSequence === true,
+  );
+  if (randomizedSections.length > 0) {
+    const shuffledSections = shuffleSections(edition.sections);
+    serverData.sectionSequence = shuffledSections.map((section) => section.id);
+  }
 
   // insert
   const insertRes = await RawResponse.insertOne(serverData);
