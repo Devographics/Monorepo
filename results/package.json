@@ -146,9 +146,5 @@
         "lint": "eslint src",
         "types:check": "tsc -p ./tsconfig.check.json",
         "typecheck": "tsc --noEmit --p ./tsconfig.check.json"
-    },
-    "resolutions": {
-        "webpack": "5.88.2",
-        "graphql": "^16.7.1"
     }
 }

@@ -92,5 +92,5 @@
   "peerDependencies": {
     "@babel/preset-env": "^7.28.5"
   },
-  "packageManager": "pnpm@10.30.2"
+  "packageManager": "pnpm@11.1.2"
 }
