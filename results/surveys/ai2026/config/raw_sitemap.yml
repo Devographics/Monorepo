@@ -493,7 +493,7 @@
       - id: reach_agi
         template: opinion2
 
-      - id: risks_pain_points_resources
+      - id: opinions_resources
         items: [clerk]
         template: recommended_resources
 
