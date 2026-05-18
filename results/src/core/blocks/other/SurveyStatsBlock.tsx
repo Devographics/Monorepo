@@ -52,36 +52,6 @@ const SurveyStatsBlock = (props: { block: BlockVariantDefinition }) => {
                 </p>
             </div>
         </div>
-        // <table className="survey-stats">
-        //     <tbody>
-        //         <tr>
-        //             <th>
-        //                 <T k="general.start_date" />
-        //             </th>
-        //             <th>
-        //                 <T k="general.end_date" />
-        //             </th>
-        //             <th>
-        //                 <T k="general.number_of_respondents" />
-        //             </th>
-        //             <th rowSpan={2}>
-        //                 <a href={questionsUrl} target="_blank" rel="noreferrer">
-        //                     <T k="general.review_questions" />
-        //                 </a>
-        //             </th>
-        //             <th rowSpan={2}>
-        //                 <a href={questionsUrl} target="_blank" rel="noreferrer">
-        //                     <T k="general.download_data" />
-        //                 </a>
-        //             </th>
-        //         </tr>
-        //         <tr>
-        //             <td>{startedAt}</td>
-        //             <td>{endedAt}</td>
-        //             <td>{formatNumber(currentEditionStats.totalRespondents)}</td>{' '}
-        //         </tr>
-        //     </tbody>
-        // </table>
     )
 }
 export default SurveyStatsBlock

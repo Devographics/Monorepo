@@ -1,3 +1,5 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
 .survey-stats {
     // border: 1px solid var(--borderColor);
     width: 100%;
@@ -7,7 +9,9 @@
     display: flex;
     justify-content: center;
     align-items: stretch;
-    gap: var(--halfSpacing);
+    @include small {
+        flex-direction: column;
+    }
     h4,
     p {
         margin: 0;
@@ -26,28 +30,13 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        border-right: 1px solid var(--backgroundAlt2Color);
+        @include small {
+            border-bottom: 1px solid var(--backgroundAlt2Color);
+        }
+        @include medium-large {
+            border-right: 1px solid var(--backgroundAlt2Color);
+        }
     }
-    &,
-    td,
-    th {
-        border: 1px solid var(--backgroundAlt2Color);
-        border-collapse: collapse;
-    }
-    td,
-    th {
-        padding: var(--quarterSpacing);
-    }
-    th {
-        color: var(--textAltColor);
-    }
-}
-table.survey-stats {
-    // border: 1px solid var(--borderColor);
-    width: 100%;
-    text-align: center;
-    border-radius: 3px;
-    font-size: var(--fontSizeSmall);
     &,
     td,
     th {
