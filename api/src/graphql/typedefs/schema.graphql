@@ -90,6 +90,13 @@ type EditionMetadata {
     sitemap: [SitemapSection]
 }
 
+type SurveyStats {
+    """
+    Total respondents for a survey
+    """
+    totalRespondents: Int
+}
+
 enum IncludeEnum {
     outlineOnly
     apiOnly

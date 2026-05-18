@@ -36,7 +36,8 @@ import {
     editionMetadataResolverMap,
     getEditionCodebookResolver,
     getEditionMetadataResolver,
-    getEditionResolver
+    getEditionResolver,
+    getEditionStatsResolver
 } from './resolvers/editions'
 import { getSurveyMetadataResolver, getSurveyResolver } from './resolvers/surveys'
 import { commentsResolverMap } from './resolvers/comments'
@@ -148,6 +149,10 @@ export const generateResolvers = async ({
                     resolvers[editionTypeObject.typeName] = {
                         _metadata: getEditionMetadataResolver({ survey, edition }),
                         [ResultsSubFieldEnum.CODEBOOK]: getEditionCodebookResolver({
+                            survey,
+                            edition
+                        }),
+                        _stats: getEditionStatsResolver({
                             survey,
                             edition
                         }),

@@ -7,6 +7,7 @@ import { EditionSectionMetadataArgs, filterItems } from '../resolvers'
 import { getEntities } from '../../load/entities'
 import intersection from 'lodash/intersection.js'
 import uniqBy from 'lodash/uniqBy.js'
+import { getCollection } from '../../helpers/db'
 /*
 
 Responses
@@ -152,3 +153,13 @@ export const editionMetadataResolverMap = {
         return filterItems(parent.sections, args.include).map(s => ({ ...s, ...args }))
     }
 }
+
+export const getEditionStatsResolver =
+    ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
+    async (parent, args, context, info) => {
+        console.log(`// edition stats resolver: ${edition.id}`)
+        const { db } = context
+        const collection = getCollection(db, survey)
+        const totalRespondents = collection.count({ editionId: edition.id })
+        return { totalRespondents }
+    }
