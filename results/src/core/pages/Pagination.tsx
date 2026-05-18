@@ -57,7 +57,6 @@ const Container = styled.div`
     position: relative;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-
     @media ${mq.smallMedium} {
         border-bottom: none;
         grid-template-columns: 1fr 0px 1fr;
@@ -66,6 +65,9 @@ const Container = styled.div`
             border-left: ${props => props.theme.separationBorder};
             border-right: ${props => props.theme.separationBorder};
         }
+    }
+    @media ${mq.large} {
+        min-height: 68px;
     }
 `
 

@@ -88,6 +88,8 @@ import HighlightBlock from 'core/blocks/other/HighlightBlock'
 
 import CTABlock from 'core/blocks/other/CTABlock'
 
+import SurveyStatsBlock from 'core/blocks/other/SurveyStatsBlock'
+
 const otherBlocks = {
     PageIntroductionBlock,
     TextBlock,
@@ -115,7 +117,8 @@ const otherBlocks = {
     // DataExplorerBlock,
     HighlightBlock,
     FigureBlock,
-    MidpageResourceBlock
+    MidpageResourceBlock,
+    SurveyStatsBlock
 }
 
 export default { ...chartBlocks, ...otherBlocks }

@@ -1,0 +1,64 @@
+.survey-stats {
+    // border: 1px solid var(--borderColor);
+    width: 100%;
+    text-align: center;
+    border-radius: 3px;
+    font-size: var(--fontSizeSmall);
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: var(--halfSpacing);
+    h4,
+    p {
+        margin: 0;
+    }
+    h4 {
+        color: var(--textAltColor);
+    }
+    p {
+        // font-weight: var(--fontBold);
+    }
+    & > div {
+        padding: var(--halfSpacing) var(--quarterSpacing);
+        flex-grow: 1;
+        flex-basis: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-right: 1px solid var(--backgroundAlt2Color);
+    }
+    &,
+    td,
+    th {
+        border: 1px solid var(--backgroundAlt2Color);
+        border-collapse: collapse;
+    }
+    td,
+    th {
+        padding: var(--quarterSpacing);
+    }
+    th {
+        color: var(--textAltColor);
+    }
+}
+table.survey-stats {
+    // border: 1px solid var(--borderColor);
+    width: 100%;
+    text-align: center;
+    border-radius: 3px;
+    font-size: var(--fontSizeSmall);
+    &,
+    td,
+    th {
+        border: 1px solid var(--backgroundAlt2Color);
+        border-collapse: collapse;
+    }
+    td,
+    th {
+        padding: var(--quarterSpacing);
+    }
+    th {
+        color: var(--textAltColor);
+    }
+}

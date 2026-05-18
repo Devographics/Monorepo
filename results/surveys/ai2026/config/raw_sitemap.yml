@@ -6,6 +6,12 @@
       #   blockType: LivestreamBlock
       #   disableExport: true
       #   wrapBlock: false
+
+      - id: survey_stats
+        blockType: SurveyStatsBlock
+        disableExport: true
+        wrapBlock: false
+
       - id: survey_intro
         blockType: SurveyIntroBlock
         disableExport: true
@@ -926,6 +932,13 @@
   is_hidden: true
   blocks:
       - id: support
+        template: page_introduction
+
+- id: download
+  path: /download
+  is_hidden: true
+  blocks:
+      - id: download
         template: page_introduction
 
 - id: sponsor_finish
