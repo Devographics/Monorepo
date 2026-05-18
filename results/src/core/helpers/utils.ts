@@ -32,7 +32,7 @@ export function indentString(s: string, count = 1, options = {}) {
     return s.replace(regex, indent.repeat(count))
 }
 
-export const stripHtml = s => s && s.replace(/<([^>]+?)([^>]*?)>(.*?)<\/\1>/gi, '$3')
+export const stripHtml = (s: string) => s && s.replace(/<([^>]+?)([^>]*?)>(.*?)<\/\1>/gi, '$3')
 
 export async function copyTextToClipboard(text: string) {
     if ('clipboard' in navigator) {

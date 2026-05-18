@@ -349,7 +349,7 @@ export const getBlockMeta = ({
     const { tClean: blockTitle } = getBlockTitle({ block, pageContext, getFallbacks })
     const title = title_ || blockTitle
 
-    const subtitle = getBlockDescription({ block, pageContext, getFallbacks })
+    const subtitle = getBlockDescription({ block, pageContext, getFallbacks })?.t
 
     const imageUrl = getBlockImage({ block, pageContext })
 
