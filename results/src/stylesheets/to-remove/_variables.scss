@@ -1,3 +1,5 @@
+@use "colors";
+
 $spacing: 20px;
 
 @mixin flex-center {
@@ -6,8 +8,8 @@ $spacing: 20px;
     align-items: center;
 }
 
-$border: 1px solid $border-color-dark;
-$border2: 1px solid $border-color;
+$border: 1px solid colors.$border-color-dark;
+$border2: 1px solid colors.$border-color;
 
 @mixin border {
     border: $border;

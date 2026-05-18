@@ -1,4 +1,4 @@
-@import '_breakpoints.scss';
+@use '_breakpoints.scss';
 
 .edition-td2023,
 .edition-td2024 {
@@ -10,10 +10,10 @@
         display: block;
     }
     .PageTitle {
-        @include small {
+        @include breakpoints.small {
             font-size: 2.5rem;
         }
-        @include medium-large {
+        @include breakpoints.medium-large {
             font-size: 4rem;
         }
     }

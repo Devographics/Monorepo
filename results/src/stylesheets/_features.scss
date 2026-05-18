@@ -1,17 +1,22 @@
+@use "breakpoints";
+@use "to-remove/colors";
+@use "to-remove/typography";
+@use "to-remove/variables";
+
 @use "sass:math";
 
 .Feature__Support {
-    font-size: $smallish-font;
-    @include font-regular;
+    font-size: typography.$smallish-font;
+    @include typography.font-regular;
 }
 
 .Feature__Links {
-    font-size: $smallish-font;
-    @include font-regular;
+    font-size: typography.$smallish-font;
+    @include typography.font-regular;
 }
 
 .FTBlock__Links__Item {
-    margin-bottom: math.div($spacing, 3);
+    margin-bottom: math.div(variables.$spacing, 3);
 }
 
 .Features__Overview {
@@ -23,23 +28,23 @@
 .Features__Overview__Item {
     width: 240px;
     height: 260px;
-    margin-bottom: $spacing * 2;
+    margin-bottom: variables.$spacing * 2;
     display: grid;
     grid-template-rows: 210px 50px;
 }
 
 .Features__Overview__Item__Footer {
-    border-top: 2px solid $border-color;
-    border-bottom: 2px solid $border-color;
-    font-size: $smallish-font;
-    @include font-bold;
+    border-top: 2px solid colors.$border-color;
+    border-bottom: 2px solid colors.$border-color;
+    font-size: typography.$smallish-font;
+    @include typography.font-bold;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .Features__Overview__Item__Footer:hover {
-    background: $border-color;
+    background: colors.$border-color;
     color: #ffffff;
     cursor: pointer;
 }
@@ -49,15 +54,15 @@
     }
 }
 .FTBlock__Resources {
-    @include small {
-        margin-top: $spacing;
+    @include breakpoints.small {
+        margin-top: variables.$spacing;
     }
     h3 {
-        margin-bottom: $spacing*0.5;
-        font-size: $medium-font;
+        margin-bottom: variables.$spacing*0.5;
+        font-size: typography.$medium-font;
     }
     ul {
-        padding-left: $spacing;
+        padding-left: variables.$spacing;
     }
     .capture & {
         display: none;

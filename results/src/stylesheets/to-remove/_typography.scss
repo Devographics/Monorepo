@@ -1,3 +1,5 @@
+@use "variables";
+
 $root-size-mobile: 13px;
 $root-size: 17px;
 
@@ -47,6 +49,6 @@ strong {
     float: left;
     display: block;
     font-size: 7rem;
-    margin-right: $spacing;
+    margin-right: variables.$spacing;
     line-height: 1;
 }

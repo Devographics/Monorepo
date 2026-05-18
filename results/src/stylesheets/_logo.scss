@@ -1,3 +1,9 @@
+@use "sass:string";
+@use "breakpoints";
+@use "to-remove/colors";
+@use "to-remove/typography";
+@use "to-remove/variables";
+
 /*
 
 Mixins
@@ -25,7 +31,7 @@ Mixins
     .Logo--animated .#{$className} {
         animation-iteration-count: 1;
         animation-fill-mode: forwards;
-        animation-name: unquote($animationName);
+        animation-name: string.unquote($animationName);
         animation-duration: $duration;
         animation-delay: $delay;
         animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -139,14 +145,14 @@ Logo
         */
         .letter {
             font-size: 288px * $s;
-            color: $pink;
-            @include font-bold;
+            color: colors.$pink;
+            @include typography.font-bold;
             line-height: 1;
         }
         .c {
             @include centerV;
             left: $offset;
-            text-shadow: 10px * $s 10px * $s 0px $blue;
+            text-shadow: 10px * $s 10px * $s 0px colors.$blue;
         }
         .s1 {
             @include centerVH;
@@ -170,7 +176,7 @@ Logo
         .text {
             font-size: 48px * $s;
             font-style: italic;
-            color: $greyTeal;
+            color: colors.$greyTeal;
         }
         .stateof {
             top: 0px;
@@ -206,7 +212,7 @@ Logo
         .stripe {
             height: 5px * $s;
             width: 100px * $s;
-            background: $greyTeal;
+            background: colors.$greyTeal;
         }
         .stripe1 {
             top: 248px * $s;
@@ -236,13 +242,13 @@ Logo
             transform: rotate(-20deg);
             width: 400px * $s;
             height: 200px * $s;
-            @include flex-center;
+            @include variables.flex-center;
         }
 
         .blob {
             width: 50%;
             height: 100%;
-            background: $greyTeal;
+            background: colors.$greyTeal;
             border-radius: 50%;
         }
         .blob1 {
@@ -264,7 +270,7 @@ Logo
                 transform: translateX(-50%) translateY(-50%);
                 div {
                     @include square-ratio;
-                    border: 10px * $s dashed $blue;
+                    border: 10px * $s dashed colors.$blue;
                     border-radius: 100%;
                     box-sizing: content-box;
                 }
@@ -282,10 +288,10 @@ Logo
             .inner {
                 transform: translateY(-50%) rotate(45deg);
                 div {
-                    border: 10px * $s solid $blue;
+                    border: 10px * $s solid colors.$blue;
                     @include square-ratio;
                     box-sizing: content-box;
-                    box-shadow: 7px * $s 7px * $s 0px 0px $greyTeal;
+                    box-shadow: 7px * $s 7px * $s 0px 0px colors.$greyTeal;
                 }
             }
         }
@@ -395,17 +401,17 @@ Logo
 
 .Logo__Container{
     overflow: hidden;
-    @include small{
+    @include breakpoints.small{
         @include logo(0.3);
 
     }
-    @include medium{
+    @include breakpoints.medium{
         @include logo(0.5);
 
     }
-    @include large{
+    @include breakpoints.large{
         @include logo(0.8);
     }
-    @include flex-center;
-    margin-bottom: $spacing * 2;
+    @include variables.flex-center;
+    margin-bottom: variables.$spacing * 2;
 }

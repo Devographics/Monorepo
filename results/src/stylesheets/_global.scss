@@ -1,21 +1,25 @@
+@use "to-remove/colors";
+@use "to-remove/typography";
+@use "to-remove/variables";
+
 .conclusion__byline {
     text-align: right;
     display: block;
-    @include font-bold;
+    @include typography.font-bold;
 }
 
 .warning {
     color: #f5ef7e;
     border: 3px solid #aaa433;
-    padding: $spacing;
+    padding: variables.$spacing;
 }
 .error {
-    color: $red;
-    border: 3px solid $redLighter;
-    padding: $spacing;
+    color: colors.$red;
+    border: 3px solid colors.$redLighter;
+    padding: variables.$spacing;
 }
 .error-data {
-    font-size: $small-font;
+    font-size: typography.$small-font;
 }
 
 .Tooltip {
@@ -73,7 +77,7 @@ Capture
         padding-top: 60px;
     }
     .Quadrants__Chart__Legend__Item {
-        font-size: $medium-font;
+        font-size: typography.$medium-font;
     }
     #connections {
         width: 1000px;

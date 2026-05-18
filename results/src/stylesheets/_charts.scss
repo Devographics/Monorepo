@@ -1,10 +1,15 @@
+@use "breakpoints";
+@use "to-remove/colors";
+@use "to-remove/typography";
+@use "to-remove/variables";
+
 /*
 
 Vertical Bar Chart
 
 */
 .OpinionScaleChart {
-    padding-top: $spacing;
+    padding-top: variables.$spacing;
     svg {
         overflow: visible;
     }
@@ -31,16 +36,16 @@ Gauge Chart
     // }
 }
 .FeaturesSectionOverviewChart {
-    @include xsmall {
+    @include breakpoints.xsmall {
         height: 200px;
     }
-    @include small {
+    @include breakpoints.small {
         height: 400px;
     }
-    @include medium {
+    @include breakpoints.medium {
         height: 500px;
     }
-    @include large {
+    @include breakpoints.large {
         height: 500px;
     }
 }
@@ -56,16 +61,16 @@ Technologies Overview Chart
 
 */
 .TechnologiesOverviewChart {
-    @include xsmall {
+    @include breakpoints.xsmall {
         height: 800px;
     }
-    @include small {
+    @include breakpoints.small {
         height: 800px;
     }
-    @include medium {
+    @include breakpoints.medium {
         height: 800px;
     }
-    @include large {
+    @include breakpoints.large {
         height: 800px;
     }
 }
@@ -75,7 +80,7 @@ Quadrant/Scatterplot Chart
 
 */
 .Scatterplot__Crosshair__Line {
-    @include svgAnts;
+    @include variables.svgAnts;
 }
 
 /*
@@ -85,31 +90,31 @@ Bump Chart
 */
 @mixin coloredText($color) {
     display: inline-block;
-    background: $teal;
-    color: $navy;
+    background: colors.$teal;
+    color: colors.$navy;
     border-radius: 15px;
     padding: 0 12px;
     background: $color;
-    @include font-bold;
+    @include typography.font-bold;
 }
 .text-highlight {
     @include coloredText(#000);
 }
 .text-green {
-    @include coloredText($green);
+    @include coloredText(colors.$green);
 }
 
 .text-pink {
-    @include coloredText($pink);
+    @include coloredText(colors.$pink);
 }
 .text-pink-light {
-    @include coloredText($pinkLight);
+    @include coloredText(colors.$pinkLight);
 }
 .text-pink-lighter {
-    @include coloredText($pinkLighter);
+    @include coloredText(colors.$pinkLighter);
 }
 .text-red {
-    @include coloredText($red);
+    @include coloredText(colors.$red);
 }
 .text-teal {
     // @include coloredText($teal);
@@ -123,16 +128,16 @@ Bump Chart
 }
 
 .text-blue {
-    @include coloredText($blue);
+    @include coloredText(colors.$blue);
 }
 .text-blackred {
-    @include coloredText(black(0.3));
-    color: $teal;
-    border: 1px solid $red;
+    @include coloredText(variables.black(0.3));
+    color: colors.$teal;
+    border: 1px solid colors.$red;
 }
 
 .text-bold {
-    @include font-bold;
+    @include typography.font-bold;
 }
 
 .Chip {

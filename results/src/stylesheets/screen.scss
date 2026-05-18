@@ -3,26 +3,26 @@
 Variables
 
 */
-@import '_normalize.scss';
-@import 'to-remove/_colors.scss';
-@import 'to-remove/_variables.scss';
-@import '_breakpoints.scss';
-@import 'to-remove/_typography.scss';
+@use '_normalize.scss';
+@use 'to-remove/_colors.scss';
+@use 'to-remove/_variables.scss';
+@use '_breakpoints.scss';
+@use 'to-remove/_typography.scss';
 
 /*
 
 Global
 
 */
-@import '_global.scss';
+@use '_global.scss';
 
 /*
 
 Elements
 
 */
-@import '_logo.scss';
-@import '_features.scss';
+@use '_logo.scss';
+@use '_features.scss';
 
 /*
 
@@ -30,6 +30,6 @@ Charts
 
 */
 
-@import '_charts.scss';
+@use '_charts.scss';
 
-@import '_overrides.scss';
+@use '_overrides.scss';
