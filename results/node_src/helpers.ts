@@ -288,13 +288,14 @@ export const getMetadata = async ({ surveyId, editionId, graphql }) => {
     const allSurveys = metadataData._metadata.surveys
     const currentSurvey = metadataData.surveys[surveyId]._metadata
     const currentEdition = metadataData.surveys[surveyId][editionId]._metadata
+    const currentEditionStats = metadataData.surveys[surveyId][editionId]._stats
     if (!currentSurvey) {
         throw new Error(`getMetadata: could not find survey for id ${surveyId}`)
     }
     if (!currentEdition) {
         throw new Error(`getMetadata: could not find edition for id ${surveyId}/${editionId}`)
     }
-    return { currentSurvey, currentEdition, allSurveys }
+    return { currentSurvey, currentEdition, currentEditionStats, allSurveys }
 }
 
 /**

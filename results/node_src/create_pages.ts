@@ -122,11 +122,12 @@ export const createPagesSingleLoop = async ({
         )
 
         // load metadata
-        const { currentSurvey, currentEdition, allSurveys } = await getMetadata({
-            surveyId,
-            editionId,
-            graphql
-        })
+        const { currentSurvey, currentEdition, currentEditionStats, allSurveys } =
+            await getMetadata({
+                surveyId,
+                editionId,
+                graphql
+            })
         const { enableChartSponsorships, resultsUrl } = currentEdition
         const metadata = []
 
@@ -219,7 +220,8 @@ export const createPagesSingleLoop = async ({
                 config,
                 allSurveys,
                 currentSurvey,
-                currentEdition
+                currentEdition,
+                currentEditionStats
             }
 
             try {

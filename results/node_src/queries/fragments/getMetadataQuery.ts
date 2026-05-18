@@ -44,6 +44,9 @@ query {
                     }
                 }
                 ${editionId} {
+                    _stats {
+                        totalRespondents
+                    }
                     _metadata {
                         id
                         year
