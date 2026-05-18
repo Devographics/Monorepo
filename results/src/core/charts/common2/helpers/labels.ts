@@ -83,7 +83,13 @@ export const getFiltersLabel = ({
 }) => {
     const labelSegments = filters.conditions.map(({ fieldId, operator, value }) => {
         const question = allQuestions.find(q => q.id === fieldId) as FilterItem
-        const optionI18nNamespace = i18nNamespaces[question.id] || question.id
+        // todo: find a way to get i18nNamespace that does not require hardcoding a
+        // check on the question template here
+        const optionI18nNamespace =
+            i18nNamespaces[question.id] ||
+            question.i8nNamespace ||
+            (['toolv3', 'featurev3'].includes(question.template) && 'experience') ||
+            question.id
 
         const { key, label: questionLabel } = getQuestionLabel({
             getString,
@@ -94,12 +100,13 @@ export const getFiltersLabel = ({
         const valueArray = Array.isArray(value) ? value : [value]
         const valueLabel = valueArray
             .map(valueString => {
-                const { key, label, shortLabel } = getItemLabel({
+                const labelObject = getItemLabel({
                     id: valueString,
                     getString,
                     entity: entities.find(e => e.id === valueString),
                     i18nNamespace: optionI18nNamespace
                 })
+                const { key, label, shortLabel } = labelObject
                 return shortLabel
             })
             .join(', ')

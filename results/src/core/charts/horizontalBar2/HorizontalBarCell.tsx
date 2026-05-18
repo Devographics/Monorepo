@@ -181,7 +181,7 @@ export const Cell = ({
                 }
                 contents={
                     <div>
-                        [{label}] <strong>{v}</strong>{' '}
+                        [<span dangerouslySetInnerHTML={{ __html: label }} />] <strong>{v}</strong>{' '}
                         {isStacked ? (
                             <T
                                 k="charts.facet_detail_answers"
