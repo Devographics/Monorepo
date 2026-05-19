@@ -8,6 +8,7 @@ import uniq from 'lodash/uniq.js'
 import compact from 'lodash/compact.js'
 import { sortBuckets } from './sort_data'
 import { PercentileData, Percentiles } from '@devographics/types'
+import isNil from 'lodash/isNil.js'
 
 export function mergeBuckets<T extends Bucket | FacetBucket>({
     buckets,
@@ -89,7 +90,7 @@ function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
     const percentileKeys = ['p0', 'p10', 'p25', 'p50', 'p75', 'p90', 'p100'] as Percentiles[]
     const percentiles = {} as PercentileData
     for (const key of percentileKeys) {
-        const values = compact(buckets.map(b => b?.[BucketUnits.PERCENTILES]?.[key]))
+        const values = buckets.map(b => b?.[BucketUnits.PERCENTILES]?.[key]).filter(v => !isNil(v))
         if (values.length === 0) {
             // if one or more percentile doesn't exist in any of the buckets, abort
             return null
