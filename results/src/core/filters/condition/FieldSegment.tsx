@@ -89,7 +89,11 @@ export const ItemSelectOptions = ({
     const { getString } = useI18n()
     const { currentEdition } = usePageContext()
     const { sections } = currentEdition
-    const orderedSections = getOrderedSections(sections)
+    // TODO: do not hardcode list of disallowed sections
+    const filterableSections = sections.filter(
+        section => !['_all_libraries', '_all_features', '_external_data'].includes(section.id)
+    )
+    const orderedSections = getOrderedSections(filterableSections)
 
     return (
         <>
@@ -101,7 +105,11 @@ export const ItemSelectOptions = ({
                     .filter(q => q.sectionId === section.id)
                     .filter(q => !disallowedQuestions.includes(q.id))
                 return sectionItems.length > 0 ? (
-                    <optgroup key={section.id} label={getSectionLabel({ getString, section })}>
+                    <optgroup
+                        key={section.id}
+                        data-id={section.id}
+                        label={getSectionLabel({ getString, section })}
+                    >
                         {sectionItems.map((question: FilterItem) => {
                             const { label, key } = getFieldLabel({
                                 getString,
