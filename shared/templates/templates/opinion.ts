@@ -9,6 +9,7 @@ export const opinion: TemplateFunction = options => {
         allowMultiple: false,
         defaultSort: 'options',
         optionsAreNumeric: true,
+        i18nNamespace: 'opinions',
         options: [...Array(5)].map((x, i) => ({
             id: i,
             intlId: `options.opinions.${String(i)}`

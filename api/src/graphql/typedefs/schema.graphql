@@ -171,6 +171,7 @@ type QuestionMetadata {
     yearAdded: Int
     label: String
     intlId: String
+    # used for options namespace
     i18nNamespace: String
     template: String
     inputComponent: String

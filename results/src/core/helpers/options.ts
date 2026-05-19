@@ -16,6 +16,22 @@ export const getAllQuestions = (edition: EditionMetadata) => {
     return allQuestions
 }
 
+export const useAllQuestions = () => {
+    const pageContext = usePageContext()
+    const { currentEdition } = pageContext
+    return getAllQuestions(currentEdition)
+}
+
+export const getQuestionById = (edition: EditionMetadata, id: string) => {
+    const allQuestions = getAllQuestions(edition)
+    return allQuestions.find(question => question.id === id)
+}
+
+export const useQuestionById = (id: string) => {
+    const allQuestions = useAllQuestions()
+    return allQuestions.find(question => question.id === id)
+}
+
 export const useOptions = (questionId: string, addNoAnswer = false) => {
     const context = usePageContext()
     const { currentEdition } = context
