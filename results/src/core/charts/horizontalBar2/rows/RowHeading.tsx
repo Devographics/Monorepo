@@ -16,7 +16,7 @@ export const RowHeading = ({
     const { entity, id, label } = bucket
     const { isFreeformData } = bucket
     const i18nNamespace =
-        block?.filtersState?.axis1?.id || block.i18nNamespace || block.fieldId || block.id
+        block.i18nNamespace || block?.filtersState?.axis1?.id || block.fieldId || block.id
     const sectionId = bucket?._metadata?.sectionId
     return (
         <div className="chart-row-heading">
