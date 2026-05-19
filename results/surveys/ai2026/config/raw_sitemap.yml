@@ -355,6 +355,25 @@
       - id: ai_generated_code_balance
         template: multiple_options2
         showAverage: true
+        variants:
+            - id: ai_generated_code_balance_by_claude_code
+              fieldId: ai_generated_code_balance
+              template: multiple_options2
+              tabId: tabs.by_claude_code_usage
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: claude_code
+                              sectionId: coding_agents_assistants
+                              operator: nin
+                              value:
+                                  - used
+                      - conditions:
+                            - fieldId: claude_code
+                              sectionId: coding_agents_assistants
+                              operator: in
+                              value:
+                                  - used
 
       - id: ai_generated_code_refactoring
         template: multiple_options2
@@ -400,6 +419,27 @@
   blocks:
       - id: ai_risks
         template: multiple_options2_combined
+        variants:
+            - id: ai_risks_by_gender
+              template: multiple_options2_combined
+              fieldId: ai_risks
+              tabId: tabs.by_gender
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - male
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - female
+                                  - non_binary
+                                  - not_listed
 
       - id: figure_ai_pain_points
         template: figure
