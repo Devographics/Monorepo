@@ -27,7 +27,10 @@ export const Rows = ({
     const { formatValue } = viewDefinition
     const axisProps = { question, formatValue, labelId }
     return (
-        <div className={`chart-rows ${hasZebra ? 'chart-rows-zebra' : ''}`} ref={parent}>
+        <div
+            className={`chart-rows chart-rows-${view} ${hasZebra ? 'chart-rows-zebra' : ''}`}
+            ref={parent}
+        >
             {ticks && <Axis variant="top" {...axisProps} ticks={ticks} />}
 
             {children}

@@ -78,13 +78,21 @@ export const getChartBuckets = ({
         buckets = getFlattenedBucketsTree(buckets, true)
     }
     if (sort && getValue) {
-        if (sort === sortProperties.COUNT) {
+        // if we're sorting by options then we just want to preserve options order
+        if (sort !== sortProperties.OPTIONS) {
             const otherAnswersBucket = buckets.find(b => b.id === OTHER_ANSWERS)
             let sortableBuckets = buckets.filter(b => b.id !== OTHER_ANSWERS)
-            if (facet) {
+            const facetIds = uniq(
+                buckets
+                    .map(bucket => bucket?.facetBuckets?.map(facetBucket => facetBucket.id) || [])
+                    .flat()
+            )
+            if (facet && facetIds.includes(sort)) {
+                // we're sorting by facet value
                 sortableBuckets = sortBy(sortableBuckets, bucket => {
                     // find the facet bucket targeted by the sort
                     const relevantFacetBucket = bucket.facetBuckets.find(fb => fb.id == sort)
+                    console.log(relevantFacetBucket)
                     if (!relevantFacetBucket) {
                         return 0
                     } else {
@@ -93,8 +101,9 @@ export const getChartBuckets = ({
                     }
                 })
             } else {
+                // we're sorting by sort value on the main bucket
                 sortableBuckets = sortBy(sortableBuckets, bucket => {
-                    const value = getValue(bucket)
+                    const value = bucket[sort]
                     return value
                 })
             }
