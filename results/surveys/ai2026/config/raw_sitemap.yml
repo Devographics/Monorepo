@@ -356,6 +356,22 @@
         template: multiple_options2
         showAverage: true
         variants:
+            - id: ai_generated_code_balance_vs_years_of_experience
+              fieldId: ai_generated_code_balance
+              template: multiple_options2
+              tabId: tabs.by_experience
+              filtersState:
+                  # TODO: axis1/axis2 do not work yet
+                  # axis1:
+                  #     sectionId: usage
+                  #     id: ai_generated_code_balance
+                  # axis2:
+                  #     sectionId: user_info
+                  #     id: years_of_experience
+                  facet:
+                      sectionId: user_info
+                      id: years_of_experience
+
             - id: ai_generated_code_balance_by_claude_code
               fieldId: ai_generated_code_balance
               template: multiple_options2
@@ -390,6 +406,15 @@
 
       - id: ai_code_generation_frequency
         template: single_option2
+        variants:
+            - id: ai_code_generation_frequency_vs_years_of_experience
+              fieldId: ai_generated_code_balance
+              template: multiple_options2
+              tabId: tabs.by_experience
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: years_of_experience
 
       - id: ai_other_tasks_frequency
         template: single_option2
