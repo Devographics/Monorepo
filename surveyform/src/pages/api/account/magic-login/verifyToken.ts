@@ -9,6 +9,15 @@ import { magicLinkStrategy } from "~/lib/account/magicLogin/api/passport/magic-l
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 import { setToken } from "~/lib/account/middlewares/setToken";
 
+/**
+ * @see https://vercel.com/docs/functions/serverless-functions/runtimes#maxduration
+ * On PRO offer we are allowed for 300s execution max (default is 10s so too short for loading all locales)
+ */
+export const maxDuration = 300;
+export const config = {
+  maxDuration: 300,
+};
+
 passport.use(magicLinkStrategy);
 
 interface MagicLoginReqBody {
