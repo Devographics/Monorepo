@@ -1343,8 +1343,11 @@ const enabledCountries = [
 export const country: TemplateFunction = options => {
     const { question } = options
 
+    const questionId = question.id || 'country'
+    const sectionId = question.sectionId || 'user_info'
+
     const output: QuestionTemplateOutput = {
-        id: 'country',
+        id: questionId,
         // options: countries
         //     .filter(country => enabledCountries.includes(country['alpha-3']))
         //     .map(country => ({ id: country['alpha-3'], label: country.name })),
@@ -1352,14 +1355,14 @@ export const country: TemplateFunction = options => {
             // .filter(country => enabledCountries.includes(country['alpha-3']))
             .map(country => ({ id: country['alpha-3'], label: country.name })),
         rawPaths: {
-            response: 'user_info__country',
-            skip: `user_info__country__${DbPathsEnum.SKIP}`,
-            [DbSuffixes.COMMENT]: `user_info__country__${DbSuffixes.COMMENT}`
+            response: `${sectionId}__${questionId}`,
+            skip: `${sectionId}__${questionId}__${DbPathsEnum.SKIP}`,
+            [DbSuffixes.COMMENT]: `${sectionId}__${questionId}__${DbSuffixes.COMMENT}`
         },
         normPaths: {
-            response: 'user_info.country_alpha3',
-            skip: `user_info.country.${DbPathsEnum.SKIP}`,
-            comment: `user_info.country.${DbPathsEnum.COMMENT}`
+            response: `${sectionId}.${questionId}_alpha3`,
+            skip: `${sectionId}.${questionId}.${DbPathsEnum.SKIP}`,
+            comment: `${sectionId}.${questionId}.${DbPathsEnum.COMMENT}`
         },
         ...question
     }
