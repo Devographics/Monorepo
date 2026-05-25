@@ -1,4 +1,4 @@
-translationContexts: [homepage, common, results, countries, state_of_css, css2025]
+translationContexts: [homepage, common, results, countries, state_of_css, css2026]
 
 baseUrl: http://localhost:8001
 # baseUrl: http://localhost:9000

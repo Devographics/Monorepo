@@ -1,0 +1,961 @@
+# ------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------
+# Pages Properties
+# - id: the unique (survey-wide) ID of the page
+# - path: the page's path
+# - children: the page's children pages
+# - blocks: the page's blocks
+# - pageTemplate: a template from which to inherit its properties (not used)
+# - showTitle: whether to show the page title or not
+# - variables: page variables (compiled during sitemap generation)
+
+# Block Properties
+# - id: the unique (survey-wide) ID of the block
+# - blockName: the name of the block (used for titles, descriptions, etc.)
+# - bucketKeysName: the name of the block's keys (used for legends, formatting data, etc.)
+# - blockType: the type of block (which component to use)
+# - query: the query used to populate the block's data
+# - dataPath: the path to use (from the query root) to access the block's data
+# - showLegend: whether to show the block's legend
+# - showDescription: whether to show the block's description
+# - template: a template from which to inherit its properties
+# - translateData: whether to try and translate
+# - variables: block variables (compiled during sitemap generation)
+
+- id: overview
+  path: /
+  showTitle: false
+  blocks:
+      - id: survey_stats
+        blockType: SurveyStatsBlock
+        disableExport: true
+        wrapBlock: false
+
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+        variables:
+            showButton: false
+
+      - id: overview.intro.css2026
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: full_survey_cta
+        blockType: CTABlock
+        wrapBlock: false
+        showInNav: false
+        variables:
+            ctaKey: general.view_full_results
+            ctaLink: /models/
+
+      - id: survey_sponsors
+        template: sponsors
+
+      - id: survey_partners
+        template: sponsors
+        blockType: PartnersBlock
+
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+      - id: tshirt_intro
+        template: page_introduction
+      - id: tshirt_block
+        blockType: TshirtBlock
+        wrapBlock: false
+        disableExport: true
+
+# - id: data_explorer
+#   titleId: sections.data_explorer.title
+#   path: /explorer
+#   blocks:
+#       - template: page_introduction
+#       - id: data_explorer
+#         showTitle: false
+#         chartOnly: true
+#         wrapBlock: false
+#         template: data_explorer
+#         parameters: { showNoAnswer: true }
+#         variables:
+#             xAxis: user_info__yearly_salary
+#             yAxis: user_info__years_of_experience
+- id: features
+  path: /features
+  descriptionId: sections.features.description.css2024
+  blocks:
+      - template: page_introduction
+
+      - id: figure_has_usage
+        template: figure
+        variables:
+            value: 999
+            unit: percentage
+
+      - id: all_features
+        template: multi_items_experience
+        i18nNamespace: features
+        chartOptions:
+            limit: 5
+            categories: [
+                    layout,
+                    shapes_graphics,
+                    colors,
+                    interactions,
+                    # typography,
+                    # accessibility,
+                    # math_features,
+                    other_features
+                ]
+
+      - id: figure_light_dark_awareness
+        template: figure
+        variables:
+            value: 999
+            unit: percentage
+
+      # - id: knowledge_score
+      #   template: demographics
+      - id: features_ratios_over_time
+        template: multi_items_ratios
+        i18nNamespace: features
+        variables:
+            enableMultiSection: true
+
+      - id: josh_comeau
+        template: picks
+        variables:
+            url: https://linear-easing-generator.netlify.app/
+
+      - id: layout_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: layout
+        chartOptions:
+            limit: 5
+
+      - id: shapes_graphics_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: shapes_graphics
+        chartOptions:
+            limit: 5
+
+      - id: colors_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: colors
+        chartOptions:
+            limit: 5
+
+      - id: interactions_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: interactions
+        chartOptions:
+            limit: 5
+
+      - id: kilian_valkhof
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
+
+      # - id: typography_pain_points
+      #   template: multiple_options2_freeform
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: typography
+      #   chartOptions:
+      #       limit: 5
+
+      # - id: math_features_pain_points
+      #   template: multiple_options2_freeform
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: math_features
+      #   chartOptions:
+      #       limit: 5
+
+      - id: other_features_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: other_features
+        chartOptions:
+            limit: 5
+
+      # - id: layout_pain_points
+      #   titleId: features.pain_points
+      #   tabId: features.layout
+      #   template: multiple_options2_freeform
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: layout
+      #   variants:
+      #       - id: shapes_graphics_pain_points
+      #         tabId: features.shapes_graphics
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: shapes_graphics
+      #       - id: colors_pain_points
+      #         tabId: features.colors
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: colors
+      #       - id: interactions_pain_points
+      #         tabId: features.interactions
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: interactions
+      #       - id: typography_pain_points
+      #         tabId: features.typography
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: typography
+      #       - id: math_features_pain_points
+      #         tabId: features.math_features
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: math_features
+      #       - id: other_features_pain_points
+      #         tabId: features.other_features
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: other_features
+
+      - id: ana_rodrigues
+        template: picks
+        variables:
+            url: https://modern-fluid-typography.vercel.app/
+
+      - id: reading_list
+        template: multiple_options2
+        parameters:
+            limit: 20
+        queryOptions:
+            sectionId: reading_list
+            addQuestionComments: false
+        chartOptions:
+            dataFilters: [removeOverLimit, removeNoAnswer]
+            limit: 10
+
+      - id: features_resources
+        items: [fm-css-grid, fm-animations-transitions]
+        template: recommended_resources
+
+  # children:
+  #     - id: layout
+  #       path: /layout
+  #       blocks:
+  #           - id: layout_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: layout_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: shapes_graphics
+  #       path: /shapes-graphics
+  #       blocks:
+  #           - id: shapes_graphics_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: shapes_graphics_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: colors
+  #       path: /colors
+  #       blocks:
+  #           - id: colors_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: colors_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: interactions
+  #       path: /interactions
+  #       blocks:
+  #           - id: interactions_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: interactions_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: typography
+  #       path: /typography
+  #       blocks:
+  #           - id: typography_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: typography_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: math_features
+  #       path: /math
+  #       blocks:
+  #           - id: math_features_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: math_features_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: other_features
+  #       path: /other-features
+  #       blocks:
+  #           - id: other_features_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: other_features_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+- id: other_tools
+  path: /other-tools
+  blocks:
+      - id: tools_others_intro
+        template: page_introduction
+
+      - id: css_frameworks
+        template: multiple_options2_combined
+        i18nNamespace: tools
+        variables:
+            disableOtherBucket: true
+        variants:
+            - template: vs_years_of_experience
+              parameters:
+                  sort: { property: medianByFacet }
+
+      - id: figure_css_in_js
+        template: figure
+        variables:
+            value: 29
+            unit: percentage
+
+      - id: css_in_js
+        template: multiple_options2_combined
+        i18nNamespace: tools
+        variables:
+            disableOtherBucket: true
+        # variants:
+        #     - template: vs_years_of_experience
+        #       parameters:
+        #           sort: { property: medianByFacet }
+
+      - id: ahmad_shadeed
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/if
+
+      - id: pre_post_processors
+        template: multiple_options2_combined
+        i18nNamespace: tools
+        # variants:
+        #     - template: vs_years_of_experience
+        #       parameters:
+        #           sort: { property: medianByFacet }
+
+      - id: utilities
+        template: multiple_options2_combined
+        i18nNamespace: tools
+
+      - id: figure_css_in_js
+        template: figure
+        variables:
+            value: 29
+            unit: percentage
+
+      - id: browsers
+        template: multiple_options2_combined
+        i18nNamespace: tools
+        variants:
+            - id: browsers_by_os
+              fieldId: browsers
+              template: multiple_options2_combined
+              tabId: tabs.by_os
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: os
+                              sectionId: _user_metadata
+                              operator: eq
+                              value: macOS
+                      - conditions:
+                            - fieldId: os
+                              sectionId: _user_metadata
+                              operator: eq
+                              value: Windows
+
+      - id: other_tools_resources
+        items: [fm-tailwind-css-v2, fm-frontend-system-design]
+        template: recommended_resources
+
+- id: usage
+  descriptionId: sections.usage.description.css2024
+  intlId: usage_css
+  path: /usage
+  blocks:
+      - template: page_introduction
+
+      - id: form_factors
+        template: multiple_options2_combined
+        variants:
+            - id: company_size_vs_form_factors
+              template: multiple_options2_combined
+              tabId: tabs.vs_company_size
+              queryOptions:
+                  sectionId: user_info
+              fieldId: company_size
+              filtersState:
+                  facet:
+                      sectionId: usage
+                      id: form_factors
+
+      - id: css_ai_generated_code_balance
+        template: multiple_options2
+        showAverage: true
+
+      - id: sharing_hint
+        template: hint
+
+      # - id: what_do_you_use_css_for
+      #   template: multiple_options2_combined
+
+      - id: ana_tudor
+        template: picks
+        variables:
+            url: https://codepen.io/thebabydino/pen/LEExpVg
+
+      # - id: industry_sector
+      #   template: multiple_options2_combined
+
+      - id: figure_anchor_positioning
+        template: figure
+        variables:
+            value: 9
+            unit: percentage
+
+      - id: css_interoperability_features
+        template: multiple_options2_freeform
+
+      - id: amit_sheen
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units/Using_CSS_math_functions
+
+      - id: css_missing_features
+        template: multiple_options2_freeform
+
+      - id: css_general_pain_points
+        template: multiple_options2_freeform
+
+      - id: favorite_new_features
+        template: multiple_options2_freeform
+
+      - id: saron_yitbarek
+        template: picks
+        variables:
+            url: https://piccalil.li/blog/
+
+      - id: css_pace_of_change
+        template: single_option2
+        variants:
+            - template: vs_years_of_experience
+              parameters:
+                  sort: { property: medianByFacet }
+
+      - id: sara_joy
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark
+
+      - id: state_of_the_web_happiness
+        template: happiness2
+        i18nNamespace: usage
+
+      - id: state_of_css_happiness
+        template: happiness2
+        i18nNamespace: usage
+
+      - id: usage_resources
+        items: [fm-getting-started-css-v2, fm-svg]
+        template: recommended_resources
+
+- id: resources
+  intlId: resources_css
+  descriptionId: sections.resources.description.css2024
+  path: /resources
+  blocks:
+      - template: page_introduction
+
+      - id: podcasts
+        template: multiple_options2_freeform
+
+      - id: video_creators
+        template: multiple_options2_freeform
+
+      - id: people
+        template: multiple_options2_freeform
+
+      - id: sacha_greif
+        template: picks
+        variables:
+            url: https://miocene.io/
+
+      - id: web_platform_resources
+        template: multiple_options2_combined
+
+      - id: other_surveys
+        template: multiple_options2_combined
+
+      - id: resources_resources
+        items: [fm-pro-css, fm-theming-style-queries]
+        template: recommended_resources
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+      - template: page_introduction
+
+      - id: country
+        template: multiple_options2
+        parameters: { limit: 20 }
+        variants:
+            - template: vs_salary
+              parameters: { cutoff: 100, limit: 20, sort: { property: medianByFacet, order: desc } }
+
+      # - id: locale
+      #   template: multiple_options2
+      #   parameters: { cutoff: 20 }
+
+      - id: hint_hint
+        template: hint
+
+      # - id: completion_stats
+      #   template: multiple_options2
+
+      - id: age
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: options }
+
+      - id: years_of_experience
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: options }
+
+      - id: julia_miocene
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API
+
+      - id: company_size
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: options }
+
+      - id: variants_hint
+        template: hint
+
+      - id: yearly_salary
+        template: multiple_options2
+        variants:
+            - id: yearly_salary_us_vs_world
+              fieldId: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              blockType: HorizontalBarBlock2
+              hasData: true
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: in
+                              value: [USA]
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value: [USA]
+
+      - id: job_title
+        template: multiple_options2_freeform
+        variants:
+            - template: vs_salary
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_age
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_years_of_experience
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_gender
+              parameters:
+                  limit: 20
+                  cutoff: 100
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: frontend_masters_learning_path
+        template: midpage_resource
+        variables:
+            id: fem-learning-path
+            labelId: frontendmasters.learning_path
+            imageUrl: https://assets.devographics.com/sponsors/fem-background-intermediate.jpg
+            logoUrl: https://assets.devographics.com/sponsors/frontend-masters-dark.png
+            link: https://frontendmasters.com/learn/professional/?utm_source=stateofdevs&utm_medium=website&utm_campaign=css2025
+
+      - id: higher_education_degree
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: options }
+
+      # - id: lea_verou
+      #   template: picks
+      #   variables:
+      #       url: https://developer.chrome.com/docs/css-ui/style-queries
+
+      - id: gender
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+            - id: country_vs_gender
+              fieldId: country
+              tabId: tabs.by_country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 15
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: race_ethnicity
+        template: multiple_options2_combined
+        variants:
+            - template: vs_years_of_experience
+            - template: vs_age
+
+      - id: disability_status
+        template: multiple_options2_combined
+
+      - id: user_info_resources
+        items: [fm-homepage]
+        template: recommended_resources
+
+- id: awards
+  path: /awards
+  blocks:
+      - template: page_introduction
+
+      - id: awards
+        template: awards
+        variables:
+            entities: '"has_selector","aspect_ratio","intrinsic_sizing","sibling_count","sibling_index","scroll_state","light_dark","anchor_positioning","text_wrap_pretty","css_nesting","trigonometric_functions","writing_modes","wide_gamut_colors","line_clamp","subgrid"'
+        awards:
+            - id: most_used_feature_award
+              template: award
+              awards:
+                  - id: has_selector
+                    value: '80.4%'
+                  - id: aspect_ratio
+                    value: '76.2%'
+                  - id: intrinsic_sizing
+                    value: '75%'
+
+            - id: least_used_feature_award
+              template: award
+              awards:
+                  - id: sibling_count
+                    value: '1.5%'
+                  - id: sibling_index
+                    value: '1.6%'
+                  - id: scroll_state
+                    value: '1.9%'
+
+            - id: largest_awareness_progression_award
+              template: award
+              awards:
+                  - id: light_dark
+                    value: '23%'
+                  - id: anchor_positioning
+                    value: '21%'
+                  - id: text_wrap_pretty
+                    value: '20%'
+
+            - id: largest_usage_progression_award
+              template: award
+              awards:
+                  - id: text_wrap_pretty
+                    value: '17%'
+                  - id: css_nesting
+                    value: '13%'
+                  - id: light_dark
+                    value: '13%'
+
+            - id: most_loved_feature_award
+              template: award
+              awards:
+                  - id: has_selector
+                    value: '51.5%'
+                  - id: subgrid
+                    value: '50.6%'
+                  - id: aspect_ratio
+                    value: '47.6%'
+
+            - id: most_hated_feature_award
+              template: award
+              awards:
+                  - id: trigonometric_functions
+                    value: '9.1%'
+                  - id: writing_modes
+                    value: '8.8%'
+                  - id: wide_gamut_colors
+                    value: '7.2%'
+
+            - id: most_commented_feature_award
+              template: award
+              awards:
+                  - id: subgrid
+                    value: 167
+                  - id: line_clamp
+                    value: 114
+                  - id: css_nesting
+                    value: 87
+
+- id: conclusion
+  path: /conclusion
+  blocks:
+      - id: conclusion
+        template: conclusion
+        variables:
+            author: amit_sheen
+            entities: '"amit_sheen"'
+
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
+
+- id: _user_metadata
+  i18nNamespace: user_metadata
+  path: /metadata
+  blocks:
+      - template: page_introduction
+
+      - id: locale
+        template: multiple_options2
+        defaultView: percentageSurvey
+        parameters: { cutoff: 20 }
+        queryOptions:
+            addQuestionComments: false
+
+      - id: completion_stats
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: authmode
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: device
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: browser
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      # - id: version
+      #   template: multiple_options2
+      #   queryOptions:
+      #       addQuestionComments: false
+
+      - id: os
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: past_surveys
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+            addBucketsEntities: true
+        parameters:
+            showNoAnswer: true
+
+      - id: past_same_survey_count
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+        parameters:
+            showNoAnswer: true
+
+      - id: created_at_date
+        template: multiple_options2
+        blockType: TimeSeriesByDateBlock
+        defaultView: countBar
+        parameters:
+            showNoAnswer: false
+            cutoff: 10
+            sort: { order: asc, property: id }
+        queryOptions:
+            addQuestionComments: false
+        variants:
+            - id: created_at_date_by_source
+              fieldId: created_at_date
+              template: multiple_options2
+              blockType: TimeSeriesByDateBlock
+              defaultView: count
+              parameters:
+                  showNoAnswer: false
+                  cutoff: 10
+                  sort: { order: asc, property: id }
+                  facetLimit: 3
+                  enableAddOverallBucket: false
+                  mergeOtherBuckets: true
+              queryOptions:
+                  addBucketsEntities: true
+                  addQuestionComments: false
+              filtersState:
+                  facet:
+                      sectionId: _user_metadata
+                      id: source
+
+      - id: source
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        parameters:
+            limit: 20
+        queryOptions:
+            addQuestionComments: false
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: about
+  path: /about
+  blocks:
+      - id: about_contents
+        blockType: AboutBlock
+        wrapBlock: false
+        disableExport: true
+
+# - id: how_to_help
+#   path: /how_to_help
+#   blocks:
+
+#     - id: how_to_help_contents
+#       blockType: HowToHelpBlock
+#       wrapBlock: false
+#       disableExport: true
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+      - id: support
+        template: page_introduction
+
+- id: download
+  path: /download
+  is_hidden: true
+  blocks:
+      - id: download
+        template: page_introduction
+
+- id: sponsor_finish
+  path: /sponsor-chart-finish
+  is_hidden: true
+  blocks:
+      - id: sponsor_finish
+        blockType: SponsorFinishBlock
+        wrapBlock: false
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+      - id: notfound
+        blockType: NotFoundBlock
