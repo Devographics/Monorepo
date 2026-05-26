@@ -7,8 +7,9 @@
 /**
  * Verify the magic link token
  */
+
 import passport from "passport";
-import nextConnect from "next-connect";
+import { createRouter } from "next-connect";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { anonymousLoginStrategy } from "~/lib/account/anonymousLogin/api/passport/anonymous-strategy";
@@ -18,39 +19,61 @@ import { createResponse } from "~/lib/responses/db-actions/create";
 
 passport.use(anonymousLoginStrategy);
 
-interface AnonymousLoginReqBody {}
-// NOTE: adding NextApiRequest, NextApiResponse is required to get the right typings in next-connect
-// this is the normal behaviour
-// @ts-ignore TODO Eric
-const loginAndCreateResponse = nextConnect<NextApiRequest, NextApiResponse>()
-  // @ts-ignore
-  .use(passport.initialize())
-  .post(
-    connectToAppDbMiddleware,
-    passport.authenticate(
-      "anonymouslogin",
-      // prevent passport from managing session on its own
-      // @see https://stackoverflow.com/questions/19948816/passport-js-error-failed-to-serialize-user-into-session
-      { session: false }
-    ),
-    async (req, res, next) => {
-      const user = (req as unknown as any).user;
-      if (!user) {
-        return res
-          .status(500)
-          .send("Anonymous login succeeded but req.user not correctly set.");
-      }
-      return next();
-    },
-    setToken,
-    async (req, res) => {
-      const currentUser = (req as unknown as any).user;
-      const clientData = req.body;
-      const response = await createResponse({ clientData, currentUser });
-      return res
-        .status(200)
-        .send({ done: true, userId: req.user._id, response });
-    }
-  );
+type NextHandler = (err?: unknown) => void;
 
-export default loginAndCreateResponse;
+interface AuthenticatedNextApiRequest extends NextApiRequest {
+  user?: {
+    _id: string;
+    [key: string]: unknown;
+  };
+}
+
+const router = createRouter<AuthenticatedNextApiRequest, NextApiResponse>();
+
+router.use(passport.initialize());
+
+router.post(
+  connectToAppDbMiddleware,
+
+  passport.authenticate("anonymouslogin", {
+    // prevent passport from managing session on its own
+    // @see https://stackoverflow.com/questions/19948816/passport-js-error-failed-to-serialize-user-into-session
+    session: false,
+  }),
+
+  async (
+    req: AuthenticatedNextApiRequest,
+    res: NextApiResponse,
+    next: NextHandler,
+  ) => {
+    const user = req.user;
+
+    if (!user) {
+      return res
+        .status(500)
+        .send("Anonymous login succeeded but req.user not correctly set.");
+    }
+
+    return next();
+  },
+
+  setToken,
+
+  async (req: AuthenticatedNextApiRequest, res: NextApiResponse) => {
+    const currentUser = req.user;
+    const clientData = req.body;
+
+    const response = await createResponse({
+      clientData,
+      currentUser,
+    });
+
+    return res.status(200).send({
+      done: true,
+      userId: req.user?._id,
+      response,
+    });
+  },
+);
+
+export default router.handler();
