@@ -49,6 +49,7 @@ const limiter = rateLimit({
   // NOTE: as a default rateLimit will use the IP but this is not totally reliable
   // we can use the requested email here for this precise scenario
   keyGenerator: (request) => {
+    //@ts-ignore
     return (request.body as MagicLoginSendEmailBody).destination;
   },
 });
@@ -57,6 +58,7 @@ const router = createRouter<MagicLoginRequest, NextApiResponse>();
 
 router.post(
   checkBody,
+  //@ts-ignored
   limiter,
   connectToAppDbMiddleware,
   connectToRedisMiddleware,
