@@ -10,7 +10,7 @@ export async function register() {
   setAppName(AppName.SURVEYFORM);
   const isDev = process.env.NODE_ENV === "development";
   // call getConfig the first time and show warnings if this is local dev env
-  getConfig({ showWarnings: isDev });
+  getConfig({ showWarnings: isDev, calledFrom: "instrumentation.ts" });
 
   // if (process.env.NEXT_RUNTIME === 'nodejs') {
   //   await import('./instrumentation-node');
