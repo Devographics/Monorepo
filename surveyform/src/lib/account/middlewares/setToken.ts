@@ -3,6 +3,10 @@ import { AUTH_TOKEN, MAX_AGE, encryptSession } from "~/lib/account/session";
 import { serialize } from "cookie";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { UserDocument } from "~/lib/users/typings";
+import {
+  AuthenticatedNextApiRequest,
+  SimplifiedUserDocument,
+} from "../magicLogin/typings/requests-body";
 
 /**
  * This function is expecting a Pages router API endpoint as we sill use Passport/Node.Js
@@ -20,15 +24,17 @@ export function setTokenCookie(res: NextApiResponse, token: string) {
 
   res.setHeader("Set-Cookie", cookie);
 }
+
 export const setToken = async (
-  req: NextApiRequest & { user: UserDocument },
+  req: AuthenticatedNextApiRequest,
   res: NextApiResponse,
-  next: any
+  next: any,
 ) => {
-  // session is the payload to save in the token, it may contain basic info about the user
-  const session = cloneDeep(req.user);
-  // The token is a string with the encrypted session
+  const session = cloneDeep(req.user) as UserDocument;
+
   const token = await encryptSession(session);
+
   setTokenCookie(res, token);
+
   return next();
 };

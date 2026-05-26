@@ -15,6 +15,7 @@ import type { ResponseDocument, PrefilledResponse } from "@devographics/types";
 import { prefilledResponseSchema } from "@devographics/types";
 import { createResponse } from "~/lib/responses/db-actions/create";
 import z from "zod";
+import { AuthenticatedNextApiRequest } from "~/lib/account/magicLogin/typings/requests-body";
 
 /**
  * @see https://vercel.com/docs/functions/serverless-functions/runtimes#maxduration
@@ -43,12 +44,7 @@ interface VerifyTokenResponse {
 
 type NextHandler = (err?: unknown) => void;
 
-interface AuthenticatedRequest extends NextApiRequest {
-  user?: {
-    _id: string;
-    [key: string]: unknown;
-  };
-
+interface QueryAuthenticatedNextApiRequest extends AuthenticatedNextApiRequest {
   query: {
     token?: string;
     editionId?: string;
@@ -62,9 +58,18 @@ const expectedClientDataSchema = z.object({
   surveyId: z.string(),
 });
 
-const router = createRouter<AuthenticatedRequest, NextApiResponse>();
+const router = createRouter<
+  QueryAuthenticatedNextApiRequest,
+  NextApiResponse
+>();
 
-router.use(passport.initialize());
+router.use(
+  passport.initialize() as unknown as (
+    req: AuthenticatedNextApiRequest,
+    res: NextApiResponse,
+    next: (err?: unknown) => void,
+  ) => void,
+);
 
 router.get(
   connectToAppDbMiddleware,
@@ -74,7 +79,7 @@ router.get(
   }),
 
   async (
-    req: AuthenticatedRequest,
+    req: QueryAuthenticatedNextApiRequest,
     res: NextApiResponse,
     next: NextHandler,
   ) => {
@@ -88,7 +93,7 @@ router.get(
 
   setToken,
 
-  async (req: AuthenticatedRequest, res: NextApiResponse) => {
+  async (req: QueryAuthenticatedNextApiRequest, res: NextApiResponse) => {
     let response: any;
     let responseType: "new" | "existing";
 

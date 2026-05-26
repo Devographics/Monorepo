@@ -15,21 +15,21 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { anonymousLoginStrategy } from "~/lib/account/anonymousLogin/api/passport/anonymous-strategy";
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 import { setToken } from "~/lib/account/middlewares/setToken";
+import { AuthenticatedNextApiRequest } from "~/lib/account/magicLogin/typings/requests-body";
 
 passport.use(anonymousLoginStrategy);
 
 type NextHandler = (err?: unknown) => void;
 
-interface AuthenticatedNextApiRequest extends NextApiRequest {
-  user?: {
-    _id: string;
-    [key: string]: unknown;
-  };
-}
-
 const router = createRouter<AuthenticatedNextApiRequest, NextApiResponse>();
 
-router.use(passport.initialize());
+router.use(
+  passport.initialize() as unknown as (
+    req: AuthenticatedNextApiRequest,
+    res: NextApiResponse,
+    next: (err?: unknown) => void,
+  ) => void,
+);
 
 router.post(
   // TODO: probably not needed

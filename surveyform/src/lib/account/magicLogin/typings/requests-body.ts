@@ -15,3 +15,14 @@ export interface MagicLoginSendEmailBody {
   editionId?: string;
   surveyId?: string;
 }
+
+import type { NextApiRequest } from "next";
+
+export type SimplifiedUserDocument = {
+  _id: string;
+  [key: string]: unknown;
+};
+
+export interface AuthenticatedNextApiRequest extends NextApiRequest {
+  user?: SimplifiedUserDocument;
+}

@@ -9,6 +9,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { magicLinkStrategy } from "~/lib/account/magicLogin/api/passport/magic-login-strategy";
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 import { setToken } from "~/lib/account/middlewares/setToken";
+import { AuthenticatedNextApiRequest } from "~/lib/account/magicLogin/typings/requests-body";
 
 /**
  * @see https://vercel.com/docs/functions/serverless-functions/runtimes#maxduration
@@ -29,18 +30,22 @@ interface MagicLoginReqBody {
   token: string;
 }
 
-interface AuthenticatedNextApiRequest extends NextApiRequest {
+interface TokenAuthenticatedNextApiRequest extends AuthenticatedNextApiRequest {
   body: MagicLoginReqBody;
-
-  user?: {
-    _id: string;
-    [key: string]: unknown;
-  };
 }
 
-const router = createRouter<AuthenticatedNextApiRequest, NextApiResponse>();
+const router = createRouter<
+  TokenAuthenticatedNextApiRequest,
+  NextApiResponse
+>();
 
-router.use(passport.initialize());
+router.use(
+  passport.initialize() as unknown as (
+    req: TokenAuthenticatedNextApiRequest,
+    res: NextApiResponse,
+    next: (err?: unknown) => void,
+  ) => void,
+);
 
 router.get(
   connectToAppDbMiddleware,
@@ -52,7 +57,7 @@ router.get(
   }),
 
   async (
-    req: AuthenticatedNextApiRequest,
+    req: TokenAuthenticatedNextApiRequest,
     res: NextApiResponse,
     next: NextHandler,
   ) => {
@@ -69,7 +74,7 @@ router.get(
 
   setToken,
 
-  (req: AuthenticatedNextApiRequest, res: NextApiResponse) => {
+  (req: TokenAuthenticatedNextApiRequest, res: NextApiResponse) => {
     return res.status(200).send({
       done: true,
       userId: req.user?._id,
