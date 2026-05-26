@@ -77,6 +77,7 @@ export type DefaultConfigValues = Partial<Record<EnvVar, any>>
 interface GetConfigOptions {
     appName?: AppName
     showWarnings?: boolean
+    calledFrom?: string
 }
 
 const formatVariable = ({ id, description, example }: EnvVariable) => {
@@ -109,8 +110,10 @@ const getValue = (variable: EnvVariable, localDefaultValues: DefaultConfigValues
     // For Next.js public variables build,
     // we CAN'T move process.env to a variable like const env = process.env,
     // because Next rely on build-time injection when detecting process.env[something] explicitely
+
     const value =
         globalDefaultValues[id] || localDefaultValues[id] || process.env[id] || envMapGlobal[id]
+
     if (value) {
         return { id, value }
     } else if (aliases) {
@@ -135,7 +138,7 @@ export const getConfig = (
     options: GetConfigOptions = {},
     defaultValues: DefaultConfigValues = {}
 ) => {
-    const { showWarnings = false } = options
+    const { showWarnings = false, calledFrom } = options
     const appName =
         appNameGlobal || (getValue({ id: EnvVar.APP_NAME }, defaultValues)?.value as AppName)
     if (!appName) {
@@ -166,13 +169,13 @@ export const getConfig = (
     if (optionalVariables.length > 0) {
         console.warn(
             `getConfig/${appName}: The following optional environment variables were not defined:
-${optionalVariables.map(formatVariable).join('\n')}`
+${optionalVariables.map(formatVariable).join('\n')} ${calledFrom ? `(called from: ${calledFrom})` : ''}`
         )
     }
     if (missingVariables.length > 0) {
         throw new Error(
             `getConfig/${appName}: Found the following missing environment variables:
-${missingVariables.map(formatVariable).join('\n')}`
+${missingVariables.map(formatVariable).join('\n')} ${calledFrom ? `(called from: ${calledFrom})` : ''}`
         )
     }
     return variables as { [id in EnvVar]: string }

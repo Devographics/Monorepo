@@ -16,7 +16,7 @@ export default function RootLayout({
    */
   setAppName(AppName.SURVEYFORM);
   const isDev = process.env.NODE_ENV === "development";
-  getConfig({ showWarnings: isDev });
+  getConfig({ showWarnings: isDev, calledFrom: "layout.tsx" });
 
   const configClass = process.env.NEXT_PUBLIC_CONFIG
     ? `config-${process.env.NEXT_PUBLIC_CONFIG}`
