@@ -39,7 +39,7 @@ export const getQuestioni18nIds = ({
     const { id: questionId, sectionId: questionSectionId, i18nNamespace, intlId } = question
 
     const sectionNamespace = questionSectionId || slug || sectionId
-    const questionNamespace = i18nNamespace || questionId
+    const questionNamespace = questionId
 
     const baseSegments = [sectionNamespace, questionNamespace]
     const base = intlId || baseSegments.join(separator)
