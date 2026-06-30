@@ -28,7 +28,8 @@ export function sortBuckets<T extends Bucket | FacetBucket>(
     sortedBuckets = putBucketLast<T>(sortedBuckets, CUTOFF_ANSWERS)
     sortedBuckets = putBucketLast<T>(sortedBuckets, NO_MATCH)
     sortedBuckets = putBucketLast<T>(sortedBuckets, OTHER_ANSWERS)
-    sortedBuckets = putBucketLast<T>(sortedBuckets, NOT_APPLICABLE)
+    // NOT_APPLICABLE is an actual answer so don't put it last
+    // sortedBuckets = putBucketLast<T>(sortedBuckets, NOT_APPLICABLE)
     sortedBuckets = putBucketLast<T>(sortedBuckets, NO_ANSWER)
     sortedBuckets = putBucketLast<T>(sortedBuckets, INSUFFICIENT_DATA)
     return sortedBuckets

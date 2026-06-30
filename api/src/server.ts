@@ -174,7 +174,7 @@ const start = async () => {
     await logToFile(
         'questionObjects.yml',
         questionObjects.map(q => {
-            const { survey, ...rest } = q
+            const { survey, edition, section, ...rest } = q
             return rest
         })
     )
