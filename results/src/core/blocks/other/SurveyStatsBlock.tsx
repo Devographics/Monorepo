@@ -8,7 +8,6 @@ import { formatNumber } from 'core/charts/common2/helpers/format'
 import Link from 'core/components/LocaleLink'
 
 const SurveyStatsBlock = (props: { block: BlockVariantDefinition }) => {
-    console.log(props)
     const { currentEdition, currentEditionStats } = usePageContext()
     const { startedAt, endedAt, questionsUrl } = currentEdition
     return (
