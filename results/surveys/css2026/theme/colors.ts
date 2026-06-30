@@ -1,5 +1,6 @@
 import { DefaultTheme } from 'styled-components'
 import colors_ from 'core/theme/colors'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const colors = {
     ...colors_,
@@ -142,22 +143,56 @@ const distinct = [
     colors.kaki
 ]
 
+export const surveyColorTheme = {
+    lightOnDark: {
+        primary: { default: '#ff8196', darker: '#c0384f' },
+        background: { default: '#231F20', alt: '#393234', alt2: '#55474a' },
+        text: { default: '#f8e6e9' },
+        experience: {
+            heard: 'rgb(166, 183, 245)',
+            used: 'rgb(32, 111, 175)',
+            never_heard: 'rgb(139, 128, 131)'
+        },
+        sentiment: {
+            positive: '#5ce58cff',
+            negative: 'rgb(232, 64, 103)',
+            neutral: '#8b8b80ff'
+        },
+        velocity: [
+            'hsl(350, 61%, 20%)',
+            'hsl(350, 61%, 25%)',
+            'hsl(350, 61%, 30%)',
+            'hsl(350, 61%, 35%)',
+            'hsl(350, 61%, 40%)',
+            'hsl(350, 61%, 45%)',
+            'hsl(350, 61%, 50%)',
+            'hsl(350, 61%, 55%)',
+            'hsl(350, 61%, 60%)',
+            'hsl(350, 61%, 65%)',
+            'hsl(350, 61%, 70%)',
+            'hsl(350, 61%, 75%)',
+            'hsl(350, 61%, 80%)',
+            'hsl(350, 61%, 85%)'
+        ]
+    }
+}
+
 const stateOfCSSThemeColors: DefaultTheme['colors'] = {
-    background: '#272325',
+    background: getThemeColor('background.default'),
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
-    backgroundAlt3: '#2c3033',
-    backgroundBackground: colors.electricBlueDarkest,
+    backgroundAlt3: '#27242E',
+    backgroundBackground: '#375D70',
     backgroundForeground: colors.navyLighter,
-    backgroundAlt: '#314448',
+    backgroundAlt: getThemeColor('background.alt'),
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
-    backgroundAlt2: colors.electricBlueDarkerer,
+    backgroundAlt2: getThemeColor('background.alt2'),
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
-    text: colors.white,
+    text: getThemeColor('text.default'),
     textAlt: 'rgba(255, 246, 229, 0.5)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: '#EC81F2',
+    link: getThemeColor('primary.default'),
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
@@ -230,8 +265,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     ],
     barColorDefault: {
         id: 'barColorDefault',
-        color: '#64FF3E',
-        gradient: ['#61EC4C', '#19B330']
+        color: colors.blueGreenDark,
+        gradient: [colors.blueGreenDark, colors.blueGreenDark]
     },
     barColorNoAnswer: {
         id: 'barColorNoAnswer',
@@ -239,8 +274,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         gradient: [colors.greyLight, colors.greyLightest]
     },
     barChart: {
-        primary: '#EA99EE',
-        primaryGradient: ['#B937C0', '#EA99EE'],
+        primary: getThemeColor('primary.default'),
+        primaryGradient: [getThemeColor('primary.darker'), getThemeColor('primary.default')],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
@@ -248,98 +283,88 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     },
     ranges: {
         tools: {
-            would_use: [colors.electricBlueDarkerer, colors.electricBlueDarker],
+            would_use: [colors.blueGreenDarker, colors.blueGreenDark],
             would_not_use: [colors.red, colors.redLight],
-            interested: [colors.electricBlue, colors.electricBlueLight],
+            interested: [colors.blueGreen, colors.blueGreenLight],
             not_interested: [colors.redLighter, colors.redLightest],
             never_heard: [colors.greyLight, colors.greyLightest]
         },
         toolSections: {
-            javascript_flavors: colors.indigo,
-            front_end_frameworks: colors.pink,
-            datalayer: colors.red,
-            back_end_frameworks: colors.purple,
-            testing: colors.orange,
-            build_tools: colors.yellow,
-            mobile_desktop: colors.green,
-            other_tools: colors.blue,
-            css_in_js: colors.blue,
-            pre_post_processors: colors.yellow,
-            css_frameworks: colors.pink
+            component_libraries: colors.pinkLight,
+            state_management: colors.teal,
+            data_loading: colors.green,
+            back_end_infrastructure: colors.orange
         },
         sentiment: {
-            positive: ['#5ce593', colors.greenLight],
-            neutral: [colors.grey, colors.greyLight],
-            negative: ['#e45959', colors.redLight]
+            positive: [getThemeColor('sentiment.positive'), getThemeColor('sentiment.positive')],
+            neutral: [getThemeColor('sentiment.neutral'), getThemeColor('sentiment.neutral')],
+            negative: [getThemeColor('sentiment.negative'), getThemeColor('sentiment.negative')]
         },
         features: {
-            heard: ['#AEEFFF', '#D3F6FF'],
-            used: ['#129DC0', '#21B1D6'],
-            never_heard: [colors.grey, colors.greyLight]
+            heard: [getThemeColor('experience.heard'), getThemeColor('experience.heard')],
+            used: [getThemeColor('experience.used'), getThemeColor('experience.used')],
+            never_heard: [
+                getThemeColor('experience.never_heard'),
+                getThemeColor('experience.never_heard')
+            ]
         },
         features_categories: {
-            layout: colors.indigo,
-            shapes_graphics: colors.pink,
-            interactions: colors.red,
-            typography: colors.purple,
-            animations_transforms: colors.orange,
-            other_features: colors.green,
-            colors: colors.orange,
-            selectors: colors.aqua,
-            accessibility: colors.yellow
+            language: colors.purple,
+            browser_apis: colors.pink,
+            other_features: colors.green
         },
         features_simplified: {
             know_it: '#ACFFC3',
             used_it: '#59DF7F'
         },
-        gender: {
-            male: [velocity[0], velocity[1]],
-            female: [velocity[3], velocity[4]],
-            non_binary: [velocity[6], velocity[7]],
-            prefer_not_to_say: [velocity[8], velocity[9]],
-            not_listed: [velocity[10], velocity[11]]
-        },
-        race_ethnicity: {
-            biracial: velocity[0],
-            black_african: velocity[1],
-            east_asian: velocity[2],
-            hispanic_latin: velocity[3],
-            middle_eastern: velocity[4],
-            multiracial: velocity[5],
-            native_american_islander_australian: velocity[6],
-            south_asian: velocity[7],
-            white_european: velocity[8],
-            south_east_asian: velocity[9],
-            not_listed: velocity[10]
-        },
-        yearly_salary: {
-            range_work_for_free: [velocity[0], velocity[1]],
-            range_0_10: [velocity[2], velocity[3]],
-            range_10_30: [velocity[4], velocity[5]],
-            range_30_50: [velocity[6], velocity[7]],
-            range_50_100: [velocity[8], velocity[9]],
-            range_100_200: [velocity[10], velocity[11]],
-            range_more_than_200: [velocity[12], velocity[13]]
-        },
-        years_of_experience: {
-            range_less_than_1: [velocity[0], velocity[1]],
-            range_1_2: [velocity[2], velocity[3]],
-            range_2_5: [velocity[4], velocity[5]],
-            range_5_10: [velocity[6], velocity[7]],
-            range_10_20: [velocity[8], velocity[9]],
-            range_more_than_20: [velocity[10], velocity[11]]
-        },
-        higher_education_degree: {
-            no_degree: velocity[0],
-            yes_related: velocity[2],
-            yes_unrelated: velocity[4]
-        },
+        // gender: {
+        //     male: [velocity[0], velocity[1]],
+        //     female: [velocity[3], velocity[4]],
+        //     non_binary: [velocity[6], velocity[7]],
+        //     prefer_not_to_say: [velocity[8], velocity[9]],
+        //     not_listed: [velocity[10], velocity[11]]
+        // },
+        // race_ethnicity: {
+        //     biracial: velocity[0],
+        //     black_african: velocity[1],
+        //     east_asian: velocity[2],
+        //     hispanic_latin: velocity[3],
+        //     middle_eastern: velocity[4],
+        //     multiracial: velocity[5],
+        //     native_american_islander_australian: velocity[6],
+        //     south_asian: velocity[7],
+        //     white_european: velocity[8],
+        //     south_east_asian: velocity[9],
+        //     not_listed: velocity[10]
+        // },
+        // yearly_salary: {
+        //     range_work_for_free: [velocity[0], velocity[1]],
+        //     range_0_10: [velocity[2], velocity[3]],
+        //     range_10_30: [velocity[4], velocity[5]],
+        //     range_30_50: [velocity[6], velocity[7]],
+        //     range_50_100: [velocity[8], velocity[9]],
+        //     range_100_200: [velocity[10], velocity[11]],
+        //     range_more_than_200: [velocity[12], velocity[13]]
+        // },
+        // years_of_experience: {
+        //     range_less_than_1: [velocity[0], velocity[1]],
+        //     range_1_2: [velocity[2], velocity[3]],
+        //     range_2_5: [velocity[4], velocity[5]],
+        //     range_5_10: [velocity[6], velocity[7]],
+        //     range_10_20: [velocity[8], velocity[9]],
+        //     range_more_than_20: [velocity[10], velocity[11]]
+        // },
+        // higher_education_degree: {
+        //     no_degree: velocity[0],
+        //     yes_related: velocity[2],
+        //     yes_unrelated: velocity[4]
+        // },
         opinions: {
-            4: [velocity[9], velocity[8]],
-            3: [velocity[7], velocity[6]],
-            2: [velocity[5], velocity[4]],
-            1: [velocity[3], velocity[2]],
-            0: [velocity[1], velocity[0]]
+            4: [getThemeColor('velocity[9]'), getThemeColor('velocity[8]')],
+            3: [getThemeColor('velocity[7]'), getThemeColor('velocity[6]')],
+            2: [getThemeColor('velocity[5]'), getThemeColor('velocity[4]')],
+            1: [getThemeColor('velocity[3]'), getThemeColor('velocity[2]')],
+            0: [getThemeColor('velocity[1]'), getThemeColor('velocity[0]')]
         },
         bracket: {
             round1: [velocity[2], velocity[3]],

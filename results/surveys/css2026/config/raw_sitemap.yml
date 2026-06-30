@@ -91,15 +91,17 @@
   blocks:
       - template: page_introduction
 
-      - id: figure_has_usage
+      - id: figure_total_features
         template: figure
         variables:
-            value: 999
-            unit: percentage
+            value: 46
+            unit: count
 
       - id: all_features
         template: multi_items_experience
         i18nNamespace: features
+        queryOptions:
+            sectionId: _all_features
         chartOptions:
             limit: 5
             categories: [
@@ -113,16 +115,18 @@
                     other_features
                 ]
 
-      - id: figure_light_dark_awareness
+      - id: figure_sibling_count_awareness
         template: figure
         variables:
-            value: 999
+            value: 22
             unit: percentage
 
       # - id: knowledge_score
       #   template: demographics
       - id: features_ratios_over_time
         template: multi_items_ratios
+        queryOptions:
+            sectionId: _all_features
         i18nNamespace: features
         variables:
             enableMultiSection: true
@@ -345,8 +349,6 @@
       - id: css_frameworks
         template: multiple_options2_combined
         i18nNamespace: tools
-        variables:
-            disableOtherBucket: true
         variants:
             - template: vs_years_of_experience
               parameters:
@@ -361,8 +363,6 @@
       - id: css_in_js
         template: multiple_options2_combined
         i18nNamespace: tools
-        variables:
-            disableOtherBucket: true
         # variants:
         #     - template: vs_years_of_experience
         #       parameters:
@@ -385,10 +385,10 @@
         template: multiple_options2_combined
         i18nNamespace: tools
 
-      - id: figure_css_in_js
+      - id: figure_non_major_browsers
         template: figure
         variables:
-            value: 29
+            value: 22
             unit: percentage
 
       - id: browsers
@@ -411,6 +411,25 @@
                               sectionId: _user_metadata
                               operator: eq
                               value: Windows
+            # - id: browsers_not_big_4
+            #   fieldId: browsers
+            #   template: multiple_options2_combined
+            #   tabId: tabs.browsers_not_big_4
+            #   filtersState:
+            #       filters:
+            #           - conditions:
+            #                 - fieldId: browsers
+            #                   sectionId: other_tools
+            #                   operator: nin
+            #                   value:
+            #                       - chrome
+            #                       - chrome_android
+            #                       - chrome_ios
+            #                       - edge
+            #                       - firefox
+            #                       - firefox_android
+            #                       - safari
+            #                       - safari_ios
 
       - id: other_tools_resources
         items: [fm-tailwind-css-v2, fm-frontend-system-design]
@@ -437,6 +456,12 @@
                       sectionId: usage
                       id: form_factors
 
+      - id: figure_css_ai_generated_code_balance
+        template: figure
+        variables:
+            value: 26
+            unit: percentage
+
       - id: css_ai_generated_code_balance
         template: multiple_options2
         showAverage: true
@@ -454,12 +479,6 @@
 
       # - id: industry_sector
       #   template: multiple_options2_combined
-
-      - id: figure_anchor_positioning
-        template: figure
-        variables:
-            value: 9
-            unit: percentage
 
       - id: css_interoperability_features
         template: multiple_options2_freeform

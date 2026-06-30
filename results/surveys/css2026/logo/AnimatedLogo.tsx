@@ -10,7 +10,7 @@ interface LogoProps {
 }
 
 export const Logo = ({ className, animated = true, showText = true, size = 'l' }: LogoProps) => (
-    <Wrapper aria-label="State of CSS 2025" className="logo__wrapper">
+    <Wrapper aria-label="State of CSS 2026" className="logo__wrapper">
         <div className="soc-logo__wrapper">
             <svg
                 className="soc-logo"
@@ -20,7 +20,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                 height={748.16263}
                 viewBox="0 0 748.16263 748.16263"
             >
-                <title>{'State of CSS 2025'}</title>
+                <title>{'State of CSS 2026'}</title>
                 <defs>
                     <mask id="soc-logo-shadow">
                         <rect x={0} y={0} width="100%" height="100%" fill="white" />
@@ -648,7 +648,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                             dx={71}
                             data-year-char={4}
                         >
-                            {'5'}
+                            {'6'}
                         </text>
                     </g>
                 </g>
@@ -676,21 +676,21 @@ const Wrapper = styled.div`
 
     .soc-logo__wrapper {
         --color-bg: #232840;
-        --color-text: #fff6e6;
-        --color-accent: #ffffff;
-        --color-alt: #ede1a4;
-        --color-grad-lines-a: #68d1d5;
-        --color-grad-lines-b: #3797c0;
-        --color-grad-lines-c: #59258a;
+        --color-text: #f8e6e9;
+        --color-accent: #ef7085;
+        --color-alt: #ebc4ed;
+        --color-grad-lines-a: #d55167;
+        --color-grad-lines-b: #9d2240;
+        --color-grad-lines-c: #87318c;
         --color-grad-frame-a: #ebc4ed;
-        --color-grad-frame-b: #943c9a;
-        --color-grad-frame-c: #800e86;
-        --color-grad-frame-d: #59258a;
-        --color-grad-logo-a: #bbb2a4;
-        --color-grad-logo-b: #ded5c6;
-        --color-grad-logo-c: #f1e8d8;
-        --color-grad-logo-d: #f6edde;
-        --color-shadow-logo: #7a2380;
+        --color-grad-frame-b: #d55167;
+        --color-grad-frame-c: #99203f;
+        --color-grad-frame-d: #99203f;
+        --color-grad-logo-a: #fdd3db;
+        --color-grad-logo-b: #fcdbe1;
+        --color-grad-logo-c: #fdd3db;
+        --color-grad-logo-d: #fcdbe1;
+        --color-shadow-logo: #99203f;
         --timeline-delay-frame: 500ms;
         --timeline-anim-frame: 1250ms;
         --timeline-anim-text: 500ms;
@@ -699,7 +699,7 @@ const Wrapper = styled.div`
         --timeline-delay-letters: 50ms;
         --ease-bouncy-out: cubic-bezier(0.6, 1.5, 0.5, 1);
         --ease-bouncy-in-out: cubic-bezier(0.25, -0.25, 0.1, 1.25);
-        background: none;
+        background: var(--color-bg);
     }
 
     .soc-logo * {

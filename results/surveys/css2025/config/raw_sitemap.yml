@@ -97,6 +97,8 @@
       - id: all_features
         template: multi_items_experience
         i18nNamespace: features
+        queryOptions:
+            sectionId: _all_features
         chartOptions:
             limit: 5
             categories: [
