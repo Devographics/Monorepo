@@ -963,14 +963,6 @@
       - id: download
         template: page_introduction
 
-- id: sponsor_finish
-  path: /sponsor-chart-finish
-  is_hidden: true
-  blocks:
-      - id: sponsor_finish
-        blockType: SponsorFinishBlock
-        wrapBlock: false
-
 - id: notfound
   titleId: notfound.title
   path: /404
