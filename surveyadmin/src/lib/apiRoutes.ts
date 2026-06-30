@@ -54,6 +54,9 @@ export const apiRoutes = {
     deleteTokens: {
       href: (params) => `/api/normalization/deleteTokens`,
     },
+    deleteAITokens: {
+      href: (params) => `/api/normalization/deleteAITokens`,
+    },
     approveTokens: {
       href: (params) => `/api/normalization/approveTokens`,
     },

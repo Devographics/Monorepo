@@ -45,14 +45,14 @@ export async function normalizeResponses(params: NormalizeResponsesArgs) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
 }
 
 export async function normalizeQuestionResponses(
-  params: NormalizeQuestionResponsesArgs
+  params: NormalizeQuestionResponsesArgs,
 ) {
   const fetchRes = await fetch(
     apiRoutes.normalization.normalizeQuestionResponses.href(params),
@@ -62,7 +62,7 @@ export async function normalizeQuestionResponses(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
@@ -77,7 +77,7 @@ export async function normalizeQuestion(params: NormalizeQuestionArgs) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
@@ -92,7 +92,7 @@ export async function normalizeEdition(params: NormalizeEditionArgs) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
@@ -107,7 +107,7 @@ export async function addCustomTokens(params: CustomNormalizationParams) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
@@ -126,7 +126,7 @@ export async function renameTokens(params: RenameTokensParams) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
@@ -146,7 +146,27 @@ export async function deleteTokens(params: DeleteTokensParams) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
+  );
+  const result: ResultsPayload = await fetchRes.json();
+  return result;
+}
+
+export interface DeleteAITokensParams {
+  editionId: string;
+  questionId: string;
+}
+
+export async function deleteAITokens(params: DeleteAITokensParams) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.deleteAITokens.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
@@ -170,7 +190,7 @@ export async function approveTokens(params: ApproveTokensParams) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
@@ -185,7 +205,7 @@ export async function removeCustomTokens(params: CustomNormalizationParams) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
@@ -199,7 +219,7 @@ export async function enableRegularTokens(params: CustomNormalizationParams) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
@@ -214,7 +234,7 @@ export async function disableRegularTokens(params: CustomNormalizationParams) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
@@ -229,7 +249,7 @@ export async function loadQuestionData(params: GetQuestionDataArgs) {
         "Content-Type": "application/json",
       },
       // body: JSON.stringify(params),
-    }
+    },
   );
   const result: { data?: NormalizationProgressStats; error: any } =
     await fetchRes.json();
@@ -245,14 +265,14 @@ export async function importNormalizationsCSV(params: ImportNormalizationArgs) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;
 }
 
 export async function importNormalizationsJSON(
-  params: ImportNormalizationArgs
+  params: ImportNormalizationArgs,
 ) {
   const fetchRes = await fetch(
     apiRoutes.normalization.importNormalizationsJSON.href(params),
@@ -262,7 +282,7 @@ export async function importNormalizationsJSON(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(params),
-    }
+    },
   );
   const result: ResultsPayload = await fetchRes.json();
   return result;

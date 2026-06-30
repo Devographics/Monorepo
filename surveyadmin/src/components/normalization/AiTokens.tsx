@@ -15,6 +15,7 @@ import { CommonNormalizationProps } from "./NormalizeQuestion";
 import LoadingButton from "../LoadingButton";
 import {
   deleteTokens,
+  deleteAITokens,
   removeCustomTokens,
   renameTokens,
 } from "~/lib/normalization/services";
@@ -47,7 +48,7 @@ export const AiTokensTrigger = (props: ActionProps) => {
       customNorm.aiTokens!.map((tokenId) => ({
         tokenId,
         answer: getAnswer(allAnswers, customNorm)!,
-      }))
+      })),
     )
     .flat();
 
@@ -59,10 +60,10 @@ export const AiTokensTrigger = (props: ActionProps) => {
         aiNormalizations
           .filter((t) => t.tokenId === tokenId)
           .map((t) => t.answer)
-          .flat()
+          .flat(),
       ),
     })),
-    (t) => t.answers.length
+    (t) => t.answers.length,
   ).toReversed();
 
   return (
@@ -80,31 +81,48 @@ export const AiTokensTrigger = (props: ActionProps) => {
 export const AiTokens = (
   props: ActionProps & {
     aiTokens: Array<AiTokenGrouped>;
-  }
+  },
 ) => {
-  const { aiTokens, edition } = props;
+  const { aiTokens, edition, question } = props;
   if (aiTokens.length === 0) {
     return <p>No AI tokens.</p>;
   }
   return (
-    <section>
-      <table className="tokens-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Token</th>
-            <th>Sample Answers</th>
-            <th>Rename to</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {aiTokens.map((token, i) => (
-            <Token key={token.tokenId} {...props} token={token} i={i} />
-          ))}
-        </tbody>
-      </table>
-    </section>
+    <>
+      <section>
+        <LoadingButton
+          action={async () => {
+            if (confirm(`Delete all tokens associated with this question?`)) {
+              const result = await deleteAITokens({
+                editionId: edition.id,
+                questionId: question.id,
+              });
+              return result;
+            }
+          }}
+          label="Delete All"
+          tooltip="Delete all AI tokens associated with this question"
+        />
+      </section>
+      <section>
+        <table className="tokens-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Token</th>
+              <th>Sample Answers</th>
+              <th>Rename to</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {aiTokens.map((token, i) => (
+              <Token key={token.tokenId} {...props} token={token} i={i} />
+            ))}
+          </tbody>
+        </table>
+      </section>
+    </>
   );
 };
 
@@ -151,7 +169,7 @@ const Token = (props: {
                     </p>
                   </td>
                 </tr>
-              )
+              ),
             )}
           </tbody>
         </table>

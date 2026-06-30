@@ -49,7 +49,7 @@ interface NormalizeQuestionProps {
   question: QuestionWithSection;
 }
 export const NormalizeQuestionWithProvider = (
-  props: NormalizeQuestionProps
+  props: NormalizeQuestionProps,
 ) => (
   <QueryClientProvider client={queryClient}>
     <NormalizeQuestion {...props} />
@@ -126,19 +126,19 @@ export interface CommonNormalizationProps extends NormalizationProps {
   tokenFilter: string[] | null;
   setTokenFilter: (
     filterQuery: string[] | null,
-    variant?: AnswerVariant
+    variant?: AnswerVariant,
   ) => void;
   filterQuery?: string;
   setFilterQuery: (
     filterQuery: string | undefined,
-    variant?: AnswerVariant
+    variant?: AnswerVariant,
   ) => void;
   variant: AnswerVariant;
   setVariant: Dispatch<SetStateAction<AnswerVariant>>;
   actionLog: ActionLogItem[];
   addToActionLog: (
     action: Omit<ActionLogItem, "timestamp">,
-    showActionLog?: boolean
+    showActionLog?: boolean,
   ) => void;
   showActionLog: boolean;
   setShowActionLog: Dispatch<SetStateAction<boolean>>;
@@ -282,12 +282,12 @@ export const Normalization = (props: NormalizationProps) => {
   const [variant, setVariant] = useState<AnswerVariant>("unnormalized");
   const [actionLog, setActionLog] = useLocalStorage<ActionLogItem[]>(
     getActionLogKey(keyParams),
-    []
+    [],
   );
   const [showActionLog, setShowActionLog] = useState(false);
   const addToActionLog: CommonNormalizationProps["addToActionLog"] = (
     action,
-    showActionLog = true
+    showActionLog = true,
   ) => {
     setActionLog([...actionLog, { ...action, timestamp: new Date() }]);
     if (showActionLog) {
@@ -312,7 +312,7 @@ export const Normalization = (props: NormalizationProps) => {
 
   const setTokenFilter = (
     tokenFilter: null | string[],
-    variant?: AnswerVariant
+    variant?: AnswerVariant,
   ) => {
     setTokenFilter_(tokenFilter);
     if (variant) {
@@ -328,6 +328,10 @@ export const Normalization = (props: NormalizationProps) => {
     setEnabled,
     segments,
   } = useSegments();
+
+  if (!responses) {
+    return <div>no responses</div>;
+  }
 
   const {
     allAnswers,
