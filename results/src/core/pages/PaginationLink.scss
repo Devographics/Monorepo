@@ -1,6 +1,6 @@
-@import '../../stylesheets/_breakpoints.scss';
+@use '../../stylesheets/_breakpoints.scss';
 .pagination-link {
-    @include small-medium {
+    @include breakpoints.small-medium {
         .page-link-inner {
             display: block;
             width: 100%;
@@ -19,7 +19,7 @@
 }
 
 .pagination-link-label {
-    @include small-medium {
+    @include breakpoints.small-medium {
         text-overflow: ellipsis;
         overflow: hidden;
     }

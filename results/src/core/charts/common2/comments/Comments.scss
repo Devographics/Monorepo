@@ -1,4 +1,4 @@
-@import '../../../../stylesheets/_breakpoints.scss';
+@use '../../../../stylesheets/_breakpoints.scss';
 
 .comments-wrapper {
     .block-question {
@@ -13,7 +13,7 @@
     color: var(--textAltColor);
 }
 .comments-contents {
-    @include large {
+    @include breakpoints.large {
         display: grid;
         grid-template-columns: 300px 1fr;
         gap: var(--doubleSpacing);
@@ -45,7 +45,7 @@
     min-width: 0;
 }
 .comments-filters-wrapper {
-    @include small {
+    @include breakpoints.small {
         margin-bottom: var(--spacing);
 
         & > .Button {
@@ -60,7 +60,7 @@
             display: none;
         }
     }
-    @include medium-large {
+    @include breakpoints.medium-large {
         & > .Button {
             display: none;
         }
@@ -100,11 +100,11 @@
 
 .comment-index {
     // font-weight: bold;
-    @include small {
+    @include breakpoints.small {
         font-size: 1rem;
         display: none;
     }
-    @include medium-large {
+    @include breakpoints.medium-large {
         font-size: 1.3rem;
     }
     // position: absolute;
@@ -136,7 +136,7 @@
     }
 }
 .comments-list {
-    @include medium-large {
+    @include breakpoints.medium-large {
         display: grid;
         grid-template-columns: min-content 1fr;
     }
@@ -144,7 +144,7 @@
 
 .comment-item-wrapper {
     margin-bottom: var(--spacing);
-    @include medium-large {
+    @include breakpoints.medium-large {
         display: grid;
         grid-template-columns: subgrid;
         gap: var(--halfSpacing);
@@ -163,13 +163,13 @@
     &:hover {
         color: var(--linkColor);
     }
-    @include small {
+    @include breakpoints.small {
         margin-top: var(--halfSpacing);
     }
 }
 .comment-footer {
     margin-top: 8px;
-    @include medium-large {
+    @include breakpoints.medium-large {
         display: flex;
         justify-content: space-between;
     }

@@ -1,11 +1,11 @@
-@import '../../../../stylesheets/_breakpoints.scss';
+@use '../../../../stylesheets/_breakpoints.scss';
 
 .chart-row,
 .chart-axis {
 }
 
 .chart-subgrid {
-    @include medium-large {
+    @include breakpoints.medium-large {
         display: grid;
         grid-template-columns: subgrid;
         grid-column-start: 1;
@@ -16,7 +16,7 @@
 }
 .chart-row {
     align-items: center;
-    @include small {
+    @include breakpoints.small {
         // display: flex;
         // flex-direction: column;
         padding: var(--spacing) 0;
@@ -51,7 +51,7 @@
 }
 .chart-axis {
     align-items: center;
-    @include small {
+    @include breakpoints.small {
         // display: flex;
         // flex-direction: column;
         // display: grid;
@@ -65,10 +65,10 @@
 }
 .chart-rows-zebra {
     .chart-row:nth-child(2n) {
-        @include small {
+        @include breakpoints.small {
             background-color: color-mix(in srgb, var(--backgroundAltColor) 50%, transparent);
         }
-        @include medium-large {
+        @include breakpoints.medium-large {
             .chart-row-content {
                 background-color: color-mix(in srgb, var(--backgroundAltColor) 50%, transparent);
             }
@@ -106,7 +106,7 @@
 
 .chart-row-content {
     padding: var(--rowPadding) 0;
-    @include medium-large {
+    @include breakpoints.medium-large {
         position: relative;
     }
     // height: calc(var(--barHeight) + var(--spacing));
@@ -123,7 +123,7 @@
     grid-area: heading;
     display: flex;
     height: 100%;
-    @include small {
+    @include breakpoints.small {
         align-items: center;
         gap: var(--halfSpacing);
         .chart-row-index {
@@ -133,7 +133,7 @@
             }
         }
     }
-    @include medium-large {
+    @include breakpoints.medium-large {
         // justify-content: space-between;
         align-items: center;
         gap: var(--spacing);
@@ -143,7 +143,7 @@
     color: var(--textAltColor);
     opacity: 0.7;
     font-size: 1.1rem;
-    @include small {
+    @include breakpoints.small {
         font-size: 0.9rem;
     }
     .chart-sort-options & {
@@ -155,7 +155,7 @@
 }
 .chart-row-content {
     grid-area: content;
-    @include small {
+    @include breakpoints.small {
         padding: 0;
     }
 }
@@ -164,7 +164,7 @@
     display: flex;
     align-items: center;
     gap: var(--spacing);
-    @include small {
+    @include breakpoints.small {
         justify-content: flex-end;
         padding-right: var(--quarterSpacing);
         position: relative;

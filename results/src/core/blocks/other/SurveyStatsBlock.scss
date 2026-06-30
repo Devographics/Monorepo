@@ -1,4 +1,4 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .survey-stats {
     // border: 1px solid var(--borderColor);
@@ -9,7 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: stretch;
-    @include small {
+    @include breakpoints.small {
         flex-direction: column;
     }
     h4,
@@ -30,10 +30,10 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        @include small {
+        @include breakpoints.small {
             border-bottom: 1px solid var(--backgroundAlt2Color);
         }
-        @include medium-large {
+        @include breakpoints.medium-large {
             border-right: 1px solid var(--backgroundAlt2Color);
         }
     }

@@ -1,4 +1,4 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .block-question {
     background: var(--backgroundAltColor);
@@ -14,10 +14,10 @@
     display: flex;
     flex-grow: 1;
     gap: var(--spacing);
-    @include small {
+    @include breakpoints.small {
         flex-direction: column;
     }
-    @include medium-large {
+    @include breakpoints.medium-large {
         align-items: center;
         justify-content: space-between;
     }
@@ -40,9 +40,9 @@
 .block-question-right {
     display: flex;
     gap: var(--spacing);
-    @include small {
+    @include breakpoints.small {
     }
-    @include medium-large {
+    @include breakpoints.medium-large {
         align-items: flex-end;
         justify-content: center;
     }

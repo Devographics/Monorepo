@@ -1,4 +1,4 @@
-@import '../../../../stylesheets/_breakpoints.scss';
+@use '../../../../stylesheets/_breakpoints.scss';
 
 .chart-average-marker {
     position: relative;
@@ -9,7 +9,7 @@
     height: 3px;
     left: 0px;
     right: var(--spacing);
-    @include small {
+    @include breakpoints.small {
         // take into account the fact that labels wrap on small viewports
         top: calc(
             var(--offsetCoefficient) * (var(--barHeight) * 2 + var(--spacing) * 3) *
@@ -17,7 +17,7 @@
         );
         width: 85%;
     }
-    @include medium-large {
+    @include breakpoints.medium-large {
         top: calc(
             var(--offsetCoefficient) * (var(--barHeight) + var(--rowPadding) * 2) *
                 var(--numberOfRows)

@@ -1,4 +1,4 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .multiexp {
     --chartFontColumnHeading: 0.9rem;
@@ -53,13 +53,13 @@
     .radio-unchecked {
         opacity: 0.8;
     }
-    @include small {
+    @include breakpoints.small {
         justify-content: space-between;
         width: 100%;
     }
 }
 .multiexp-column-headings {
-    @include medium-large {
+    @include breakpoints.medium-large {
         display: grid;
         grid-template-columns: 250px minmax(0, 1fr);
         gap: 10px;
@@ -88,7 +88,7 @@
 }
 .multiexp-table-grouping {
     font-size: var(--chartFontColumnHeading);
-    @include small {
+    @include breakpoints.small {
         display: none;
     }
 }

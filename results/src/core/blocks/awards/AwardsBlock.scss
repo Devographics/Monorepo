@@ -1,8 +1,8 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .awards-wrapper {
     margin-bottom: var(--quadrupleSpacing);
-    @include medium-large {
+    @include breakpoints.medium-large {
         display: grid;
         grid-template-columns: 1fr 1fr;
         column-gap: calc(var(--spacing) * 6);

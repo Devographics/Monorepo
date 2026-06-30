@@ -1,4 +1,4 @@
-@import '../../stylesheets/_breakpoints.scss';
+@use '../../stylesheets/_breakpoints.scss';
 
 .filters-sections {
     display: flex;
@@ -7,7 +7,7 @@
 }
 
 .filters-section {
-    // @include medium-large {
+    // @include breakpoints.medium-large {
     //     display: grid;
     //     grid-template-columns: 1fr minmax(120px, min-content);
     //     // justify-content: space-between;
@@ -22,7 +22,7 @@
 }
 
 .filters-section-image {
-    @include small {
+    @include breakpoints.small {
         display: none;
     }
     display: flex;
@@ -45,7 +45,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: var(--spacing);
-    @include small-medium {
+    @include breakpoints.small-medium {
         flex-direction: column;
         align-items: flex-start;
         gap: var(--halfSpacing);
@@ -58,7 +58,7 @@
     align-items: center;
     gap: 5px;
 
-    @include small-medium {
+    @include breakpoints.small-medium {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -67,7 +67,7 @@
     .filters-heading-title {
     }
     .filters-heading-separator {
-        @include small-medium {
+        @include breakpoints.small-medium {
             display: none;
         }
     }

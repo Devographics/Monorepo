@@ -1,17 +1,17 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .recommended-resource-jobs {
     display: flex;
     gap: var(--halfSpacing);
     margin-top: var(--halfSpacing);
 
-    @include small {
+    @include breakpoints.small {
         flex-direction: column;
     }
 }
 
 .recommended-resource-job {
-    @include small {
+    @include breakpoints.small {
         display: block;
     }
     display: flex;

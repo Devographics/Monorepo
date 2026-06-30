@@ -1,4 +1,4 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .tier-row {
     display: grid;
@@ -82,7 +82,7 @@
     width: 100%;
     aspect-ratio: 1 / 1;
     padding: 7px;
-    @include small {
+    @include breakpoints.small {
         padding: 1px;
     }
 }
@@ -124,7 +124,7 @@
     width: 30px;
     padding: 2px 4px;
     border-radius: 0 0 0 3px;
-    @include small {
+    @include breakpoints.small {
         height: 24px;
         width: 24px;
         padding: 2px 2px;
@@ -135,7 +135,7 @@
     line-height: 0;
     text-align: center;
     font-size: var(--fontSizeSmall);
-    @include small {
+    @include breakpoints.small {
         font-size: var(--fontSizeSmaller);
     }
 }

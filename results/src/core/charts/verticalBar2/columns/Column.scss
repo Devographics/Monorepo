@@ -1,4 +1,4 @@
-@import '../../../../stylesheets/_breakpoints.scss';
+@use '../../../../stylesheets/_breakpoints.scss';
 
 .chart-column {
     display: grid;
@@ -57,7 +57,7 @@
     transform: translateX(-50%);
     margin-top: 10px;
     text-align: center;
-    @include small {
+    @include breakpoints.small {
         .chart-column:nth-child(2n) & {
             display: none;
         }

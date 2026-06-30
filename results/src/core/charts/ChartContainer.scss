@@ -1,4 +1,4 @@
-@import '../../stylesheets/_breakpoints.scss';
+@use '../../stylesheets/_breakpoints.scss';
 
 .chart-container-outer {
     position: relative;
@@ -9,12 +9,12 @@
         display: block;
     }
 
-    @include small-medium {
+    @include breakpoints.small-medium {
         overflow-x: scroll;
     }
 
     .multiexp-row-chart & {
-        @include small-medium {
+        @include breakpoints.small-medium {
             overflow-x: visible;
         }
     }
@@ -22,10 +22,10 @@
 
 .chart-container-inner {
     &.chart-container-inner-expand {
-        @include small {
+        @include breakpoints.small {
             min-width: 500px;
         }
-        @include medium {
+        @include breakpoints.medium {
             max-width: auto;
             min-width: 800px;
             padding-bottom: var(--spacing);
@@ -75,7 +75,7 @@
         transform: rotate(-90deg);
     }
 
-    @include medium-large {
+    @include breakpoints.medium-large {
         display: none;
     }
 }

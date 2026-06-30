@@ -1,11 +1,11 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
-@include small {
+@include breakpoints.small {
     .serie-axis {
         display: none;
     }
 }
-@include medium-large {
+@include breakpoints.medium-large {
     .back-to-back-wrapper {
         display: grid;
         grid-template-columns: 1fr min-content 1fr;

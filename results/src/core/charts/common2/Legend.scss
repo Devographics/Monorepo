@@ -1,14 +1,14 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .chart-legend {
     flex-grow: 1;
     display: flex;
     align-items: center;
     gap: 10px;
-    @include small {
+    @include breakpoints.small {
         justify-content: space-between;
     }
-    // @include medium-large {
+    // @include breakpoints.medium-large {
     //     justify-content: flex-end;
     // }
     // grid-column-start: 2;

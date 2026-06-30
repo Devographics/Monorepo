@@ -1,4 +1,4 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .award-container {
     text-align: center;
@@ -6,7 +6,7 @@
     flex-direction: column;
     align-items: center;
 
-    @include small-medium {
+    @include breakpoints.small-medium {
         margin-bottom: var(--tripleSpacing);
     }
 

@@ -1,8 +1,8 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .hint-container {
     margin-bottom: var(--tripleSpacing);
-    @include large {
+    @include breakpoints.large {
         margin-bottom: var(--quadrupleSpacing);
     }
     background: var(--backgroundAltColor);
@@ -11,11 +11,11 @@
     align-items: center;
     /* background: radial-gradient(circle at 2% 3%, rgba(252,228,145,0.5) 0%, rgba(252,228,145,0.3) 100%); */
 
-    @include small {
+    @include breakpoints.small {
         padding: var(--spacing);
         grid-template-columns: 30px auto;
     }
-    @include medium-large {
+    @include breakpoints.medium-large {
         padding: var(--spacing);
         grid-template-columns: 60px auto;
     }
@@ -25,7 +25,7 @@
     display: grid;
     place-items: center;
 
-    @include small {
+    @include breakpoints.small {
         margin-bottom: var(--halfSpacing);
     }
 }

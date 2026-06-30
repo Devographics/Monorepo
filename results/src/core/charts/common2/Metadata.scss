@@ -1,11 +1,11 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .chart-metadata {
     font-size: 0.8rem;
     display: flex;
     align-items: center;
     gap: var(--spacing);
-    @include small {
+    @include breakpoints.small {
         flex-wrap: wrap;
         justify-content: center;
     }

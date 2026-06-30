@@ -1,4 +1,4 @@
-@import 'src/stylesheets/to-remove/colors.scss';
+@use 'src/stylesheets/to-remove/colors.scss';
 
 .tools-arrows-view-switcher {
     margin-bottom: var(--spacing);
@@ -17,7 +17,7 @@
     // justify-content: center;
 
     svg {
-        fill: $greyLight;
+        fill: colors.$greyLight;
         overflow: visible;
     }
     &__svg {
@@ -38,7 +38,7 @@
     }
 
     &__axis {
-        stroke: $navyLighter;
+        stroke: colors.$navyLighter;
         stroke-width: 1px;
 
         &__label {
@@ -101,7 +101,7 @@
 
                 .ToolsArrowsChart {
                     &__gradient-line {
-                        stroke: $navy;
+                        stroke: colors.$navy;
                         stroke-width: 1 !important;
                     }
 
@@ -155,7 +155,7 @@
     &__label-background {
         font-size: 0.8em;
         font-weight: 600;
-        stroke: $navyDark;
+        stroke: colors.$navyDark;
         stroke-width: 3px;
     }
 
@@ -184,7 +184,7 @@
 .ToolsArrowsChart__label {
     cursor: pointer;
     &:hover {
-        fill: $white;
+        fill: colors.$white;
     }
 }
 
@@ -207,7 +207,7 @@
 }
 
 .legend_label {
-    fill: $text-color;
+    fill: colors.$text-color;
     text-anchor: start;
     font-size: 0.8rem;
     line-height: 1.25rem;
@@ -217,13 +217,13 @@
     margin-bottom: 0;
 
     &.left {
-        border-left: 1px solid $text-color;
+        border-left: 1px solid colors.$text-color;
         padding-left: 0.5rem;
         // padding-right: 4rem;
         padding-top: 0.25rem;
     }
     &.right {
-        border-right: 1px solid $text-color;
+        border-right: 1px solid colors.$text-color;
         text-align: right;
         padding-right: 0.5rem;
         // padding-left: 4rem;
@@ -241,8 +241,8 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
 
-    border-left: 1px solid $text-color;
-    border-right: 1px solid $text-color;
+    border-left: 1px solid colors.$text-color;
+    border-right: 1px solid colors.$text-color;
 
     margin-top: 0;
 }

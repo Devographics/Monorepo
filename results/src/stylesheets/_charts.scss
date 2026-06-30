@@ -1,7 +1,7 @@
-@use "breakpoints";
-@use "to-remove/colors";
-@use "to-remove/typography";
-@use "to-remove/variables";
+@use 'breakpoints';
+@use 'to-remove/colors';
+@use 'to-remove/typography';
+@use 'to-remove/variables';
 
 /*
 
@@ -25,13 +25,13 @@ Gauge Chart
     // @include xsmall {
     //     height: 800px;
     // }
-    // @include small {
+    // @include breakpoints.small {
     //     height: 800px;
     // }
-    // @include medium {
+    // @include breakpoints.medium {
     //     height: 800px;
     // }
-    // @include large {
+    // @include breakpoints.large {
     //     height: 800px;
     // }
 }

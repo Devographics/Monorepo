@@ -1,4 +1,4 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .ratio-description {
     h4,
@@ -19,12 +19,12 @@
 
 .chart-multi-ratios-content {
     .chart-multi-ratios-multiSection & {
-        @include small-medium {
+        @include breakpoints.small-medium {
             display: flex;
             flex-direction: column;
             gap: var(--doubleSpacing);
         }
-        @include large {
+        @include breakpoints.large {
             display: grid;
             grid-template-columns: 1fr minmax(400px, min-content);
             grid-template-areas: 'content sidebar';

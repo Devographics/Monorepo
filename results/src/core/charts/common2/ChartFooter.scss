@@ -1,4 +1,4 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .chart-footer {
     display: flex;
@@ -6,7 +6,7 @@
     justify-content: space-between;
     border-top: 1px solid #ffffff33;
     padding-top: var(--spacing);
-    @include small {
+    @include breakpoints.small {
         flex-direction: column;
         gap: var(--spacing);
     }

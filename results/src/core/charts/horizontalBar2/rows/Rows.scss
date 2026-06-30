@@ -1,4 +1,4 @@
-@import '../../../../stylesheets/_breakpoints.scss';
+@use '../../../../stylesheets/_breakpoints.scss';
 
 .chart-rows {
     position: relative;
@@ -16,7 +16,7 @@
     // flex-direction: column;
     // grid-auto-rows: minmax(0, 1fr);
 
-    @include medium-large {
+    @include breakpoints.medium-large {
         display: grid;
 
         // grid-template-columns: 200px minmax(0, 1fr) 100px;

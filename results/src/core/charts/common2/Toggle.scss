@@ -1,4 +1,4 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .chart-toggle {
     // flex-grow: 1;
@@ -12,13 +12,13 @@
         margin: 0;
     }
     // overflow: hidden;
-    @include small {
+    @include breakpoints.small {
         flex-direction: column;
     }
 }
 .chart-toggle-control {
     // overflow: hidden;
-    @include small {
+    @include breakpoints.small {
         width: 100%;
     }
     // flex: 1;

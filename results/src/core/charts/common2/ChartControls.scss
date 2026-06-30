@@ -1,4 +1,4 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@use '../../../stylesheets/_breakpoints.scss';
 
 .chart-controls {
     display: flex;
@@ -15,11 +15,11 @@
 .chart-controls-bottom {
     display: flex;
     gap: var(--halfSpacing);
-    @include small {
+    @include breakpoints.small {
         flex-direction: column;
         gap: var(--spacing);
     }
-    @include medium-large {
+    @include breakpoints.medium-large {
         justify-content: space-between;
     }
 }
