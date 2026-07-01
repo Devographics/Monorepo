@@ -39,7 +39,67 @@
         variables:
             showButton: false
 
-      - id: overview.intro.css2026
+      - id: overview.introduction.css2026
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: overview.1.css2026
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: favorite_new_features
+        template: multiple_options2_freeform
+        titleKey: usage.favorite_new_features
+        questionKey: usage.favorite_new_features.question
+        showAverage: true
+        disableExport: true
+        showInNav: false
+        queryOptions:
+            sectionId: usage
+
+      - id: overview.2.css2026
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: css_interoperability_features
+        template: multiple_options2_freeform
+        titleKey: usage.css_interoperability_features
+        questionKey: usage.css_interoperability_features.question
+        showAverage: true
+        disableExport: true
+        showInNav: false
+        queryOptions:
+            sectionId: usage
+
+      - id: overview.3.css2026
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: overview.4.css2026
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: css_ai_generated_code_balance
+        template: multiple_options2
+        titleKey: usage.css_ai_generated_code_balance
+        questionKey: usage.css_ai_generated_code_balance.question
+        showAverage: true
+        disableExport: true
+        showInNav: false
+        queryOptions:
+            sectionId: usage
+
+      - id: overview.5.css2026
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -51,7 +111,7 @@
         showInNav: false
         variables:
             ctaKey: general.view_full_results
-            ctaLink: /models/
+            ctaLink: /tshirt/
 
       - id: survey_sponsors
         template: sponsors
