@@ -120,8 +120,8 @@ importers:
         specifier: ^1.5.2
         version: 1.29.0
       web-features:
-        specifier: ^3.11.1
-        version: 3.21.0
+        specifier: ^3.32.0
+        version: 3.32.0
     devDependencies:
       '@devographics/types':
         specifier: workspace:*
@@ -16591,8 +16591,8 @@ packages:
   weak-lru-cache@1.2.2:
     resolution: {integrity: sha512-DEAoo25RfSYMuTGc9vPJzZcZullwIqRDSI9LOy+fkCJPi6hykCnfKaXTuPBDuXAUcqHXyOgFtHNp/kB2FjYHbw==}
 
-  web-features@3.21.0:
-    resolution: {integrity: sha512-KfLWQivp9KjNSvL62+Cu83dAfhTqr4EsDTCZP87IKQfhMSpYqXJZxgXwKz4+RbH5UFIHdnKQoK7jMfdwTWOd/A==}
+  web-features@3.32.0:
+    resolution: {integrity: sha512-PQBbTofqV8FtMP65oT9tLPjbN4FSB2dRdNxLM0A9j4bNifVpFhEP/ATXSMMJAqPPWb/pgUOh6B+98yzfNEVbNw==}
 
   web-namespaces@1.1.4:
     resolution: {integrity: sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==}
@@ -36644,7 +36644,7 @@ snapshots:
 
   weak-lru-cache@1.2.2: {}
 
-  web-features@3.21.0: {}
+  web-features@3.32.0: {}
 
   web-namespaces@1.1.4: {}
 
