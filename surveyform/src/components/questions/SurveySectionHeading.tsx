@@ -6,6 +6,7 @@ import { FormLayoutProps } from "../form/FormLayout";
 import { useFormStateContext } from "../form/FormStateContext";
 import { useFormPropsContext } from "../form/FormPropsContext";
 import { T, useI18n } from "@devographics/react-i18n";
+import { NewQuestionIndicator } from "../form/form_item/NewQuestionIndicator";
 
 const SurveySectionHeading = ({ section }: FormLayoutProps) => {
   const { stateStuff, response } = useFormStateContext();
@@ -60,7 +61,8 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
           <ol>
             {section.questions
               .filter(
-                (q) => !q.hidden && !["subheading", "help"].includes(q.template)
+                (q) =>
+                  !q.hidden && !["subheading", "help"].includes(q.template),
               )
               .map((question) => (
                 <QuestionItem
@@ -88,7 +90,7 @@ Get the item currently in viewport
 const offset = 200;
 export const getItemIdInViewport = (
   scrollPosition: number,
-  itemPositions: { [key: string]: number }
+  itemPositions: { [key: string]: number },
 ) => {
   return Object.keys(itemPositions)
     .reverse()
@@ -108,6 +110,9 @@ const QuestionItem = ({
   const isCompleted = response
     ? questionIsCompleted({ edition, question, response })
     : false;
+
+  const { yearAdded } = question;
+  const currentYear = new Date().getFullYear();
   return (
     <li>
       <a
@@ -122,6 +127,12 @@ const QuestionItem = ({
           formatCode={true}
           variant="short"
         />
+        {yearAdded === currentYear && (
+          <>
+            {" "}
+            <NewQuestionIndicator />
+          </>
+        )}
       </a>
     </li>
   );

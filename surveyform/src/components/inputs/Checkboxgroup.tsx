@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import without from "lodash/without.js";
-import { useI18n } from "@devographics/react-i18n";
+import { T, useI18n } from "@devographics/react-i18n";
 import { Button } from "~/components/ui/Button";
 import { FormItem } from "~/components/form/FormItem";
 import { FormInputProps } from "~/components/form/typings";
@@ -12,6 +12,8 @@ import OtherOption from "./OtherOption";
 import { getFormPaths } from "@devographics/templates";
 
 import { useFormStateContext } from "../form/FormStateContext";
+import uniq from "lodash/uniq.js";
+import compact from "lodash/compact.js";
 
 const defaultCutoff = 99;
 // how many items to allow past the cutoff limit before actually cutting off the list
@@ -26,7 +28,7 @@ const cutoffMargin = 2;
  * @returns
  */
 export const FormComponentCheckboxGroup = (
-  props: FormInputProps<string[] | number[]>
+  props: FormInputProps<string[] | number[]>,
 ) => {
   const { value, edition, question } = props;
   const { response } = useFormStateContext();
@@ -43,7 +45,7 @@ export const FormComponentCheckboxGroup = (
 
   if (!options_) {
     throw new Error(
-      `Question ${question.id} does not have any options defined.`
+      `Question ${question.id} does not have any options defined.`,
     );
   }
 
@@ -70,6 +72,7 @@ export const FormComponentCheckboxGroup = (
       break;
   }
 
+  // cutoff
   const cutoff = question.cutoff || defaultCutoff;
 
   const hasReachedLimit = !!(limit && value?.length >= limit);
@@ -85,6 +88,26 @@ export const FormComponentCheckboxGroup = (
       : options?.slice(0, cutoff)
     : options;
 
+  // group options
+  const hasGroupedOptions = !!options.find((o) => o.group);
+  const ungroupedOptions = {
+    id: "other",
+    items: optionsToShow.filter((o) => !o.group),
+  };
+  let groupedOptions;
+  if (hasGroupedOptions) {
+    const optionGroups = compact(uniq(optionsToShow.map((o) => o.group)));
+    groupedOptions = [
+      ...optionGroups.map((group) => ({
+        id: group,
+        items: optionsToShow.filter((o) => o.group === group),
+      })),
+      ungroupedOptions,
+    ];
+  } else {
+    groupedOptions = [ungroupedOptions];
+  }
+
   return (
     <FormItem {...props} showMore={showMore} showOther={showOther}>
       <div className="form-item-options">
@@ -98,19 +121,21 @@ export const FormComponentCheckboxGroup = (
             value={value}
           />
         )}
-        {optionsToShow?.map((option, i) => {
-          return (
-            <Checkbox
-              {...props}
-              key={i}
-              index={i}
-              option={option}
-              hasValue={hasValue}
-              hasReachedLimit={hasReachedLimit}
-              value={value}
-            />
-          );
-        })}
+
+        {groupedOptions.map(({ id, items }, i) => (
+          <OptionGroup
+            {...props}
+            hasGroupedOptions={hasGroupedOptions}
+            index={i}
+            key={i}
+            id={id}
+            items={items}
+            hasValue={hasValue}
+            hasReachedLimit={hasReachedLimit}
+            value={value}
+          />
+        ))}
+
         {enableCutoff && !showMore && (
           <Button
             className="form-show-more"
@@ -145,15 +170,40 @@ export const FormComponentCheckboxGroup = (
   );
 };
 
-const Checkbox = (
-  props: FormInputProps<string[] | number[]> & {
-    option: OptionMetadata;
-    index: number;
-    hasValue: boolean;
-    hasReachedLimit: boolean;
-    value: Array<string | number>;
-  }
-) => {
+type CheckboxGroupProps = FormInputProps<string[] | number[]> & {
+  id: string;
+  items: OptionMetadata[];
+  index: number;
+  hasValue: boolean;
+  hasReachedLimit: boolean;
+  value: Array<string | number>;
+  hasGroupedOptions: boolean;
+};
+
+const OptionGroup = (props: CheckboxGroupProps) => {
+  const { id, items, question, hasGroupedOptions } = props;
+  return (
+    <div className="form-item-options-group">
+      {hasGroupedOptions && (
+        <h5 className="form-item-options-group-heading">
+          <T token={`options.${question.id}.${id}`} />
+        </h5>
+      )}
+      {items?.map((option, i) => {
+        return <Checkbox {...props} key={i} index={i} option={option} />;
+      })}
+    </div>
+  );
+};
+
+type CheckboxProps = FormInputProps<string[] | number[]> & {
+  option: OptionMetadata;
+  index: number;
+  hasValue: boolean;
+  hasReachedLimit: boolean;
+  value: Array<string | number>;
+};
+const Checkbox = (props: CheckboxProps) => {
   const {
     index,
     value = [],
@@ -188,7 +238,7 @@ const Checkbox = (
   return (
     <div
       className={[checkClass, "form-check", `form-option-${option.id}`].join(
-        " "
+        " ",
       )}
     >
       <label className="form-check-label" htmlFor={`${path}.${index}`}>

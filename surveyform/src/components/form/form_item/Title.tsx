@@ -10,9 +10,10 @@ import { SectionMetadata } from "@devographics/types";
 import { FormItemProps } from "./Item";
 import BaselineLabel from "../BaselineLabel";
 import ExperimentalLabel from "../ExperimentalLabel";
+import { NewQuestionIndicator } from "./NewQuestionIndicator";
 
 export const FormItemTitle = (
-  props: FormItemProps & { section: SectionMetadata }
+  props: FormItemProps & { section: SectionMetadata },
 ) => {
   const { question, enableReadingList, section } = props;
   const { t } = useI18n();
@@ -30,23 +31,7 @@ export const FormItemTitle = (
           <ExperimentalLabel entity={question.entity} />
           <BaselineLabel entity={question.entity} />
 
-          {yearAdded === currentYear && (
-            <OverlayTrigger
-              placement="top"
-              overlay={
-                <Tooltip id="general.newly_added">
-                  <T token="general.newly_added" />
-                </Tooltip>
-              }
-            >
-              <span
-                className="question-label-new"
-                title={t("general.newly_added")}
-              >
-                ✨
-              </span>
-            </OverlayTrigger>
-          )}
+          {yearAdded === currentYear && <NewQuestionIndicator />}
         </Form.Label>
 
         {/* {enableReadingList && question.entity && (

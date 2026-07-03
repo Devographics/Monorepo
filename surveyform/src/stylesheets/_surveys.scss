@@ -255,6 +255,12 @@
   // grid-template-columns: 1fr 1fr;
   // gap: math.div($spacing, 2);
 }
+.form-item-options-group-heading {
+  font-size: 0.9rem;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
 .form-section-message {
   background: var(--bg-color-light);
   padding: variables.$spacing;
