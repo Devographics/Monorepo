@@ -92,10 +92,7 @@ const AwardBlock = ({
                     <T k="awards.runner_ups" />
                 </h4>
                 {runnerUps.map((runnerUp, i) => (
-                    <div
-                        key={runnerUp.id}
-                        className="awards-runnersup-item Awards__RunnerUps__Item"
-                    >
+                    <div key={runnerUp.id} className="award-runnersup-item Awards__RunnerUps__Item">
                         {i + 2}.{' '}
                         {runnerUp.entity ? (
                             <EntityItem id={runnerUp.id} entity={runnerUp.entity} />

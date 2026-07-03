@@ -799,77 +799,77 @@
       - id: awards
         template: awards
         variables:
-            entities: '"has_selector","aspect_ratio","intrinsic_sizing","sibling_count","sibling_index","scroll_state","light_dark","anchor_positioning","text_wrap_pretty","css_nesting","trigonometric_functions","writing_modes","wide_gamut_colors","line_clamp","subgrid"'
+            entities: '"has_selector","aspect_ratio","css_nesting","css_gap_decorations","if_function","scroll_state","sibling_index","sibling_count","at_function","anchor_positioning","viewport_percentage_length_units","at_container_size","aspect_ratio","wide_gamut_colors","css_carousels","gradient_color_spaces","subgrid","css_nesting"'
         awards:
             - id: most_used_feature_award
               template: award
               awards:
                   - id: has_selector
-                    value: '80.4%'
+                    value: '83.7%'
                   - id: aspect_ratio
-                    value: '76.2%'
-                  - id: intrinsic_sizing
-                    value: '75%'
+                    value: '81.3%'
+                  - id: css_nesting
+                    value: '70.6%'
 
             - id: least_used_feature_award
               template: award
               awards:
-                  - id: sibling_count
-                    value: '1.5%'
-                  - id: sibling_index
-                    value: '1.6%'
+                  - id: css_gap_decorations
+                    value: '3.7%'
+                  - id: if_function
+                    value: '4.9%'
                   - id: scroll_state
-                    value: '1.9%'
+                    value: '5.5%'
 
             - id: largest_awareness_progression_award
               template: award
               awards:
-                  - id: light_dark
+                  - id: sibling_index
                     value: '23%'
-                  - id: anchor_positioning
-                    value: '21%'
-                  - id: text_wrap_pretty
-                    value: '20%'
+                  - id: sibling_count
+                    value: '23%'
+                  - id: at_function
+                    value: '22%'
 
             - id: largest_usage_progression_award
               template: award
               awards:
-                  - id: text_wrap_pretty
-                    value: '17%'
-                  - id: css_nesting
-                    value: '13%'
-                  - id: light_dark
-                    value: '13%'
+                  - id: anchor_positioning
+                    value: '15%'
+                  - id: viewport_percentage_length_units
+                    value: '11%'
+                  - id: at_container_size
+                    value: '11%'
 
             - id: most_loved_feature_award
               template: award
               awards:
                   - id: has_selector
-                    value: '51.5%'
-                  - id: subgrid
-                    value: '50.6%'
+                    value: '51.8%'
+                  - id: css_nesting
+                    value: '48.6%'
                   - id: aspect_ratio
-                    value: '47.6%'
+                    value: '48.1%'
 
             - id: most_hated_feature_award
               template: award
               awards:
-                  - id: trigonometric_functions
-                    value: '9.1%'
-                  - id: writing_modes
-                    value: '8.8%'
                   - id: wide_gamut_colors
-                    value: '7.2%'
+                    value: '7.9%'
+                  - id: css_carousels
+                    value: '6.6%'
+                  - id: gradient_color_spaces
+                    value: '5.6%'
 
             - id: most_commented_feature_award
               template: award
               awards:
                   - id: subgrid
-                    value: 167
-                  - id: line_clamp
-                    value: 114
+                    value: 78
                   - id: css_nesting
-                    value: 87
+                    value: 63
+                  - id: anchor_positioning
+                    value: 58
 
 - id: conclusion
   path: /conclusion
