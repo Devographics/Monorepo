@@ -296,6 +296,7 @@ type OptionMetadata {
     """
     average: Float
     entity: Entity
+    group: String
 }
 
 type GroupsMetadata {

@@ -293,6 +293,7 @@ export type Option = {
     label?: string
     lowerBound?: number
     upperBound?: number
+    group?: string
 }
 
 export type OptionId = string | number

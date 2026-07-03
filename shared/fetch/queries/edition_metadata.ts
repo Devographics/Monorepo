@@ -135,6 +135,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
                 id
                 intlId
                 label
+                group
                 entity {
                   ${getEntityFragment()}
                 }
