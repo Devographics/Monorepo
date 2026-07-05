@@ -174,6 +174,7 @@ export const FormComponentCheckboxGroup = (
 
 type CheckboxGroupProps = FormInputProps<string[] | number[]> & {
   id: string;
+  options: OptionMetadata[]; // original options
   items: OptionMetadata[];
   index: number;
   hasValue: boolean;
