@@ -108,12 +108,14 @@ export const FormComponentCheckboxGroup = (
     groupedOptions = [ungroupedOptions];
   }
 
+  const formProps = { ...props, options };
+
   return (
-    <FormItem {...props} showMore={showMore} showOther={showOther}>
+    <FormItem {...formProps} showMore={showMore} showOther={showOther}>
       <div className="form-item-options">
         {naOption && naPosition === "top" && (
           <Checkbox
-            {...props}
+            {...formProps}
             index={999}
             option={naOption}
             hasValue={hasValue}
@@ -124,7 +126,7 @@ export const FormComponentCheckboxGroup = (
 
         {groupedOptions.map(({ id, items }, i) => (
           <OptionGroup
-            {...props}
+            {...formProps}
             hasGroupedOptions={hasGroupedOptions}
             index={i}
             key={i}
@@ -148,7 +150,7 @@ export const FormComponentCheckboxGroup = (
         )}
         {allowOther && (!enableCutoff || showMore) && (
           <OtherOption
-            {...props}
+            {...formProps}
             mainValue={value}
             type="checkbox"
             showOther={showOther}
@@ -157,7 +159,7 @@ export const FormComponentCheckboxGroup = (
         )}
         {naOption && naPosition === "bottom" && (
           <Checkbox
-            {...props}
+            {...formProps}
             index={999}
             option={naOption}
             hasValue={hasValue}
@@ -198,6 +200,7 @@ const OptionGroup = (props: CheckboxGroupProps) => {
 
 type CheckboxProps = FormInputProps<string[] | number[]> & {
   option: OptionMetadata;
+  options: OptionMetadata[];
   index: number;
   hasValue: boolean;
   hasReachedLimit: boolean;
@@ -207,6 +210,7 @@ const Checkbox = (props: CheckboxProps) => {
   const {
     index,
     value = [],
+    options,
     option,
     hasValue,
     hasReachedLimit,
@@ -235,20 +239,23 @@ const Checkbox = (props: CheckboxProps) => {
       return isChecked ? [...value, option.id] : without(value, option.id);
     }
   };
+
+  const optionIndex = options.findIndex((o) => o.id === option.id);
+
   return (
     <div
       className={[checkClass, "form-check", `form-option-${option.id}`].join(
         " ",
       )}
     >
-      <label className="form-check-label" htmlFor={`${path}.${index}`}>
+      <label className="form-check-label" htmlFor={`${path}.${optionIndex}`}>
         <div className="form-input-wrapper">
           <input
             className="form-check-input"
             type="checkbox"
             checked={isChecked}
             disabled={disabled}
-            id={`${path}.${index}`}
+            id={`${path}.${optionIndex}`}
             name={path}
             value={option.id}
             onChange={(event) => {
