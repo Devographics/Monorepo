@@ -8,7 +8,7 @@
     "lint": "pnpm run next lint",
     "start": "next start",
     "tokyodev": "dotenv -e .env.tokyodev.local next",
-    "typecheck-watch": "tsc --noEmit --p src/tsconfig.json -w",
+    "typecheck-watch": "tsc --noEmit --p src/devtsconfig.json -w",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -76,6 +76,7 @@
     "@types/unist": "^3.0.3",
     "@types/uuid": "^11.0.0",
     "chalk": "^5.6.2",
+    "dotenv-cli": "^4.1.1",
     "esbuild-plugin-yaml": "^0.0.1",
     "eslint": "^9.39.1",
     "mongodb": "^7.0.0",
@@ -92,5 +93,5 @@
   "peerDependencies": {
     "@babel/preset-env": "^7.28.5"
   },
-  "packageManager": "pnpm@11.1.2"
+  "packageManager": "pnpm@11.10.0+sha512.0b7f8b98060031904c017e3a41eb187a16d40eeb829b95c4f8cb03681761fc4ab53dd219115b9b447f4dce1a05a214764461e7d3703392a9f32f9511ce8c86c8"
 }

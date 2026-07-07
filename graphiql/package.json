@@ -18,9 +18,9 @@
         "dev": "vite",
         "build": "vite build",
         "start": "vite preview",
-        "dev-production": "PORT=4031 REACT_APP_API_URL=https://api.devographics.com/graphql react-scripts start",
-        "dev-staging": "PORT=4032 REACT_APP_API_URL=https://api-staging.devographics.com/graphql react-scripts start",
-        "tokyodev": "PORT=5030 REACT_APP_API_URL=http://localhost:5020/graphql react-scripts start",
+        "dev-production": "PORT=4031 VITE_REACT_APP_API_URL=https://api.devographics.com/graphql vite",
+        "dev-staging": "PORT=4032 VITE_REACT_APP_API_URL=https://api-staging.devographics.com/graphql vite",
+        "tokyodev": "PORT=5030 VITE_REACT_APP_API_URL=http://localhost:5020/graphql vite",
         "typecheck": "tsc --noEmit --p ./tsconfig.json"
     }
 }

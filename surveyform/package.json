@@ -138,7 +138,7 @@
     "react-test-renderer": ">=16.9.0",
     "require-from-string": "^2.0.2"
   },
-  "packageManager": "pnpm@11.1.2",
+  "packageManager": "pnpm@11.10.0",
   "engines": {
     "node": "24"
   }
