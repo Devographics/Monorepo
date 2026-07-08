@@ -26,8 +26,31 @@ type NormalizationJSONPayload = {
   matches: AnswerMatch[];
 };
 
+function splitRight(str: string, sep: string): string[] {
+  if (sep === "") return [...str];
+
+  const parts: string[] = [];
+  let start = 0;
+  let i = 0;
+
+  while (i <= str.length - sep.length) {
+    // split here only if the separator matches at i,
+    // but NOT at i + 1 (prefer the rightmost match in a run)
+    if (str.startsWith(sep, i) && !str.startsWith(sep, i + 1)) {
+      parts.push(str.slice(start, i));
+      i += sep.length;
+      start = i;
+    } else {
+      i++;
+    }
+  }
+
+  parts.push(str.slice(start));
+  return parts;
+}
+
 export const importNormalizationsJSON = async (
-  args: ImportNormalizationArgs
+  args: ImportNormalizationArgs,
 ) => {
   console.log("// importNormalizationsJSON");
   const { surveyId, editionId, questionId, data } = args;
@@ -50,12 +73,13 @@ export const importNormalizationsJSON = async (
   const items = parsedData.matches;
 
   console.log(
-    `// importNormalizationsJSON: found ${items.length} items to import…`
+    `// importNormalizationsJSON: found ${items.length} items to import…`,
   );
 
   for (const item of items) {
     const { answer, answerId, tokenIds } = item;
-    const [responseId, questionId_, answerIndex] = answerId.split("___");
+    // note: mongo ids can sometimes end with _ so use custom splitRight function
+    const [responseId, questionId_, answerIndex] = splitRight(answerId, "___");
 
     if (tokenIds && tokenIds.length > 0) {
       normalizationsImported++;
