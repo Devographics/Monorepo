@@ -6,7 +6,7 @@ import last from 'lodash/last.js'
 import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 
-import { LoadAllOptions, addToAllContexts, excludedFiles, mergeLocales } from './locales'
+import { LoadAllOptions, addToAllContexts, excludedFiles } from './locales'
 import { getOctokit } from '../../external_apis'
 
 /*
@@ -89,16 +89,7 @@ const loadLocalesFromGitHubSameRepo = async ({
                 }
             }
             await walkDirectory(localeDirectory.path)
-
-            const existingLocaleIndex = locales.findIndex(l => l.id === localeRawData.id)
-            if (existingLocaleIndex !== -1) {
-                locales[existingLocaleIndex] = mergeLocales(
-                    locales[existingLocaleIndex],
-                    localeRawData
-                )
-            } else {
-                locales.push(localeRawData)
-            }
+            locales.push(localeRawData)
         }
     }
 }
@@ -177,12 +168,7 @@ const loadLocalesFromGitHubMultiRepo = async ({
         }
         await walkDirectory('')
 
-        const existingLocaleIndex = locales.findIndex(l => l.id === localeRawData.id)
-        if (existingLocaleIndex !== -1) {
-            locales[existingLocaleIndex] = mergeLocales(locales[existingLocaleIndex], localeRawData)
-        } else {
-            locales.push(localeRawData)
-        }
+        locales.push(localeRawData)
 
         logToFile(`locales_raw/github_${localeRawData.id}_${pathIndex}.yml`, localeRawData, {
             mode: 'overwrite'

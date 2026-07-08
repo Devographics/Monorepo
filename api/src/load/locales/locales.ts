@@ -10,6 +10,7 @@ import {
 } from '../../helpers/locales'
 import { loadAllLocally } from './local'
 import { loadLocalesFromGitHub } from './github'
+import uniq from 'lodash/uniq.js'
 
 let RawLocales: RawLocale[] = []
 let Locales: Locale[] = []
@@ -32,13 +33,39 @@ export interface LoadAllOptions {
     localeContexts?: string[]
 }
 
-export const mergeLocales = (locale1: RawLocale, locale2: RawLocale) => {
-    return {
-        ...locale1,
-        translators: [...locale1.translators, ...locale2.translators],
-        stringFiles: [...locale1.stringFiles, ...locale2.stringFiles]
-    }
+export const mergeLocales = (locales: RawLocale[]): RawLocale => {
+    return locales.reduce(
+        (merged, locale) => ({
+            ...merged,
+            ...locale,
+            translators: [...merged.translators, ...locale.translators],
+            stringFiles: [...merged.stringFiles, ...locale.stringFiles]
+        }),
+        {
+            id: 'foo',
+            label: 'bar',
+            translators: [],
+            stringFiles: []
+        } as RawLocale
+    )
 }
+
+/*
+
+If we've loaded locales in a fragmented way from different places,
+merge them all back down to a list of unique locales
+
+*/
+const mergeAllLocales = (rawLocales: RawLocale[]) => {
+    const uniqueLocaleIds = uniq(rawLocales.map(l => l.id))
+    const mergedLocales = uniqueLocaleIds.map(localeId => {
+        const matchingLocales = rawLocales.filter(locale => locale.id === localeId)
+        const mergedLocale = mergeLocales(matchingLocales)
+        return mergedLocale
+    })
+    return mergedLocales
+}
+
 /*
 
 Load the YAML file containing metadata for all locales
@@ -122,6 +149,7 @@ export const getLocaleIds = () => {
 export const getLocaleContexts = () => {
     return parseEnvVariableArray(getEnvVar(EnvVar.LOCALE_CONTEXTS))
 }
+
 /*
 
 Load locales contents through GitHub API or locally
@@ -141,6 +169,7 @@ export const loadLocales = async (
         mode === 'local'
             ? await loadAllLocally({ localeIds, localeContexts })
             : await loadLocalesFromGitHub({ localeIds, localeContexts })
+    const mergedLocales = mergeAllLocales(locales)
     console.log('🌐 done loading locales')
-    return locales
+    return mergedLocales
 }

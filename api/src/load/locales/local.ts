@@ -6,7 +6,7 @@ import { EnvVar, getEnvVar } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 import { access } from 'fs/promises'
 
-import { LoadAllOptions, addToAllContexts, excludedFiles, mergeLocales } from './locales'
+import { LoadAllOptions, addToAllContexts, excludedFiles } from './locales'
 
 // when developing locally, load from local files
 
@@ -43,7 +43,7 @@ export const loadAllLocally = async (options: LoadAllOptions = {}): Promise<RawL
             const localeRawData: RawLocale = { ...localeConfig, stringFiles: [] }
             i++
 
-            console.log(`-> loading directory ${localeDirName} locally (${i}/${allLocales.length})`)
+            console.log(`-> loading directory ${localeDirPath} locally (${i}/${allLocales.length})`)
 
             // start recursive function
             const walkDirectory = async (currentPath: string, subDirName: string = 'root') => {
@@ -87,7 +87,6 @@ export const loadAllLocally = async (options: LoadAllOptions = {}): Promise<RawL
                 }
             }
             await walkDirectory(localeDirPath)
-
             locales.push(localeRawData)
         }
     }
