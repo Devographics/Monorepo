@@ -147,7 +147,7 @@
 #             yAxis: user_info__years_of_experience
 - id: features
   path: /features
-  descriptionId: sections.features.description.css2024
+  descriptionId: sections.features.description.css2026
   blocks:
       - template: page_introduction
 
@@ -196,37 +196,64 @@
         variables:
             url: https://linear-easing-generator.netlify.app/
 
+      - id: reading_list
+        template: multiple_options2
+        parameters:
+            limit: 20
+        queryOptions:
+            sectionId: reading_list
+            addQuestionComments: false
+        chartOptions:
+            dataFilters: [removeOverLimit, removeNoAnswer]
+            limit: 10
+
+      - id: features_resources
+        items: [fm-css-grid, fm-animations-transitions]
+        template: recommended_resources
+
+- id: pain_points
+  path: /pain-points
+  descriptionId: sections.pain_points.description.css2026
+  blocks:
       - id: layout_pain_points
-        template: multiple_options2_freeform
+        template: nested_pain_points
         i18nNamespace: features
         queryOptions:
             sectionId: layout
-        chartOptions:
-            limit: 5
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       - id: shapes_graphics_pain_points
-        template: multiple_options2_freeform
+        template: nested_pain_points
         i18nNamespace: features
         queryOptions:
             sectionId: shapes_graphics
-        chartOptions:
-            limit: 5
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       - id: colors_pain_points
-        template: multiple_options2_freeform
+        template: nested_pain_points
         i18nNamespace: features
         queryOptions:
             sectionId: colors
-        chartOptions:
-            limit: 5
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       - id: interactions_pain_points
-        template: multiple_options2_freeform
-        i18nNamespace: features
+        # template: multiple_options2_freeform
+        template: nested_pain_points
         queryOptions:
             sectionId: interactions
-        chartOptions:
-            limit: 5
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       - id: kilian_valkhof
         template: picks
@@ -250,12 +277,23 @@
       #       limit: 5
 
       - id: other_features_pain_points
-        template: multiple_options2_freeform
+        template: nested_pain_points
         i18nNamespace: features
         queryOptions:
             sectionId: other_features
-        chartOptions:
-            limit: 5
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
+
+      - id: css_general_pain_points
+        template: nested_pain_points
+        queryOptions:
+            sectionId: usage
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       # - id: layout_pain_points
       #   titleId: features.pain_points
@@ -307,18 +345,7 @@
         variables:
             url: https://modern-fluid-typography.vercel.app/
 
-      - id: reading_list
-        template: multiple_options2
-        parameters:
-            limit: 20
-        queryOptions:
-            sectionId: reading_list
-            addQuestionComments: false
-        chartOptions:
-            dataFilters: [removeOverLimit, removeNoAnswer]
-            limit: 10
-
-      - id: features_resources
+      - id: features_pain_points
         items: [fm-css-grid, fm-animations-transitions]
         template: recommended_resources
 
@@ -496,7 +523,7 @@
         template: recommended_resources
 
 - id: usage
-  descriptionId: sections.usage.description.css2024
+  descriptionId: sections.usage.description.css2026
   intlId: usage_css
   path: /usage
   blocks:
@@ -551,9 +578,6 @@
       - id: css_missing_features
         template: multiple_options2_freeform
 
-      - id: css_general_pain_points
-        template: multiple_options2_freeform
-
       - id: favorite_new_features
         template: multiple_options2_freeform
 
@@ -588,7 +612,7 @@
 
 - id: resources
   intlId: resources_css
-  descriptionId: sections.resources.description.css2024
+  descriptionId: sections.resources.description.css2026
   path: /resources
   blocks:
       - template: page_introduction

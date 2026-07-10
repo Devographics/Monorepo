@@ -18,7 +18,7 @@ parameters:
 chartOptions:
     limit: 10
 
-i18nNamespace: html_pain_points
+# i18nNamespace: html_pain_points
 
 descriptionId: features.pain_points.features
 
