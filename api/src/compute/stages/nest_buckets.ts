@@ -2,7 +2,11 @@ import { Entity } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket, RequestContext } from '../../types'
 import { getEntities } from '../../load/entities'
 
-function getNestedBucketTree(buckets: Bucket[], entities: Entity[]): Bucket[] {
+function getNestedBucketTree(
+    buckets: Bucket[],
+    entities: Entity[],
+    disallowedTokenIds: string[] = []
+): Bucket[] {
     const lookup = new Map<string, Bucket>()
 
     // First, create a node for every item
@@ -12,7 +16,9 @@ function getNestedBucketTree(buckets: Bucket[], entities: Entity[]): Bucket[] {
 
     const entityLookup = new Map<string, Entity>()
     for (const entity of entities) {
-        entityLookup.set(entity.id, entity)
+        if (!disallowedTokenIds.includes(entity.id)) {
+            entityLookup.set(entity.id, entity)
+        }
     }
 
     /*
@@ -87,9 +93,14 @@ export async function nestBuckets(
     axis2?: ComputeAxisParameters
 ) {
     const entities = await getEntities({ context, includeNormalizationEntities: true })
+    const disallowedTokenIds = axis1?.question?.disallowedTokenIds
     for (let editionData of resultsByEdition) {
         if (axis1.enableBucketNesting) {
-            const nestedBuckets = getNestedBucketTree(editionData.buckets, entities)
+            const nestedBuckets = getNestedBucketTree(
+                editionData.buckets,
+                entities,
+                disallowedTokenIds
+            )
             editionData.buckets = nestedBuckets
         }
     }
