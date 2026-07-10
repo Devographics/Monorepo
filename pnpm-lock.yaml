@@ -281,7 +281,7 @@ importers:
         version: 7.4.0(mongodb-client-encryption@7.1.0)(socks@2.8.9)
       next:
         specifier: 16.0.10
-        version: 16.0.10(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.101.0)
+        version: 16.0.10(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.101.0)
       react:
         specifier: 19.2.3
         version: 19.2.3
@@ -505,7 +505,7 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
       form-data:
-        specifier: ^4.0.0
+        specifier: ^4.0.6
         version: 4.0.6
       gatsby:
         specifier: ^5.13.7
@@ -565,7 +565,7 @@ importers:
         specifier: ^5.2.4
         version: 5.11.1
       js-yaml:
-        specifier: ^4.1.0
+        specifier: ^4.3.0
         version: 4.3.0
       json2csv:
         specifier: ^5.0.7
@@ -574,10 +574,10 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1
       lodash:
-        specifier: ^4.17.21
+        specifier: ^4.18.1
         version: 4.18.1
       minimatch:
-        specifier: ^10.0.3
+        specifier: ^10.2.5
         version: 10.2.5
       new-github-issue-url:
         specifier: ^1.0.0
@@ -653,7 +653,7 @@ importers:
         specifier: ^3.7.2
         version: 3.14.1(@types/react@17.0.93)(graphql@16.9.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@babel/core':
-        specifier: ^7.21.3
+        specifier: ^7.29.7
         version: 7.29.7
       '@babel/eslint-parser':
         specifier: ^7.21.3
@@ -32322,7 +32322,7 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  next@16.0.10(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.101.0):
+  next@16.0.10(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.101.0):
     dependencies:
       '@next/env': 16.0.10
       '@swc/helpers': 0.5.15
