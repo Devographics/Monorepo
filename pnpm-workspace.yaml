@@ -16,6 +16,12 @@ packages:
     - 'graphiql'
     - 'dot_com'
 
+# pnpm 11 no longer reads the yarn-style "resolutions" field from package.json;
+# overrides must live here instead
+overrides:
+    graphql: 16.9.0
+    webpack: 5.88.2
+
 # Security baseline:
 # - review dependency build scripts explicitly (default deny)
 # - block exotic transitive dependencies

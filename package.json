@@ -6,10 +6,6 @@
         "typescript": "^5.9.3"
     },
     "packageManager": "pnpm@11.10.0",
-    "resolutions": {
-        "webpack": "5.88.2",
-        "graphql": "16.9.0"
-    },
     "scripts": {
         "knip": "knip"
     }
