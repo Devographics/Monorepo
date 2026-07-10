@@ -37,8 +37,8 @@ export const generateFilterType = ({
     } else {
         typeDef = `input ${filterTypeName} {
             eq: String
-            in: String
-            nin: String
+            in: [String]
+            nin: [String]
             hasTags: [EntitiesTagsEnum]
         }`
     }
