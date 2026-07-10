@@ -90,9 +90,6 @@
     &-depth-3 {
         // background: #ffffff18;
     }
-    .chart-row-index {
-        // display: none;
-    }
     &-overall {
         // background: #ffffff22;
     }
@@ -148,6 +145,12 @@
     }
     .chart-sort-options & {
         display: none;
+    }
+    .chart-row-depth-1 &,
+    .chart-row-depth-2 &,
+    .chart-row-depth-3 &,
+    .chart-row-depth-4 & {
+        visibility: hidden;
     }
 }
 .chart-row-index-spacer {
