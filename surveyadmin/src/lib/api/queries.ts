@@ -61,6 +61,7 @@ query ${editionId}MetadataQuery {
             matchTags
             disallowedTokenIds
             disableRegexMatching
+            autoAddParentTokens
             followups {
               id
               options {

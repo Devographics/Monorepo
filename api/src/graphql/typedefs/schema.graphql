@@ -197,6 +197,8 @@ type QuestionMetadata {
     disallowedTokenIds: [String]
     # disable regex matching on a per-question basis
     disableRegexMatching: Boolean
+    # whenever a freeform normalization token is encountered, also auto-add all its parents
+    autoAddParentTokens: Boolean
     limit: Int
     # options/values for the question are numeric
     optionsAreNumeric: Boolean

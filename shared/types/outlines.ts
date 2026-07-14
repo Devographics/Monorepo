@@ -265,6 +265,9 @@ export type Question = {
     disallowedTokenIds?: string[]
     // disable regex matching on a per-question basis
     disableRegexMatching?: boolean
+    // whenever a freeform normalization token is encountered,
+    // also auto-add all its parents
+    autoAddParentTokens?: boolean
 
     // a question that's in the outline but not in the API
     hasApiEndpoint?: boolean

@@ -16,6 +16,7 @@ import {
 } from "@devographics/constants";
 import compact from "lodash/compact";
 import pick from "lodash/pick";
+import uniq from "lodash/uniq";
 import {
   FieldLogItem,
   SubfieldProcessFunction,
@@ -65,7 +66,11 @@ export const freeform: SubfieldProcessFunction = async ({
     }
   };
 
-  const { disallowedTokenIds = [], disableRegexMatching } = questionObject;
+  const {
+    disallowedTokenIds = [],
+    disableRegexMatching,
+    autoAddParentTokens,
+  } = questionObject;
 
   const modifiedFields: FieldLogItem[] = [];
 
@@ -217,7 +222,11 @@ export const freeform: SubfieldProcessFunction = async ({
             normalizedIds = normalizedIds.slice(0, 1);
           }
 
-          const parentIds = getParentIds(normalizedIds, entities);
+          if (autoAddParentTokens) {
+            const parentIds = getParentIds(normalizedIds, entities);
+            normalizedIds = uniq([...normalizedIds, ...parentIds]);
+          }
+
           // modify normalized response object
           set(normResp, normPaths.metadata!, metadata);
           set(normResp, normPaths.other!, normalizedIds);
