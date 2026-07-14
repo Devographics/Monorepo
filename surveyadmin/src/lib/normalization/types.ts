@@ -94,8 +94,7 @@ export interface NormalizationResult<Type extends NormalizationResultTypes> {
   type: Type;
 }
 
-export interface NormalizationResultSuccess
-  extends NormalizationResult<NormalizationResultTypes.SUCCESS> {
+export interface NormalizationResultSuccess extends NormalizationResult<NormalizationResultTypes.SUCCESS> {
   normalizedResponse: NormalizedResponseDocument;
   normalizedFields: Array<NormalizedField>;
   prenormalizedFields: Array<RegularField>;
@@ -106,20 +105,17 @@ export interface NormalizationResultSuccess
   discard?: boolean;
 }
 
-export interface NormalizationResultSuccessEx
-  extends NormalizationResultSuccess {
+export interface NormalizationResultSuccessEx extends NormalizationResultSuccess {
   response: ResponseDocument;
   responseId: string;
   counts: Counts;
   selector: { responseId: string };
 }
 
-export interface NormalizationResultEmpty
-  extends NormalizationResult<NormalizationResultTypes.EMPTY> {
+export interface NormalizationResultEmpty extends NormalizationResult<NormalizationResultTypes.EMPTY> {
   discard: true;
 }
-export interface NormalizationResultError
-  extends NormalizationResult<NormalizationResultTypes.ERROR> {
+export interface NormalizationResultError extends NormalizationResult<NormalizationResultTypes.ERROR> {
   discard: true;
   errors: any[];
 }
@@ -170,6 +166,7 @@ export interface NormalizationParams extends NormalizationOptions {
   normResp: NormalizedResponseDocument;
   survey: SurveyMetadata;
   edition: EditionMetadata;
+  entities: Entity[];
   entityRules: EntityRule[];
   privateFields?: any;
   errors?: any;
@@ -189,5 +186,5 @@ export interface NormalizeFieldResult {
 }
 
 export type StepFunction = (
-  NormalizationParams
+  NormalizationParams,
 ) => Promise<NormalizedResponseDocument>;

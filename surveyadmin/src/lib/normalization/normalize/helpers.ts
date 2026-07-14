@@ -7,6 +7,7 @@ import {
   SurveyMetadata,
   QuestionTemplateOutput,
   QuestionWithSection,
+  Entity,
 } from "@devographics/types";
 import {
   getNormResponsesCollection,
@@ -24,6 +25,7 @@ import {
   getEntitiesNormalizationQuery,
 } from "./getEntitiesNormalizationQuery";
 import trim from "lodash/trim";
+import uniq from "lodash/uniq";
 
 export const cleanupValue = (value) =>
   typeof value === "undefined" || ignoreValues.includes(value)
@@ -308,3 +310,36 @@ export const getBulkOperations = ({
 
 export const getDuration = (startAt, endAt) =>
   Math.ceil((endAt.valueOf() - startAt.valueOf()) / 1000);
+
+/* 
+
+For a given list of tokens, get all their parent tokens
+
+e.g. ['safari', 'subgrid'] =>
+['apple', 'interop_issues', 'grid', 'css_layout_issues']
+
+*/
+export const getParentIds = (tokenIds: string[], entities: Entity[]) => {
+  const parentIds: string[] = [];
+  for (const tokenId of tokenIds) {
+    let keepGoing = true;
+    let currentEntityId = tokenId;
+
+    while (keepGoing) {
+      const currentEntity = entities.find(
+        (entity) => entity.id === currentEntityId,
+      );
+      const parentEntityId = currentEntity?.parentId;
+      const parentEntity =
+        parentEntityId &&
+        entities.find((entity) => entity.id === parentEntityId);
+      if (parentEntity) {
+        parentIds.push(parentEntity.id);
+        currentEntityId = parentEntity.id;
+      } else {
+        keepGoing = false;
+      }
+    }
+  }
+  return uniq(parentIds);
+};

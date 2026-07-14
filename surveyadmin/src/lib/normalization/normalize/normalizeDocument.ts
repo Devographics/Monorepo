@@ -63,7 +63,7 @@ const fetchDataIfNeeded = async (options: NormalizationOptions) => {
  * Marks the document with "empty", "errors" etc. depending on the situation
  */
 export const normalizeDocument = async (
-  options: NormalizationOptions
+  options: NormalizationOptions,
 ): Promise<
   | NormalizationResultSuccessEx
   | NormalizationResultEmpty
@@ -76,7 +76,8 @@ export const normalizeDocument = async (
 
   try {
     const { response, questionId } = options;
-    const { survey, edition, entityRules } = await fetchDataIfNeeded(options);
+    const { survey, edition, entities, entityRules } =
+      await fetchDataIfNeeded(options);
 
     if (entityRules.length === 0) {
       throw new Error(`normalizeDocument: entityRules empty.`);
@@ -90,6 +91,7 @@ export const normalizeDocument = async (
       normResp,
       survey,
       edition,
+      entities,
       entityRules,
       errors,
     };
@@ -145,13 +147,13 @@ Normalize single question
 
 */
 const normalizeQuestion = async (
-  normalizationParams: NormalizationParams & { questionId: string }
+  normalizationParams: NormalizationParams & { questionId: string },
 ): Promise<NormalizationResultSuccess> => {
   const { verbose, response, survey, edition, questionId } =
     normalizationParams;
   if (verbose) {
     console.log(
-      `⛰️ Normalizing document ${response._id}, question ${questionId}…`
+      `⛰️ Normalizing document ${response._id}, question ${questionId}…`,
     );
   }
 
@@ -168,7 +170,7 @@ const normalizeQuestion = async (
 
   if (!questionObject) {
     throw new Error(
-      `Cannot normalize question ${questionId} because no questionObject was found. `
+      `Cannot normalize question ${questionId} because no questionObject was found. `,
     );
   }
   const questionBasePath = questionObject?.normPaths?.base;
@@ -224,7 +226,7 @@ Normalize entire response document
 
 */
 const normalizeResponse = async (
-  normalizationParams: NormalizationParams
+  normalizationParams: NormalizationParams,
 ): Promise<NormalizationResultSuccess> => {
   const {
     survey,
@@ -359,7 +361,7 @@ function responseIsEmpty({
   edition: EditionMetadata;
 }) {
   const contentFields = Object.keys(response).filter((k) =>
-    k.startsWith(edition.id)
+    k.startsWith(edition.id),
   );
   return contentFields.length === 0;
 }

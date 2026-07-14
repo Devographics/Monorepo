@@ -1,7 +1,11 @@
-import { cleanupValue } from "../helpers";
+import { cleanupValue, getParentIds } from "../helpers";
 import { normalize } from "../normalize";
 import set from "lodash/set.js";
-import { NormalizationMetadata, NormalizationToken } from "@devographics/types";
+import {
+  NormalizationMetadata,
+  NormalizationToken,
+  DbSuffixes,
+} from "@devographics/types";
 import { prefixWithEditionId } from "@devographics/templates";
 import {
   NO_MATCH,
@@ -49,6 +53,7 @@ export const freeform: SubfieldProcessFunction = async ({
   response,
   normResp,
   questionObject,
+  entities,
   entityRules,
   verbose,
   customNormalizations,
@@ -65,10 +70,11 @@ export const freeform: SubfieldProcessFunction = async ({
   const modifiedFields: FieldLogItem[] = [];
 
   const allAnswersCustomNormalizations = customNormalizations.filter(
-    (c) => c.responseId === response._id && c.questionId === questionObject.id
+    (c) => c.responseId === response._id && c.questionId === questionObject.id,
   );
 
   const { rawPaths, normPaths } = getQuestionPaths(questionObject);
+
   // if a field has a "freeform/other" path defined, we normalize its contents
   if (rawPaths.other) {
     const fieldPath = prefixWithEditionId(rawPaths?.other, edition.id);
@@ -76,7 +82,7 @@ export const freeform: SubfieldProcessFunction = async ({
     if (freeformValue) {
       try {
         const valuesArray = freeformArrayTemplates.includes(
-          questionObject.template
+          questionObject.template,
         )
           ? freeformValue
           : (convertToArray({
@@ -85,7 +91,7 @@ export const freeform: SubfieldProcessFunction = async ({
             }) as string[]);
 
         const valuesArrayClean = compact(
-          valuesArray.map(cleanupValue)
+          valuesArray.map(cleanupValue),
         ) as string[];
         if (valuesArrayClean.length > 0) {
           // set(normResp, normPaths.raw!, freeformValue);
@@ -109,7 +115,7 @@ export const freeform: SubfieldProcessFunction = async ({
 
             const currentAnswerCustomNormalization =
               allAnswersCustomNormalizations.find(
-                (norm) => norm.answerIndex === i
+                (norm) => norm.answerIndex === i,
               );
 
             // if custom norm. tokens have been defined, also add their id
@@ -147,7 +153,7 @@ export const freeform: SubfieldProcessFunction = async ({
 
               if (importedTokensIds) {
                 logIfVerbose(
-                  `⛰️ Imported tokens: [${importedTokensIds.join()}]`
+                  `⛰️ Imported tokens: [${importedTokensIds.join()}]`,
                 );
                 const importedTokens = importedTokensIds
                   // only keep custom token that are not already included in regular norm. tokens
@@ -161,21 +167,21 @@ export const freeform: SubfieldProcessFunction = async ({
 
               if (disabledTokensIds) {
                 logIfVerbose(
-                  `⛰️ Disabled tokens: [${disabledTokensIds.join()}]`
+                  `⛰️ Disabled tokens: [${disabledTokensIds.join()}]`,
                 );
                 // if some tokens are disabled, remove them
                 tokens = tokens.filter(
-                  (t) => !disabledTokensIds.includes(t.id)
+                  (t) => !disabledTokensIds.includes(t.id),
                 );
               }
 
               if (disallowedTokenIds) {
                 logIfVerbose(
-                  `⛰️ Disallowed tokens: [${disallowedTokenIds.join()}]`
+                  `⛰️ Disallowed tokens: [${disallowedTokenIds.join()}]`,
                 );
                 // if some tokens are disallowed, remove them
                 tokens = tokens.filter(
-                  (t) => !disallowedTokenIds.includes(t.id)
+                  (t) => !disallowedTokenIds.includes(t.id),
                 );
               }
             }
@@ -183,7 +189,7 @@ export const freeform: SubfieldProcessFunction = async ({
             logIfVerbose(
               `⛰️ processFreeformField: ${fieldPath}/other/${i}: “${raw}” -> [${
                 tokens.length > 0 ? tokens.map((t) => t.id).join() : "🚫"
-              }]`
+              }]`,
             );
 
             const item = { raw } as NormalizationMetadata;
@@ -211,6 +217,7 @@ export const freeform: SubfieldProcessFunction = async ({
             normalizedIds = normalizedIds.slice(0, 1);
           }
 
+          const parentIds = getParentIds(normalizedIds, entities);
           // modify normalized response object
           set(normResp, normPaths.metadata!, metadata);
           set(normResp, normPaths.other!, normalizedIds);

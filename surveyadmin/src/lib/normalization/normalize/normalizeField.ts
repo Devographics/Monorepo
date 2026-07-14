@@ -14,6 +14,7 @@ import {
   EditionMetadata,
   NormalizedResponseDocument,
   CustomNormalizationDocument,
+  Entity,
 } from "@devographics/types";
 import { prefixWithEditionId } from "@devographics/templates";
 import {
@@ -34,7 +35,7 @@ interface NormalizeFieldOptions extends NormalizationParams {
 }
 
 export type SubfieldProcessFunction = (
-  props: SubfieldProcessProps
+  props: SubfieldProcessProps,
 ) => Promise<SubfieldProcessResult | void>;
 
 export interface SubfieldProcessProps {
@@ -43,6 +44,7 @@ export interface SubfieldProcessProps {
   normResp: NormalizedResponseDocument;
   questionObject: QuestionTemplateOutput;
   verbose: boolean;
+  entities: Entity[];
   entityRules: EntityRule[];
   customNormalizations: CustomNormalizationDocument[];
   timestamp: string;
@@ -61,7 +63,7 @@ export const getQuestionPaths = (questionObject: QuestionTemplateOutput) => {
   if (!rawPaths || !normPaths) {
     console.log(questionObject);
     throw new Error(
-      `⛰️ normalizeField error: could not find rawPaths or normPaths for question ${questionObject.id}`
+      `⛰️ normalizeField error: could not find rawPaths or normPaths for question ${questionObject.id}`,
     );
   }
   return { rawPaths, normPaths };
@@ -73,6 +75,7 @@ export const normalizeField = async ({
   questionObject,
   normResp: normResp_,
   edition,
+  entities,
   entityRules,
   isRenormalization,
   customNormalizations,
@@ -94,6 +97,7 @@ export const normalizeField = async ({
     questionObject,
     modified,
     verbose,
+    entities,
     entityRules,
     customNormalizations,
     timestamp,
@@ -144,7 +148,7 @@ export const normalizeField = async ({
           console.log(
             `⛰️ ${fieldPath}/${subfieldFunction.name}: “${modifiedFields
               .map((f) => f.value)
-              .join("|")}”`
+              .join("|")}”`,
           );
         }
       }
