@@ -222,9 +222,19 @@ export const freeform: SubfieldProcessFunction = async ({
             normalizedIds = normalizedIds.slice(0, 1);
           }
 
+          /*
+          Auto-add parent tokens, e.g.
+        
+            ['safari', 'subgrid'] =>
+            ['apple', 'interop_issues', 'grid', 'css_layout_issues']
+
+            Note: make sure to remove disallowed tokens from the list
+          */
           if (autoAddParentTokens) {
             const parentIds = getParentIds(normalizedIds, entities);
-            normalizedIds = uniq([...normalizedIds, ...parentIds]);
+            normalizedIds = uniq([...normalizedIds, ...parentIds]).filter(
+              (id) => !disallowedTokenIds.includes(id),
+            );
           }
 
           // modify normalized response object
