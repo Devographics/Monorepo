@@ -6,6 +6,7 @@ import { getRawData } from '../../compute/raw'
 import { getEntities } from '../../load/entities'
 import { ResolverType } from '../../types'
 import { OrderOptions, SortOrder } from '@devographics/types'
+import { INVALID_VALUES } from '@devographics/constants'
 
 enum RawDataSortProperty {
     ALPHABETICAL = 'alphabetical',
@@ -34,12 +35,14 @@ type RawDataArgs = {
 export const rawDataResolver: ResolverType = async (parent, args: RawDataArgs, context, info) => {
     console.log('// rawDataResolver')
     const { survey, edition, section, question, responseArguments } = parent
-    const { token, sort = {}, parameters, excludedTokens } = args
+    const { token, sort = {}, parameters, excludedTokens: excludedTokens_ = [] } = args
     const { limit } = parameters || {}
     const { property = RawDataSortProperty.ALPHABETICAL, order = OrderOptions.ASC } = sort
     // helper function to get count of how many times a token appears across all answers
     const getTokenCount = (tokenId: string) =>
         answers?.filter(a => a.tokens && a.tokens.map(t => t.id).includes(tokenId)).length
+
+    const excludedTokens = [...excludedTokens_, ...INVALID_VALUES]
 
     // get all raw answers for this question
     let answers = await getRawData({

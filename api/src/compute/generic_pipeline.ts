@@ -1,6 +1,6 @@
 import { generateFiltersQuery } from '../filters'
 import { ComputeAxisParameters, GenericComputeParameters, QuestionApiObject } from '../types'
-import { NO_ANSWER } from '@devographics/constants'
+import { NO_ANSWER, INVALID_VALUES } from '@devographics/constants'
 import { getDbPath, getMatch } from './generic'
 import { EditionMetadata, Filters, ResponsesTypes, SurveyMetadata } from '@devographics/types'
 import { getPastNEditions } from '../helpers/surveys'
@@ -89,7 +89,7 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
     const pipeline: any[] = [
         /*
         
-        Stage 1
+        Stage 0
         
         Match surveyId and editionId
 
@@ -97,6 +97,44 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         {
             $match: match
         },
+        // Stage 1a: filter our any invalid values at axis1DbPath
+        {
+            $set: {
+                [`${axis1DbPath}`]: {
+                    $cond: [
+                        { $isArray: `$${axis1DbPath}` },
+                        {
+                            $filter: {
+                                input: `$${axis1DbPath}`,
+                                cond: { $not: [{ $in: ['$$this', INVALID_VALUES] }] }
+                            }
+                        },
+                        `$${axis1DbPath}`
+                    ]
+                }
+            }
+        },
+        // Stage 1b: filter our any invalid values at axis2DbPath
+        ...(axis2DbPath
+            ? [
+                  {
+                      $set: {
+                          [`${axis2DbPath}`]: {
+                              $cond: [
+                                  { $isArray: `$${axis2DbPath}` },
+                                  {
+                                      $filter: {
+                                          input: `$${axis2DbPath}`,
+                                          cond: { $not: [{ $in: ['$$this', invalidValues] }] }
+                                      }
+                                  },
+                                  `$${axis2DbPath}`
+                              ]
+                          }
+                      }
+                  }
+              ]
+            : []),
         /*
         
         Stage 2
@@ -160,10 +198,17 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
                           [`${axis2DbPath}`]: {
                               $cond: [
                                   {
-                                      $and: [
-                                          { $not: [`$${axis2DbPath}`] },
+                                      $or: [
+                                          // the value in "axis2DbPath" is equal to []
+                                          { $eq: [`$${axis2DbPath}`, []] },
+                                          // OR the following conditions must be true:
                                           {
-                                              $ne: [`$${axis2DbPath}`, 0]
+                                              $and: [
+                                                  { $not: [`$${axis2DbPath}`] },
+                                                  {
+                                                      $ne: [`$${axis2DbPath}`, 0]
+                                                  }
+                                              ]
                                           }
                                       ]
                                   },
