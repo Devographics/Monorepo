@@ -100,6 +100,8 @@ export interface BlockVariantDefinition {
     dataPath?: string
     isFreeform?: boolean
 
+    hideOtherAnswersBucket?: boolean
+
     // from BlockChart
     switcherPosition?: 'top' | 'bottom'
     showNote?: boolean

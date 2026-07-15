@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import { sortProperties, StandardQuestionData } from '@devographics/types'
+import { OTHER_ANSWERS } from '@devographics/constants'
 import { DataSeries } from 'core/filters/types'
 import {
     getChartBuckets,
@@ -90,6 +91,10 @@ export const HorizontalBarSerie = (
     })
     if (applyRowsLimit(rowsLimit, chartValues.totalRows)) {
         buckets = take(buckets, chartState.rowsLimit)
+    }
+
+    if (block.hideOtherAnswersBucket) {
+        buckets = buckets.filter(bucket => bucket.id !== OTHER_ANSWERS)
     }
 
     // let allRowOffsets = allRowsCellDimensions.map(cd =>

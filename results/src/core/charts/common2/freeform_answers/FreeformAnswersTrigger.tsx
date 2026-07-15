@@ -25,6 +25,10 @@ export type RawDataQueryOptions = {
     excludedTokens?: string[]
 }
 
+// get ids of all buckets, including recursively nested sub-buckets
+const getAllBucketIds = (buckets: Bucket[]): string[] =>
+    buckets.flatMap(b => [b.id, ...getAllBucketIds(b.nestedBuckets || [])])
+
 export const FreeformAnswersTrigger = (props: {
     bucket: Bucket | FacetBucket
     buckets: Bucket[]
@@ -49,7 +53,7 @@ export const FreeformAnswersTrigger = (props: {
     }
 
     if (id === OTHER_ANSWERS) {
-        queryOptions.excludedTokens = buckets.map(b => b.id).filter(id => id !== OTHER_ANSWERS)
+        queryOptions.excludedTokens = getAllBucketIds(buckets).filter(id => id !== OTHER_ANSWERS)
     }
 
     const i18nNamespace = block.i18nNamespace || questionId

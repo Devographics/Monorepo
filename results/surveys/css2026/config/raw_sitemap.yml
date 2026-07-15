@@ -221,8 +221,8 @@
         queryOptions:
             sectionId: layout
         variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
+            # - template: nested_pain_points_limitations
+            # - template: nested_pain_points_interop
             - template: nested_pain_points_features
 
       - id: shapes_graphics_pain_points
@@ -231,8 +231,8 @@
         queryOptions:
             sectionId: shapes_graphics
         variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
+            # - template: nested_pain_points_limitations
+            # - template: nested_pain_points_interop
             - template: nested_pain_points_features
 
       - id: colors_pain_points
@@ -241,8 +241,8 @@
         queryOptions:
             sectionId: colors
         variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
+            # - template: nested_pain_points_limitations
+            # - template: nested_pain_points_interop
             - template: nested_pain_points_features
 
       - id: interactions_pain_points
@@ -251,8 +251,8 @@
         queryOptions:
             sectionId: interactions
         variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
+            # - template: nested_pain_points_limitations
+            # - template: nested_pain_points_interop
             - template: nested_pain_points_features
 
       - id: kilian_valkhof
@@ -282,8 +282,8 @@
         queryOptions:
             sectionId: other_features
         variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
+            # - template: nested_pain_points_limitations
+            # - template: nested_pain_points_interop
             - template: nested_pain_points_features
 
       - id: css_general_pain_points
@@ -291,8 +291,8 @@
         queryOptions:
             sectionId: usage
         variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
+            # - template: nested_pain_points_limitations
+            # - template: nested_pain_points_interop
             - template: nested_pain_points_features
 
       # - id: layout_pain_points

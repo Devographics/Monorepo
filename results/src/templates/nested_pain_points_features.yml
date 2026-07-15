@@ -9,6 +9,8 @@ queryOptions:
     addNestedBuckets: true
     sectionId: ${sectionId}
 
+hideOtherAnswersBucket: true
+
 customizationModes: [filters, facets]
 parameters:
     showNoAnswer: true
