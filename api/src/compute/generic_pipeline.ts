@@ -125,7 +125,7 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
                                   {
                                       $filter: {
                                           input: `$${axis2DbPath}`,
-                                          cond: { $not: [{ $in: ['$$this', invalidValues] }] }
+                                          cond: { $not: [{ $in: ['$$this', INVALID_VALUES] }] }
                                       }
                                   },
                                   `$${axis2DbPath}`
