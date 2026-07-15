@@ -41,12 +41,13 @@ export const FilterTokens = ({
                 {tokens.map(token => {
                     const { id, count } = token
                     const entity = entities.find(e => e.id === id) || token
-                    const { shortLabel } = getItemLabel({
+                    const labelObject = getItemLabel({
                         id,
                         entity,
                         getString
                         // i18nNamespace: question.id
                     })
+                    const { shortLabel } = labelObject
                     return (
                         <FilterItem
                             key={id}

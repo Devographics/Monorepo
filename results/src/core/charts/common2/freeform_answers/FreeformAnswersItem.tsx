@@ -250,9 +250,10 @@ const Token = ({
         tokenFilter === id
     const bucket = allBuckets.find(b => b.id === id)
 
+    const entity = bucket?.entity || fullToken
     const labelObject = getItemLabel({
         id,
-        entity: bucket?.entity || fullToken,
+        entity,
         getString,
         // i18nNamespace,
         html: true

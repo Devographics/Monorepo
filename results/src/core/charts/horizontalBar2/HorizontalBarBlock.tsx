@@ -114,7 +114,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                     <code>{JSON.stringify(facetQuestion, null, 2)}</code>
                 </pre> */}
 
-                {hasNestedData && <ChartNestedToggle {...commonProps} />}
+                {/* {hasNestedData && <ChartNestedToggle {...commonProps} />} */}
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 
                 {bucketsFilter && <BucketsFilterHeading bucketsFilter={bucketsFilter} />}
