@@ -42,6 +42,7 @@ export const rawDataResolver: ResolverType = async (parent, args: RawDataArgs, c
     const getTokenCount = (tokenId: string) =>
         answers?.filter(a => a.tokens && a.tokens.map(t => t.id).includes(tokenId)).length
 
+    // we do not want to show any raw answers with invalid values
     const excludedTokens = [...excludedTokens_, ...INVALID_VALUES]
 
     // get all raw answers for this question

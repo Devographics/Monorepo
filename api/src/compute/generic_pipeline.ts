@@ -97,7 +97,7 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         {
             $match: match
         },
-        // Stage 1a: filter our any invalid values at axis1DbPath
+        // Stage 1a: filter out any invalid values at axis1DbPath
         {
             $set: {
                 [`${axis1DbPath}`]: {
@@ -114,7 +114,7 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
                 }
             }
         },
-        // Stage 1b: filter our any invalid values at axis2DbPath
+        // Stage 1b: filter out any invalid values at axis2DbPath
         ...(axis2DbPath
             ? [
                   {
