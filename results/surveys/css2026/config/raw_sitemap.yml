@@ -191,10 +191,10 @@
         variables:
             enableMultiSection: true
 
-      - id: josh_comeau
-        template: picks
-        variables:
-            url: https://linear-easing-generator.netlify.app/
+      # - id: josh_comeau
+      #   template: picks
+      #   variables:
+      #       url: https://linear-easing-generator.netlify.app/
 
       - id: reading_list
         template: multiple_options2
@@ -255,10 +255,10 @@
             # - template: nested_pain_points_interop
             - template: nested_pain_points_features
 
-      - id: kilian_valkhof
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
+      # - id: kilian_valkhof
+      #   template: picks
+      #   variables:
+      #       url: https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
 
       # - id: typography_pain_points
       #   template: multiple_options2_freeform
@@ -340,10 +340,10 @@
       #         queryOptions:
       #             sectionId: other_features
 
-      - id: ana_rodrigues
-        template: picks
-        variables:
-            url: https://modern-fluid-typography.vercel.app/
+      # - id: ana_rodrigues
+      #   template: picks
+      #   variables:
+      #       url: https://modern-fluid-typography.vercel.app/
 
       - id: features_pain_points
         items: [fm-css-grid, fm-animations-transitions]
@@ -455,11 +455,10 @@
         #       parameters:
         #           sort: { property: medianByFacet }
 
-      - id: ahmad_shadeed
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/if
-
+      # - id: ahmad_shadeed
+      #   template: picks
+      #   variables:
+      #       url: https://developer.mozilla.org/en-US/docs/Web/CSS/if
       - id: pre_post_processors
         template: multiple_options2_combined
         i18nNamespace: tools
@@ -559,10 +558,10 @@
       # - id: what_do_you_use_css_for
       #   template: multiple_options2_combined
 
-      - id: ana_tudor
-        template: picks
-        variables:
-            url: https://codepen.io/thebabydino/pen/LEExpVg
+      # - id: ana_tudor
+      #   template: picks
+      #   variables:
+      #       url: https://codepen.io/thebabydino/pen/LEExpVg
 
       # - id: industry_sector
       #   template: multiple_options2_combined
@@ -570,10 +569,10 @@
       - id: css_interoperability_features
         template: multiple_options2_freeform
 
-      - id: amit_sheen
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units/Using_CSS_math_functions
+      # - id: amit_sheen
+      #   template: picks
+      #   variables:
+      #       url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units/Using_CSS_math_functions
 
       - id: css_missing_features
         template: multiple_options2_freeform
@@ -581,10 +580,10 @@
       - id: favorite_new_features
         template: multiple_options2_freeform
 
-      - id: saron_yitbarek
-        template: picks
-        variables:
-            url: https://piccalil.li/blog/
+      # - id: saron_yitbarek
+      #   template: picks
+      #   variables:
+      #       url: https://piccalil.li/blog/
 
       - id: css_pace_of_change
         template: single_option2
@@ -593,10 +592,10 @@
               parameters:
                   sort: { property: medianByFacet }
 
-      - id: sara_joy
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark
+      # - id: sara_joy
+      #   template: picks
+      #   variables:
+      #       url: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark
 
       - id: state_of_the_web_happiness
         template: happiness2
@@ -626,10 +625,10 @@
       - id: people
         template: multiple_options2_freeform
 
-      - id: sacha_greif
-        template: picks
-        variables:
-            url: https://miocene.io/
+      # - id: sacha_greif
+      #   template: picks
+      #   variables:
+      #       url: https://miocene.io/
 
       - id: web_platform_resources
         template: multiple_options2_combined
@@ -678,10 +677,10 @@
               parameters:
                   sort: { property: options }
 
-      - id: julia_miocene
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API
+      # - id: julia_miocene
+      #   template: picks
+      #   variables:
+      #       url: https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API
 
       - id: company_size
         template: multiple_options2
