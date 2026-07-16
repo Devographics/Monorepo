@@ -887,7 +887,7 @@
             - id: most_commented_feature_award
               template: award
               awards:
-                  - id: subgrid
+                  - id: line_clamp
                     value: 78
                   - id: css_nesting
                     value: 63
