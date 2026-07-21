@@ -56,6 +56,8 @@ const loadLocalesFromGitHubSameRepo = async ({
             const localeRawData = await initGitHubLocale({
                 octokit,
                 org,
+                repo,
+                path: localeDirectory.path,
                 localeId: localeDirectory.name
             })
             const localeFiles: string[] = []
@@ -186,21 +188,24 @@ const initGitHubLocale = async ({
     octokit,
     org,
     path = '',
+    repo,
     localeId
 }: {
     octokit: Octokit
     org: string
     path?: string
+    repo?: string
     localeId: string
 }) => {
     // request contents of locale config file
     const pathSegment = path === '' ? '' : '{path}/'
     const githubUrl = `GET /repos/{owner}/{repo}/contents/${pathSegment}config.yml`
-    const contents = await octokit.request(githubUrl, {
+    const githubOptions = {
         owner: org,
-        repo: localeId,
+        repo: repo || localeId,
         path
-    })
+    }
+    const contents = await octokit.request(githubUrl, githubOptions)
     const configFile = contents.data
     if (!configFile) {
         throw new Error(`Could not find config.yml file for locale ${localeId}`)
