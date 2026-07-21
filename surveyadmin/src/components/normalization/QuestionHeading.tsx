@@ -15,7 +15,7 @@ const QuestionHeading = ({ question }: { question: QuestionWithSection }) => {
       <h5>
         <T token={i18nIds.question} />
       </h5>
-      <T token={i18nIds.prompt} fallback={null} />
+      <T token={i18nIds.prompt} />
     </div>
   );
 };

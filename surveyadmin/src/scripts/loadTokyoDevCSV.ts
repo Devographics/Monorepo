@@ -60,7 +60,7 @@ async function parseCSVFile<T>(filename: string): Promise<T[]> {
 const loadYamlFile = async (surveyId) => {
   const contents = await readFile(
     `../../tokyodev-surveys/tokyodev/${surveyId}/questions.yml`,
-    "utf8"
+    "utf8",
   );
   const yamlContents: any = yaml.load(contents);
   return yamlContents;
@@ -86,10 +86,10 @@ const loadAllEditions = async (allSurveysMetadata, surveyId) => {
     const data = await parseCSVFile<any>(`../../tokyodev-data/${fileName}`);
     const outline = await loadYamlFile(editionId);
     const survey = allSurveysMetadata.find(
-      (s) => s.id === surveyId
+      (s) => s.id === surveyId,
     ) as SurveyMetadata;
     const metadata = survey.editions.find(
-      (e) => e.id === editionId
+      (e) => e.id === editionId,
     ) as EditionMetadata;
     allEditions.push({
       editionId,
@@ -102,7 +102,7 @@ const loadAllEditions = async (allSurveysMetadata, surveyId) => {
   await logToFile(
     "tokyodev.yml",
     allEditions.map(({ data, ...rest }) => rest),
-    { mode: "overwrite" }
+    { mode: "overwrite" },
   );
   return allEditions;
 };
@@ -113,14 +113,14 @@ const flattenOutline = (outline: EditionOutline) =>
 const getOutlineQuestion = (
   outline: EditionOutline,
   questionLabel: string,
-  editionId: string
+  editionId: string,
 ) => {
   const question = flattenOutline(outline).find(
-    (q) => q.label?.trim() === questionLabel.trim()
+    (q) => q?.label?.trim() === questionLabel.trim(),
   );
   if (!question) {
     throw new Error(
-      `🔴 Could not find question outline for "${editionId}/${questionLabel}"`
+      `🔴 Could not find question outline for "${editionId}/${questionLabel}"`,
     );
   }
   return question;
@@ -129,13 +129,13 @@ const getOutlineQuestion = (
 const getQuestionMetadata = (
   editionMetadata: EditionMetadata,
   question: Question,
-  editionId: string
+  editionId: string,
 ) => {
   const allQuestions = getEditionQuestions(editionMetadata);
   const questionMetadata = allQuestions.find((q) => q.id === question.id);
   if (!questionMetadata) {
     throw new Error(
-      `🔴 Could not find question metadata for "${editionId}/${question.id}"`
+      `🔴 Could not find question metadata for "${editionId}/${question.id}"`,
     );
   }
   return questionMetadata as QuestionMetadata;
@@ -172,7 +172,7 @@ const getOptionValues = (
   edition: EditionObject,
   question: Question,
   value_: string,
-  questionLabel: string
+  questionLabel: string,
 ) => {
   const { editionId, outline } = edition;
   let optionsValues: (string | number)[] = [],
@@ -185,8 +185,8 @@ const getOptionValues = (
       ? String(
           findClosestValue(
             question.options?.map((o) => o.id),
-            Number(value_)
-          )
+            Number(value_),
+          ),
         )
       : value_;
 
@@ -196,7 +196,8 @@ const getOptionValues = (
     // check if a predefined matching option exists based on the option label
     // or the option id, for question whose options are generated from a template
     const matchingOption = question.options?.find(
-      (o) => String(o.label) === String(value) || String(o.id) === String(value)
+      (o) =>
+        String(o.label) === String(value) || String(o.id) === String(value),
     );
     if (matchingOption) {
       optionsValues.push(matchingOption.id);
@@ -207,7 +208,7 @@ const getOptionValues = (
       } else {
         console.log(question);
         throw new Error(
-          `🔴 Could not find value "${value}" within options for ${editionId}/${question.id} ("${questionLabel})"`
+          `🔴 Could not find value "${value}" within options for ${editionId}/${question.id} ("${questionLabel})"`,
         );
       }
     }
@@ -263,14 +264,14 @@ export const loadTokyoDevCSV = async () => {
             const question = getOutlineQuestion(
               outline,
               questionLabel,
-              editionId
+              editionId,
             );
 
             // find the question's canonical metadata based on its ID
             const questionMetadata = getQuestionMetadata(
               metadata,
               question,
-              editionId
+              editionId,
             );
 
             const convertToType = (value) =>
@@ -288,7 +289,7 @@ export const loadTokyoDevCSV = async () => {
             ] as TemplateFunction;
             if (!templateFunction) {
               throw new Error(
-                `// No template ${questionMetadata.template} found`
+                `// No template ${questionMetadata.template} found`,
               );
             }
 
@@ -314,7 +315,7 @@ export const loadTokyoDevCSV = async () => {
                   edition,
                   questionObject,
                   questionValue,
-                  questionLabel
+                  questionLabel,
                 );
 
                 if (optionsValues.length > 0) {

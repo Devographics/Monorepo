@@ -9,7 +9,7 @@ Re-enable one or more regex tokens by removing them from disabled tokens list
 
 */
 export const enableRegularTokens = async (
-  params: CustomNormalizationParams
+  params: CustomNormalizationParams,
 ) => {
   const { tokens } = params;
   const normalizationId = getNormalizationId(params);
@@ -21,9 +21,9 @@ export const enableRegularTokens = async (
         disabledTokens: tokens[0],
       },
     },
-    { returnDocument: "after" }
+    { returnDocument: "after" },
   );
-  const document = updateResult.value;
+  const document = updateResult;
   const deleteResult = await cleanTokensUpIfNeeded(document);
   return {
     action: "enableRegularTokens",
