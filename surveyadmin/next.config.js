@@ -8,6 +8,11 @@ const moduleExports = (phase, { defaultConfig }) => {
    **/
   let nextConfig = {
     ...defaultConfig,
+    // mongodb pulls this in as an optional peer dep for client-side field level
+    // encryption, which this app doesn't use. It ships a native .node addon whose
+    // prebuilt binary isn't guaranteed to match the Lambda's Node ABI, so keep it
+    // out of the serverless bundle instead of require()-ing it at runtime.
+    serverExternalPackages: ["mongodb-client-encryption"],
     // Disable linting during build => the linter may have optional dev dependencies
     // (eslint-plugin-cypress) that wont exist during prod build
     // You should lint manually only
