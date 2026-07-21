@@ -104,7 +104,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     }
 
     return (
-        <ChartWrapper block={block} question={question} className="chart-horizontal-bar">
+        <ChartWrapper {...commonProps} className="chart-horizontal-bar">
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>

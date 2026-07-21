@@ -1,3 +1,5 @@
+@use '../../../stylesheets/_breakpoints.scss';
+
 .chart-wrapper {
     margin-top: var(--doubleSpacing);
     display: flex;
@@ -5,10 +7,18 @@
     gap: var(--doubleSpacing);
 }
 
-.chart-description {
-    margin-top: var(--doubleSpacing);
-}
+.chart-wrapper-heading {
+    display: flex;
+    gap: var(--halfSpacing);
+    flex-direction: column;
 
-.chart-description + .chart-wrapper {
+    margin-top: var(--doubleSpacing);
+    @include breakpoints.medium-large {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+.chart-wrapper-heading + .chart-wrapper {
     margin-top: var(--spacing);
 }
