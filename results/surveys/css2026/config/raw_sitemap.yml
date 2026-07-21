@@ -900,8 +900,8 @@
       - id: conclusion
         template: conclusion
         variables:
-            author: amit_sheen
-            entities: '"amit_sheen"'
+            author: sunkanmi_fafowora
+            entities: '"sunkanmi_fafowora"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
