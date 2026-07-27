@@ -14,6 +14,7 @@ import { rscTotalResponses } from "~/lib/responses/stats";
 import { getEditionImageUrl } from "@devographics/helpers";
 import { publicConfig } from "~/config/public";
 import { T } from "@devographics/react-i18n";
+import TokyoDevNewsletterSignup from "../share/TokyoDevNewsletterSignup";
 
 const goal = 1000;
 
@@ -93,6 +94,10 @@ export const Finish = async ({
 
       {enableReadingList && response && (
         <ReadingListResults response={response} edition={edition} />
+      )}
+
+      {process.env.NEXT_PUBLIC_CONFIG === "tokyodev" && (
+        <TokyoDevNewsletterSignup />
       )}
     </div>
   );
