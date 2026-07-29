@@ -15,6 +15,7 @@ packages:
     - 'homepage'
     - 'graphiql'
     - 'dot_com'
+    - 'directory'
 
 # pnpm 11 no longer reads the yarn-style "resolutions" field from package.json;
 # overrides must live here instead

@@ -299,11 +299,24 @@ importers:
         specifier: 5.6.2
         version: 5.6.2
 
+  directory:
+    dependencies:
+      '@devographics/fetch':
+        specifier: workspace:1.0.0
+        version: link:../shared/fetch
+    devDependencies:
+      '@rollup/plugin-yaml':
+        specifier: ^4.1.2
+        version: 4.1.2(rollup@4.62.2)
+      astro:
+        specifier: ^5.16.6
+        version: 5.18.2(@types/node@25.9.4)(@upstash/redis@1.38.0)(ioredis@5.11.1)(jiti@2.7.0)(rollup@4.62.2)(sass@1.101.0)(supports-color@5.5.0)(terser@5.48.0)(typescript@5.9.3)(yaml@2.9.0)
+
   dot_com:
     dependencies:
       '@astrojs/mdx':
         specifier: ^4.0.3
-        version: 4.3.14(astro@5.18.2(@types/node@25.9.4)(@upstash/redis@1.38.0)(ioredis@5.11.1)(jiti@2.7.0)(rollup@4.62.2)(sass@1.101.0)(supports-color@5.5.0)(terser@5.48.0)(typescript@5.9.3)(yaml@2.9.0))
+        version: 4.3.14(astro@5.18.2(@types/node@25.9.4)(@upstash/redis@1.38.0)(ioredis@5.11.1)(jiti@2.7.0)(rollup@4.62.2)(sass@1.101.0)(terser@5.48.0)(typescript@5.9.3)(yaml@2.9.0))
       '@astrojs/rss':
         specifier: ^4.0.10
         version: 4.0.19
@@ -17241,7 +17254,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/mdx@4.3.14(astro@5.18.2(@types/node@25.9.4)(@upstash/redis@1.38.0)(ioredis@5.11.1)(jiti@2.7.0)(rollup@4.62.2)(sass@1.101.0)(supports-color@5.5.0)(terser@5.48.0)(typescript@5.9.3)(yaml@2.9.0))':
+  '@astrojs/mdx@4.3.14(astro@5.18.2(@types/node@25.9.4)(@upstash/redis@1.38.0)(ioredis@5.11.1)(jiti@2.7.0)(rollup@4.62.2)(sass@1.101.0)(terser@5.48.0)(typescript@5.9.3)(yaml@2.9.0))':
     dependencies:
       '@astrojs/markdown-remark': 6.3.11
       '@mdx-js/mdx': 3.1.1

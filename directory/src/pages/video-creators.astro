@@ -1,0 +1,103 @@
+---
+import { fetchGraphQLApi } from '@devographics/fetch'
+
+const QUERY = `
+query MyQuery {
+  entities(tags: "video_creators") {
+    id
+    youtube {
+      url
+      stats {
+        subscribers
+      }
+    }
+  }
+}
+`
+
+type VideoCreatorEntity = {
+    id: string
+    youtube?: {
+        url?: string
+        stats?: {
+            subscribers?: number
+        }
+    }
+}
+
+const apiUrl = import.meta.env.API_URL
+
+let entities: VideoCreatorEntity[] = []
+let error: string | null = null
+
+if (!apiUrl) {
+    error = 'API_URL environment variable is not set'
+} else {
+    try {
+        const data = await fetchGraphQLApi<{ entities: VideoCreatorEntity[] }>({
+            query: QUERY,
+            apiUrl
+        })
+        entities = (data?.entities ?? [])
+            .slice()
+            .sort(
+                (a, b) =>
+                    (b.youtube?.stats?.subscribers ?? -1) - (a.youtube?.stats?.subscribers ?? -1)
+            )
+    } catch (e: any) {
+        error = e.message
+    }
+}
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Video Creators</title>
+    </head>
+    <body>
+        <h1>Video Creators</h1>
+        {error && <p class="error">Error: {error}</p>}
+        <ol>
+            {
+                entities.map(entity => {
+                    const url = entity.youtube?.url
+                    const subscribers = entity.youtube?.stats?.subscribers
+                    return (
+                        <li>
+                            {url ? (
+                                <a href={url} target="_blank" rel="noopener noreferrer">
+                                    {entity.id}
+                                </a>
+                            ) : (
+                                entity.id
+                            )}
+                            {typeof subscribers === 'number' && (
+                                <span> — {subscribers.toLocaleString()} subscribers</span>
+                            )}
+                        </li>
+                    )
+                })
+            }
+        </ol>
+    </body>
+</html>
+
+<style>
+    body {
+        font-family: system-ui, sans-serif;
+        max-width: 40rem;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+    .error {
+        color: crimson;
+    }
+    ol {
+        padding-left: 1.5rem;
+    }
+    li {
+        margin-bottom: 0.5rem;
+    }
+</style>
