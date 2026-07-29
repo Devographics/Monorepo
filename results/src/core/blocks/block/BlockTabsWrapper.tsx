@@ -19,7 +19,7 @@ import { EditIcon } from '@devographics/icons'
 import BlockQuestion from './BlockQuestion'
 import { BlockDefinition } from 'core/types'
 import { getAllQuestions } from 'core/helpers/options'
-
+import './BlockTabsWrapper.scss'
 export const getRegularTabId = (index: number) => `tab-${index}`
 export const getCustomTabId = (id: string) => `tabCustom-${id}`
 

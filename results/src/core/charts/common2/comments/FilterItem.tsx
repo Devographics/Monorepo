@@ -22,6 +22,7 @@ export const FilterItem = ({
 }) => {
     return (
         <button
+            data-id={id}
             className={`comment-filter-item comment-filter-item-${
                 question.template
             } comment-filter-item-${id} comment-filter-item-${isActive ? 'active' : 'inactive'}`}

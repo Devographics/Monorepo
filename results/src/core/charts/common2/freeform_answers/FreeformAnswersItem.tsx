@@ -279,6 +279,7 @@ const Token = ({
                             <>
                                 <span
                                     key={tokenId}
+                                    data-id={tokenId}
                                     className="token-item-ancestor"
                                     dangerouslySetInnerHTML={{ __html: ancestorLabel }}
                                 />
@@ -290,7 +291,11 @@ const Token = ({
                     })}
                 </div>
             )}
-            <div className="token-item-label" dangerouslySetInnerHTML={{ __html: label }} />
+            <div
+                className="token-item-label"
+                data-id={id}
+                dangerouslySetInnerHTML={{ __html: label }}
+            />
         </div>
     )
 }

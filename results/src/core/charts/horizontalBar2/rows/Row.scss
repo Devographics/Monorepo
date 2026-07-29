@@ -217,6 +217,24 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
+    position: relative;
+
+    // doesn't work yet
+    // &::after {
+    //     display: block;
+    //     position: absolute;
+    //     top: 0;
+    //     bottom: 0;
+    //     right: 0;
+    //     width: 40px;
+    //     z-index: 1;
+    //     background: linear-gradient(
+    //         to left,
+    //         var(--backgroundColor) 20%,
+    //         color-mix(in srgb, var(--backgroundColor) 0%, transparent) 100%
+    //     );
+    //     content: ' ';
+    // }
 }
 .chart-row-heading-content-left {
     display: flex;
@@ -233,6 +251,8 @@
     height: 18px;
     font-size: 0.8rem;
     line-height: 1;
+    z-index: 2;
+    position: relative;
 }
 .chart-row-heading-grouped {
     opacity: 0.5;

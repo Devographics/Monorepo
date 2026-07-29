@@ -57,7 +57,7 @@ export const FilterTokens = ({
                             count={count}
                             isActive={id === tokenFilter}
                             clickHandler={() => {
-                                setTokenFilter(id)
+                                setTokenFilter(tokenFilter === id ? null : id)
                             }}
                         />
                     )
