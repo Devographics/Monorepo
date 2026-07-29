@@ -18,7 +18,15 @@ import { MongoClient, Db, Document } from 'mongodb'
 import { nanoid } from 'nanoid'
 import { getEnvVar, EnvVar } from '@devographics/helpers'
 
-const clients: { [uri: string]: Promise<MongoClient> } = {}
+declare global {
+    // eslint-disable-next-line no-var
+    var _mongoClients: { [uri: string]: Promise<MongoClient> } | undefined
+}
+
+// cached on globalThis so Next.js dev mode's HMR module re-evaluation
+// reuses existing connections instead of leaking a new client (and full
+// replica-set connection pool) on every recompile
+const clients: { [uri: string]: Promise<MongoClient> } = globalThis._mongoClients ?? (globalThis._mongoClients = {})
 
 const connectToDb = async ({ dbUri }: { dbUri: string }) => {
     const mongoClient = new MongoClient(dbUri, {

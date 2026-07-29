@@ -166,6 +166,13 @@
   usedBy:
       - api
 
+- id: YOUTUBE_API_KEY
+  description: YouTube Data API v3 key
+  example: AIzaSyD-...
+  optional: true
+  usedBy:
+      - api
+
 - id: GITHUB_PATH_SURVEYS
   description: Path to surveys repo/directory on GitHub
   example: owner/repo/subdir (subdir is optional)
