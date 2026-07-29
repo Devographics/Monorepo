@@ -137,6 +137,12 @@ YouTube Info
 type YouTube {
     name: String
     url: String
+    stats: YouTubeStats
+}
+
+type YouTubeStats {
+    subscribers: Int
+    generatedAt: String
 }
 
 """

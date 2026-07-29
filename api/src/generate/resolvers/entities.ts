@@ -12,12 +12,11 @@ import {
     ExecutionContext,
     GenericComputeArguments,
     GenericComputeParameters,
-    QuestionApiObject,
     RequestContext,
     ResolverType
 } from '../../types'
 // import projects from '../data/bestofjs.yml'
-import { fetchMdnResource, fetchTwitterUser } from '../../external_apis'
+import { fetchMdnResource, fetchTwitterUser, getYoutubeStatsCached } from '../../external_apis'
 import { computeKey, LogOptions, useCache } from '../../helpers/caching'
 import { getEntity } from '../../load/entities'
 import compact from 'lodash/compact.js'
@@ -228,11 +227,7 @@ export const entityResolverMap: EntityResolverMap = {
             (typeof homepageUrl === 'string' && homepageUrl.includes('youtube')
                 ? homepageUrl
                 : null)
-        if (url) {
-            return { url }
-        } else {
-            return
-        }
+        return url ? { url, id: entity.id } : null
     },
     twitch: async (entity: Entity) => {
         if (!entity) {
@@ -329,6 +324,18 @@ export const entityAppearanceResolverMap = {
             context
         })
         return responses
+    }
+}
+
+export const youtubeResolverMap = {
+    stats: async (
+        youtube: { url: string; id: string },
+        args: any,
+        context: RequestContext
+    ) => {
+        const { url, id } = youtube
+        const key = `api__youtubeStats__${id}`
+        return await getYoutubeStatsCached({ url, key, context })
     }
 }
 

@@ -9,7 +9,8 @@ import { getPath, getSectionType } from './helpers'
 import {
     entitiesResolvers,
     entityAppearanceResolverMap,
-    entityResolverMap
+    entityResolverMap,
+    youtubeResolverMap
 } from './resolvers/entities'
 import { getResponseTypeName } from '../graphql/templates/responses'
 import { RequestContext, SectionApiObject } from '../types'
@@ -89,14 +90,16 @@ export const generateResolvers = async ({
         Surveys: surveysFieldsResolvers,
         ItemComments: commentsResolverMap,
         CreditItem: creditResolverMap,
-        Entity: entityResolverMap,
-        EntityAppearance: entityAppearanceResolverMap,
         EditionMetadata: editionMetadataResolverMap,
         SectionMetadata: sectionMetadataResolverMap,
         QuestionMetadata: questionMetadataResolverMap,
         SitemapBlock: sitemapBlockResolverMap,
         SitemapBlockVariant: sitemapBlockResolverMap,
         CardinalitiesItem: cardinalitiesResolverMap,
+        // entities
+        Entity: entityResolverMap,
+        EntityAppearance: entityAppearanceResolverMap,
+        YouTube: youtubeResolverMap,
         // Scalars
         StringOrInt: new GraphQLScalarType(stringOrInt),
         StringOrFloatOrArray: new GraphQLScalarType(StringOrFloatOrArray)
