@@ -441,12 +441,11 @@
               parameters:
                   sort: { property: medianByFacet }
 
-      - id: figure_css_in_js
-        template: figure
-        variables:
-            value: 29
-            unit: percentage
-
+      # - id: figure_css_in_js
+      #   template: figure
+      #   variables:
+      #       value: 29
+      #       unit: percentage
       - id: css_in_js
         template: multiple_options2_combined
         i18nNamespace: tools
@@ -822,7 +821,7 @@
       - id: awards
         template: awards
         variables:
-            entities: '"has_selector","aspect_ratio","css_nesting","css_gap_decorations","if_function","scroll_state","sibling_index","sibling_count","at_function","anchor_positioning","viewport_percentage_length_units","at_container_size","aspect_ratio","wide_gamut_colors","css_carousels","gradient_color_spaces","subgrid","css_nesting"'
+            entities: '"has_selector","aspect_ratio","css_nesting","css_gap_decorations","if_function","scroll_state","sibling_index","sibling_count","at_function","anchor_positioning","viewport_percentage_length_units","at_container_size","aspect_ratio","wide_gamut_colors","css_carousels","gradient_color_spaces","subgrid","css_nesting", "line_clamp"'
         awards:
             - id: most_used_feature_award
               template: award
