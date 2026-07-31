@@ -1,10 +1,18 @@
 ---
 import { fetchGraphQLApi } from '@devographics/fetch'
+import type { Entity } from '@devographics/types'
 
 const QUERY = `
 query MyQuery {
   entities(tags: "video_creators") {
     id
+    name
+    twitter {
+      url
+    }
+    bluesky {
+      url
+    }
     youtube {
       url
       stats {
@@ -15,26 +23,16 @@ query MyQuery {
 }
 `
 
-type VideoCreatorEntity = {
-    id: string
-    youtube?: {
-        url?: string
-        stats?: {
-            subscribers?: number
-        }
-    }
-}
-
 const apiUrl = import.meta.env.API_URL
 
-let entities: VideoCreatorEntity[] = []
+let entities: Entity[] = []
 let error: string | null = null
 
 if (!apiUrl) {
     error = 'API_URL environment variable is not set'
 } else {
     try {
-        const data = await fetchGraphQLApi<{ entities: VideoCreatorEntity[] }>({
+        const data = await fetchGraphQLApi<{ entities: Entity[] }>({
             query: QUERY,
             apiUrl
         })
@@ -61,22 +59,49 @@ if (!apiUrl) {
         {error && <p class="error">Error: {error}</p>}
         <ol>
             {
-                entities.map(entity => {
-                    const url = entity.youtube?.url
+                entities.map((entity, i) => {
+                    const { name, id, youtube, twitter, bluesky } = entity
+                    const url = youtube?.url
                     const subscribers = entity.youtube?.stats?.subscribers
                     return (
-                        <li>
-                            {url ? (
-                                <a href={url} target="_blank" rel="noopener noreferrer">
-                                    {entity.id}
-                                </a>
-                            ) : (
-                                entity.id
-                            )}
-                            {typeof subscribers === 'number' && (
-                                <span> — {subscribers.toLocaleString()} subscribers</span>
-                            )}
-                        </li>
+                        <div>
+                            <h3>
+                                {i}. {name}
+                            </h3>
+                            <ul>
+                                {typeof subscribers === 'number' && (
+                                    <li>
+                                        {' '}
+                                        <a href={url} target="_blank" rel="noopener noreferrer">
+                                            YouTube – {subscribers.toLocaleString()} subscribers
+                                        </a>
+                                    </li>
+                                )}
+                                {twitter && (
+                                    <li>
+                                        <a
+                                            href={twitter.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Twitter
+                                        </a>
+                                    </li>
+                                )}
+
+                                {bluesky && (
+                                    <li>
+                                        <a
+                                            href={bluesky.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Bluesky
+                                        </a>
+                                    </li>
+                                )}
+                            </ul>
+                        </div>
                     )
                 })
             }

@@ -304,6 +304,9 @@ importers:
       '@devographics/fetch':
         specifier: workspace:1.0.0
         version: link:../shared/fetch
+      '@devographics/types':
+        specifier: workspace:1.0.0
+        version: link:../shared/types
     devDependencies:
       '@rollup/plugin-yaml':
         specifier: ^4.1.2

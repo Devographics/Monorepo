@@ -356,17 +356,17 @@
             # - template: men_vs_non_men
             # - template: white_vs_non_white
 
-      - id: higher_education_degree
-        template: multiple_options2
-        variants:
-            - template: vs_salary
-              filtersState:
-                  facet:
-                      sectionId: workplace
-                      id: yearly_salary
-            # - template: vs_gender
-            # - template: men_vs_non_men
-            # - template: white_vs_non_white
+      # - id: higher_education_degree
+      #   template: multiple_options2
+      #   variants:
+      #       - template: vs_salary
+      #         filtersState:
+      #             facet:
+      #                 sectionId: workplace
+      #                 id: yearly_salary
+      #       # - template: vs_gender
+      #       # - template: men_vs_non_men
+      #       # - template: white_vs_non_white
 
       #   - id: variants_hint
       #     template: hint
@@ -567,16 +567,16 @@
                       sectionId: career
                       id: career_security
 
-- id: lola_odelola
-  path: /lola-odelola
-  variables:
-      imageUrl: https://assets.devographics.com/avatars/lola_odelola.jpg
-  blocks:
-      - id: conclusion_lola
-        template: conclusion
-        variables:
-            author: lola_odelola
-            entities: '"lola_odelola"'
+# - id: lola_odelola
+#   path: /lola-odelola
+#   variables:
+#       imageUrl: https://assets.devographics.com/avatars/lola_odelola.jpg
+#   blocks:
+#       - id: conclusion_lola
+#         template: conclusion
+#         variables:
+#             author: lola_odelola
+#             entities: '"lola_odelola"'
 
 - id: workplace
   path: /workplace
@@ -926,7 +926,7 @@
         template: single_option2
 
 - id: ai_usage
-  path: /technology
+  path: /ai
   blocks:
       - template: page_introduction
 
@@ -943,166 +943,21 @@
         template: single_option2
 
       - id: ai_mental_state
-        template: opinion
+        template: opinion2
 
       - id: ai_outlook
         template: multiple_options2_freeform
 
-# - id: technology
-#   path: /technology
+# - id: declan_chidlow
+#   path: /declan-chidlow
+#   variables:
+#       imageUrl: https://assets.devographics.com/avatars/declan_chidlow.jpg
 #   blocks:
-#       - template: page_introduction
-
-#       - id: mobile_os
-#         template: single_option2_combined
-
-#       - id: desktop_os
-#         template: single_option2_combined
-
-#       - id: programming_languages
-#         template: multiple_options2_combined
-#         paramters:
-#             limit: 40
-#         variants:
-#             - template: vs_salary
-#               parameters:
-#                   sort: { property: medianByFacet }
-#                   limit: 40
-#               filtersState:
-#                   facet:
-#                       sectionId: workplace
-#                       id: yearly_salary
-#             - template: vs_years_of_experience
-#               parameters:
-#                   sort: { property: medianByFacet }
-#                   limit: 40
-#               filtersState:
-#                   facet:
-#                       sectionId: career
-#                       id: years_of_experience
-
-#       - id: storyblok_technologies
-#         template: midpage_resource
+#       - id: conclusion_declan
+#         template: conclusion
 #         variables:
-#             id: storyblok_technologies
-#             labelId: storyblok.technologies
-#             imageUrl: https://a.storyblok.com/f/88751/2600x1214/77a80a3235/hero-visual-editor-ai-blue.png/m/2600x0/
-#             logoUrl: https://assets.devographics.com/sponsors/storyblok-light.svg
-#             link: https://www.storyblok.com/technologies/?utm_source=stateofdevs&utm_medium=website&utm_campaign=devs2025
-
-#       - id: productivity_apps
-#         template: multiple_options2_combined
-#         variants:
-#             - id: productivity_apps_vs_company_size
-#               template: vs_facet
-#               queryOptions:
-#                   subField: combined
-#               parameters:
-#                   cutoff: 100
-#                   limit: 20
-#                   sort: { property: medianByFacet }
-#               filtersState:
-#                   facet:
-#                       sectionId: workplace
-#                       id: company_size
-
-#       - id: chat_apps
-#         template: multiple_options2_combined
-
-#       - id: social_media
-#         template: multiple_options2_combined
-#         variants:
-#             - template: vs_age
-#               parameters:
-#                   sort: { property: medianByFacet }
-#                   cutoff: 20
-#               filtersState:
-#                   facet:
-#                       sectionId: health
-#                       id: age
-
-#       - id: figure_community_involvement
-#         template: figure
-#         variables:
-#             value: 40
-#             unit: count
-
-#       - id: community_involvement
-#         template: multiple_options2_combined
-#         variants:
-#             - template: vs_age
-#               parameters:
-#                   sort: { property: medianByFacet }
-#               filtersState:
-#                   facet:
-#                       sectionId: health
-#                       id: age
-#             - id: community_involvement_by_gender
-#               template: vs_facet
-#               queryOptions:
-#                   sectionId: technology
-#                   subField: responses
-#               fieldId: community_involvement
-#               tabId: tabs.by_gender
-#               parameters:
-#                   limit: 20
-#               filtersState:
-#                   filters:
-#                       - conditions:
-#                             - fieldId: gender
-#                               sectionId: user_info
-#                               operator: in
-#                               value: [male]
-#                       - conditions:
-#                             - fieldId: gender
-#                               sectionId: user_info
-#                               operator: nin
-#                               value: [male]
-
-#             # - template: vs_age
-#             #   queryOptions:
-#             #       subField: combined
-#             #   parameters:
-#             #       cutoff: 10
-#             #       sort: { property: medianByFacet }
-#             #   filtersState:
-#             #       facet:
-#             #           sectionId: health
-#             #           id: age
-
-#       - id: community_contributions
-#         template: multiple_options2_combined
-#         variants:
-#             - template: men_vs_non_men
-#               queryOptions:
-#                   subField: combined
-
-#       - id: figure_open_source_involvement
-#         template: figure
-#         variables:
-#             value: 15
-#             unit: percentage
-
-#       - id: open_source_involvement
-#         template: multiple_options2_combined
-#         variants:
-#             - template: men_vs_non_men
-#               queryOptions:
-#                   subField: combined
-#             - template: white_vs_non_white
-#               queryOptions:
-#                   subField: combined
-
-- id: declan_chidlow
-  path: /declan-chidlow
-  variables:
-      imageUrl: https://assets.devographics.com/avatars/declan_chidlow.jpg
-  blocks:
-      - id: conclusion_declan
-        template: conclusion
-        variables:
-            author: declan_chidlow
-            entities: '"declan_chidlow"'
+#             author: declan_chidlow
+#             entities: '"declan_chidlow"'
 
 - id: health
   path: /health
@@ -1534,16 +1389,16 @@
                       sectionId: worldview
                       id: overall_happiness
 
-- id: josh_comeau
-  path: /josh-comeau
-  variables:
-      imageUrl: https://assets.devographics.com/avatars/josh_comeau.jpg
-  blocks:
-      - id: conclusion_josh
-        template: conclusion
-        variables:
-            author: josh_comeau
-            entities: '"josh_comeau"'
+# - id: josh_comeau
+#   path: /josh-comeau
+#   variables:
+#       imageUrl: https://assets.devographics.com/avatars/josh_comeau.jpg
+#   blocks:
+#       - id: conclusion_josh
+#         template: conclusion
+#         variables:
+#             author: josh_comeau
+#             entities: '"josh_comeau"'
 
 - id: hobbies
   path: /hobbies
@@ -1606,117 +1461,6 @@
         variables:
             value: 47
             unit: count
-
-      # - id: favorite_musical_artists
-      #   template: multiple_options2_freeform
-      #   variants:
-      #       - id: favorite_musical_artists_vs_age
-      #         template: vs_facet
-      #         queryOptions:
-      #             sectionId: hobbies
-      #         fieldId: favorite_musical_artists
-      #         tabId: tabs.by_age
-      #         parameters:
-      #             cutoff: 40
-      #             sort: { property: medianByFacet, order: asc }
-      #         filtersState:
-      #             facet:
-      #                 sectionId: health
-      #                 id: age
-      #       - id: favorite_musical_artists_by_gender
-      #         template: vs_facet
-      #         queryOptions:
-      #             sectionId: hobbies
-      #         fieldId: favorite_musical_artists
-      #         tabId: tabs.by_gender
-      #         parameters:
-      #             limit: 20
-      #         filtersState:
-      #             filters:
-      #                 - conditions:
-      #                       - fieldId: gender
-      #                         sectionId: user_info
-      #                         operator: in
-      #                         value: [male]
-      #                 - conditions:
-      #                       - fieldId: gender
-      #                         sectionId: user_info
-      #                         operator: nin
-      #                         value: [male]
-
-      # - id: favorite_movies
-      #   template: multiple_options2_freeform
-      #   variants:
-      #       - id: favorite_movies_vs_age
-      #         template: vs_facet
-      #         queryOptions:
-      #             sectionId: hobbies
-      #         fieldId: favorite_movies
-      #         tabId: tabs.by_age
-      #         parameters:
-      #             cutoff: 40
-      #             sort: { property: medianByFacet, order: asc }
-      #         filtersState:
-      #             facet:
-      #                 sectionId: health
-      #                 id: age
-      #       - id: favorite_movies_by_gender
-      #         template: vs_facet
-      #         queryOptions:
-      #             sectionId: hobbies
-      #         fieldId: favorite_movies
-      #         tabId: tabs.by_gender
-      #         parameters:
-      #             limit: 20
-      #         filtersState:
-      #             filters:
-      #                 - conditions:
-      #                       - fieldId: gender
-      #                         sectionId: user_info
-      #                         operator: in
-      #                         value: [male]
-      #                 - conditions:
-      #                       - fieldId: gender
-      #                         sectionId: user_info
-      #                         operator: nin
-      #                         value: [male]
-
-      # - id: favorite_tv
-      #   template: multiple_options2_freeform
-      #   variants:
-      #       - id: favorite_tv_vs_age
-      #         template: vs_facet
-      #         queryOptions:
-      #             sectionId: hobbies
-      #         fieldId: favorite_tv
-      #         tabId: tabs.by_age
-      #         parameters:
-      #             cutoff: 40
-      #             sort: { property: medianByFacet, order: asc }
-      #         filtersState:
-      #             facet:
-      #                 sectionId: health
-      #                 id: age
-      #       - id: favorite_tv_by_gender
-      #         template: vs_facet
-      #         queryOptions:
-      #             sectionId: hobbies
-      #         fieldId: favorite_tv
-      #         tabId: tabs.by_gender
-      #         parameters:
-      #             limit: 20
-      #         filtersState:
-      #             filters:
-      #                 - conditions:
-      #                       - fieldId: gender
-      #                         sectionId: user_info
-      #                         operator: in
-      #                         value: [male]
-      #                 - conditions:
-      #                       - fieldId: gender
-      #                         sectionId: user_info
-      #                         operator: nin
-      #                         value: [male]
 
       - id: favorite_beverages
         template: multiple_options2_freeform
