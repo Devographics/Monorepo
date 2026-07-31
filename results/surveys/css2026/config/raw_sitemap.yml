@@ -574,7 +574,9 @@
       #       url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units/Using_CSS_math_functions
 
       - id: css_missing_features
-        template: multiple_options2_freeform
+        template: nested_pain_points
+        descriptionId: features.missing_features.default
+        tabId: usage.css_missing_features
 
       - id: favorite_new_features
         template: multiple_options2_freeform
