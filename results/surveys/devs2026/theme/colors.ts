@@ -145,39 +145,38 @@ const distinct = [
 
 export const surveyColorTheme = {
     lightOnDark: {
-        primary: { default: '#ff8196', darker: '#c0384f' },
-        background: { default: '#231F20', alt: '#393234', alt2: '#55474a' },
-        text: { default: '#f8e6e9' },
+        primary: { default: '#BDFDFF', darker: '#299295' },
+        background: { default: '#2E3337', alt: '#29333a', alt2: 'rgb(43, 52, 59)' },
+        text: { default: '#e2feff' },
         experience: {
-            heard: 'rgb(166, 183, 245)',
-            used: 'rgb(32, 111, 175)',
-            never_heard: 'rgb(139, 128, 131)'
+            heard: 'rgb(166, 223, 245)',
+            used: 'rgb(32, 146, 175)',
+            never_heard: 'rgb(128, 137, 139)'
         },
         sentiment: {
-            positive: '#5ce58cff',
-            negative: 'rgb(232, 64, 103)',
-            neutral: '#8b8b80ff'
+            positive: 'rgb(92, 229, 186)',
+            negative: 'rgb(232, 64, 131)',
+            neutral: 'rgb(128, 137, 139)'
         },
         velocity: [
-            'hsl(350, 61%, 20%)',
-            'hsl(350, 61%, 25%)',
-            'hsl(350, 61%, 30%)',
-            'hsl(350, 61%, 35%)',
-            'hsl(350, 61%, 40%)',
-            'hsl(350, 61%, 45%)',
-            'hsl(350, 61%, 50%)',
-            'hsl(350, 61%, 55%)',
-            'hsl(350, 61%, 60%)',
-            'hsl(350, 61%, 65%)',
-            'hsl(350, 61%, 70%)',
-            'hsl(350, 61%, 75%)',
-            'hsl(350, 61%, 80%)',
-            'hsl(350, 61%, 85%)'
+            'hsl(182, 100%, 20%)',
+            'hsl(182, 100%, 25%)',
+            'hsl(182, 100%, 30%)',
+            'hsl(182, 100%, 35%)',
+            'hsl(182, 100%, 40%)',
+            'hsl(182, 100%, 45%)',
+            'hsl(182, 100%, 50%)',
+            'hsl(182, 100%, 55%)',
+            'hsl(182, 100%, 60%)',
+            'hsl(182, 100%, 65%)',
+            'hsl(182, 100%, 70%)',
+            'hsl(182, 100%, 75%)',
+            'hsl(182, 100%, 80%)',
+            'hsl(182, 100%, 85%)'
         ]
     }
 }
-
-const stateOfCSSThemeColors: DefaultTheme['colors'] = {
+const stateOfDevsThemeColors: DefaultTheme['colors'] = {
     background: getThemeColor('background.default'),
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
     backgroundAlt3: '#27242E',
@@ -385,4 +384,4 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     velocity
 }
 
-export default stateOfCSSThemeColors
+export default stateOfDevsThemeColors

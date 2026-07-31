@@ -156,40 +156,6 @@ const distinct = [
     colors.kaki
 ]
 
-export const surveyColorTheme = {
-    lightOnDark: {
-        primary: { default: '#BDFDFF', darker: '#299295' },
-        background: { default: '#2E3337', alt: '#29333a', alt2: 'rgb(43, 52, 59)' },
-        text: { default: '#e2feff' },
-        experience: {
-            heard: 'rgb(166, 223, 245)',
-            used: 'rgb(32, 146, 175)',
-            never_heard: 'rgb(128, 137, 139)'
-        },
-        sentiment: {
-            positive: 'rgb(92, 229, 186)',
-            negative: 'rgb(232, 64, 131)',
-            neutral: 'rgb(128, 137, 139)'
-        },
-        velocity: [
-            'hsl(182, 100%, 20%)',
-            'hsl(182, 100%, 25%)',
-            'hsl(182, 100%, 30%)',
-            'hsl(182, 100%, 35%)',
-            'hsl(182, 100%, 40%)',
-            'hsl(182, 100%, 45%)',
-            'hsl(182, 100%, 50%)',
-            'hsl(182, 100%, 55%)',
-            'hsl(182, 100%, 60%)',
-            'hsl(182, 100%, 65%)',
-            'hsl(182, 100%, 70%)',
-            'hsl(182, 100%, 75%)',
-            'hsl(182, 100%, 80%)',
-            'hsl(182, 100%, 85%)'
-        ]
-    }
-}
-
 const stateOfDevsThemeColors: DefaultTheme['colors'] = {
     background: '#242B21', // main bg
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',

@@ -1715,16 +1715,16 @@
                       sectionId: _user_metadata
                       id: source
 
-- id: anjana_vakil
-  path: /anjana-vakil
-  variables:
-      imageUrl: https://assets.devographics.com/avatars/anjana_vakil.jpg
-  blocks:
-      - id: conclusion_anjana
-        template: conclusion
-        variables:
-            author: anjana_vakil
-            entities: '"anjana_vakil"'
+# - id: anjana_vakil
+#   path: /anjana-vakil
+#   variables:
+#       imageUrl: https://assets.devographics.com/avatars/anjana_vakil.jpg
+#   blocks:
+#       - id: conclusion_anjana
+#         template: conclusion
+#         variables:
+#             author: anjana_vakil
+#             entities: '"anjana_vakil"'
 
 - id: about
   path: /about
