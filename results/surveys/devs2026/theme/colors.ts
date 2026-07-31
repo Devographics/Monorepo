@@ -146,7 +146,7 @@ const distinct = [
 export const surveyColorTheme = {
     lightOnDark: {
         primary: { default: '#BDFDFF', darker: '#299295' },
-        background: { default: '#2E3337', alt: '#29333a', alt2: 'rgb(43, 52, 59)' },
+        background: { default: '#272b2e', alt: '#303d47', alt2: '#406785' },
         text: { default: '#e2feff' },
         experience: {
             heard: 'rgb(166, 223, 245)',
