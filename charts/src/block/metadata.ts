@@ -61,11 +61,11 @@ const getBlockTitle = ({
     pageContext: PageContextValue
     getString: StringTranslator
 }) => {
-    const entity = block?.entity
-    const entityName = entity?.nameClean || entity?.name
+    // const entity = block?.entity
+    // const entityName = entity?.nameClean || entity?.name
     const key = getBlockTitleKey({ block, pageContext })
     const translation = getString(key)
-    return translation?.tClean || translation?.t || entityName
+    return translation?.tClean || translation?.t
 }
 
 /*
@@ -93,7 +93,7 @@ const getBlockDescription = ({
         isHtml?: boolean
     }*/
 }) => {
-    const key = block.descriptionId || `${getBlockKey({ block, pageContext })}.description`
+    const key = block.descriptionKey || `${getBlockKey({ block, pageContext })}.description`
     const translation = getString(key)
     return translation?.tClean || translation?.t
 }
