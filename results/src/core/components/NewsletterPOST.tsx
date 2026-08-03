@@ -52,15 +52,20 @@ export default function NewsletterPOST({ locale }: { locale?: any }) {
         }
     }, [])
 
-    const useScript = process.env.GATSBY_EMAIL_USE_TOKYODEV_SCRIPT === 'true'
+    const isTokyoDev = process.env.GATSBY_EMAIL_USE_TOKYODEV_SCRIPT === 'true'
+    const useScript = isTokyoDev
     return (
         <div className="newsletter">
-            <h3 className="newsletter-heading">
-                <T k="newsletter.stay_tuned" />
-            </h3>
-            <p className="newsletter-details">
-                <T k="newsletter.leave_your_email" />
-            </p>{' '}
+            {!isTokyoDev && (
+                <>
+                    <h3 className="newsletter-heading">
+                        <T k="newsletter.stay_tuned" />
+                    </h3>
+                    <p className="newsletter-details">
+                        <T k="newsletter.leave_your_email" />
+                    </p>{' '}
+                </>
+            )}
             {useScript ? (
                 <div id="mailing-list-container"></div>
             ) : (

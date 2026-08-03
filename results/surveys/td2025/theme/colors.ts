@@ -1,5 +1,6 @@
 import { DefaultTheme } from 'styled-components'
 import colors_ from 'core/theme/colors'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const colors = {
     ...colors_,
@@ -151,6 +152,40 @@ const distinct = [
     colors.kaki
 ]
 
+export const surveyColorTheme = {
+    lightOnDark: {
+        primary: { default: '#ff8196', darker: '#c0384f' },
+        background: { default: '#231F20', alt: '#393234', alt2: '#55474a' },
+        text: { default: '#f8e6e9' },
+        experience: {
+            heard: 'rgb(166, 183, 245)',
+            used: 'rgb(32, 111, 175)',
+            never_heard: 'rgb(139, 128, 131)'
+        },
+        sentiment: {
+            positive: '#5ce58cff',
+            negative: 'rgb(232, 64, 103)',
+            neutral: '#8b8b80ff'
+        },
+        velocity: [
+            'hsl(350, 61%, 20%)',
+            'hsl(350, 61%, 25%)',
+            'hsl(350, 61%, 30%)',
+            'hsl(350, 61%, 35%)',
+            'hsl(350, 61%, 40%)',
+            'hsl(350, 61%, 45%)',
+            'hsl(350, 61%, 50%)',
+            'hsl(350, 61%, 55%)',
+            'hsl(350, 61%, 60%)',
+            'hsl(350, 61%, 65%)',
+            'hsl(350, 61%, 70%)',
+            'hsl(350, 61%, 75%)',
+            'hsl(350, 61%, 80%)',
+            'hsl(350, 61%, 85%)'
+        ]
+    }
+}
+
 const stateOfJSThemeColors: DefaultTheme['colors'] = {
     background: '#030d1f',
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
@@ -275,6 +310,11 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
             build_tools: colors.teal,
             mobile_desktop: colors.green,
             monorepo_tools: colors.navyLighter
+        },
+        sentiment: {
+            positive: [getThemeColor('sentiment.positive'), getThemeColor('sentiment.positive')],
+            neutral: [getThemeColor('sentiment.neutral'), getThemeColor('sentiment.neutral')],
+            negative: [getThemeColor('sentiment.negative'), getThemeColor('sentiment.negative')]
         },
         features: {
             used: [colors.lilacDarkest, colors.lilacDarkerer],
