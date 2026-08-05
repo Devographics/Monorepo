@@ -45,7 +45,7 @@ import {
  * @returns
  */
 export const getFieldsToCopy = (
-  editionId: String
+  editionId: String,
 ): Array<
   [keyof GenericResponseDocument] | [keyof GenericResponseDocument, string]
 > => [
@@ -105,6 +105,8 @@ export const copyFields: StepFunction = async ({
   return normResp;
 };
 
+const countryFields = ["country", "country_of_origin"];
+
 export const normalizeCountryField: StepFunction = async ({
   normResp: normResp_,
   log,
@@ -112,24 +114,31 @@ export const normalizeCountryField: StepFunction = async ({
   const normResp = clone(normResp_);
   /*
 
-  5c. Normalize country (if provided)
+  5c. Normalize country fields (if provided)
   
   */
-  if (normResp?.user_info?.country) {
-    set(normResp, "user_info.country_alpha2", normResp.user_info.country);
-    const countryNormalized = countries.find(
-      (c) => c["alpha-2"] === normResp?.user_info?.country
-    );
-    if (countryNormalized) {
-      set(normResp, "user_info.country_name", countryNormalized.name);
-      set(normResp, "user_info.country_alpha3", countryNormalized["alpha-3"]);
-    } else {
-      // if (log) {
-      //   await logToFile(
-      //     "countries_normalization.txt",
-      //     result.user_info.country
-      //   );
-      // }
+  for (const countryField of countryFields) {
+    const countryValue = normResp?.user_info?.[countryField];
+    if (countryValue) {
+      set(normResp, `user_info.${countryField}_alpha2`, countryValue);
+      const countryNormalized = countries.find(
+        (c) => c["alpha-2"] === countryValue,
+      );
+      if (countryNormalized) {
+        set(normResp, `user_info.${countryField}_name`, countryNormalized.name);
+        set(
+          normResp,
+          `user_info.${countryField}_alpha3`,
+          countryNormalized["alpha-3"],
+        );
+      } else {
+        // if (log) {
+        //   await logToFile(
+        //     "countries_normalization.txt",
+        //     result.user_info.country
+        //   );
+        // }
+      }
     }
   }
   return normResp;
@@ -273,7 +282,7 @@ export const calculateCardinalities: StepFunction = async ({
   const _cardinalities = {};
   const normResp = clone(normResp_);
   const toolsSections = edition.sections.filter(
-    (s) => s.template && ["tool", "toolv3"].includes(s.template)
+    (s) => s.template && ["tool", "toolv3"].includes(s.template),
   );
   for (const section of toolsSections) {
     let heardCount = 0,
