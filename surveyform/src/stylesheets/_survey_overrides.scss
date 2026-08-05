@@ -21,9 +21,21 @@ These styles will only be active for specific surveys and/or editions
   --bg-color-light: rgb(24, 42, 74);
   --link-color: rgb(129 140 248);
 
-  font-family: Inter var, ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans,
-    sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
+  font-family:
+    Inter var,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Helvetica Neue,
+    Arial,
+    Noto Sans,
+    sans-serif,
+    Apple Color Emoji,
+    Segoe UI Emoji,
+    Segoe UI Symbol,
     Noto Color Emoji;
 
   // font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
@@ -124,5 +136,10 @@ These styles will only be active for specific surveys and/or editions
 
   .comment-trigger-wrapper {
     display: none;
+  }
+  .question-label-new {
+    &::after {
+      content: "🆕" !important;
+    }
   }
 }

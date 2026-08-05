@@ -14,9 +14,10 @@ export const NewQuestionIndicator = () => {
         </Tooltip>
       }
     >
-      <span className="question-label-new" title={t("general.newly_added")}>
-        ✨
-      </span>
+      <span
+        className="question-label-new"
+        title={t("general.newly_added")}
+      ></span>
     </OverlayTrigger>
   );
 };

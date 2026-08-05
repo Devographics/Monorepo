@@ -89,6 +89,10 @@
       // padding: 1px 5px;
       // font-size: typography.$smaller-font;
       // @include font-regular;
+      &::after {
+        display: block;
+        content: "✨";
+      }
     }
     &-number {
       opacity: 0.3;
