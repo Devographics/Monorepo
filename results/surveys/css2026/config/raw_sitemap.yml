@@ -52,7 +52,8 @@
         showInNav: false
 
       - id: favorite_new_features
-        template: multiple_options2_freeform
+        # template: multiple_options2_freeform
+        template: nested_pain_points
         titleKey: usage.favorite_new_features
         questionKey: usage.favorite_new_features.question
         showAverage: true
@@ -579,7 +580,8 @@
         tabId: usage.css_missing_features
 
       - id: favorite_new_features
-        template: multiple_options2_freeform
+        # template: multiple_options2_freeform
+        template: nested_pain_points_features
 
       # - id: saron_yitbarek
       #   template: picks
