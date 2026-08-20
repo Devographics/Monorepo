@@ -15,6 +15,8 @@ import { useI18n } from '@devographics/react-i18n'
 import { useEntities } from 'core/helpers/entities'
 import Avatar, { AvatarNotLink } from '../Avatar'
 import './Nav.scss'
+import { NewQuestionIndicator } from 'core/blocks/block/NewQuestionIndicator'
+import { getAllQuestions } from 'core/helpers/options'
 
 interface PageConfig {
     is_hidden?: boolean
@@ -207,6 +209,9 @@ const BlockItem = ({ block, closeSidebar, page }) => {
     })
     const emojiKey = `${key}.emoji`
     const hasEmoji = !getString(emojiKey).missing
+
+    const question = getAllQuestions(pageContext.currentEdition).find(q => q.id === block.id)
+
     return (
         <InternalLinkWrapper_>
             <InternalLink_
@@ -222,7 +227,8 @@ const BlockItem = ({ block, closeSidebar, page }) => {
                     </span>
                 )}
                 {label}
-                {/* <T k={getBlockTitleKey({ block: { ...block, sectionId: page.id } })} /> */}
+                {/* <T k={getBlockTitleKey({ block: { ...block, sectionId: page.id } })} /> */}{' '}
+                <NewQuestionIndicator question={question} />
             </InternalLink_>
         </InternalLinkWrapper_>
     )

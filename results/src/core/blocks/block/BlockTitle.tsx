@@ -13,6 +13,8 @@ import { BlockVariantDefinition } from 'core/types'
 import { getBlockSeriesData } from 'core/helpers/data'
 import { CommentsTrigger } from 'core/charts/common2/comments/CommentsTrigger'
 import T from 'core/i18n/T'
+import { NewQuestionIndicator } from './NewQuestionIndicator'
+import { QuestionMetadata } from '@devographics/types'
 
 const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
     const { getString } = useI18n()
@@ -45,9 +47,11 @@ const BlockTitle = ({
     view,
     setView,
     units,
-    setUnits
+    setUnits,
+    question
 }: {
     block: BlockVariantDefinition
+    question?: QuestionMetadata
 }) => {
     const { id, entity } = block
     const completion =
@@ -56,7 +60,6 @@ const BlockTitle = ({
     const pageContext = usePageContext()
     const { isCapturing, currentEdition } = pageContext
 
-    const { enableChartSponsorships } = currentEdition
     const { getFallbacks } = useI18n()
 
     const entities = useEntities()
@@ -105,6 +108,7 @@ const BlockTitle = ({
                             {/* {!isCapturing && enableChartSponsorships && (
                                 <BlockSponsor block={block} />
                             )} */}
+                            <NewQuestionIndicator question={question} />
                         </div>
                     </BlockTitleText>
                     {/* <Popover trigger={<More />}>

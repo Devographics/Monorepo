@@ -89,7 +89,7 @@ export const TabsWrapper = ({
     return (
         <Wrapper className={`tabs-wrapper tabs-wrapper-${block.id}`} withMargin={withMargin}>
             <BlockHeaderTop_ className="block-header-top">
-                <BlockTitle block={firstBlockVariant} />
+                <BlockTitle block={firstBlockVariant} question={question} />
                 {/* <BlockDescriptionContents block={firstBlockVariant} /> */}
                 <BlockTakeaway block={firstBlockVariant} />
             </BlockHeaderTop_>

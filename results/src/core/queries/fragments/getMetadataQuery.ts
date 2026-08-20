@@ -92,6 +92,7 @@ query {
                                 allowMultiple
                                 allowComment
                                 allowOther
+                                yearAdded
                                 entity {
                                     id
                                     name
