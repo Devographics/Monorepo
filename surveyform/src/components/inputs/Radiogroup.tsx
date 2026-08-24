@@ -9,6 +9,8 @@ import isNil from "lodash/isNil";
 import { useFormStateContext } from "../form/FormStateContext";
 import { OPTION_NA } from "@devographics/types";
 import { FormCheck, FormCheckInput, FormCheckLabel } from "../form/FormCheck";
+import { isNumber } from "util";
+import { convertValueToNumber } from "./helpers";
 
 export const FormComponentRadioGroup = (props: FormInputProps) => {
   const { response } = useFormStateContext();
@@ -18,7 +20,7 @@ export const FormComponentRadioGroup = (props: FormInputProps) => {
 
   if (!options_) {
     throw new Error(
-      `Question ${question.id} does not have any options defined.`
+      `Question ${question.id} does not have any options defined.`,
     );
   }
 
@@ -114,14 +116,21 @@ const Radio = ({ index, value, option, hasValue, formProps, setShowOther }) => {
             className={checkClass}
             onClick={(e) => {
               const target = e.currentTarget;
-              const clickedValue = target.value;
+              const v = target.value;
+              const clickedValue = question.optionsAreNumeric
+                ? convertValueToNumber(v, question)
+                : v;
+
               if (clickedValue === value) {
                 updateCurrentValues({ [path]: null });
               }
             }}
             onChange={(e) => {
               const v = e.currentTarget.value;
-              const newValue = question.optionsAreNumeric ? Number(v) : v;
+              const newValue = question.optionsAreNumeric
+                ? convertValueToNumber(v, question)
+                : v;
+
               updateCurrentValues({ [path]: newValue });
               if (formPaths.other) {
                 setShowOther(false);
