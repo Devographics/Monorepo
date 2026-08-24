@@ -117,7 +117,7 @@ const QuestionItem = ({
     <li>
       <a
         href={`#${question.id}`}
-        className={`${isHighlighted ? "highlighted" : "not-highlighted"} ${
+        className={`section-toc-item ${isHighlighted ? "highlighted" : "not-highlighted"} ${
           isCompleted ? "completed" : "not-completed"
         }`}
       >

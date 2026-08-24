@@ -63,6 +63,19 @@
       }
     }
   }
+  .question-label-new {
+    // text-transform: uppercase;
+    // background: colors.$active-color-dark;
+    // color: colors.$text-color-inverted;
+    // padding: 1px 5px;
+    // font-size: typography.$smaller-font;
+    // @include font-regular;
+    &::after {
+      display: block;
+      content: "✨";
+    }
+  }
+
   .form-label {
     margin: 0;
     @include breakpoints.small-medium {
@@ -82,18 +95,7 @@
     .entity-label {
       // white-space: nowrap;
     }
-    .question-label-new {
-      // text-transform: uppercase;
-      // background: colors.$active-color-dark;
-      // color: colors.$text-color-inverted;
-      // padding: 1px 5px;
-      // font-size: typography.$smaller-font;
-      // @include font-regular;
-      &::after {
-        display: block;
-        content: "✨";
-      }
-    }
+
     &-number {
       opacity: 0.3;
       margin-right: 8px;

@@ -194,28 +194,30 @@
     flex-direction: column;
     gap: variables.$spacing-half;
   }
-  li {
-    a {
-      font-size: typography.$smallish-font;
-      @include typography.font-regular;
-      &.not-highlighted {
-        &:link,
-        &:visited {
-          color: var(--text-color-dark);
-        }
-        &:hover {
-          color: var(--hover-color);
-        }
+  .section-toc-item {
+    font-size: typography.$smallish-font;
+    @include typography.font-regular;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    justify-content: flex-end;
+    &.not-highlighted {
+      &:link,
+      &:visited {
+        color: var(--text-color-dark);
       }
-      &.highlighted {
-        &::before {
-          content: "» ";
-        }
+      &:hover {
+        color: var(--hover-color);
       }
-      &.completed {
-        text-decoration: line-through;
-        opacity: 0.6;
+    }
+    &.highlighted {
+      &::before {
+        content: "» ";
       }
+    }
+    &.completed {
+      text-decoration: line-through;
+      opacity: 0.6;
     }
   }
 }
