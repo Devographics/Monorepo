@@ -48,17 +48,17 @@ export const getQuestionTokens = ({
         return (tagEntities.length > 0 ? tagEntities : emptyEntities).map(
           (e) => {
             const matchCount = allAnswers.filter((a) =>
-              a.tokens?.map((t) => t.id).includes(e.id)
+              a.tokens?.map((t) => t.id).includes(e.id),
             ).length;
             return {
               ...e,
               matchCount,
               tag,
             };
-          }
+          },
         );
       })
-      .flat()
+      .flat(),
   ) as Array<TokenType>;
   return allTokens;
 };
@@ -87,7 +87,7 @@ export const getSortedQuestionTokens = ({
         return (tagEntities.length > 0 ? tagEntities : emptyEntities)
           .map((e) => {
             const matchCount = allAnswers.filter((a) =>
-              a.tokens?.map((t) => t.id).includes(e.id)
+              a.tokens?.map((t) => t.id).includes(e.id),
             ).length;
             return {
               ...e,
@@ -105,7 +105,7 @@ export const getSortedQuestionTokens = ({
           });
       })
       .flat()
-      .filter((token) => token.id.includes(filterQuery))
+      .filter((token) => token?.id?.includes(filterQuery)),
   ) as Array<TokenType>;
   return allTokens;
 };
@@ -377,8 +377,8 @@ const Row = (props: RowProps) => {
   const descriptionKind = i18nDescription
     ? "i18n"
     : tokenDescription
-    ? "entity"
-    : "none";
+      ? "entity"
+      : "none";
   const description = i18nDescription || tokenDescription;
 
   return (
