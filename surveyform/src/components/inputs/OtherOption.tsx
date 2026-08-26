@@ -15,7 +15,7 @@ const OtherOption = (
     setShowOther: Dispatch<SetStateAction<boolean>>;
     type: "radio" | "checkbox";
     mainValue: string | number | Array<string | number>;
-  }
+  },
 ) => {
   const {
     edition,
@@ -55,6 +55,7 @@ const OtherOption = (
   const naIsChecked = Array.isArray(mainValue) && mainValue.includes(OPTION_NA);
   const disabled = readOnly || naIsChecked;
 
+  const { allowMultiple } = question;
   return (
     <div className="form-option-other">
       <FormCheck className={checkClass}>
@@ -92,7 +93,9 @@ const OtherOption = (
           onChange={handleChangeDebounced}
           onBlur={handleChange}
           disabled={disabled}
-          placeholder={t("options.other.placeholder")}
+          placeholder={t(
+            `options.other.placeholder${allowMultiple ? ".multiple" : ""}`,
+          )}
         />
       )}
     </div>
