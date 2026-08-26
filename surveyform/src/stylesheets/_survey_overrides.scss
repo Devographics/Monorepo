@@ -142,4 +142,10 @@ These styles will only be active for specific surveys and/or editions
       content: "🆕" !important;
     }
   }
+
+  .form-note {
+    &[data-key="user_info.gender.note"] {
+      display: none;
+    }
+  }
 }
