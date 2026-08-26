@@ -2,8 +2,8 @@ const MaintenancePage = () => {
   return (
     <div>
       Sorry, this application is currently under maintenance. Follow{" "}
-      <a href="https://twitter.com/devographicsviz">@DevographicsViz</a> on
-      Twitter to get updates.{" "}
+      <a href="https://bsky.app/profile/devographics.com">@devographics.com</a>{" "}
+      on Bluesky to get updates.{" "}
     </div>
   );
 };

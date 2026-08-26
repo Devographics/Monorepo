@@ -13,7 +13,7 @@ import { USED_PTS, HEARD_PTS } from "~/lib/responses/helpers";
 import useSWR from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
 import { T, useI18n } from "@devographics/react-i18n";
-import ShareTwitter from "../share/ShareTwitter";
+import ShareX from "../share/ShareX";
 import ShareBluesky from "../share/ShareBluesky";
 import ShareMastodon from "../share/ShareMastodon";
 
@@ -99,7 +99,7 @@ const Score = ({
   const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;
 
-  const getBody = (source: "twitter" | "bluesky" | "mastodon") => {
+  const getBody = (source: "x" | "bluesky" | "mastodon") => {
     const text = t("thanks.share_score_message", {
       // TODO: at the time of writing (09/2023) translations include an additional %
       // need to check if we keep the % around
@@ -216,15 +216,7 @@ const Score = ({
           />
         </div>
         <div className="score-share ShareSite__Content">
-          {/* <Button
-            target="_blank"
-            href={`https://twitter.com/intent/tweet/?text=${encodeURIComponent(
-              text,
-            )}`}
-          >
-            <T token="thanks.share_on_twitter" />
-          </Button> */}
-          <ShareTwitter showLabel={true} text={getBody("twitter")} />
+          <ShareX showLabel={true} text={getBody("x")} />
           <ShareBluesky showLabel={true} text={getBody("bluesky")} />
           <ShareMastodon showLabel={true} text={getBody("mastodon")} />
         </div>

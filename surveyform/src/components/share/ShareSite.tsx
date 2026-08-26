@@ -1,5 +1,5 @@
 "use client";
-import ShareTwitter from "./ShareTwitter";
+import ShareX from "./ShareX";
 import ShareEmail from "./ShareEmail";
 import ShareFacebook from "./ShareFacebook";
 import ShareLinkedIn from "./ShareLinkedIn";
@@ -25,7 +25,7 @@ const ShareSite = ({ edition }: { edition: EditionMetadata }) => {
         <T token="finish.share_social" />
       </h4>
       <div className="ShareSite__Content">
-        <ShareTwitter text={getBody("twitter")} />
+        <ShareX text={getBody("x")} />
         <ShareBluesky text={getBody("bluesky")} />
         <ShareMastodon text={getBody("mastodon")} />
         <ShareFacebook link={getLink("facebook")} quote={getBody("facebook")} />

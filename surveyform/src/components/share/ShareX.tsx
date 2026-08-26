@@ -1,7 +1,7 @@
 import React from "react";
 import ShareButton from "./ShareButton";
 
-const ShareTwitter = ({
+const ShareX = ({
   text,
   trackingId,
   showLabel,
@@ -12,9 +12,9 @@ const ShareTwitter = ({
 }) => (
   <ShareButton
     showLabel={showLabel}
-    id="twitter"
-    href={`https://twitter.com/intent/tweet/?text=${encodeURIComponent(text)}`}
+    id="x"
+    href={`https://x.com/intent/tweet/?text=${encodeURIComponent(text)}`}
   />
 );
 
-export default ShareTwitter;
+export default ShareX;

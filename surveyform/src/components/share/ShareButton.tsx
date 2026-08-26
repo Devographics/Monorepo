@@ -8,11 +8,12 @@ import {
   FacebookIcon,
   LinkedInIcon,
   EmailIcon,
+  XIcon,
 } from "@devographics/icons";
 
 const icons = {
   bluesky: BlueskyIcon,
-  twitter: TwitterIcon,
+  x: XIcon,
   mastodon: MastodonIcon,
   facebook: FacebookIcon,
   linkedin: LinkedInIcon,
