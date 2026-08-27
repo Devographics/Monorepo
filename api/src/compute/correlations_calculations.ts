@@ -425,28 +425,20 @@ export const expandCategoricalOptions = (
 
 export interface PairStats {
     n: number
-    cramersV: number
-    spearman: number | null
+    correlation: number
 }
 
 /*
 
-Compute pair statistics from a contingency table (rows × cols, row-major).
-
-Cramér's V uses the Bergsma bias correction. Categories with an empty marginal
-in the pairwise-complete subset are ignored when counting rows/columns.
+Compute the correlation between two variables from their contingency table
+(rows × cols, row-major).
 
 Spearman's rho is computed from the table using average (tie-corrected) ranks,
-which is exact for tied data; it is only meaningful when both variables are
-ordinal, so callers pass `includeSpearman` accordingly.
+which is exact for tied data. It is only meaningful when both variables are
+ordered, which is why only ordered variables are paired in the first place.
 
 */
-export const computePairStats = (
-    table: Int32Array,
-    rows: number,
-    cols: number,
-    includeSpearman: boolean
-): PairStats => {
+export const computePairStats = (table: Int32Array, rows: number, cols: number): PairStats => {
     const rowSums = new Array(rows).fill(0)
     const colSums = new Array(cols).fill(0)
     let n = 0
@@ -458,72 +450,48 @@ export const computePairStats = (
             n += count
         }
     }
+    // a variable with fewer than two observed values cannot correlate
     const nonEmptyRows = rowSums.filter(s => s > 0).length
     const nonEmptyCols = colSums.filter(s => s > 0).length
     if (n === 0 || nonEmptyRows < 2 || nonEmptyCols < 2) {
-        return { n, cramersV: 0, spearman: null }
+        return { n, correlation: 0 }
     }
 
-    // chi-square over cells with non-empty marginals
-    let chi2 = 0
+    // average rank of each category, in option order
+    const rowRanks = new Array(rows).fill(0)
+    const colRanks = new Array(cols).fill(0)
+    let cumulative = 0
     for (let x = 0; x < rows; x++) {
-        if (rowSums[x] === 0) continue
-        for (let y = 0; y < cols; y++) {
-            if (colSums[y] === 0) continue
-            const expected = (rowSums[x] * colSums[y]) / n
-            const delta = table[x * cols + y] - expected
-            chi2 += (delta * delta) / expected
-        }
+        rowRanks[x] = cumulative + (rowSums[x] + 1) / 2
+        cumulative += rowSums[x]
     }
-
-    // bias-corrected Cramér's V (Bergsma 2013)
-    const phi2 = chi2 / n
-    const r = nonEmptyRows
-    const c = nonEmptyCols
-    const phi2Corrected = Math.max(0, phi2 - ((r - 1) * (c - 1)) / (n - 1))
-    const rCorrected = r - ((r - 1) * (r - 1)) / (n - 1)
-    const cCorrected = c - ((c - 1) * (c - 1)) / (n - 1)
-    const denominator = Math.min(rCorrected, cCorrected) - 1
-    const cramersV = denominator > 0 ? Math.sqrt(phi2Corrected / denominator) : 0
-
-    let spearman: number | null = null
-    if (includeSpearman) {
-        // average rank of each category, in option order
-        const rowRanks = new Array(rows).fill(0)
-        const colRanks = new Array(cols).fill(0)
-        let cumulative = 0
-        for (let x = 0; x < rows; x++) {
-            rowRanks[x] = cumulative + (rowSums[x] + 1) / 2
-            cumulative += rowSums[x]
-        }
-        cumulative = 0
+    cumulative = 0
+    for (let y = 0; y < cols; y++) {
+        colRanks[y] = cumulative + (colSums[y] + 1) / 2
+        cumulative += colSums[y]
+    }
+    const meanRank = (n + 1) / 2
+    let covariance = 0
+    let varianceX = 0
+    let varianceY = 0
+    for (let x = 0; x < rows; x++) {
+        varianceX += rowSums[x] * (rowRanks[x] - meanRank) ** 2
+    }
+    for (let y = 0; y < cols; y++) {
+        varianceY += colSums[y] * (colRanks[y] - meanRank) ** 2
+    }
+    for (let x = 0; x < rows; x++) {
         for (let y = 0; y < cols; y++) {
-            colRanks[y] = cumulative + (colSums[y] + 1) / 2
-            cumulative += colSums[y]
-        }
-        const meanRank = (n + 1) / 2
-        let covariance = 0
-        let varianceX = 0
-        let varianceY = 0
-        for (let x = 0; x < rows; x++) {
-            varianceX += rowSums[x] * (rowRanks[x] - meanRank) ** 2
-        }
-        for (let y = 0; y < cols; y++) {
-            varianceY += colSums[y] * (colRanks[y] - meanRank) ** 2
-        }
-        for (let x = 0; x < rows; x++) {
-            for (let y = 0; y < cols; y++) {
-                const count = table[x * cols + y]
-                if (count > 0) {
-                    covariance += count * (rowRanks[x] - meanRank) * (colRanks[y] - meanRank)
-                }
+            const count = table[x * cols + y]
+            if (count > 0) {
+                covariance += count * (rowRanks[x] - meanRank) * (colRanks[y] - meanRank)
             }
         }
-        spearman =
-            varianceX > 0 && varianceY > 0 ? covariance / Math.sqrt(varianceX * varianceY) : 0
     }
+    const correlation =
+        varianceX > 0 && varianceY > 0 ? covariance / Math.sqrt(varianceX * varianceY) : 0
 
-    return { n, cramersV, spearman }
+    return { n, correlation }
 }
 
 export const round = (value: number) => Math.round(value * 10000) / 10000

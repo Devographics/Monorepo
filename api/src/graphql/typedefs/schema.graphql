@@ -930,8 +930,27 @@ type Codebook {
     entitiesCount: Int
 }
 
+"""
+EXPERIMENTAL. Automatically detected correlations between survey variables.
+
+These are statistical associations only and do not imply causation; they are
+generated without human review, and no controls are applied for other variables.
+
+Always computed over every response of the edition, so they are NOT affected by
+any filters applied to sibling fields.
+"""
 type Correlations {
+    """
+    Correlations between two whole questions ("higher salary goes with more
+    experience"), strongest first. Only questions whose options have an order
+    (salary, experience…) take part, so this is empty for questions like gender
+    or country, whose answers appear in answerCorrelations instead.
+    """
     questionCorrelations: [CorrelationItem]
+    """
+    Correlations involving one specific answer ("respondents who picked X tend
+    to…"), strongest first.
+    """
     answerCorrelations: [CorrelationItem]
 }
 

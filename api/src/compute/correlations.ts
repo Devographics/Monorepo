@@ -118,9 +118,8 @@ export async function computeEditionCorrelations(
                 if (b < 0) continue
                 table[a * cols + b]++
             }
-            const stats = computePairStats(table, rows, cols, true)
-            if (stats.n < MIN_PAIRWISE_N) continue
-            const correlation = stats.spearman ?? 0
+            const { n, correlation } = computePairStats(table, rows, cols)
+            if (n < MIN_PAIRWISE_N) continue
             if (Math.abs(correlation) < MIN_CORRELATION) continue
 
             const sectionId1 = getSectionId(eq1.question)
@@ -133,7 +132,7 @@ export async function computeEditionCorrelations(
                 questionId2: eq2.question.id,
                 sectionId2,
                 ...(eq2.optionId && { optionId2: eq2.optionId }),
-                n: stats.n,
+                n,
                 correlation: round(correlation),
                 strength: getCorrelationStrength(correlation, isAnswer),
                 direction: getCorrelationDirection(correlation),

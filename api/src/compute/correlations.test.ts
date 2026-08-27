@@ -19,10 +19,9 @@ describe('computePairStats', () => {
             50, 0,
             0, 50
         ])
-        const { n, cramersV, spearman } = computePairStats(table, 2, 2, true)
+        const { n, correlation } = computePairStats(table, 2, 2)
         expect(n).toBe(100)
-        expect(cramersV).toBeCloseTo(1, 5)
-        expect(spearman).toBeCloseTo(1, 5)
+        expect(correlation).toBeCloseTo(1, 5)
     })
 
     test('perfect negative association', () => {
@@ -31,42 +30,28 @@ describe('computePairStats', () => {
             0, 50,
             50, 0
         ])
-        const { cramersV, spearman } = computePairStats(table, 2, 2, true)
-        expect(cramersV).toBeCloseTo(1, 5)
-        expect(spearman).toBeCloseTo(-1, 5)
+        const { correlation } = computePairStats(table, 2, 2)
+        expect(correlation).toBeCloseTo(-1, 5)
     })
 
-    test('independence yields zero association', () => {
+    test('independence yields zero correlation', () => {
         // prettier-ignore
         const table = new Int32Array([
             25, 25,
             25, 25
         ])
-        const { cramersV, spearman } = computePairStats(table, 2, 2, true)
-        expect(cramersV).toBe(0)
-        expect(spearman).toBe(0)
+        const { correlation } = computePairStats(table, 2, 2)
+        expect(correlation).toBe(0)
     })
 
-    test('known 2x2 table values', () => {
-        // chi2 = 20, n = 80 -> bias-corrected V ≈ 0.4903, spearman = 0.5
+    test('known 2x2 table value', () => {
         // prettier-ignore
         const table = new Int32Array([
             30, 10,
             10, 30
         ])
-        const { cramersV, spearman } = computePairStats(table, 2, 2, true)
-        expect(cramersV).toBeCloseTo(0.4903, 3)
-        expect(spearman).toBeCloseTo(0.5, 5)
-    })
-
-    test('spearman is null when not requested', () => {
-        // prettier-ignore
-        const table = new Int32Array([
-            30, 10,
-            10, 30
-        ])
-        const { spearman } = computePairStats(table, 2, 2, false)
-        expect(spearman).toBeNull()
+        const { correlation } = computePairStats(table, 2, 2)
+        expect(correlation).toBeCloseTo(0.5, 5)
     })
 
     test('empty categories are ignored', () => {
@@ -77,8 +62,8 @@ describe('computePairStats', () => {
             0, 0,
             10, 30
         ])
-        const { cramersV } = computePairStats(table, 3, 2, false)
-        expect(cramersV).toBeCloseTo(0.4903, 3)
+        const { correlation } = computePairStats(table, 3, 2)
+        expect(correlation).toBeCloseTo(0.5, 5)
     })
 
     test('degenerate table (single observed category) yields zero', () => {
@@ -87,9 +72,9 @@ describe('computePairStats', () => {
             40, 60,
             0, 0
         ])
-        const { cramersV, spearman } = computePairStats(table, 2, 2, true)
-        expect(cramersV).toBe(0)
-        expect(spearman).toBeNull()
+        const { n, correlation } = computePairStats(table, 2, 2)
+        expect(n).toBe(100)
+        expect(correlation).toBe(0)
     })
 })
 
