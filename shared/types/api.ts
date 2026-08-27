@@ -23,6 +23,7 @@ export enum ResultsSubFieldEnum {
     ID = 'id',
     METADATA = '_metadata',
     CODEBOOK = '_codebook',
+    CORRELATIONS = '_correlations',
     RAW_DATA = 'rawData'
 }
 
@@ -40,6 +41,7 @@ export const subfieldDocs = {
     [ResultsSubFieldEnum.OPTIONS]: 'The predefined options associated with this question.',
     [ResultsSubFieldEnum.CODEBOOK]:
         "Codebook containing relevant entities that could potentially match the question's contents",
+    [ResultsSubFieldEnum.CORRELATIONS]: 'Correlation coefficients',
     [ResultsSubFieldEnum.FOLLOWUPS]: null,
     [ResultsSubFieldEnum.MEDIANS]: null,
     [ResultsSubFieldEnum.ID]: null,
