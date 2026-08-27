@@ -79,6 +79,36 @@ export const getCorrelationStrength = (
 export const getCorrelationDirection = (correlation: number): CorrelationDirection =>
     correlation < 0 ? 'negative' : 'positive'
 
+// weakest to strongest
+export const CORRELATION_STRENGTHS: CorrelationStrength[] = [
+    'weak',
+    'moderate',
+    'strong',
+    'very_strong'
+]
+
+/*
+
+Keep only correlations worth showing: strong enough to mean something, and at
+most `limit` of them. Gating on `strength` rather than a raw number means each
+item is judged against the bands for its own type, since answer correlations
+have a lower ceiling than question ones.
+
+*/
+export const filterCorrelations = (
+    items: CorrelationItem[],
+    {
+        minStrength = 'moderate',
+        limit
+    }: { minStrength?: CorrelationStrength; limit?: number } = {}
+) => {
+    const minIndex = CORRELATION_STRENGTHS.indexOf(minStrength)
+    const filtered = items.filter(
+        item => CORRELATION_STRENGTHS.indexOf(item.strength) >= minIndex
+    )
+    return limit === undefined ? filtered : filtered.slice(0, limit)
+}
+
 export interface CorrelationItem {
     questionId1: string
     sectionId1?: string
@@ -177,15 +207,19 @@ ever take part through their answers.
 */
 export const splitQuestionCorrelations = (
     items: CorrelationItem[],
-    question: QuestionApiObject
+    question: QuestionApiObject,
+    minStrength: CorrelationStrength = 'moderate'
 ) => {
-    const questionCorrelations = items
+    // only keep correlations worth putting in front of a reader
+    const shownItems = filterCorrelations(items, { minStrength })
+
+    const questionCorrelations = shownItems
         .filter(item => !item.optionId1)
         .slice(0, QUESTION_CORRELATIONS_LIMIT)
 
     // items arrive sorted strongest-first, so each group keeps that order
     const itemsByOption = new Map<string, CorrelationItem[]>()
-    for (const item of items) {
+    for (const item of shownItems) {
         const { optionId1 } = item
         if (!optionId1) continue
         const groupItems = itemsByOption.get(optionId1)

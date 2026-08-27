@@ -3,6 +3,7 @@ import {
     encodeMultiValueQuestion,
     encodeQuestion,
     expandCategoricalOptions,
+    filterCorrelations,
     getCorrelationDirection,
     getCorrelationQuestions,
     getCorrelationStrength,
@@ -256,6 +257,47 @@ describe('expandCategoricalOptions', () => {
     })
 })
 
+describe('filterCorrelations', () => {
+    const item = (strength: string, correlation = 0.5) =>
+        ({ strength, correlation } as CorrelationItem)
+
+    test('keeps moderate and stronger by default', () => {
+        const items = [
+            item('very_strong'),
+            item('weak'),
+            item('strong'),
+            item('moderate'),
+            item('weak')
+        ]
+        expect(filterCorrelations(items).map(i => i.strength)).toEqual([
+            'very_strong',
+            'strong',
+            'moderate'
+        ])
+    })
+
+    test('honours a custom minimum strength', () => {
+        const items = [item('very_strong'), item('strong'), item('moderate'), item('weak')]
+        expect(filterCorrelations(items, { minStrength: 'strong' }).map(i => i.strength)).toEqual([
+            'very_strong',
+            'strong'
+        ])
+        expect(filterCorrelations(items, { minStrength: 'weak' })).toHaveLength(4)
+    })
+
+    test('applies the limit after filtering', () => {
+        const items = [item('strong'), item('weak'), item('strong'), item('strong')]
+        // the weak item must not consume one of the two slots
+        const filtered = filterCorrelations(items, { limit: 2 })
+        expect(filtered).toHaveLength(2)
+        expect(filtered.every(i => i.strength === 'strong')).toBe(true)
+    })
+
+    test('returns nothing when everything is too weak', () => {
+        expect(filterCorrelations([item('weak'), item('weak')])).toEqual([])
+    })
+})
+
 describe('splitQuestionCorrelations', () => {
     const item = (fields: Partial<CorrelationItem>): CorrelationItem =>
         ({
@@ -310,6 +352,22 @@ describe('splitQuestionCorrelations', () => {
         )
         expect(questionCorrelations).toHaveLength(2)
         expect(optionCorrelations).toEqual([])
+    })
+
+    test('drops weak correlations, and options left with none', () => {
+        const question = makeQuestion({
+            id: 'gender',
+            options: [{ id: 'male' }, { id: 'female' }]
+        })
+        const items = [
+            item({ optionId1: 'male', strength: 'strong' }),
+            item({ optionId1: 'male', strength: 'weak' }),
+            item({ optionId1: 'female', strength: 'weak' })
+        ]
+        const { optionCorrelations } = splitQuestionCorrelations(items, question)
+        // female had only a weak correlation, so it gets no group at all
+        expect(optionCorrelations.map(g => g.id)).toEqual(['male'])
+        expect(optionCorrelations[0].correlations).toHaveLength(1)
     })
 
     test('caps each option group independently', () => {
