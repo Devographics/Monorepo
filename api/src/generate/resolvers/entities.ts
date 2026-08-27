@@ -172,10 +172,10 @@ export const entityResolverMap: EntityResolverMap = {
         return entity.homepageUrl && { url: entity.homepageUrl }
     },
     amazon: async entity => {
-        return entity.amazon && { url: entity.amazonUrl }
+        return entity.amazonUrl && { url: entity.amazonUrl }
     },
     wikipedia: async entity => {
-        return entity.wikipedia && { url: entity.wikipediaUrl }
+        return entity.wikipediaUrl && { url: entity.wikipediaUrl }
     },
     blog: async entity => {
         return entity.blog && { url: entity.blogUrl }
