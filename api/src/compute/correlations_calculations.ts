@@ -102,7 +102,19 @@ export interface CorrelationItem {
     sameSection: boolean
 }
 
-export interface EditionCorrelations {
+/*
+
+Correlations for one of a question's own answers, so that the results app can
+show indicators on individual options ("respondents who picked this also…").
+
+*/
+export interface OptionCorrelations {
+    id: string
+    correlations: CorrelationItem[]
+}
+
+// the full computed (and cached) result for one edition
+export interface ComputedCorrelations {
     editionId: string
     respondentCount: number
     questionCount: number
@@ -142,7 +154,57 @@ export const putQuestionFirst = (item: CorrelationItem, questionId: string): Cor
           }
         : item
 
-export const splitCorrelationItems = (items: CorrelationItem[], limit?: number) => {
+// how many correlations to return for a question as a whole…
+export const QUESTION_CORRELATIONS_LIMIT = 10
+// …and for each of its individual options
+export const OPTION_CORRELATIONS_LIMIT = 5
+
+/*
+
+Build the correlations payload for a single question, from the (already
+filtered and side-normalised) items involving it.
+
+Items involving one of the question's own answers are grouped under that answer,
+to drive per-option indicators. Everything else describes the question as a
+whole, whether the other side is another question ("yearly_salary ×
+company_size") or one of its answers ("yearly_salary ×
+workplace_perks:compensation").
+
+A question only ever lands on one side of this split: questions whose options
+have an order are never expanded into answers, and questions like gender only
+ever take part through their answers.
+
+*/
+export const splitQuestionCorrelations = (
+    items: CorrelationItem[],
+    question: QuestionApiObject
+) => {
+    const questionCorrelations = items
+        .filter(item => !item.optionId1)
+        .slice(0, QUESTION_CORRELATIONS_LIMIT)
+
+    // items arrive sorted strongest-first, so each group keeps that order
+    const itemsByOption = new Map<string, CorrelationItem[]>()
+    for (const item of items) {
+        const { optionId1 } = item
+        if (!optionId1) continue
+        const groupItems = itemsByOption.get(optionId1)
+        if (!groupItems) {
+            itemsByOption.set(optionId1, [item])
+        } else if (groupItems.length < OPTION_CORRELATIONS_LIMIT) {
+            groupItems.push(item)
+        }
+    }
+    // follow the question's own option order so groups line up with its buckets
+    const optionCorrelations: OptionCorrelations[] = (question.options ?? [])
+        .map(option => String(option.id))
+        .filter(id => itemsByOption.has(id))
+        .map(id => ({ id, correlations: itemsByOption.get(id)! }))
+
+    return { questionCorrelations, optionCorrelations }
+}
+
+export const splitEditionCorrelations = (items: CorrelationItem[], limit?: number) => {
     // items are already sorted by association strength, so both lists stay
     // sorted with the strongest correlations first
     const questionCorrelations = items.filter(item => !isAnswerCorrelation(item))

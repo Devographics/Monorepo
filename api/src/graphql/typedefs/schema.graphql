@@ -941,15 +941,49 @@ any filters applied to sibling fields.
 """
 type Correlations {
     """
-    Correlations between two whole questions ("higher salary goes with more
-    experience"), strongest first. Only questions whose options have an order
-    (salary, experience…) take part, so this is empty for questions like gender
-    or country, whose answers appear in answerCorrelations instead.
+    Everything this question correlates with as a whole, strongest first — the
+    other side may be another question ("yearly_salary × company_size") or one
+    of its answers ("yearly_salary × workplace_perks:compensation").
+
+    Only questions whose options have an order (salary, experience…) take part
+    this way, so this is empty for questions like gender, whose correlations all
+    appear under optionCorrelations instead.
     """
     questionCorrelations: [CorrelationItem]
     """
-    Correlations involving one specific answer ("respondents who picked X tend
-    to…"), strongest first.
+    Correlations grouped by each of this question's own answers, for showing
+    indicators on individual options. Empty for questions whose options have an
+    order, which take part as a whole via questionCorrelations.
+    """
+    optionCorrelations: [OptionCorrelations]
+}
+
+"""
+The strongest correlations involving one specific answer to a question.
+"""
+type OptionCorrelations {
+    """
+    Id of the option, matching the corresponding response bucket's id
+    """
+    id: String
+    """
+    Strongest first
+    """
+    correlations: [CorrelationItem]
+}
+
+"""
+EXPERIMENTAL. Every correlation detected across a whole edition, ranked by
+strength — a flat browsing view, as opposed to the per-question Correlations.
+Same caveats apply: statistical association only, no causation, no human review.
+"""
+type EditionCorrelations {
+    """
+    Correlations between two whole questions, strongest first
+    """
+    questionCorrelations: [CorrelationItem]
+    """
+    Correlations involving at least one specific answer, strongest first
     """
     answerCorrelations: [CorrelationItem]
 }

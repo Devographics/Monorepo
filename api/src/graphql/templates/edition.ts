@@ -47,7 +47,7 @@ export const generateEditionType = ({
         typeDef: `type ${typeName} {
     _metadata: EditionMetadata
     _codebook: Codebook
-    _correlations: Correlations
+    _correlations: EditionCorrelations
     _stats: SurveyStats
     ${
         allSections.length > 0

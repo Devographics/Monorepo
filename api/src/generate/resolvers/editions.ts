@@ -11,7 +11,7 @@ import {
 import {
     EDITION_CORRELATIONS_LIMIT,
     getEditionCorrelations,
-    splitCorrelationItems
+    splitEditionCorrelations
 } from '../../compute/correlations'
 import { getEditionById } from '../helpers'
 import { EditionSectionMetadataArgs, filterItems } from '../resolvers'
@@ -150,7 +150,7 @@ export const getEditionCorrelationsResolver =
             questionObjects,
             context
         })
-        return splitCorrelationItems(editionCorrelations.items, EDITION_CORRELATIONS_LIMIT)
+        return splitEditionCorrelations(editionCorrelations.items, EDITION_CORRELATIONS_LIMIT)
     }
 
 export const currentEditionResolver: ResolverType = async (parent, args, context, info) => {

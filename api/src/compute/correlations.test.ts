@@ -7,7 +7,8 @@ import {
     getCorrelationQuestions,
     getCorrelationStrength,
     putQuestionFirst,
-    splitCorrelationItems
+    splitEditionCorrelations,
+    splitQuestionCorrelations
 } from './correlations_calculations'
 import type { CorrelationItem } from './correlations_calculations'
 import type { EditionApiObject, QuestionApiObject } from '../types/surveys'
@@ -255,7 +256,79 @@ describe('expandCategoricalOptions', () => {
     })
 })
 
-describe('splitCorrelationItems', () => {
+describe('splitQuestionCorrelations', () => {
+    const item = (fields: Partial<CorrelationItem>): CorrelationItem =>
+        ({
+            questionId1: 'gender',
+            questionId2: 'other',
+            n: 1000,
+            sameSection: false,
+            correlation: 0.5,
+            strength: 'strong',
+            direction: 'positive',
+            ...fields
+        } as CorrelationItem)
+
+    test('groups items by the queried question own answers, in option order', () => {
+        const question = makeQuestion({
+            id: 'gender',
+            options: [{ id: 'male' }, { id: 'female' }, { id: 'non_binary' }]
+        })
+        // deliberately not in option order, to check groups get reordered
+        const items = [
+            item({ optionId1: 'female', correlation: 0.9 }),
+            item({ optionId1: 'male', correlation: 0.8 }),
+            item({ optionId1: 'female', correlation: 0.7 })
+        ]
+        const { questionCorrelations, optionCorrelations } = splitQuestionCorrelations(
+            items,
+            question
+        )
+        expect(questionCorrelations).toEqual([])
+        expect(optionCorrelations.map(g => g.id)).toEqual(['male', 'female'])
+        // within a group, incoming (strongest-first) order is preserved
+        expect(optionCorrelations[1].correlations.map(i => i.correlation)).toEqual([0.9, 0.7])
+        // options with no correlations produce no group at all
+        expect(optionCorrelations.some(g => g.id === 'non_binary')).toBe(false)
+    })
+
+    test('items without an own answer describe the question as a whole', () => {
+        const question = makeQuestion({ id: 'yearly_salary', options: [{ id: 'range_1' }] })
+        const items = [
+            // other side is a whole question
+            item({ questionId1: 'yearly_salary', questionId2: 'company_size' }),
+            // other side is another question's answer: still question-level here
+            item({
+                questionId1: 'yearly_salary',
+                questionId2: 'workplace_perks',
+                optionId2: 'compensation'
+            })
+        ]
+        const { questionCorrelations, optionCorrelations } = splitQuestionCorrelations(
+            items,
+            question
+        )
+        expect(questionCorrelations).toHaveLength(2)
+        expect(optionCorrelations).toEqual([])
+    })
+
+    test('caps each option group independently', () => {
+        const question = makeQuestion({
+            id: 'gender',
+            options: [{ id: 'male' }, { id: 'female' }]
+        })
+        const items = [
+            ...Array.from({ length: 8 }, () => item({ optionId1: 'male' })),
+            ...Array.from({ length: 8 }, () => item({ optionId1: 'female' }))
+        ]
+        const { optionCorrelations } = splitQuestionCorrelations(items, question)
+        // both groups are capped at OPTION_CORRELATIONS_LIMIT rather than
+        // competing for a single shared budget
+        expect(optionCorrelations.map(g => g.correlations.length)).toEqual([5, 5])
+    })
+})
+
+describe('splitEditionCorrelations', () => {
     const makeItem = (fields: Partial<CorrelationItem>): CorrelationItem =>
         ({
             questionId1: 'a',
@@ -273,7 +346,7 @@ describe('splitCorrelationItems', () => {
             makeItem({ correlation: -0.7, optionId2: 'y' }),
             makeItem({ correlation: 0.6 })
         ]
-        const { questionCorrelations, answerCorrelations } = splitCorrelationItems(items)
+        const { questionCorrelations, answerCorrelations } = splitEditionCorrelations(items)
         expect(questionCorrelations.map(i => i.correlation)).toEqual([0.8, 0.6])
         expect(answerCorrelations.map(i => i.correlation)).toEqual([0.9, -0.7])
     })
@@ -285,7 +358,7 @@ describe('splitCorrelationItems', () => {
             makeItem({}),
             makeItem({})
         ]
-        const { questionCorrelations, answerCorrelations } = splitCorrelationItems(items, 1)
+        const { questionCorrelations, answerCorrelations } = splitEditionCorrelations(items, 1)
         expect(questionCorrelations).toHaveLength(1)
         expect(answerCorrelations).toHaveLength(1)
     })

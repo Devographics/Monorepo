@@ -4,7 +4,8 @@ import { getCollection } from '../helpers/db'
 import { useCache, computeKey } from '../helpers/caching'
 import {
     CorrelationItem,
-    EditionCorrelations,
+    ComputedCorrelations,
+    OptionCorrelations,
     EncodedQuestion,
     MIN_PAIRWISE_N,
     computePairStats,
@@ -19,7 +20,7 @@ import {
     getSectionId,
     putQuestionFirst,
     round,
-    splitCorrelationItems
+    splitQuestionCorrelations
 } from './correlations_calculations'
 
 export * from './correlations_calculations'
@@ -63,7 +64,7 @@ interface ComputeOptions {
 
 export async function computeEditionCorrelations(
     options: ComputeOptions
-): Promise<EditionCorrelations> {
+): Promise<ComputedCorrelations> {
     const { survey, edition, questionObjects, context } = options
     const { db } = context
 
@@ -170,11 +171,8 @@ export const getEditionCorrelations = async (options: ComputeOptions) => {
         context,
         funcOptions: options,
         enableCache
-    })) as EditionCorrelations
+    })) as ComputedCorrelations
 }
-
-// how many items to return for each type of correlation array
-const limit = 10
 
 export const getQuestionCorrelations = async ({
     survey,
@@ -195,28 +193,5 @@ export const getQuestionCorrelations = async ({
         // present the queried question consistently as side 1
         .map(item => putQuestionFirst(item, question.id))
 
-    /*
-    
-    "Question correlations" relate two whole questions ("higher salary goes with
-    more experience"); "answer correlations" involve one specific answer on at
-    least one side ("respondents who picked X tend to…").
-    
-    */
-    const isAnswerCorrelation = (item: CorrelationItem) => !!(item.optionId1 || item.optionId2)
-
-    // items are already sorted by association strength, so both lists stay
-    // sorted with the strongest correlations first
-    const questionCorrelations = items.filter(item => !isAnswerCorrelation(item))
-    /*
-    Note: since the queried question is always side 1, answer items come in two
-    shapes depending on the queried question's type. For categorical/multi
-    questions the answer is the question's own ("gender:female × yearly_salary",
-    optionId1 set); for ordinal scale questions it belongs to the other side
-    ("job_happiness × workplace_perks:company_culture", optionId2 set).
-    */
-    const answerCorrelations = items.filter(isAnswerCorrelation)
-    return {
-        questionCorrelations: limit ? questionCorrelations.slice(0, limit) : questionCorrelations,
-        answerCorrelations: limit ? answerCorrelations.slice(0, limit) : answerCorrelations
-    }
+    return splitQuestionCorrelations(items, question)
 }
