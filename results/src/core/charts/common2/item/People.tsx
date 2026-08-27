@@ -34,10 +34,11 @@ export const PeopleIcon = ({ entity }: LabelProps) =>
     entity?.avatar?.url ? <Avatar entity={entity} size={30} /> : <UserIcon />
 
 export const PeopleModal = ({ entity }: LabelProps) => {
-    const { alias, name } = entity
+    const { alias, name, author } = entity
     return (
         <div>
             <h3 className="item-name">{alias ? `${alias} (${name})` : name}</h3>
+            {author && <h4 className="item-author">{author}</h4>}
             {entity.descriptionHtml && (
                 <div className="item-description">
                     <div dangerouslySetInnerHTML={{ __html: entity.descriptionHtml }} />

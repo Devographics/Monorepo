@@ -10,3 +10,12 @@
     color: var(--textAltColor);
     text-align: center;
 }
+.item-name {
+    margin-bottom: var(--quarterSpacing);
+}
+
+.item-author {
+    font-weight: normal;
+    color: var(--textAltColor);
+    margin-bottom: var(--quarterSpacing);
+}

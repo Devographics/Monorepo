@@ -3,6 +3,7 @@ export const getEntityFragment = () => `entity {
     nameHtml
     nameClean
     alias
+    author
     description
     descriptionHtml
     descriptionClean
@@ -25,6 +26,9 @@ export const getEntityFragment = () => `entity {
       url
     }
     wikipedia {
+      url
+    }
+    steam {
       url
     }
     youtube {

@@ -13,7 +13,8 @@ import {
     ThreadsIcon,
     BlueskyIcon,
     AmazonIcon,
-    WikipediaIcon
+    WikipediaIcon,
+    SteamIcon
 } from '@devographics/icons'
 import { ServiceDefinition } from './types'
 
@@ -77,5 +78,9 @@ export const services: ServiceDefinition[] = [
     {
         service: 'wikipedia',
         icon: WikipediaIcon
+    },
+    {
+        service: 'steam',
+        icon: SteamIcon
     }
 ]
