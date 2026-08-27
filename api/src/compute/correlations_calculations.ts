@@ -48,10 +48,14 @@ export interface CorrelationItem {
     optionId2?: string
     // number of respondents who answered both questions
     n: number
-    // bias-corrected Cramér's V (unsigned, 0-1)
-    cramersV: number
-    // Spearman's rank correlation (signed), only defined when both questions are ordinal
-    spearman: number | null
+    /*
+    Signed Spearman rank correlation (-1 to 1): positive means higher values of
+    one variable go with higher values of the other (for answers: picking the
+    answer goes with higher values), negative means the reverse. Only pairs of
+    ordered variables (ordinal questions and binary answer variables) are
+    correlated, so this is always defined.
+    */
+    correlation: number
     sameSection: boolean
 }
 
@@ -64,6 +68,29 @@ export interface EditionCorrelations {
 
 export const getSectionId = (question: QuestionApiObject) =>
     question.section?.id ?? question.sectionIds?.[0]
+
+/*
+
+"Question correlations" relate two whole questions ("higher salary goes with
+more experience"); "answer correlations" involve one specific answer on at
+least one side ("respondents who picked X tend to…").
+
+*/
+export const isAnswerCorrelation = (item: CorrelationItem) =>
+    !!(item.optionId1 || item.optionId2)
+
+export const splitCorrelationItems = (items: CorrelationItem[], limit?: number) => {
+    // items are already sorted by association strength, so both lists stay
+    // sorted with the strongest correlations first
+    const questionCorrelations = items.filter(item => !isAnswerCorrelation(item))
+    const answerCorrelations = items.filter(isAnswerCorrelation)
+    return {
+        questionCorrelations: limit
+            ? questionCorrelations.slice(0, limit)
+            : questionCorrelations,
+        answerCorrelations: limit ? answerCorrelations.slice(0, limit) : answerCorrelations
+    }
+}
 
 const isEligibleQuestion = (q: QuestionApiObject, edition: EditionApiObject) =>
     !!(

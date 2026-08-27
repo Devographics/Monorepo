@@ -931,16 +931,17 @@ type Codebook {
 }
 
 type Correlations {
-    data: [CorrelationItem]
+    questionCorrelations: [CorrelationItem]
+    answerCorrelations: [CorrelationItem]
 }
 
 type CorrelationItem {
     questionId1: String
     sectionId1: String
     """
-    Set when the variable is one option of a multi-value question (e.g. one game
-    of favorite_video_games): the correlation is between selecting that option
-    or not, and the other variable
+    Set when the variable is one specific answer (e.g. one game of
+    favorite_video_games, or one gender option): the correlation is between
+    picking that answer or not, and the other variable
     """
     optionId1: String
     questionId2: String
@@ -951,13 +952,11 @@ type CorrelationItem {
     """
     n: Float
     """
-    Bias-corrected Cramér's V (unsigned, 0-1)
+    Signed rank correlation (-1 to 1): positive means higher values of one
+    variable go with higher values of the other (for answers: picking the answer
+    goes with higher values), negative means the reverse
     """
-    cramersV: Float
-    """
-    Spearman's rank correlation (signed), only defined when both questions are ordinal
-    """
-    spearman: Float
+    correlation: Float
     sameSection: Boolean
 }
 

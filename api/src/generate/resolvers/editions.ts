@@ -8,7 +8,11 @@ import {
     ResolverType,
     SurveyApiObject
 } from '../../types'
-import { EDITION_CORRELATIONS_LIMIT, getEditionCorrelations } from '../../compute/correlations'
+import {
+    EDITION_CORRELATIONS_LIMIT,
+    getEditionCorrelations,
+    splitCorrelationItems
+} from '../../compute/correlations'
 import { getEditionById } from '../helpers'
 import { EditionSectionMetadataArgs, filterItems } from '../resolvers'
 import { getEntities } from '../../load/entities'
@@ -146,7 +150,7 @@ export const getEditionCorrelationsResolver =
             questionObjects,
             context
         })
-        return { data: editionCorrelations.items.slice(0, EDITION_CORRELATIONS_LIMIT) }
+        return splitCorrelationItems(editionCorrelations.items, EDITION_CORRELATIONS_LIMIT)
     }
 
 export const currentEditionResolver: ResolverType = async (parent, args, context, info) => {

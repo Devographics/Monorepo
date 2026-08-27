@@ -81,14 +81,13 @@ export const subFields: Array<SubField> = [
         resolverFunction: async (parent, args, context) => {
             console.log('// question correlations resolver')
             const { survey, edition, question, questionObjects } = parent
-            const data = await getQuestionCorrelations({
+            return await getQuestionCorrelations({
                 survey,
                 edition,
                 question,
                 questionObjects,
                 context
             })
-            return { data }
         }
     },
     {

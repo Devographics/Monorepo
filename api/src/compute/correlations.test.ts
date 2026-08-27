@@ -3,8 +3,10 @@ import {
     encodeMultiValueQuestion,
     encodeQuestion,
     expandCategoricalOptions,
-    getCorrelationQuestions
+    getCorrelationQuestions,
+    splitCorrelationItems
 } from './correlations_calculations'
+import type { CorrelationItem } from './correlations_calculations'
 import type { EditionApiObject, QuestionApiObject } from '../types/surveys'
 
 describe('computePairStats', () => {
@@ -262,6 +264,42 @@ describe('expandCategoricalOptions', () => {
         const encoded = encodeQuestion(question, docs)!
         const expanded = expandCategoricalOptions(encoded, 2)
         expect(expanded.map(e => e.optionId)).toEqual(['a', 'b'])
+    })
+})
+
+describe('splitCorrelationItems', () => {
+    const makeItem = (fields: Partial<CorrelationItem>): CorrelationItem =>
+        ({
+            questionId1: 'a',
+            questionId2: 'b',
+            n: 1000,
+            sameSection: false,
+            correlation: 0.5,
+            ...fields
+        } as CorrelationItem)
+
+    test('splits into question and answer correlations, preserving order', () => {
+        const items = [
+            makeItem({ correlation: 0.9, optionId1: 'x' }),
+            makeItem({ correlation: 0.8 }),
+            makeItem({ correlation: -0.7, optionId2: 'y' }),
+            makeItem({ correlation: 0.6 })
+        ]
+        const { questionCorrelations, answerCorrelations } = splitCorrelationItems(items)
+        expect(questionCorrelations.map(i => i.correlation)).toEqual([0.8, 0.6])
+        expect(answerCorrelations.map(i => i.correlation)).toEqual([0.9, -0.7])
+    })
+
+    test('applies the limit to each list separately', () => {
+        const items = [
+            makeItem({ optionId1: 'x' }),
+            makeItem({ optionId1: 'y' }),
+            makeItem({}),
+            makeItem({})
+        ]
+        const { questionCorrelations, answerCorrelations } = splitCorrelationItems(items, 1)
+        expect(questionCorrelations).toHaveLength(1)
+        expect(answerCorrelations).toHaveLength(1)
     })
 })
 

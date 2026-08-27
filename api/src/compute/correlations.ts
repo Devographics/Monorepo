@@ -15,35 +15,41 @@ import {
     getMultiValueCorrelationQuestions,
     getMultiValueDbPaths,
     getSectionId,
-    round
+    round,
+    splitCorrelationItems
 } from './correlations_calculations'
 
 export * from './correlations_calculations'
 
 /*
 
-Compute the association strength between every pair of (single-answer, predefined-options)
-questions of an edition, in a single pass over the normalized responses collection.
+Compute the correlation between every pair of ordered variables of an edition,
+in a single pass over the normalized responses collection.
 
-All pairwise metrics are computed in-process: responses are fetched once with a projection
-limited to each question's normPaths.response, encoded as small integer arrays, then each
-pair gets a contingency table from which we derive:
+Everything is computed in-process: responses are fetched once with a projection
+limited to each question's normalized paths, encoded as small integer arrays,
+then each pair gets a contingency table from which we derive a signed,
+tie-corrected Spearman rank correlation.
 
-- bias-corrected Cramér's V (0-1, works for any pair of categorical questions), used for ranking
-- Spearman's rank correlation (signed, only when both questions are ordinal)
+Only variables with an inherent order are paired, so every item has a signed
+correlation ("more X goes with more Y"). That includes ordinal questions
+(salary, experience…) and the binary variables expanded from individual answers
+("picked it or not"); categorical questions like gender or os participate
+through their per-answer expansions rather than as whole variables.
 
-The full result is cached per-edition (survey data is immutable once an edition closes).
+The full result is cached per-edition (survey data is immutable once an edition
+closes).
 
 */
 
 // how many (sorted) pairs to return at the edition level
 export const EDITION_CORRELATIONS_LIMIT = 1000
-// discard pairs below this association strength; multi-value questions expand
-// into hundreds of binary variables, and keeping every near-zero pair would
-// bloat the cached result with noise
-const MIN_CRAMERS_V = 0.05
+// discard pairs below this correlation strength; answer expansion produces
+// hundreds of binary variables, and keeping every near-zero pair would bloat
+// the cached result with noise
+const MIN_CORRELATION = 0.05
 // bump to invalidate cached results when the algorithm changes
-const CACHE_VERSION = 3
+const CACHE_VERSION = 4
 
 interface ComputeOptions {
     survey: SurveyApiObject
@@ -84,13 +90,17 @@ export async function computeEditionCorrelations(
         ...singleEncoded.flatMap(encoded => expandCategoricalOptions(encoded)),
         ...multiValueQuestions.flatMap(question => encodeMultiValueQuestion(question, docs))
     ]
+    // only pair variables with an inherent order, so that every pair gets a
+    // signed correlation; categorical questions (gender, os…) participate
+    // through their one-vs-rest expansions instead
+    const orderedVariables = encodedQuestions.filter(encoded => encoded.isOrdinal)
 
     const items: CorrelationItem[] = []
-    for (let i = 0; i < encodedQuestions.length; i++) {
-        const eq1 = encodedQuestions[i]
-        for (let j = i + 1; j < encodedQuestions.length; j++) {
-            const eq2 = encodedQuestions[j]
-            // options of the same multi-value question correlate structurally
+    for (let i = 0; i < orderedVariables.length; i++) {
+        const eq1 = orderedVariables[i]
+        for (let j = i + 1; j < orderedVariables.length; j++) {
+            const eq2 = orderedVariables[j]
+            // options of the same question correlate structurally
             // (they compete for the same selections), skip them
             if (eq1.question.id === eq2.question.id) continue
             const rows = eq1.cardinality
@@ -105,9 +115,10 @@ export async function computeEditionCorrelations(
                 if (b < 0) continue
                 table[a * cols + b]++
             }
-            const stats = computePairStats(table, rows, cols, eq1.isOrdinal && eq2.isOrdinal)
+            const stats = computePairStats(table, rows, cols, true)
             if (stats.n < MIN_PAIRWISE_N) continue
-            if (stats.cramersV < MIN_CRAMERS_V) continue
+            const correlation = stats.spearman ?? 0
+            if (Math.abs(correlation) < MIN_CORRELATION) continue
 
             const sectionId1 = getSectionId(eq1.question)
             const sectionId2 = getSectionId(eq2.question)
@@ -119,18 +130,17 @@ export async function computeEditionCorrelations(
                 sectionId2,
                 ...(eq2.optionId && { optionId2: eq2.optionId }),
                 n: stats.n,
-                cramersV: round(stats.cramersV),
-                spearman: stats.spearman === null ? null : round(stats.spearman),
+                correlation: round(correlation),
                 sameSection: !!sectionId1 && !!sectionId2 ? sectionId1 === sectionId2 : false
             })
         }
     }
-    items.sort((a, b) => b.cramersV - a.cramersV)
+    items.sort((a, b) => Math.abs(b.correlation) - Math.abs(a.correlation))
 
     return {
         editionId: edition.id,
         respondentCount: docs.length,
-        questionCount: encodedQuestions.length,
+        questionCount: orderedVariables.length,
         items
     }
 }
@@ -141,6 +151,9 @@ Cached accessor: the heavy computation runs once per edition and is reused by
 both the edition-level and question-level resolvers.
 
 */
+
+const enableCache = true
+
 export const getEditionCorrelations = async (options: ComputeOptions) => {
     const { edition, context } = options
     return (await useCache({
@@ -150,9 +163,13 @@ export const getEditionCorrelations = async (options: ComputeOptions) => {
         }),
         func: computeEditionCorrelations,
         context,
-        funcOptions: options
+        funcOptions: options,
+        enableCache
     })) as EditionCorrelations
 }
+
+// how many items to return for each type of correlation array
+const limit = 10
 
 export const getQuestionCorrelations = async ({
     survey,
@@ -167,6 +184,26 @@ export const getQuestionCorrelations = async ({
         questionObjects,
         context
     })
-    const items = editionCorrelations.items.filter(item => item.questionId1 === question.id)
-    return items
+
+    const items = editionCorrelations.items.filter(
+        item => item.questionId1 === question.id || item.questionId2 === question.id
+    )
+
+    /*
+    
+    "Question correlations" relate two whole questions ("higher salary goes with
+    more experience"); "answer correlations" involve one specific answer on at
+    least one side ("respondents who picked X tend to…").
+    
+    */
+    const isAnswerCorrelation = (item: CorrelationItem) => !!(item.optionId1 || item.optionId2)
+
+    // items are already sorted by association strength, so both lists stay
+    // sorted with the strongest correlations first
+    const questionCorrelations = items.filter(item => !isAnswerCorrelation(item))
+    const answerCorrelations = items.filter(isAnswerCorrelation)
+    return {
+        questionCorrelations: limit ? questionCorrelations.slice(0, limit) : questionCorrelations,
+        answerCorrelations: limit ? answerCorrelations.slice(0, limit) : answerCorrelations
+    }
 }
