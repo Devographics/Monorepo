@@ -171,6 +171,12 @@ export const entityResolverMap: EntityResolverMap = {
     homepage: async entity => {
         return entity.homepageUrl && { url: entity.homepageUrl }
     },
+    amazon: async entity => {
+        return entity.amazon && { url: entity.amazonUrl }
+    },
+    wikipedia: async entity => {
+        return entity.wikipedia && { url: entity.wikipediaUrl }
+    },
     blog: async entity => {
         return entity.blog && { url: entity.blogUrl }
     },
@@ -328,11 +334,7 @@ export const entityAppearanceResolverMap = {
 }
 
 export const youtubeResolverMap = {
-    stats: async (
-        youtube: { url: string; id: string },
-        args: any,
-        context: RequestContext
-    ) => {
+    stats: async (youtube: { url: string; id: string }, args: any, context: RequestContext) => {
         const { url, id } = youtube
         const key = `api__youtubeStats__${id}`
         return await getYoutubeStatsCached({ url, key, context })

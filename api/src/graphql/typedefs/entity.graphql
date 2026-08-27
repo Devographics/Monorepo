@@ -62,6 +62,12 @@ type Entity {
     twitchName: String
     twitch: Twitch
 
+    amazonUrl: String
+    amazon: Amazon
+
+    wikipediaUrl: String
+    wikipedia: Wikipedia
+
     blog: Blog
     rss: RSS
 
@@ -180,6 +186,20 @@ type NPM {
 Blog Info
 """
 type Blog {
+    url: String
+}
+
+"""
+Wikipedia Info
+"""
+type Wikipedia {
+    url: String
+}
+
+"""
+Amazon Info
+"""
+type Amazon {
     url: String
 }
 

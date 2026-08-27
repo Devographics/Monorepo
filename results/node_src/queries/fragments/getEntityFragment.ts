@@ -21,6 +21,12 @@ export const getEntityFragment = () => `entity {
     homepage {
       url
     }
+    amazon {
+      url
+    }
+    wikipedia {
+      url
+    }
     youtube {
       url
     }

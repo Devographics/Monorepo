@@ -25,6 +25,8 @@ export interface EntityResolvedFields {
     youtube?: any
     company?: Entity
     blog?: Resource
+    amazon?: Resource
+    wikipedia?: Resource
     rss?: Resource
     webFeature?: WebFeature
     appearsIn?: EntityAppearance[]
@@ -50,6 +52,8 @@ export interface Entity extends EntityResolvedFields {
     normalizationOnly?: boolean
 
     homepageUrl?: string
+    wikipediaUrl?: string
+    amazonUrl?: string
     blogUrl?: string
     rssUrl?: string
     mastodonName?: string
