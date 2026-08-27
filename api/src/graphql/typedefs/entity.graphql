@@ -13,6 +13,8 @@ type Entity {
     nameHtml: String
     # for streamers, etc. who are best know by their nickname
     alias: String
+    # for books
+    author: String
     otherName: String
     homepageUrl: String
     homepage: Homepage
@@ -67,6 +69,9 @@ type Entity {
 
     wikipediaUrl: String
     wikipedia: Wikipedia
+
+    steamUrl: String
+    steam: Steam
 
     blog: Blog
     rss: RSS
@@ -200,6 +205,13 @@ type Wikipedia {
 Amazon Info
 """
 type Amazon {
+    url: String
+}
+
+"""
+Steam Info
+"""
+type Steam {
     url: String
 }
 

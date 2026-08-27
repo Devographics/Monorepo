@@ -27,6 +27,7 @@ export interface EntityResolvedFields {
     blog?: Resource
     amazon?: Resource
     wikipedia?: Resource
+    steam?: Resource
     rss?: Resource
     webFeature?: WebFeature
     appearsIn?: EntityAppearance[]
@@ -43,6 +44,7 @@ export interface Entity extends EntityResolvedFields {
     nameClean?: string
     nameHtml?: string
     alias?: string
+    author?: string
     category?: string
     description?: string
     descriptionClean?: string
@@ -54,6 +56,7 @@ export interface Entity extends EntityResolvedFields {
     homepageUrl?: string
     wikipediaUrl?: string
     amazonUrl?: string
+    steamUrl?: string
     blogUrl?: string
     rssUrl?: string
     mastodonName?: string

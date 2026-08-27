@@ -177,6 +177,9 @@ export const entityResolverMap: EntityResolverMap = {
     wikipedia: async entity => {
         return entity.wikipediaUrl && { url: entity.wikipediaUrl }
     },
+    steam: async entity => {
+        return entity.steamUrl && { url: entity.steamUrl }
+    },
     blog: async entity => {
         return entity.blog && { url: entity.blogUrl }
     },
