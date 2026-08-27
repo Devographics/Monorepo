@@ -20,6 +20,7 @@ interface TProps {
     useShort?: boolean
     element?: string
     fallback?: string
+    className?: string
 }
 
 export const T = ({
@@ -32,6 +33,7 @@ export const T = ({
     fallback,
     isFallback = false,
     useShort = false,
+    className,
     element
 }: TProps) => {
     const { getString, getFallbacks } = useI18n()
@@ -45,6 +47,10 @@ export const T = ({
     }
 
     const classNames = ['t']
+
+    if (className) {
+        classNames.push(className)
+    }
 
     if (override) {
         classNames.push('t-override')

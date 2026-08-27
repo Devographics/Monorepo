@@ -1,0 +1,12 @@
+.entity-amazon {
+    display: flex;
+    flex-direction: column;
+    gap: var(--halfSpacing);
+    // align-items: center;
+    margin-top: var(--spacing);
+}
+.entity-amazon-affiliate-notice {
+    font-size: 0.8rem;
+    color: var(--textAltColor);
+    text-align: center;
+}

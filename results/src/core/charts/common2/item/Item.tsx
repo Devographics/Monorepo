@@ -13,7 +13,8 @@ import {
 import Button from 'core/components/Button'
 // import Popover from 'core/components/Popover'
 import Popover from 'core/components/Popover2'
-import { PeopleIcon, PeopleModal, services } from './People'
+import { PeopleIcon, PeopleModal } from './People'
+import { services } from './services'
 import { baselineStatuses, FeatureModal } from './Feature'
 import { LibraryModal } from './Library'
 import { ExternalLinkIcon, FeatureIcon, LibraryIcon } from '@devographics/icons'
@@ -24,7 +25,7 @@ import { SeriesMetadata } from '../types'
 import { BaselineIcon } from './BaselineIcon'
 
 export const entityComponents = {
-    [EntityType.DEFAULT]: { icon: FeatureIcon, modal: FeatureModal },
+    [EntityType.DEFAULT]: { icon: FeatureIcon, modal: PeopleModal },
     [EntityType.PEOPLE]: { icon: PeopleIcon, modal: PeopleModal },
     [EntityType.FEATURE]: { icon: FeatureIcon, modal: FeatureModal },
     [EntityType.LIBRARY]: { icon: LibraryIcon, modal: LibraryModal }
@@ -74,7 +75,6 @@ export const ChartItem = ({
         )
     } else if (
         !enableItemPopovers ||
-        entity.entityType === EntityType.DEFAULT ||
         !entityHasData(entity) ||
         !entityComponents[entity.entityType]
     ) {
