@@ -22,7 +22,7 @@ export const MidpageResourceBlock = ({ block }: { block: BlockVariantDefinition 
                 <div className="midpage-resource-wrapper">
                     <div
                         className="midpage-resource-image"
-                        style={{ 'background-image': `url(${imageUrl})` }}
+                        style={{ backgroundImage: `url(${imageUrl})` }}
                     />
                     <div className="midpage-resource-content">
                         <img className="midpage-resource-logo" src={logoUrl} />

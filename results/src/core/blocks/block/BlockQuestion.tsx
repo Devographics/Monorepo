@@ -9,6 +9,7 @@ import { MultipleIndicator } from 'core/charts/common2/MultipleIndicator'
 import Tooltip from 'core/components/Tooltip'
 import './BlockQuestion.scss'
 import { QuestionMetadata } from '@devographics/types'
+import { OptionLimitIndicator } from 'core/charts/common2/OptionLimitIndicator'
 
 export const BlockQuestion = ({
     block,
@@ -20,6 +21,8 @@ export const BlockQuestion = ({
     const blockQuestion = block && useBlockQuestion({ block })
     const isFreeformQuestion = ['multiple_options2_freeform'].includes(block.template)
     const isMultipleQuestion = question?.allowMultiple
+    const limit = question?.limit
+    const hasOptionLimit = limit !== undefined
     if (blockQuestion) {
         return (
             <div className="block-question">
@@ -29,6 +32,7 @@ export const BlockQuestion = ({
                     <div className="block-question-right">
                         {isFreeformQuestion && <FreeformIndicator showLabel={true} />}
                         {isMultipleQuestion && <MultipleIndicator showLabel={true} />}
+                        {hasOptionLimit && <OptionLimitIndicator showLabel={true} limit={limit} />}
                     </div>
                 </div>
             </div>

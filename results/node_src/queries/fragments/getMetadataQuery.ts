@@ -93,6 +93,7 @@ query {
                                 allowComment
                                 allowOther
                                 yearAdded
+                                limit
                                 entity {
                                     id
                                     name
