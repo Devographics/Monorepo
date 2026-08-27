@@ -5,7 +5,8 @@ import {
     QuestionMetadata,
     ResponseEditionMetadata,
     YearCompletion,
-    OrderOptions
+    OrderOptions,
+    BucketUnits
 } from '@devographics/types'
 import { MultiItemsChartValues } from '../multiItemsExperience/types'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
@@ -45,7 +46,7 @@ export interface ChartStateWithView<ViewType> extends ChartStateWithHighlightedR
 }
 
 export interface ChartStateWithSort extends ChartStateWithHighlightedRow {
-    sort: string | undefined
+    sort: BucketUnits | undefined
     setSort: Dispatch<SetStateAction<string | undefined>>
     order: OrderOptions
     setOrder: Dispatch<SetStateAction<OrderOptions>>

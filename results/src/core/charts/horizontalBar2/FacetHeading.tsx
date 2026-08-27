@@ -1,6 +1,6 @@
 import React from 'react'
 import { PageContextValue } from 'core/types'
-import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
+import { OrderOptions, QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { getBlockAllFacetBucketIds } from './helpers/other'
 import { useEntities } from 'core/helpers/entities'
@@ -13,6 +13,7 @@ import Legend from './Legend'
 import { getViewDefinition } from './helpers/views'
 import { Toggle } from '../common2'
 import { useI18n } from '@devographics/react-i18n'
+import './FacetHeading.scss'
 
 export const FacetHeading = (
     props: CommonProps<HorizontalBarChartState> & {
@@ -61,7 +62,12 @@ export const FacetHeading = (
                 question={question}
                 chartState={chartState}
             />
-            {showToggle && <ViewToggle chartState={chartState} />}
+            {showToggle && (
+                <div className="chart-heading-toggles">
+                    <ViewToggle chartState={chartState} />
+                    <OrderToggle chartState={chartState} />
+                </div>
+            )}
             {viewDefinition.showLegend && facetQuestion && colorScale && (
                 <Legend
                     {...props}
@@ -96,4 +102,28 @@ const ViewToggle = ({ chartState }: { chartState: HorizontalBarChartState }) => 
         />
     )
 }
+
+const OrderToggle = ({ chartState }: { chartState: HorizontalBarChartState }) => {
+    const { getString } = useI18n()
+    const { order, setOrder } = chartState
+    const items = [OrderOptions.DESC, OrderOptions.ASC].map(id => {
+        const labelKey = `charts.order.${id}`
+        return {
+            labelKey,
+            id,
+            isEnabled: order === id,
+            label: getString(labelKey)?.t
+        }
+    })
+    return (
+        <Toggle
+            labelId="charts.order"
+            handleSelect={id => {
+                setOrder(id as OrderOptions)
+            }}
+            items={items}
+        />
+    )
+}
+
 export default FacetHeading

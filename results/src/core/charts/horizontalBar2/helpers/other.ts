@@ -1,5 +1,6 @@
 import {
     Bucket,
+    BucketUnits,
     FacetBucket,
     FeaturesOptions,
     QuestionMetadata,
@@ -102,8 +103,23 @@ export const getChartBuckets = ({
                 })
             } else {
                 // we're sorting by sort value on the main bucket
+                // when sorting by the facet summary stat (median/average), follow
+                // whichever one is currently displayed (view) rather than the
+                // configured default, since that's the value the user is looking at
+                const isFacetSummarySort =
+                    sort === BucketUnits.MEDIAN || sort === BucketUnits.AVERAGE
+                const effectiveSort = isFacetSummarySort
+                    ? view === HorizontalBarViews.AVERAGE
+                        ? BucketUnits.AVERAGE
+                        : BucketUnits.MEDIAN
+                    : sort
                 sortableBuckets = sortBy(sortableBuckets, bucket => {
-                    const value = bucket[sort]
+                    // note: medianByFacet isn't a real field returned by the API,
+                    // the actual median value lives at percentilesByFacet.p50
+                    const value =
+                        effectiveSort === BucketUnits.MEDIAN
+                            ? bucket.percentilesByFacet?.p50
+                            : bucket[effectiveSort]
                     return value
                 })
             }
