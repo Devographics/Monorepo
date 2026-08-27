@@ -99,11 +99,11 @@ export const getItemLabel = (options: {
         descriptionKey,
         source = LabelSourcesEnum.ID
 
-    // 2. if this is a predefined key, use that
+    // 2. if this is a predefined key, use that as default
     if (Object.keys(predefinedKeys).includes(String(id))) {
         // 2. this is special field with a predefined key
-        key = predefinedKeys[id]
-        label = getString(key)?.t
+        const predefinedKey = predefinedKeys[id]
+        label = getString(predefinedKey)?.t
         shortLabel = label
         source = LabelSourcesEnum.PREDEFINED
     }
