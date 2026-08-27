@@ -11,10 +11,13 @@ import {
     encodeMultiValueQuestion,
     encodeQuestion,
     expandCategoricalOptions,
+    getCorrelationDirection,
     getCorrelationQuestions,
+    getCorrelationStrength,
     getMultiValueCorrelationQuestions,
     getMultiValueDbPaths,
     getSectionId,
+    putQuestionFirst,
     round,
     splitCorrelationItems
 } from './correlations_calculations'
@@ -49,7 +52,7 @@ export const EDITION_CORRELATIONS_LIMIT = 1000
 // the cached result with noise
 const MIN_CORRELATION = 0.05
 // bump to invalidate cached results when the algorithm changes
-const CACHE_VERSION = 4
+const CACHE_VERSION = 5
 
 interface ComputeOptions {
     survey: SurveyApiObject
@@ -122,6 +125,7 @@ export async function computeEditionCorrelations(
 
             const sectionId1 = getSectionId(eq1.question)
             const sectionId2 = getSectionId(eq2.question)
+            const isAnswer = !!(eq1.optionId || eq2.optionId)
             items.push({
                 questionId1: eq1.question.id,
                 sectionId1,
@@ -131,6 +135,8 @@ export async function computeEditionCorrelations(
                 ...(eq2.optionId && { optionId2: eq2.optionId }),
                 n: stats.n,
                 correlation: round(correlation),
+                strength: getCorrelationStrength(correlation, isAnswer),
+                direction: getCorrelationDirection(correlation),
                 sameSection: !!sectionId1 && !!sectionId2 ? sectionId1 === sectionId2 : false
             })
         }
@@ -185,9 +191,10 @@ export const getQuestionCorrelations = async ({
         context
     })
 
-    const items = editionCorrelations.items.filter(
-        item => item.questionId1 === question.id || item.questionId2 === question.id
-    )
+    const items = editionCorrelations.items
+        .filter(item => item.questionId1 === question.id || item.questionId2 === question.id)
+        // present the queried question consistently as side 1
+        .map(item => putQuestionFirst(item, question.id))
 
     /*
     
@@ -201,6 +208,13 @@ export const getQuestionCorrelations = async ({
     // items are already sorted by association strength, so both lists stay
     // sorted with the strongest correlations first
     const questionCorrelations = items.filter(item => !isAnswerCorrelation(item))
+    /*
+    Note: since the queried question is always side 1, answer items come in two
+    shapes depending on the queried question's type. For categorical/multi
+    questions the answer is the question's own ("gender:female × yearly_salary",
+    optionId1 set); for ordinal scale questions it belongs to the other side
+    ("job_happiness × workplace_perks:company_culture", optionId2 set).
+    */
     const answerCorrelations = items.filter(isAnswerCorrelation)
     return {
         questionCorrelations: limit ? questionCorrelations.slice(0, limit) : questionCorrelations,

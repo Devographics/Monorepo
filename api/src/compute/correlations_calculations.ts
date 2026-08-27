@@ -38,6 +38,47 @@ export const EXCLUDED_QUESTION_IDS = [
     'survey_feedback'
 ]
 
+export type CorrelationStrength = 'very_strong' | 'strong' | 'moderate' | 'weak'
+export type CorrelationDirection = 'positive' | 'negative'
+
+/*
+
+Strength bands (lower bound of |correlation| for each label).
+
+Answer correlations use lower thresholds: a binary "picked it or not" variable
+has a mechanical ceiling below 1 unless its pick-rate matches the other
+variable's distribution, so the same numeric value represents a stronger effect
+than it would between two full scales.
+
+*/
+export const QUESTION_STRENGTH_BANDS: [CorrelationStrength, number][] = [
+    ['very_strong', 0.5],
+    ['strong', 0.3],
+    ['moderate', 0.15]
+]
+export const ANSWER_STRENGTH_BANDS: [CorrelationStrength, number][] = [
+    ['very_strong', 0.4],
+    ['strong', 0.25],
+    ['moderate', 0.1]
+]
+
+export const getCorrelationStrength = (
+    correlation: number,
+    isAnswerCorrelation: boolean
+): CorrelationStrength => {
+    const bands = isAnswerCorrelation ? ANSWER_STRENGTH_BANDS : QUESTION_STRENGTH_BANDS
+    const value = Math.abs(correlation)
+    for (const [strength, lowerBound] of bands) {
+        if (value >= lowerBound) {
+            return strength
+        }
+    }
+    return 'weak'
+}
+
+export const getCorrelationDirection = (correlation: number): CorrelationDirection =>
+    correlation < 0 ? 'negative' : 'positive'
+
 export interface CorrelationItem {
     questionId1: string
     sectionId1?: string
@@ -56,6 +97,8 @@ export interface CorrelationItem {
     correlated, so this is always defined.
     */
     correlation: number
+    strength: CorrelationStrength
+    direction: CorrelationDirection
     sameSection: boolean
 }
 
@@ -76,8 +119,28 @@ more experience"); "answer correlations" involve one specific answer on at
 least one side ("respondents who picked X tend to…").
 
 */
-export const isAnswerCorrelation = (item: CorrelationItem) =>
-    !!(item.optionId1 || item.optionId2)
+export const isAnswerCorrelation = (item: CorrelationItem) => !!(item.optionId1 || item.optionId2)
+
+/*
+
+Pairs are stored once in arbitrary order; when returning the correlations of a
+specific question, put that question on side 1 so results read consistently
+("this question × everything else"). Rank correlation is symmetric, so
+swapping sides changes nothing else.
+
+*/
+export const putQuestionFirst = (item: CorrelationItem, questionId: string): CorrelationItem =>
+    item.questionId2 === questionId
+        ? {
+              ...item,
+              questionId1: item.questionId2,
+              sectionId1: item.sectionId2,
+              optionId1: item.optionId2,
+              questionId2: item.questionId1,
+              sectionId2: item.sectionId1,
+              optionId2: item.optionId1
+          }
+        : item
 
 export const splitCorrelationItems = (items: CorrelationItem[], limit?: number) => {
     // items are already sorted by association strength, so both lists stay
@@ -85,9 +148,7 @@ export const splitCorrelationItems = (items: CorrelationItem[], limit?: number) 
     const questionCorrelations = items.filter(item => !isAnswerCorrelation(item))
     const answerCorrelations = items.filter(isAnswerCorrelation)
     return {
-        questionCorrelations: limit
-            ? questionCorrelations.slice(0, limit)
-            : questionCorrelations,
+        questionCorrelations: limit ? questionCorrelations.slice(0, limit) : questionCorrelations,
         answerCorrelations: limit ? answerCorrelations.slice(0, limit) : answerCorrelations
     }
 }
@@ -230,12 +291,13 @@ export const encodeQuestion = (
     if (seen.size < 2) {
         return null
     }
-    return {
+    const q = {
         question,
         isOrdinal: isOrdinalQuestion(question),
         cardinality: hasOptions ? question.options!.length : valueIndex.size,
         codes
     }
+    return q
 }
 
 /*
@@ -294,16 +356,18 @@ export const encodeMultiValueQuestion = (
             })
         }
     })
-    return options
-        .map((option, index) => ({
-            question,
-            optionId: String(option.id),
-            isOrdinal: true,
-            cardinality: 2,
-            codes: codesPerOption[index]
-        }))
-        // drop options without enough respondents on both sides
-        .filter(encoded => hasEnoughSelections(encoded.codes, minSelections))
+    return (
+        options
+            .map((option, index) => ({
+                question,
+                optionId: String(option.id),
+                isOrdinal: true,
+                cardinality: 2,
+                codes: codesPerOption[index]
+            }))
+            // drop options without enough respondents on both sides
+            .filter(encoded => hasEnoughSelections(encoded.codes, minSelections))
+    )
 }
 
 const hasEnoughSelections = (codes: Int16Array, minSelections: number) => {
@@ -456,9 +520,7 @@ export const computePairStats = (
             }
         }
         spearman =
-            varianceX > 0 && varianceY > 0
-                ? covariance / Math.sqrt(varianceX * varianceY)
-                : 0
+            varianceX > 0 && varianceY > 0 ? covariance / Math.sqrt(varianceX * varianceY) : 0
     }
 
     return { n, cramersV, spearman }

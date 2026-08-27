@@ -957,7 +957,26 @@ type CorrelationItem {
     goes with higher values), negative means the reverse
     """
     correlation: Float
+    """
+    How strong the correlation is, judged against bands appropriate for its
+    type (answer correlations use lower thresholds since binary variables have
+    a mechanical ceiling on their correlation)
+    """
+    strength: CorrelationStrength
+    direction: CorrelationDirection
     sameSection: Boolean
+}
+
+enum CorrelationStrength {
+    very_strong
+    strong
+    moderate
+    weak
+}
+
+enum CorrelationDirection {
+    positive
+    negative
 }
 
 type ExternalData {

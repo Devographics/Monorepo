@@ -3,7 +3,10 @@ import {
     encodeMultiValueQuestion,
     encodeQuestion,
     expandCategoricalOptions,
+    getCorrelationDirection,
     getCorrelationQuestions,
+    getCorrelationStrength,
+    putQuestionFirst,
     splitCorrelationItems
 } from './correlations_calculations'
 import type { CorrelationItem } from './correlations_calculations'
@@ -300,6 +303,64 @@ describe('splitCorrelationItems', () => {
         const { questionCorrelations, answerCorrelations } = splitCorrelationItems(items, 1)
         expect(questionCorrelations).toHaveLength(1)
         expect(answerCorrelations).toHaveLength(1)
+    })
+})
+
+describe('putQuestionFirst', () => {
+    const item = {
+        questionId1: 'yearly_salary',
+        sectionId1: 'workplace',
+        questionId2: 'gender',
+        sectionId2: 'user_info',
+        optionId2: 'female',
+        n: 4000,
+        correlation: -0.04,
+        strength: 'weak',
+        direction: 'negative',
+        sameSection: false
+    } as CorrelationItem
+
+    test('swaps sides when the question is second', () => {
+        const swapped = putQuestionFirst(item, 'gender')
+        expect(swapped.questionId1).toBe('gender')
+        expect(swapped.optionId1).toBe('female')
+        expect(swapped.sectionId1).toBe('user_info')
+        expect(swapped.questionId2).toBe('yearly_salary')
+        expect(swapped.optionId2).toBeUndefined()
+        // rank correlation is symmetric: value untouched
+        expect(swapped.correlation).toBe(-0.04)
+    })
+
+    test('leaves items alone when the question is already first', () => {
+        expect(putQuestionFirst(item, 'yearly_salary')).toBe(item)
+    })
+})
+
+describe('getCorrelationStrength', () => {
+    test('question correlation bands', () => {
+        expect(getCorrelationStrength(0.5, false)).toBe('very_strong')
+        expect(getCorrelationStrength(-0.5, false)).toBe('very_strong')
+        expect(getCorrelationStrength(0.49, false)).toBe('strong')
+        expect(getCorrelationStrength(0.3, false)).toBe('strong')
+        expect(getCorrelationStrength(0.29, false)).toBe('moderate')
+        expect(getCorrelationStrength(0.15, false)).toBe('moderate')
+        expect(getCorrelationStrength(0.14, false)).toBe('weak')
+    })
+
+    test('answer correlation bands use lower thresholds', () => {
+        expect(getCorrelationStrength(0.4, true)).toBe('very_strong')
+        expect(getCorrelationStrength(-0.39, true)).toBe('strong')
+        expect(getCorrelationStrength(0.25, true)).toBe('strong')
+        expect(getCorrelationStrength(0.24, true)).toBe('moderate')
+        expect(getCorrelationStrength(0.1, true)).toBe('moderate')
+        expect(getCorrelationStrength(0.09, true)).toBe('weak')
+    })
+})
+
+describe('getCorrelationDirection', () => {
+    test('sign maps to direction', () => {
+        expect(getCorrelationDirection(0.3)).toBe('positive')
+        expect(getCorrelationDirection(-0.3)).toBe('negative')
     })
 })
 
