@@ -1,7 +1,14 @@
 import { Entity, ResultsSubFieldEnum } from '@devographics/types'
 import { getGenericCacheKey, genericComputeFunction } from '../../compute'
 import { useCache } from '../../helpers/caching'
-import { EditionApiObject, RequestContext, ResolverType, SurveyApiObject } from '../../types'
+import {
+    EditionApiObject,
+    QuestionApiObject,
+    RequestContext,
+    ResolverType,
+    SurveyApiObject
+} from '../../types'
+import { EDITION_CORRELATIONS_LIMIT, getEditionCorrelations } from '../../compute/correlations'
 import { getEditionById } from '../helpers'
 import { EditionSectionMetadataArgs, filterItems } from '../resolvers'
 import { getEntities } from '../../load/entities'
@@ -119,6 +126,27 @@ export const getEditionCodebookResolver =
         }
         entities = uniqBy(entities, e => e.id)
         return { entities, entitiesCount: entities.length }
+    }
+
+export const getEditionCorrelationsResolver =
+    ({
+        survey,
+        edition,
+        questionObjects
+    }: {
+        survey: SurveyApiObject
+        edition: EditionApiObject
+        questionObjects: QuestionApiObject[]
+    }): ResolverType =>
+    async (parent, args, context, info) => {
+        console.log(`// edition correlations resolver: ${edition.id}`)
+        const editionCorrelations = await getEditionCorrelations({
+            survey,
+            edition,
+            questionObjects,
+            context
+        })
+        return { data: editionCorrelations.items.slice(0, EDITION_CORRELATIONS_LIMIT) }
     }
 
 export const currentEditionResolver: ResolverType = async (parent, args, context, info) => {

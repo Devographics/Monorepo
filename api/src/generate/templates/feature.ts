@@ -31,6 +31,7 @@ const getTypeDef = ({
 }) => `type ${fieldTypeName} {
     id: String
     _metadata: QuestionMetadata
+    _correlations: Correlations
     options: [FeatureOption]
     comments(parameters: CommentParameters): ItemComments
     entity: Entity

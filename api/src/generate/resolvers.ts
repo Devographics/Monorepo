@@ -36,6 +36,7 @@ import { getSectionResolver, sectionMetadataResolverMap } from './resolvers/sect
 import {
     editionMetadataResolverMap,
     getEditionCodebookResolver,
+    getEditionCorrelationsResolver,
     getEditionMetadataResolver,
     getEditionResolver,
     getEditionStatsResolver
@@ -154,6 +155,11 @@ export const generateResolvers = async ({
                         [ResultsSubFieldEnum.CODEBOOK]: getEditionCodebookResolver({
                             survey,
                             edition
+                        }),
+                        [ResultsSubFieldEnum.CORRELATIONS]: getEditionCorrelationsResolver({
+                            survey,
+                            edition,
+                            questionObjects
                         }),
                         _stats: getEditionStatsResolver({
                             survey,

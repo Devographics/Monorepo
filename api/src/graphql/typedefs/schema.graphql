@@ -930,6 +930,37 @@ type Codebook {
     entitiesCount: Int
 }
 
+type Correlations {
+    data: [CorrelationItem]
+}
+
+type CorrelationItem {
+    questionId1: String
+    sectionId1: String
+    """
+    Set when the variable is one option of a multi-value question (e.g. one game
+    of favorite_video_games): the correlation is between selecting that option
+    or not, and the other variable
+    """
+    optionId1: String
+    questionId2: String
+    sectionId2: String
+    optionId2: String
+    """
+    Number of respondents who answered both questions
+    """
+    n: Float
+    """
+    Bias-corrected Cramér's V (unsigned, 0-1)
+    """
+    cramersV: Float
+    """
+    Spearman's rank correlation (signed), only defined when both questions are ordinal
+    """
+    spearman: Float
+    sameSection: Boolean
+}
+
 type ExternalData {
     id: String
     _metadata: ExternalDataMetadata

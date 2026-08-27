@@ -31,6 +31,7 @@ export const tool: ApiTemplateFunction = options => {
         typeDef: `type ${fieldTypeName} {
     id: String
     _metadata: QuestionMetadata
+    _correlations: Correlations
     options: [ToolOption]
     comments: ItemComments
     entity: Entity
@@ -68,6 +69,7 @@ const getTypeDef = ({
 }) => `type ${fieldTypeName} {
     id: String
     _metadata: QuestionMetadata
+    _correlations: Correlations
     options: [ToolOption]
     comments(parameters: CommentParameters): ItemComments
     entity: Entity

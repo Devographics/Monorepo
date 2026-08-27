@@ -175,7 +175,26 @@ const config = {
   // testRunner: "jest-circus/runner",
 
   // A map from regular expressions to paths to transformers
-  // transform: undefined,
+  // (the tsconfig override is needed because the project tsconfig's "lib" values
+  // are not all supported by the typescript version resolved by ts-jest)
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        // transpile-only (like the tsup build): full typechecking would require
+        // the ts version resolved by ts-jest to understand the workspace
+        // packages' ts-source "exports" maps
+        diagnostics: false,
+        tsconfig: {
+          target: "es2021",
+          module: "commonjs",
+          lib: ["es2021"],
+          esModuleInterop: true,
+          strict: true,
+        },
+      },
+    ],
+  },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [

@@ -5,6 +5,7 @@ import { getEntities, getEntity } from '../load/entities'
 import { getResponseTypeName } from '../graphql/templates'
 import intersection from 'lodash/intersection.js'
 import { rawDataResolver } from './resolvers/raw_data'
+import { getQuestionCorrelations } from '../compute/correlations'
 
 interface SubField {
     id: ResultsSubFieldEnum
@@ -71,6 +72,23 @@ export const subFields: Array<SubField> = [
             const allEntities = await getEntities({ includeNormalizationEntities: true })
             const entities = allEntities.filter(e => intersection(e.tags, matchTags).length > 0)
             return { entities, entitiesCount: entities.length }
+        }
+    },
+    {
+        id: ResultsSubFieldEnum.CORRELATIONS,
+        def: () => `${ResultsSubFieldEnum.CORRELATIONS}: Correlations`,
+        addIf: ({ normPaths }) => !!normPaths?.response,
+        resolverFunction: async (parent, args, context) => {
+            console.log('// question correlations resolver')
+            const { survey, edition, question, questionObjects } = parent
+            const data = await getQuestionCorrelations({
+                survey,
+                edition,
+                question,
+                questionObjects,
+                context
+            })
+            return { data }
         }
     },
     {
