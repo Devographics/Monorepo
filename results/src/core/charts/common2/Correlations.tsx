@@ -96,6 +96,18 @@ export const Correlations = ({ question, block, optionId, correlations }: Correl
     return (
         <div className="correlations-wrapper">
             <h3 className="correlations-heading">{heading}</h3>
+            <div className="correlation-directions">
+                <ul>
+                    <li>
+                        <PositiveCorrelation />
+                        <T k="correlations.direction.positive.description" md={true} />
+                    </li>
+                    <li>
+                        <NegativeCorrelation />
+                        <T k="correlations.direction.negative.description" md={true} />
+                    </li>
+                </ul>
+            </div>
             <div className="correlation-items">
                 {correlations.map((c, i) => (
                     <CorrelationItemComponent key={i} correlation={c} block={block} />
@@ -194,7 +206,10 @@ const CorrelationItemComponent = ({
             className={`correlation-item correlation-item-${strength} correlation-item-${direction}`}
         >
             <div className="correlation-item-value">
-                <span>{round(correlationValue, 2)}</span>
+                <span className="correlation-item-value-figure">
+                    {correlationValue > 0 && '+'}
+                    {correlationValue.toFixed(2)}
+                </span>
                 <IconComponent />
             </div>
 
@@ -213,7 +228,7 @@ const CorrelationItemComponent = ({
                     </h4>
                     <div className="correlation-item-n">
                         {/* <T k="correlations.sample_size" />{' '} */}
-                        <UserIcon size={'small'} /> <span>{n}</span>
+                        <UserIcon size={'small'} /> <span>{formatNumber(n)}</span>
                         {/* <T k="correlations.respondents" values={{ n: formatNumber(n) }} /> */}
                     </div>
                 </div>
@@ -231,13 +246,25 @@ const CorrelationItemComponent = ({
 }
 
 const PositiveCorrelation = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="36" fill="none" viewBox="0 0 24 36">
-        <path stroke="currentColor" d="M1 23 23 1m0 7V1h-7M1 35l22-22m0 7v-7h-7"></path>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 48">
+        <path
+            stroke="currentColor"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M13 2.243h8.485v8.485m0-8.485L3.5 20.228M13 28.243h8.485v8.485m0-8.485L3.5 46.228"
+        ></path>
+        <path stroke="currentColor" d="M1 24h22"></path>
     </svg>
 )
 
 const NegativeCorrelation = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="36" fill="none" viewBox="0 0 24 36">
-        <path stroke="currentColor" d="M1 23 23 1m0 7V1h-7M1 13l22 22m-7 0h7v-7"></path>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 48">
+        <path
+            stroke="currentColor"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M13 2.243h8.485v8.485m0-8.485L3.5 20.228M21.485 37.743v8.485H13m8.485 0L3.5 28.243"
+        ></path>
+        <path stroke="currentColor" d="M1 24h22"></path>
     </svg>
 )
