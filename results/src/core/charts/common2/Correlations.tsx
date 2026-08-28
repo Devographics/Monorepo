@@ -70,17 +70,42 @@ type CorrelationProps = {
     block: BlockVariantDefinition
 }
 
-export const getCorrelationShape = (correlation: CorrelationItem) =>
-    correlation.optionId2 ? 'shape3' : 'shape2'
+export const getCorrelationShape = (correlation: CorrelationItem) => {
+    const { optionId1, optionId2 } = correlation
+    if (optionId1) {
+        if (optionId2) {
+            /*
+            ### Shape 3 
+            An option is correlated with another option, e.g. "respondents who picked [women] tend to also pick discrimination = based on gender"
+            */
+            return 'shape3'
+        } else {
+            /*
+            ### Shape 2
+            An option is correlated with a trend, e.g. "respondents who picked [women] tend to have a lower salary"
+            */
+            return 'shape2'
+        }
+    } else if (!optionId1) {
+        if (optionId2) {
+            /*
+            ### Shape 4 (same as shape 2)
+            A trend is correlated with an option, e.g. "people who work for larger companies tend to pick "I live in the US" more"
+            */
+            return 'shape4'
+        } else {
+            /* 
+            ### Shape 1
+            A trend is correlated with a trend, e.g. "people who work for larger companies tend to earn more"
+            */
+            return 'shape1'
+        }
+    }
+    throw new Error('Could not identify correlation shape')
+}
 
 export const Correlations = ({ question, block, optionId, correlations }: CorrelationProps) => {
     console.log({ correlations })
-    /* 
-    
-    If optionId is not defined then this is shape1, e.g. "people who work for larger companies tend to earn more"
-
-    */
-    const isShape1 = !optionId
 
     const { getString, getFallbacks } = useI18n()
     const pageContext = usePageContext()
@@ -92,23 +117,24 @@ export const Correlations = ({ question, block, optionId, correlations }: Correl
     const { tClean: questionLabel } = getBlockTitle({ block, pageContext, getFallbacks })
 
     // for shape2 and shape3
-    const optionLabelObject = getItemLabel({
-        id: optionId,
-        getString,
-        i18nNamespace
-    })
-
-    const optionLabel = optionLabelObject?.shortLabel
-
-    const heading = getString(`correlations.heading.${isShape1 ? 'shape1' : 'shape2'}`, {
-        values: { count, questionLabel, optionLabel }
-    })?.t
-
-    const ItemComponent = isShape1 ? QuestionCorrelationItem : OptionCorrelationItem
+    let optionLabel
+    if (optionId) {
+        const optionLabelObject = getItemLabel({
+            id: optionId,
+            getString,
+            i18nNamespace
+        })
+        optionLabel = typeof optionId !== undefined && optionLabelObject?.shortLabel
+    }
 
     return (
         <div className="correlations-wrapper">
-            <h3 className="correlations-heading">{heading}</h3>
+            <h3 className="correlations-heading">
+                <T
+                    k={`correlations.heading${optionLabel ? '.option' : ''}`}
+                    values={{ count, questionLabel, optionLabel }}
+                />
+            </h3>
             <div className="correlation-directions">
                 <ul>
                     <li>
@@ -123,7 +149,7 @@ export const Correlations = ({ question, block, optionId, correlations }: Correl
             </div>
             <div className="correlation-items">
                 {correlations.map((c, i) => (
-                    <ItemComponent key={i} correlation={c} block={block} />
+                    <CorrelationItemComponent key={i} correlation={c} block={block} />
                 ))}
             </div>
             <div className="correlations-note">
@@ -133,62 +159,7 @@ export const Correlations = ({ question, block, optionId, correlations }: Correl
     )
 }
 
-const QuestionCorrelationItem = ({
-    correlation,
-    block
-}: {
-    correlation: CorrelationItem
-    block: BlockVariantDefinition
-}) => {
-    const pageContext = usePageContext()
-    const { currentEdition } = pageContext
-    const { getString } = useI18n()
-    const { strength, correlation: correlationValue, direction, questionId2, n } = correlation
-
-    // the question the main variable is correlated to
-    const question = getQuestionById(currentEdition, questionId2)
-
-    if (!question) {
-        return (
-            <div>
-                Could not find question <code>{questionId2}</code>
-            </div>
-        )
-    }
-
-    const strengthLevelLabel = getString(`correlations.strength.${strength}`)?.t
-
-    let directionLabel
-
-    const questionLabelObject = getQuestionLabel({
-        getString,
-        question,
-        block
-    })
-    const questionLabel = questionLabelObject.question
-
-    const takeawayKey = `correlations.takeaway.shape1`
-
-    return (
-        <div
-            className={`correlation-item correlation-item-${strength} correlation-item-${direction}`}
-        >
-            <CorrelationValue value={correlationValue} direction={direction} />
-
-            <div className="correlation-item-description">
-                <CorrelationSubheading questionName={questionLabelObject.questionName} n={n} />
-                <T
-                    k={takeawayKey}
-                    values={{ strengthLevelLabel, directionLabel, questionLabel }}
-                    md={true}
-                    html={true}
-                />
-            </div>
-        </div>
-    )
-}
-
-const OptionCorrelationItem = ({
+const CorrelationItemComponent = ({
     correlation,
     block
 }: {
@@ -218,23 +189,13 @@ const OptionCorrelationItem = ({
         )
     }
 
-    /*
-
-    ### Shape 2
-    An option is correlated with a trend, e.g. "respondents who picked [women] tend to have a lower salary"
-
-    ### Shape 3 
-    An option is correlated with another option, e.g. "respondents who picked [women] tend to also pick discrimination = based on gender"
-    
-    */
     const shape = getCorrelationShape(correlation)
-    const isShape3 = shape === 'shape3'
 
     const strengthLevelLabel = getString(`correlations.strength.${strength}`)?.t
 
     let directionLabel
 
-    if (isShape3) {
+    if (['shape3', 'shape4'].includes(shape)) {
         directionLabel = getString(`correlations.direction.${direction}`)?.t
     } else {
         const shape2Directions = { positive: 'higher', negative: 'lower' }
@@ -256,11 +217,14 @@ const OptionCorrelationItem = ({
     })
     const questionLabel = questionLabelObject.question
 
-    const optionLabel = getItemLabel({
-        id: optionId2,
-        getString,
-        i18nNamespace: questionId2
-    })?.shortLabel
+    let optionLabel
+    if (optionId2) {
+        optionLabel = getItemLabel({
+            id: optionId2,
+            getString,
+            i18nNamespace: questionId2
+        })?.shortLabel
+    }
 
     const takeawayKey = `correlations.takeaway.${shape}`
 
@@ -271,6 +235,7 @@ const OptionCorrelationItem = ({
             <CorrelationValue value={correlationValue} direction={direction} />
 
             <div className="correlation-item-description">
+                {/* <div>{shape}</div> */}
                 <CorrelationSubheading
                     questionName={questionLabelObject.questionName}
                     n={n}
