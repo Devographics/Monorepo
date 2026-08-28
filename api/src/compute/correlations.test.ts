@@ -453,23 +453,22 @@ describe('putQuestionFirst', () => {
 })
 
 describe('getCorrelationStrength', () => {
-    test('question correlation bands', () => {
-        expect(getCorrelationStrength(0.5, false)).toBe('very_strong')
-        expect(getCorrelationStrength(-0.5, false)).toBe('very_strong')
-        expect(getCorrelationStrength(0.49, false)).toBe('strong')
-        expect(getCorrelationStrength(0.3, false)).toBe('strong')
-        expect(getCorrelationStrength(0.29, false)).toBe('moderate')
-        expect(getCorrelationStrength(0.15, false)).toBe('moderate')
-        expect(getCorrelationStrength(0.14, false)).toBe('weak')
+    test('one scale is used for every kind of correlation', () => {
+        expect(getCorrelationStrength(0.4)).toBe('very_strong')
+        expect(getCorrelationStrength(-0.4)).toBe('very_strong')
+        expect(getCorrelationStrength(0.39)).toBe('strong')
+        expect(getCorrelationStrength(0.25)).toBe('strong')
+        expect(getCorrelationStrength(-0.25)).toBe('strong')
+        expect(getCorrelationStrength(0.24)).toBe('moderate')
+        expect(getCorrelationStrength(0.1)).toBe('moderate')
+        expect(getCorrelationStrength(0.09)).toBe('weak')
     })
 
-    test('answer correlation bands use lower thresholds', () => {
-        expect(getCorrelationStrength(0.4, true)).toBe('very_strong')
-        expect(getCorrelationStrength(-0.39, true)).toBe('strong')
-        expect(getCorrelationStrength(0.25, true)).toBe('strong')
-        expect(getCorrelationStrength(0.24, true)).toBe('moderate')
-        expect(getCorrelationStrength(0.1, true)).toBe('moderate')
-        expect(getCorrelationStrength(0.09, true)).toBe('weak')
+    test('a larger correlation is never labelled weaker than a smaller one', () => {
+        // the two-table scale used to label 0.27 "moderate" and 0.25 "strong",
+        // which read as an inversion wherever both appeared in one list
+        expect(getCorrelationStrength(0.27)).toBe('strong')
+        expect(getCorrelationStrength(-0.25)).toBe('strong')
     })
 })
 

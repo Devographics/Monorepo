@@ -51,30 +51,22 @@ export const EXCLUDED_QUESTION_IDS = [
 
 Strength bands (lower bound of |correlation| for each label).
 
-Answer correlations use lower thresholds: a binary "picked it or not" variable
-has a mechanical ceiling below 1 unless its pick-rate matches the other
-variable's distribution, so the same numeric value represents a stronger effect
-than it would between two full scales.
+One scale is used for every kind of correlation. Binary "picked it or not"
+variables do have a mechanical ceiling below 1, which once justified scoring
+them on a separate, lower scale — but that ceiling depends on how common the
+answer is, so a single fixed discount corrected nothing while making labels
+inconsistent wherever the two kinds appear in the same list.
 
 */
-export const QUESTION_STRENGTH_BANDS: [CorrelationStrength, number][] = [
-    ['very_strong', 0.5],
-    ['strong', 0.3],
-    ['moderate', 0.15]
-]
-export const ANSWER_STRENGTH_BANDS: [CorrelationStrength, number][] = [
+export const CORRELATION_STRENGTH_BANDS: [CorrelationStrength, number][] = [
     ['very_strong', 0.4],
     ['strong', 0.25],
     ['moderate', 0.1]
 ]
 
-export const getCorrelationStrength = (
-    correlation: number,
-    isAnswerCorrelation: boolean
-): CorrelationStrength => {
-    const bands = isAnswerCorrelation ? ANSWER_STRENGTH_BANDS : QUESTION_STRENGTH_BANDS
+export const getCorrelationStrength = (correlation: number): CorrelationStrength => {
     const value = Math.abs(correlation)
-    for (const [strength, lowerBound] of bands) {
+    for (const [strength, lowerBound] of CORRELATION_STRENGTH_BANDS) {
         if (value >= lowerBound) {
             return strength
         }
@@ -96,9 +88,8 @@ export const CORRELATION_STRENGTHS: CorrelationStrength[] = [
 /*
 
 Keep only correlations worth showing: strong enough to mean something, and at
-most `limit` of them. Gating on `strength` rather than a raw number means each
-item is judged against the bands for its own type, since answer correlations
-have a lower ceiling than question ones.
+most `limit` of them. Filtering happens before the limit, so a weak item can
+never consume one of the slots.
 
 */
 export const filterCorrelations = (
