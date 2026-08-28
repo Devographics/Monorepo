@@ -6,14 +6,15 @@ import {
     Option,
     ToolsOptions,
     FeaturesOptions,
-    EditionMetadata
+    EditionMetadata,
+    QuestionMetadataWithSection
 } from '@devographics/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import omit from 'lodash/omit.js'
 
 export const getAllQuestions = (edition: EditionMetadata) => {
     const { sections } = edition
-    const allQuestions = sections
+    const allQuestions: QuestionMetadataWithSection[] = sections
         .map(s => s.questions.map(q => ({ ...q, section: omit(s, 'questions') })))
         .flat()
     return allQuestions

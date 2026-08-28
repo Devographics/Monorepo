@@ -11,9 +11,16 @@ type ModalTriggerProps = {
     size?: string
     trigger: ReactNode
     children: ReactNode
+    className?: string
 }
 
-const ModalTrigger = ({ label, trigger, size = 'm', children }: ModalTriggerProps) => {
+const ModalTrigger = ({
+    className = '',
+    label,
+    trigger,
+    size = 'm',
+    children
+}: ModalTriggerProps) => {
     const theme = useTheme()
     const [modalIsOpen, setIsOpen] = useState(false)
     const { translate } = useI18n()
@@ -63,12 +70,12 @@ const ModalTrigger = ({ label, trigger, size = 'm', children }: ModalTriggerProp
                 onRequestClose={closeModal}
                 style={customStyles}
                 contentLabel={label}
-                className="ModalContent"
+                className={`ModalContent ${className}`}
                 // overlayClassName="ModalOverlay"
             >
                 <Content size={size}>
                     <ModalClose closeModal={closeModal} />
-                    <Inner className="secondary-bg">{childrenComponent}</Inner>
+                    <Inner className="modal-inner secondary-bg">{childrenComponent}</Inner>
                 </Content>
             </Modal>
         </>

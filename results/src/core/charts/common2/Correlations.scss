@@ -1,4 +1,11 @@
 @use '../../../stylesheets/_breakpoints.scss';
+
+.correlations-modal {
+    .modal-inner {
+        padding: 0;
+    }
+}
+
 .chart-correlation-indicator {
     .chart-cell & {
         position: absolute;
@@ -12,13 +19,29 @@
 }
 
 .correlations-wrapper {
+    position: relative;
+}
+.correlations-heading-wrapper {
+    container-type: scroll-state;
+    position: sticky;
+    top: -20px;
+}
+.correlations-heading {
+    margin: 0;
+    background-color: var(--backgroundAltColor);
+    padding: var(--doubleSpacing) var(--doubleSpacing) var(--spacing) var(--doubleSpacing);
+    transition: box-shadow 0.3s ease;
+
+    @container scroll-state(stuck: top) {
+        box-shadow: 0px 10px 5px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.correlations-content {
+    padding: 0 var(--doubleSpacing) var(--doubleSpacing) var(--doubleSpacing);
     display: flex;
     flex-direction: column;
     gap: var(--spacing);
-}
-
-.correlations-heading {
-    margin: 0;
 }
 
 .correlation-directions {

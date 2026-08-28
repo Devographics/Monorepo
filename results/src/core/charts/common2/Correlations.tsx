@@ -8,12 +8,13 @@ import Button from 'core/components/Button'
 import { useI18n } from '@devographics/react-i18n'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
-import { CorrelationItem, QuestionMetadata } from '@devographics/types'
+import { CorrelationItem, QuestionMetadata, QuestionMetadataWithSection } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import { getItemLabel, getOptionsNamespace } from 'core/helpers/labels'
 import { getQuestionLabel } from './helpers/labels'
 import { getQuestionById } from 'core/helpers/options'
 import { formatNumber } from './helpers/format'
+import { StringTranslator } from '@devographics/i18n'
 
 export const CorrelationsTrigger = ({
     question,
@@ -37,6 +38,7 @@ export const CorrelationsTrigger = ({
         <ModalTrigger
             label={label}
             size="l"
+            className="correlations-modal"
             trigger={
                 <div className="chart-correlation-indicator">
                     <Tooltip
@@ -64,44 +66,10 @@ export const CorrelationsTrigger = ({
 }
 
 type CorrelationProps = {
-    question: QuestionMetadata
+    question: QuestionMetadataWithSection
     optionId?: string
     correlations: CorrelationItem[]
     block: BlockVariantDefinition
-}
-
-export const getCorrelationShape = (correlation: CorrelationItem) => {
-    const { optionId1, optionId2 } = correlation
-    if (optionId1) {
-        if (optionId2) {
-            /*
-            ### Shape 3 
-            An option is correlated with another option, e.g. "respondents who picked [women] tend to also pick discrimination = based on gender"
-            */
-            return 'shape3'
-        } else {
-            /*
-            ### Shape 2
-            An option is correlated with a trend, e.g. "respondents who picked [women] tend to have a lower salary"
-            */
-            return 'shape2'
-        }
-    } else if (!optionId1) {
-        if (optionId2) {
-            /*
-            ### Shape 4 (same as shape 2)
-            A trend is correlated with an option, e.g. "people who work for larger companies tend to pick "I live in the US" more"
-            */
-            return 'shape4'
-        } else {
-            /* 
-            ### Shape 1
-            A trend is correlated with a trend, e.g. "people who work for larger companies tend to earn more"
-            */
-            return 'shape1'
-        }
-    }
-    throw new Error('Could not identify correlation shape')
 }
 
 export const Correlations = ({ question, block, optionId, correlations }: CorrelationProps) => {
@@ -125,33 +93,40 @@ export const Correlations = ({ question, block, optionId, correlations }: Correl
         optionLabel = typeof optionId !== undefined && optionLabelObject?.shortLabel
     }
 
+    const directionLabel = getTrendDirectionLabel({ question, direction: 'positive', getString })
+
     return (
         <div className="correlations-wrapper">
-            <h3 className="correlations-heading">
-                <T
-                    k={`correlations.heading${optionLabel ? '.option' : ''}`}
-                    values={{ count, questionLabel, optionLabel }}
-                />
-            </h3>
-            <div className="correlation-directions">
-                <ul>
-                    <li>
-                        <PositiveCorrelation />
-                        <T k="correlations.direction.positive.description" md={true} />
-                    </li>
-                    <li>
-                        <NegativeCorrelation />
-                        <T k="correlations.direction.negative.description" md={true} />
-                    </li>
-                </ul>
+            <div className="correlations-heading-wrapper">
+                <h3 className="correlations-heading">
+                    <T
+                        k={`correlations.heading${optionLabel ? '.option' : '.direction'}`}
+                        values={{ count, directionLabel, questionLabel, optionLabel }}
+                        md={true}
+                    />
+                </h3>
             </div>
-            <div className="correlation-items">
-                {correlations.map((c, i) => (
-                    <CorrelationItemComponent key={i} correlation={c} block={block} />
-                ))}
-            </div>
-            <div className="correlations-note">
-                <T k="correlations.note" md={true} html={true} />
+            <div className="correlations-content">
+                <div className="correlation-directions">
+                    <ul>
+                        <li>
+                            <PositiveCorrelation />
+                            <T k="correlations.direction.positive.description" md={true} />
+                        </li>
+                        <li>
+                            <NegativeCorrelation />
+                            <T k="correlations.direction.negative.description" md={true} />
+                        </li>
+                    </ul>
+                </div>
+                <div className="correlation-items">
+                    {correlations.map((c, i) => (
+                        <CorrelationItemComponent key={i} correlation={c} block={block} />
+                    ))}
+                </div>
+                <div className="correlations-note">
+                    <T k="correlations.note" md={true} html={true} />
+                </div>
             </div>
         </div>
     )
@@ -191,21 +166,9 @@ const CorrelationItemComponent = ({
 
     const strengthLevelLabel = getString(`correlations.strength.${strength}`)?.t
 
-    let directionLabel
-
-    if (['shape3', 'shape4'].includes(shape)) {
-        directionLabel = getString(`correlations.direction.${direction}`)?.t
-    } else {
-        const shape2Directions = { positive: 'higher', negative: 'lower' }
-        const shape2DirectionKey = shape2Directions[direction]
-        const customDirectionLabelKey = `${question.section.id}.${question.id}.${shape2DirectionKey}`
-        const customDirectionLabel = getString(customDirectionLabelKey)?.t
-
-        if (customDirectionLabel) {
-            directionLabel = customDirectionLabel
-        } else {
-            directionLabel = getString(`correlations.direction.${shape2DirectionKey}`)?.t
-        }
+    let directionLabel = getString(`correlations.direction.${direction}`)?.t
+    if (['shape1', 'shape2'].includes(shape)) {
+        directionLabel = getTrendDirectionLabel({ question, direction, getString })
     }
 
     const questionLabelObject = getQuestionLabel({
@@ -313,3 +276,60 @@ const NegativeCorrelation = () => (
         <path stroke="currentColor" d="M1 24h22"></path>
     </svg>
 )
+
+export const getCorrelationShape = (correlation: CorrelationItem) => {
+    const { optionId1, optionId2 } = correlation
+    if (optionId1) {
+        if (optionId2) {
+            /*
+            ### Shape 3 
+            An option is correlated with another option, e.g. "respondents who picked [women] tend to also pick discrimination = based on gender"
+            */
+            return 'shape3'
+        } else {
+            /*
+            ### Shape 2
+            An option is correlated with a trend, e.g. "respondents who picked [women] tend to have a lower salary"
+            */
+            return 'shape2'
+        }
+    } else if (!optionId1) {
+        if (optionId2) {
+            /*
+            ### Shape 4 (same as shape 2)
+            A trend is correlated with an option, e.g. "people who work for larger companies tend to pick "I live in the US" more"
+            */
+            return 'shape4'
+        } else {
+            /* 
+            ### Shape 1
+            A trend is correlated with a trend, e.g. "people who work for larger companies tend to earn more"
+            */
+            return 'shape1'
+        }
+    }
+    throw new Error('Could not identify correlation shape')
+}
+
+const getTrendDirectionLabel = ({
+    direction,
+    getString,
+    question
+}: {
+    direction: 'positive' | 'negative'
+    getString: StringTranslator
+    question: QuestionMetadataWithSection
+}) => {
+    let directionLabel
+    const shape2Directions = { positive: 'higher', negative: 'lower' }
+    const shape2DirectionKey = shape2Directions[direction]
+    const customDirectionLabelKey = `${question?.section?.id}.${question.id}.${shape2DirectionKey}`
+    const customDirectionLabel = getString(customDirectionLabelKey)?.t
+
+    if (customDirectionLabel) {
+        directionLabel = customDirectionLabel
+    } else {
+        directionLabel = getString(`correlations.direction.${shape2DirectionKey}`)?.t
+    }
+    return directionLabel
+}
