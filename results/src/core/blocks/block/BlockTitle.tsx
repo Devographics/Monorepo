@@ -15,6 +15,7 @@ import { CommentsTrigger } from 'core/charts/common2/comments/CommentsTrigger'
 import T from 'core/i18n/T'
 import { NewQuestionIndicator } from './NewQuestionIndicator'
 import { QuestionMetadata } from '@devographics/types'
+import { CorrelationsTrigger } from 'core/charts/common2/Correlations'
 
 const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
     const { getString } = useI18n()
@@ -91,6 +92,8 @@ const BlockTitle = ({
 
     const firstVariantData = getBlockSeriesData({ block, pageContext })[0].data
     const commentsCount = firstVariantData?.comments?.currentEdition?.count
+    const questionCorrelations = firstVariantData?._correlations?.questionCorrelations || []
+    const showCorrelations = question && questionCorrelations.length > 0
 
     return (
         <>
@@ -126,7 +129,14 @@ const BlockTitle = ({
                     <BlockTitleSwitcher {...properties} />
                     {closeComponent}
                 </BlockTitleSwitcherWrapper> */}
-                <RightPart_>
+                <div className="block-title-right">
+                    {showCorrelations && (
+                        <CorrelationsTrigger
+                            block={block}
+                            question={question}
+                            correlations={questionCorrelations}
+                        />
+                    )}
                     {!!commentsCount && (
                         <CommentsTrigger
                             block={block}
@@ -134,7 +144,7 @@ const BlockTitle = ({
                             commentsCount={commentsCount}
                         />
                     )}
-                </RightPart_>
+                </div>
             </StyledBlockTitle>
             {/* {showDescription && <BlockDescriptionContents block={block} context={context} />} */}
         </>
@@ -208,7 +218,5 @@ const LeftPart_ = styled.div`
         gap: var(--halfSpacing);
     }
 `
-
-const RightPart_ = styled.div``
 
 export default memo(BlockTitle)

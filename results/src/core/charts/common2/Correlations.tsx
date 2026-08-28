@@ -13,7 +13,6 @@ import { BlockVariantDefinition } from 'core/types'
 import { getItemLabel, getOptionsNamespace } from 'core/helpers/labels'
 import { getQuestionLabel } from './helpers/labels'
 import { getQuestionById } from 'core/helpers/options'
-import round from 'lodash/round.js'
 import { formatNumber } from './helpers/format'
 
 export const CorrelationsTrigger = ({
@@ -66,12 +65,23 @@ export const CorrelationsTrigger = ({
 
 type CorrelationProps = {
     question: QuestionMetadata
-    optionId: string
+    optionId?: string
     correlations: CorrelationItem[]
     block: BlockVariantDefinition
 }
 
+export const getCorrelationShape = (correlation: CorrelationItem) =>
+    correlation.optionId2 ? 'shape3' : 'shape2'
+
 export const Correlations = ({ question, block, optionId, correlations }: CorrelationProps) => {
+    console.log({ correlations })
+    /* 
+    
+    If optionId is not defined then this is shape1, e.g. "people who work for larger companies tend to earn more"
+
+    */
+    const isShape1 = !optionId
+
     const { getString, getFallbacks } = useI18n()
     const pageContext = usePageContext()
 
@@ -81,6 +91,7 @@ export const Correlations = ({ question, block, optionId, correlations }: Correl
 
     const { tClean: questionLabel } = getBlockTitle({ block, pageContext, getFallbacks })
 
+    // for shape2 and shape3
     const optionLabelObject = getItemLabel({
         id: optionId,
         getString,
@@ -89,9 +100,11 @@ export const Correlations = ({ question, block, optionId, correlations }: Correl
 
     const optionLabel = optionLabelObject?.shortLabel
 
-    const heading = getString('correlations.heading', {
+    const heading = getString(`correlations.heading.${isShape1 ? 'shape1' : 'shape2'}`, {
         values: { count, questionLabel, optionLabel }
     })?.t
+
+    const ItemComponent = isShape1 ? QuestionCorrelationItem : OptionCorrelationItem
 
     return (
         <div className="correlations-wrapper">
@@ -110,7 +123,7 @@ export const Correlations = ({ question, block, optionId, correlations }: Correl
             </div>
             <div className="correlation-items">
                 {correlations.map((c, i) => (
-                    <CorrelationItemComponent key={i} correlation={c} block={block} />
+                    <ItemComponent key={i} correlation={c} block={block} />
                 ))}
             </div>
             <div className="correlations-note">
@@ -120,10 +133,7 @@ export const Correlations = ({ question, block, optionId, correlations }: Correl
     )
 }
 
-export const getCorrelationShape = (correlation: CorrelationItem) =>
-    correlation.optionId2 ? 'shape3' : 'shape2'
-
-const CorrelationItemComponent = ({
+const QuestionCorrelationItem = ({
     correlation,
     block
 }: {
@@ -132,7 +142,62 @@ const CorrelationItemComponent = ({
 }) => {
     const pageContext = usePageContext()
     const { currentEdition } = pageContext
-    const { getString, getFallbacks } = useI18n()
+    const { getString } = useI18n()
+    const { strength, correlation: correlationValue, direction, questionId2, n } = correlation
+
+    // the question the main variable is correlated to
+    const question = getQuestionById(currentEdition, questionId2)
+
+    if (!question) {
+        return (
+            <div>
+                Could not find question <code>{questionId2}</code>
+            </div>
+        )
+    }
+
+    const strengthLevelLabel = getString(`correlations.strength.${strength}`)?.t
+
+    let directionLabel
+
+    const questionLabelObject = getQuestionLabel({
+        getString,
+        question,
+        block
+    })
+    const questionLabel = questionLabelObject.question
+
+    const takeawayKey = `correlations.takeaway.shape1`
+
+    return (
+        <div
+            className={`correlation-item correlation-item-${strength} correlation-item-${direction}`}
+        >
+            <CorrelationValue value={correlationValue} direction={direction} />
+
+            <div className="correlation-item-description">
+                <CorrelationSubheading questionName={questionLabelObject.questionName} n={n} />
+                <T
+                    k={takeawayKey}
+                    values={{ strengthLevelLabel, directionLabel, questionLabel }}
+                    md={true}
+                    html={true}
+                />
+            </div>
+        </div>
+    )
+}
+
+const OptionCorrelationItem = ({
+    correlation,
+    block
+}: {
+    correlation: CorrelationItem
+    block: BlockVariantDefinition
+}) => {
+    const pageContext = usePageContext()
+    const { currentEdition } = pageContext
+    const { getString } = useI18n()
     const {
         strength,
         correlation: correlationValue,
@@ -197,49 +262,66 @@ const CorrelationItemComponent = ({
         i18nNamespace: questionId2
     })?.shortLabel
 
-    const IconComponent = direction === 'positive' ? PositiveCorrelation : NegativeCorrelation
-
     const takeawayKey = `correlations.takeaway.${shape}`
 
     return (
         <div
             className={`correlation-item correlation-item-${strength} correlation-item-${direction}`}
         >
-            <div className="correlation-item-value">
-                <span className="correlation-item-value-figure">
-                    {correlationValue > 0 && '+'}
-                    {correlationValue.toFixed(2)}
-                </span>
-                <IconComponent />
-            </div>
+            <CorrelationValue value={correlationValue} direction={direction} />
 
-            {/* <div className="correlation-item-strength">{strengthLevelLabel}</div> */}
-            {/* <div className="correlation-item-direction">{directionLabel}</div> */}
             <div className="correlation-item-description">
-                <div className="correlation-item-subheading">
-                    <h4 className="correlation-item-breadcrumbs">
-                        <span>{questionLabelObject.questionName}</span>
-                        {isShape3 && (
-                            <>
-                                {' '}
-                                &gt; <span>{optionLabel}</span>
-                            </>
-                        )}
-                    </h4>
-                    <div className="correlation-item-n">
-                        {/* <T k="correlations.sample_size" />{' '} */}
-                        <UserIcon size={'small'} /> <span>{formatNumber(n)}</span>
-                        {/* <T k="correlations.respondents" values={{ n: formatNumber(n) }} /> */}
-                    </div>
-                </div>
+                <CorrelationSubheading
+                    questionName={questionLabelObject.questionName}
+                    n={n}
+                    optionLabel={optionLabel}
+                />
                 <T
                     k={takeawayKey}
                     values={{ strengthLevelLabel, directionLabel, questionLabel, optionLabel }}
                     md={true}
                     html={true}
                 />
-                {/* <T k={`correlations.strength.${strength}`} />:{' '}
-                <T k={`correlations.strength.${strength}.description`} /> */}
+            </div>
+        </div>
+    )
+}
+
+const CorrelationValue = ({ value, direction }: { value: number; direction: string }) => {
+    const IconComponent = direction === 'positive' ? PositiveCorrelation : NegativeCorrelation
+    return (
+        <div className="correlation-item-value">
+            <span className="correlation-item-value-figure">
+                {value > 0 && '+'}
+                {value.toFixed(2)}
+            </span>
+            <IconComponent />
+        </div>
+    )
+}
+
+const CorrelationSubheading = ({
+    questionName,
+    optionLabel,
+    n
+}: {
+    questionName: string
+    optionLabel?: string
+    n: number
+}) => {
+    return (
+        <div className="correlation-item-subheading">
+            <h4 className="correlation-item-breadcrumbs">
+                <span>{questionName}</span>
+                {optionLabel && (
+                    <>
+                        {' '}
+                        &gt; <span>{optionLabel}</span>
+                    </>
+                )}
+            </h4>
+            <div className="correlation-item-n">
+                <UserIcon size={'small'} /> <span>{formatNumber(n)}</span>
             </div>
         </div>
     )

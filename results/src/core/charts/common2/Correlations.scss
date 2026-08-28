@@ -1,6 +1,9 @@
+@use '../../../stylesheets/_breakpoints.scss';
 .chart-correlation-indicator {
-    position: absolute;
-    right: -70px;
+    .chart-cell & {
+        position: absolute;
+        right: -70px;
+    }
 }
 .chart-correlation-indicator-button {
     display: flex;
@@ -44,19 +47,30 @@
     }
 }
 .correlation-items {
-    // display: flex;
-    // flex-direction: column;
-    // gap: var(--spacing);
-    display: grid;
-    grid-template-columns: min-content 1fr;
-    column-gap: var(--spacing);
-    row-gap: var(--spacing);
+    @include breakpoints.small {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing);
+    }
+    @include breakpoints.medium-large {
+        display: grid;
+        grid-template-columns: min-content 1fr;
+        column-gap: var(--spacing);
+        row-gap: var(--spacing);
+    }
 }
 
 .correlation-item {
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: subgrid;
+    @include breakpoints.small {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing);
+    }
+    @include breakpoints.medium-large {
+        display: grid;
+        grid-column: 1 / -1;
+        grid-template-columns: subgrid;
+    }
     border-radius: 10px;
     background-color: rgba(0, 0, 0, 0.2);
     padding: var(--spacing);
@@ -122,13 +136,19 @@
 
 .correlation-item-subheading {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     font-weight: normal;
     text-transform: uppercase;
     font-size: var(--fontSizeSmall);
     color: var(--textAltColor);
     margin-bottom: var(--quarterSpacing);
+    @include breakpoints.small {
+        flex-direction: column;
+        gap: var(--halfSpacing);
+    }
+    @include breakpoints.medium-large {
+        align-items: center;
+        justify-content: space-between;
+    }
 }
 .correlation-item-breadcrumbs {
     margin: 0;
