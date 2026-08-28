@@ -215,7 +215,7 @@ const BlockItem = ({ block, closeSidebar, page }) => {
     return (
         <InternalLinkWrapper_>
             <InternalLink_
-                className="InternalLink"
+                className="nav-link InternalLink"
                 href={`#${block.id}`}
                 onClick={closeSidebar}
                 page={page}
@@ -226,8 +226,7 @@ const BlockItem = ({ block, closeSidebar, page }) => {
                         <T k={emojiKey} />{' '}
                     </span>
                 )}
-                {label}
-                {/* <T k={getBlockTitleKey({ block: { ...block, sectionId: page.id } })} /> */}{' '}
+                <span className="nav-link-label">{label}</span>{' '}
                 <NewQuestionIndicator question={question} />
             </InternalLink_>
         </InternalLinkWrapper_>

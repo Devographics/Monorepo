@@ -3,3 +3,11 @@
     align-items: center;
     gap: var(--halfSpacing);
 }
+
+.nav-link {
+    white-space: nowrap;
+}
+
+.nav-link-label {
+    white-space: normal;
+}
