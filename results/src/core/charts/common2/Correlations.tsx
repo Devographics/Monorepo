@@ -105,8 +105,6 @@ export const getCorrelationShape = (correlation: CorrelationItem) => {
 }
 
 export const Correlations = ({ question, block, optionId, correlations }: CorrelationProps) => {
-    console.log({ correlations })
-
     const { getString, getFallbacks } = useI18n()
     const pageContext = usePageContext()
 
