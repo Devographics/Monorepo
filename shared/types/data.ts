@@ -409,8 +409,9 @@ export interface Correlations {
     questionCorrelations: CorrelationItem[]
     /**
      * Correlations grouped by each of this question's own answers, for showing
-     * indicators on individual options. Empty for questions whose options have
-     * an order.
+     * indicators on individual options. Questions whose options have an order
+     * populate this as well as questionCorrelations: the former covers patterns
+     * specific to one band, the latter the overall trend.
      */
     optionCorrelations: OptionCorrelations[]
 }

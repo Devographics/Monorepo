@@ -1,5 +1,6 @@
 import get from 'lodash/get.js'
 import { NO_ANSWER, INVALID_VALUES } from '@devographics/constants'
+import { OPTION_NA } from '@devographics/types'
 import type {
     CorrelationDirection,
     CorrelationItem,
@@ -163,9 +164,9 @@ whole, whether the other side is another question ("yearly_salary ×
 company_size") or one of its answers ("yearly_salary ×
 workplace_perks:compensation").
 
-A question only ever lands on one side of this split: questions whose options
-have an order are never expanded into answers, and questions like gender only
-ever take part through their answers.
+Questions whose options have an order populate both sides: they take part as a
+whole scale (the trend) and through their individual bands. Questions like
+gender have no whole-scale form, so they only ever populate the option groups.
 
 */
 export const splitQuestionCorrelations = (
@@ -267,6 +268,18 @@ export const getMultiValueDbPaths = (q: QuestionApiObject) => {
     const { response, other, prenormalized } = q.normPaths ?? {}
     return [response, other, prenormalized].filter((p): p is string => !!p)
 }
+
+/*
+
+Two non-answers correlating only says that some people skipped both questions,
+which is a fact about survey completion rather than about respondents.
+
+Only pairs where BOTH sides are non-answers are dropped: a single non-answer
+against a real answer can still be informative (who declines to say).
+
+*/
+export const isNonAnswerPair = (optionId1?: string, optionId2?: string) =>
+    optionId1 === OPTION_NA && optionId2 === OPTION_NA
 
 export const isOrdinalQuestion = (q: QuestionApiObject) =>
     !!q.options && !!(q.optionsAreSequential || q.optionsAreNumeric || q.optionsAreRange)
@@ -442,23 +455,24 @@ const hasEnoughSelections = (codes: Int16Array, minSelections: number) => {
 
 /*
 
-One-vs-rest expansion for single-answer categorical (non-ordinal) questions:
-each option also becomes a binary "picked it / picked something else" variable,
-so that findings like "respondents who picked X rank lower on Y" (signed
-Spearman, i.e. rank-biserial correlation) become visible. Ordinal questions are
-not expanded since their option order already carries that information.
+One-vs-rest expansion for single-answer questions: each option also becomes a
+binary "picked it / picked something else" variable, so that findings like
+"respondents who picked X rank lower on Y" (signed Spearman, i.e. rank-biserial
+correlation) become visible.
+
+Questions whose options have an order are expanded too, and still take part as
+a whole scale as well. The scale correlation only detects monotonic trends, so
+without expansion a pattern specific to one band — a middle salary bracket that
+stands out while neither extreme does — cannot surface at all.
 
 Operates on the already-encoded question to avoid re-reading the documents.
 
 */
-export const expandCategoricalOptions = (
+export const expandOptions = (
     encoded: EncodedQuestion,
     minSelections: number = MIN_OPTION_SELECTIONS
 ): EncodedQuestion[] => {
-    const { question, isOrdinal, codes } = encoded
-    if (isOrdinal) {
-        return []
-    }
+    const { question, codes } = encoded
     const options = question.options
     if (!options?.length) {
         // without an options list there is no stable id to label the variable with

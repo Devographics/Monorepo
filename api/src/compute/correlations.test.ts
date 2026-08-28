@@ -2,11 +2,12 @@ import {
     computePairStats,
     encodeMultiValueQuestion,
     encodeQuestion,
-    expandCategoricalOptions,
+    expandOptions,
     filterCorrelations,
     getCorrelationDirection,
     getCorrelationQuestions,
     getCorrelationStrength,
+    isNonAnswerPair,
     putQuestionFirst,
     splitEditionCorrelations,
     splitQuestionCorrelations
@@ -219,14 +220,14 @@ describe('encodeMultiValueQuestion', () => {
     })
 })
 
-describe('expandCategoricalOptions', () => {
+describe('expandOptions', () => {
     test('expands a categorical question into one-vs-rest binary variables', () => {
         const question = makeQuestion({
             options: [{ id: 'woman' }, { id: 'man' }, { id: 'non_binary' }]
         })
         const docs = makeDocs(['woman', 'man', 'non_binary', 'man', null])
         const encoded = encodeQuestion(question, docs)!
-        const expanded = expandCategoricalOptions(encoded, 1)
+        const expanded = expandOptions(encoded, 1)
         expect(expanded.map(e => e.optionId)).toEqual(['woman', 'man', 'non_binary'])
         const byOption = Object.fromEntries(expanded.map(e => [e.optionId, Array.from(e.codes)]))
         expect(byOption.woman).toEqual([1, 0, 0, 0, -1])
@@ -236,13 +237,17 @@ describe('expandCategoricalOptions', () => {
         expect(expanded.every(e => e.isOrdinal && e.cardinality === 2)).toBe(true)
     })
 
-    test('does not expand ordinal questions', () => {
+    test('expands ordinal questions too, so band-specific patterns can surface', () => {
         const question = makeQuestion({
-            options: [{ id: 'low' }, { id: 'high' }],
+            options: [{ id: 'low' }, { id: 'mid' }, { id: 'high' }],
             optionsAreSequential: true
         })
-        const encoded = encodeQuestion(question, makeDocs(['low', 'high']))!
-        expect(expandCategoricalOptions(encoded, 1)).toEqual([])
+        const encoded = encodeQuestion(question, makeDocs(['low', 'mid', 'high', 'mid']))!
+        const expanded = expandOptions(encoded, 1)
+        expect(expanded.map(e => e.optionId)).toEqual(['low', 'mid', 'high'])
+        // the middle band is the case a monotonic scale correlation cannot see
+        const mid = expanded.find(e => e.optionId === 'mid')!
+        expect(Array.from(mid.codes)).toEqual([0, 1, 0, 1])
     })
 
     test('drops options below the minimum selections threshold', () => {
@@ -252,7 +257,7 @@ describe('expandCategoricalOptions', () => {
         // 'c' is only picked once, below the threshold of 2
         const docs = makeDocs(['a', 'a', 'b', 'b', 'c'])
         const encoded = encodeQuestion(question, docs)!
-        const expanded = expandCategoricalOptions(encoded, 2)
+        const expanded = expandOptions(encoded, 2)
         expect(expanded.map(e => e.optionId)).toEqual(['a', 'b'])
     })
 })
@@ -469,6 +474,18 @@ describe('getCorrelationStrength', () => {
         // which read as an inversion wherever both appeared in one list
         expect(getCorrelationStrength(0.27)).toBe('strong')
         expect(getCorrelationStrength(-0.25)).toBe('strong')
+    })
+})
+
+describe('isNonAnswerPair', () => {
+    test('only drops a pair when both sides are non-answers', () => {
+        expect(isNonAnswerPair('na', 'na')).toBe(true)
+        // a single non-answer against a real answer can still be informative
+        expect(isNonAnswerPair('na', 'female')).toBe(false)
+        expect(isNonAnswerPair('female', 'na')).toBe(false)
+        // whole-question sides have no option id at all
+        expect(isNonAnswerPair('na', undefined)).toBe(false)
+        expect(isNonAnswerPair(undefined, undefined)).toBe(false)
     })
 })
 
