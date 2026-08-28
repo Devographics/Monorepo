@@ -8,6 +8,7 @@ import {
     getCorrelationQuestions,
     getCorrelationStrength,
     isNonAnswerPair,
+    isNormalizationArtifact,
     putQuestionFirst,
     splitEditionCorrelations,
     splitQuestionCorrelations
@@ -142,10 +143,30 @@ describe('encodeQuestion', () => {
         expect(encodeQuestion(question, docs)).toBeNull()
     })
 
-    test('returns null when cardinality exceeds the limit', () => {
+    test('keeps the most common values when there are more than the cap', () => {
         const question = makeQuestion({})
-        const docs = makeDocs(Array.from({ length: 100 }, (_, i) => `value_${i}`))
-        expect(encodeQuestion(question, docs)).toBeNull()
+        // 40 distinct values; the first three are answered more than once
+        const docs = makeDocs([
+            ...Array.from({ length: 40 }, (_, i) => `value_${i}`),
+            'value_0',
+            'value_0',
+            'value_1',
+            'value_2'
+        ])
+        const encoded = encodeQuestion(question, docs, 3)!
+        expect(encoded.values).toEqual(['value_0', 'value_1', 'value_2'])
+        expect(encoded.cardinality).toBe(3)
+        // values outside the kept set are treated as unanswered
+        expect(Array.from(encoded.codes.slice(0, 4))).toEqual([0, 1, 2, -1])
+    })
+
+    test('an ordinal question is dropped rather than truncated, to preserve ranks', () => {
+        const question = makeQuestion({
+            optionsAreSequential: true,
+            options: Array.from({ length: 5 }, (_, i) => ({ id: `band_${i}` }))
+        })
+        const docs = makeDocs(['band_0', 'band_1', 'band_2'])
+        expect(encodeQuestion(question, docs, 3)).toBeNull()
     })
 })
 
@@ -162,7 +183,14 @@ describe('encodeMultiValueQuestion', () => {
             ['zelda', 'unknown_game'] // unknown values still count as answering
         ])
         const encoded = encodeMultiValueQuestion(question, docs, 1)
-        expect(encoded.map(e => e.optionId)).toEqual(['zelda', 'mario', 'doom'])
+        // answers come from the data, most common first — so an "other…" answer
+        // like unknown_game takes part alongside the predefined ones
+        expect(encoded.map(e => e.optionId)).toEqual([
+            'zelda',
+            'doom',
+            'mario',
+            'unknown_game'
+        ])
         const byOption = Object.fromEntries(encoded.map(e => [e.optionId, Array.from(e.codes)]))
         expect(byOption.zelda).toEqual([1, 0, -1, 1])
         expect(byOption.mario).toEqual([0, 1, -1, 0])
@@ -187,20 +215,30 @@ describe('encodeMultiValueQuestion', () => {
         expect(byOption.freeform).toEqual([1, 0, 1])
     })
 
-    test('drops options never selected by anyone', () => {
+    test('ignores declared options nobody selected', () => {
         const question = makeQuestion({
             allowMultiple: true,
             options: [{ id: 'popular' }, { id: 'never_picked' }]
         })
         const docs = makeDocs([['popular'], ['popular'], ['some_unknown_game']])
         const encoded = encodeMultiValueQuestion(question, docs, 1)
-        expect(encoded.map(e => e.optionId)).toEqual(['popular'])
+        const ids = encoded.map(e => e.optionId)
+        expect(ids).not.toContain('never_picked')
+        expect(ids).toContain('popular')
     })
 
-    test('returns nothing without options', () => {
+    test('works with no declared options at all', () => {
         const question = makeQuestion({ allowMultiple: true })
         const docs = makeDocs([['a'], ['b']])
-        expect(encodeMultiValueQuestion(question, docs, 1)).toEqual([])
+        expect(encodeMultiValueQuestion(question, docs, 1).map(e => e.optionId)).toEqual([
+            'a',
+            'b'
+        ])
+    })
+
+    test('returns nothing when the question has no normalized paths', () => {
+        const question = makeQuestion({ allowMultiple: true, normPaths: {} })
+        expect(encodeMultiValueQuestion(question, makeDocs([['a'], ['b']]), 1)).toEqual([])
     })
 
     test('drops options below the minimum selections threshold', () => {
@@ -216,7 +254,9 @@ describe('encodeMultiValueQuestion', () => {
         // 'rare' only has 5 selections, below the threshold of 6
         // ('common' has 10 selections and 6 non-selections, so it stays)
         const encoded = encodeMultiValueQuestion(question, docs, 6)
-        expect(encoded.map(e => e.optionId)).toEqual(['common'])
+        const ids = encoded.map(e => e.optionId)
+        expect(ids).not.toContain('rare')
+        expect(ids).toContain('common')
     })
 })
 
@@ -228,7 +268,9 @@ describe('expandOptions', () => {
         const docs = makeDocs(['woman', 'man', 'non_binary', 'man', null])
         const encoded = encodeQuestion(question, docs)!
         const expanded = expandOptions(encoded, 1)
-        expect(expanded.map(e => e.optionId)).toEqual(['woman', 'man', 'non_binary'])
+        // non-ordinal values are indexed by frequency, so "man" (answered twice)
+        // comes first regardless of the declared option order
+        expect(expanded.map(e => e.optionId)).toEqual(['man', 'woman', 'non_binary'])
         const byOption = Object.fromEntries(expanded.map(e => [e.optionId, Array.from(e.codes)]))
         expect(byOption.woman).toEqual([1, 0, 0, 0, -1])
         expect(byOption.man).toEqual([0, 1, 0, 1, -1])
@@ -474,6 +516,31 @@ describe('getCorrelationStrength', () => {
         // which read as an inversion wherever both appeared in one list
         expect(getCorrelationStrength(0.27)).toBe('strong')
         expect(getCorrelationStrength(-0.25)).toBe('strong')
+    })
+})
+
+describe('isNormalizationArtifact', () => {
+    test('no_match never becomes a variable', () => {
+        expect(isNormalizationArtifact('no_match')).toBe(true)
+        expect(isNormalizationArtifact('na')).toBe(false)
+        expect(isNormalizationArtifact('padel')).toBe(false)
+    })
+
+    test('an unmatched free-form answer is dropped from a multi-value question', () => {
+        const question = makeQuestion({ allowMultiple: true })
+        const docs = makeDocs([
+            ['padel', 'no_match'],
+            ['no_match'],
+            ['padel'],
+            ['running']
+        ])
+        const encoded = encodeMultiValueQuestion(question, docs, 1)
+        expect(encoded.map(e => e.optionId)).not.toContain('no_match')
+        expect(encoded.map(e => e.optionId)).toEqual(['padel', 'running'])
+        // the respondent whose only answer was unmatched still counts as having
+        // answered, so they are a 0 rather than being dropped from the question
+        const padel = encoded.find(e => e.optionId === 'padel')!
+        expect(Array.from(padel.codes)).toEqual([1, 0, 1, 0])
     })
 })
 

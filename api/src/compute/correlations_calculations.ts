@@ -1,5 +1,5 @@
 import get from 'lodash/get.js'
-import { NO_ANSWER, INVALID_VALUES } from '@devographics/constants'
+import { NO_ANSWER, INVALID_VALUES, NO_MATCH } from '@devographics/constants'
 import { OPTION_NA } from '@devographics/types'
 import type {
     CorrelationDirection,
@@ -193,11 +193,17 @@ export const splitQuestionCorrelations = (
             groupItems.push(item)
         }
     }
-    // follow the question's own option order so groups line up with its buckets
-    const optionCorrelations: OptionCorrelations[] = (question.options ?? [])
+    // follow the question's own option order so groups line up with its buckets;
+    // answers with no declared option (a question indexed from the data, or a
+    // value outside the declared list) keep their strength order at the end
+    const declaredOrder = (question.options ?? [])
         .map(option => String(option.id))
         .filter(id => itemsByOption.has(id))
-        .map(id => ({ id, correlations: itemsByOption.get(id)! }))
+    const remaining = [...itemsByOption.keys()].filter(id => !declaredOrder.includes(id))
+    const optionCorrelations: OptionCorrelations[] = [...declaredOrder, ...remaining].map(id => ({
+        id,
+        correlations: itemsByOption.get(id)!
+    }))
 
     return { questionCorrelations, optionCorrelations }
 }
@@ -241,9 +247,9 @@ export const getCorrelationQuestions = ({
 /*
 
 Multi-value questions (multiple selections, or freeform lists like textList):
-each option becomes its own binary selected/not-selected variable. Questions
-without predefined options rely on the dynamic options (top X most popular
-answers) attached to them at schema generation time by addQuestionOptions().
+each answer becomes its own binary selected/not-selected variable. The answers
+are read from the data, so a question needs no predefined option list to take
+part.
 
 */
 export const getMultiValueCorrelationQuestions = ({
@@ -254,7 +260,10 @@ export const getMultiValueCorrelationQuestions = ({
     edition: EditionApiObject
 }) =>
     questionObjects.filter(
-        q => !!q.allowMultiple && !!q.options?.length && isEligibleQuestion(q, edition)
+        q =>
+            !!q.allowMultiple &&
+            getMultiValueDbPaths(q).length > 0 &&
+            isEligibleQuestion(q, edition)
     )
 
 /*
@@ -278,17 +287,32 @@ Only pairs where BOTH sides are non-answers are dropped: a single non-answer
 against a real answer can still be informative (who declines to say).
 
 */
+/*
+
+NO_MATCH marks a free-form answer that normalisation could not match to any
+entity. It describes the pipeline's coverage rather than the respondent, so it
+never becomes a variable at all — unlike `na`, which is an answer someone
+deliberately chose.
+
+*/
+export const isNormalizationArtifact = (value: string) => value === NO_MATCH
+
 export const isNonAnswerPair = (optionId1?: string, optionId2?: string) =>
     optionId1 === OPTION_NA && optionId2 === OPTION_NA
 
 export const isOrdinalQuestion = (q: QuestionApiObject) =>
     !!q.options && !!(q.optionsAreSequential || q.optionsAreNumeric || q.optionsAreRange)
 
+// the two states of a binary "picked it or not" variable
+const BINARY_VALUES = ['0', '1']
+
 export interface EncodedQuestion {
     question: QuestionApiObject
     // for binary variables expanded from a multi-value question's option
     optionId?: string
     isOrdinal: boolean
+    // the answer value at each index, in code order
+    values: string[]
     // number of distinct answer values
     cardinality: number
     // one entry per respondent; value index, or -1 when unanswered
@@ -306,77 +330,93 @@ const isMissing = (value: any) =>
 
 Encode one question's answers across all respondents as value indices.
 
-For questions with predefined options, indices follow the options order (so that
-they can double as ranks for ordinal questions); values not matching any option
-are treated as unanswered. For questions without options, the index mapping is
-built from the data, and the question is dropped if it exceeds MAX_CARDINALITY.
+Ordinal questions keep their declared option order, because those indices double
+as ranks and reordering them would make the correlation meaningless.
+
+Every other question is indexed by what respondents actually answered, most
+common value first, keeping the top MAX_CARDINALITY. That way a question with a
+huge predefined option list (country has 249) still takes part through its most
+common answers, instead of being dropped wholesale, and questions with no
+predefined options work the same way.
 
 */
 export const encodeQuestion = (
     question: QuestionApiObject,
-    docs: any[]
+    docs: any[],
+    maxCardinality: number = MAX_CARDINALITY
 ): EncodedQuestion | null => {
     const dbPath = question.normPaths?.response as string
-    const codes = new Int16Array(docs.length).fill(-1)
-    const valueIndex = new Map<string, number>()
-    const hasOptions = !!question.options?.length
-    if (hasOptions) {
-        question.options!.forEach((option, index) => {
-            valueIndex.set(String(option.id), index)
-        })
-        if (valueIndex.size > MAX_CARDINALITY) {
-            return null
-        }
-    }
-    const seen = new Set<number>()
-    docs.forEach((doc, docIndex) => {
+    const isOrdinal = isOrdinalQuestion(question)
+
+    // read each respondent's answer once
+    const keys: (string | null)[] = docs.map(doc => {
         let value = get(doc, dbPath)
         // defensive: normalized single-answer values can still be stored as arrays
         if (Array.isArray(value)) {
             value = value.length === 1 ? value[0] : undefined
         }
-        if (isMissing(value)) {
-            return
+        return isMissing(value) ? null : String(value)
+    })
+
+    let values: string[]
+    if (isOrdinal) {
+        // option order is the rank order, so it cannot be rebuilt from the data;
+        // a scale with more bands than the cap is left out rather than truncated
+        values = question.options!.map(option => String(option.id))
+        if (values.length > maxCardinality) {
+            return null
         }
-        const key = String(value)
-        let index = valueIndex.get(key)
-        if (index === undefined) {
-            if (hasOptions) {
-                // ignore values that don't match any predefined option
-                return
+    } else {
+        const counts = new Map<string, number>()
+        for (const key of keys) {
+            if (key !== null) {
+                counts.set(key, (counts.get(key) ?? 0) + 1)
             }
-            if (valueIndex.size >= MAX_CARDINALITY) {
-                // over cardinality limit, question will be dropped below
-                valueIndex.set(key, MAX_CARDINALITY)
-                return
-            }
-            index = valueIndex.size
-            valueIndex.set(key, index)
         }
+        // any observed value is eligible, whether or not it was predefined:
+        // questions that offer an "other…" field produce perfectly good answers
+        // that appear nowhere in the option list
+        values = [...counts.entries()]
+            .filter(([key]) => !isNormalizationArtifact(key))
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, maxCardinality)
+            .map(([key]) => key)
+    }
+
+    const valueIndex = new Map(values.map((value, index) => [value, index]))
+    const codes = new Int16Array(docs.length).fill(-1)
+    const seen = new Set<number>()
+    keys.forEach((key, docIndex) => {
+        if (key === null) return
+        const index = valueIndex.get(key)
+        // values outside the kept set (or matching no option) count as unanswered
+        if (index === undefined) return
         codes[docIndex] = index
         seen.add(index)
     })
-    if (!hasOptions && valueIndex.size > MAX_CARDINALITY) {
-        return null
-    }
+
     // need at least two distinct observed values for any association to exist
     if (seen.size < 2) {
         return null
     }
-    const q = {
+    return {
         question,
-        isOrdinal: isOrdinalQuestion(question),
-        cardinality: hasOptions ? question.options!.length : valueIndex.size,
+        isOrdinal,
+        values,
+        cardinality: values.length,
         codes
     }
-    return q
 }
 
 /*
 
-Encode a multi-value question as one binary variable per option:
-1 = selected, 0 = answered the question but did not select this option,
+Encode a multi-value question as one binary variable per answer:
+1 = selected, 0 = answered the question but did not select this answer,
 -1 = did not answer the question at all.
+
+The answers are taken from the data rather than from the question's option list,
+most common first, so that normalised free-form answers from an "other…" field
+count alongside the predefined ones.
 
 Binary variables are marked ordinal (not-selected < selected) so that pairs
 involving them get a signed Spearman coefficient indicating direction.
@@ -385,24 +425,17 @@ involving them get a signed Spearman coefficient indicating direction.
 export const encodeMultiValueQuestion = (
     question: QuestionApiObject,
     docs: any[],
-    minSelections: number = MIN_OPTION_SELECTIONS
+    minSelections: number = MIN_OPTION_SELECTIONS,
+    maxCardinality: number = MAX_CARDINALITY
 ): EncodedQuestion[] => {
-    const options = question.options ?? []
-    if (options.length === 0 || options.length > MAX_CARDINALITY) {
-        return []
-    }
     const dbPaths = getMultiValueDbPaths(question)
     if (dbPaths.length === 0) {
         return []
     }
-    const optionIndex = new Map<string, number>()
-    options.forEach((option, index) => {
-        optionIndex.set(String(option.id), index)
-    })
-    const codesPerOption = options.map(() => new Int16Array(docs.length).fill(-1))
-    docs.forEach((doc, docIndex) => {
-        let answered = false
-        const selected = new Set<number>()
+
+    // read each respondent's answers once, across every path the question uses
+    const answersPerDoc: string[][] = docs.map(doc => {
+        const answers: string[] = []
         for (const dbPath of dbPaths) {
             let values = get(doc, dbPath)
             if (values === null || values === undefined || values === '') {
@@ -412,32 +445,59 @@ export const encodeMultiValueQuestion = (
                 values = [values]
             }
             for (const value of values) {
-                if (isMissing(value)) {
-                    continue
-                }
-                answered = true
-                const index = optionIndex.get(String(value))
-                if (index !== undefined) {
-                    selected.add(index)
+                if (!isMissing(value)) {
+                    answers.push(String(value))
                 }
             }
         }
-        if (answered) {
-            codesPerOption.forEach((codes, optionIdx) => {
-                codes[docIndex] = selected.has(optionIdx) ? 1 : 0
-            })
-        }
+        return answers
     })
+
+    // count respondents per answer (not occurrences: the same answer can arrive
+    // from both the predefined and the free-form path), keep the most common
+    const counts = new Map<string, number>()
+    for (const answers of answersPerDoc) {
+        for (const answer of new Set(answers)) {
+            counts.set(answer, (counts.get(answer) ?? 0) + 1)
+        }
+    }
+    const values = [...counts.entries()]
+        .filter(([value]) => !isNormalizationArtifact(value))
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, maxCardinality)
+        .map(([value]) => value)
+    if (values.length === 0) {
+        return []
+    }
+
+    const valueIndex = new Map(values.map((value, index) => [value, index]))
+    const codesPerValue = values.map(() => new Int16Array(docs.length).fill(-1))
+    answersPerDoc.forEach((answers, docIndex) => {
+        // no answers at all means the respondent skipped the question
+        if (answers.length === 0) return
+        const selected = new Set<number>()
+        for (const answer of answers) {
+            const index = valueIndex.get(answer)
+            if (index !== undefined) {
+                selected.add(index)
+            }
+        }
+        codesPerValue.forEach((codes, index) => {
+            codes[docIndex] = selected.has(index) ? 1 : 0
+        })
+    })
+
     return (
-        options
-            .map((option, index) => ({
+        values
+            .map((value, index) => ({
                 question,
-                optionId: String(option.id),
+                optionId: value,
                 isOrdinal: true,
+                values: BINARY_VALUES,
                 cardinality: 2,
-                codes: codesPerOption[index]
+                codes: codesPerValue[index]
             }))
-            // drop options without enough respondents on both sides
+            // drop answers without enough respondents on both sides
             .filter(encoded => hasEnoughSelections(encoded.codes, minSelections))
     )
 }
@@ -472,14 +532,9 @@ export const expandOptions = (
     encoded: EncodedQuestion,
     minSelections: number = MIN_OPTION_SELECTIONS
 ): EncodedQuestion[] => {
-    const { question, codes } = encoded
-    const options = question.options
-    if (!options?.length) {
-        // without an options list there is no stable id to label the variable with
-        return []
-    }
-    return options
-        .map((option, optionIdx) => {
+    const { question, codes, values } = encoded
+    return values
+        .map((value, optionIdx) => {
             const binaryCodes = new Int16Array(codes.length)
             for (let i = 0; i < codes.length; i++) {
                 const code = codes[i]
@@ -487,8 +542,9 @@ export const expandOptions = (
             }
             return {
                 question,
-                optionId: String(option.id),
+                optionId: value,
                 isOrdinal: true,
+                values: BINARY_VALUES,
                 cardinality: 2,
                 codes: binaryCodes
             }

@@ -54,7 +54,7 @@ export const EDITION_CORRELATIONS_LIMIT = 1000
 // the cached result with noise
 const MIN_CORRELATION = 0.05
 // bump to invalidate cached results when the algorithm changes
-const CACHE_VERSION = 8
+const CACHE_VERSION = 11
 
 interface ComputeOptions {
     survey: SurveyApiObject
