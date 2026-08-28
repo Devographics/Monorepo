@@ -36,7 +36,7 @@
         template: multiple_options2
         parameters: { limit: 40 }
         chartOptions:
-            limit: 20
+            limit: 10
             cutoff: 20
         queryOptions:
             addBucketsEntities: false
@@ -56,8 +56,9 @@
       - id: country_of_origin
         template: multiple_options2
         parameters: { limit: 40 }
+        i18nNamespace: country # (options namespace)
         chartOptions:
-            limit: 20
+            limit: 10
             cutoff: 20
         queryOptions:
             addBucketsEntities: false
@@ -687,7 +688,7 @@
                                   - engineering_manager
 
       - id: work_areas
-        template: multiple_options2_freeform
+        template: multiple_options2
         variants:
             - template: vs_salary
               parameters:
@@ -1060,19 +1061,19 @@
                       sectionId: health
                       id: sleep_quantity
 
-      - id: sleep_measures
-        template: multiple_options2_combined
-        variants:
-            - id: sleep_measures_vs_sleep_quantity
-              template: vs_facet
-              tabId: tabs.vs_sleep_quantity
-              queryOptions:
-                  sectionId: health
-              fieldId: sleep_measures
-              filtersState:
-                  facet:
-                      sectionId: health
-                      id: sleep_quantity
+      # - id: sleep_measures
+      #   template: multiple_options2_combined
+      #   variants:
+      #       - id: sleep_measures_vs_sleep_quantity
+      #         template: vs_facet
+      #         tabId: tabs.vs_sleep_quantity
+      #         queryOptions:
+      #             sectionId: health
+      #         fieldId: sleep_measures
+      #         filtersState:
+      #             facet:
+      #                 sectionId: health
+      #                 id: sleep_quantity
 
 - id: worldview
   path: /worldview
@@ -1463,7 +1464,7 @@
             unit: count
 
       - id: favorite_beverages
-        template: multiple_options2_freeform
+        template: multiple_options2
         variants:
             - id: favorite_beverages_vs_age
               template: vs_facet
@@ -1717,6 +1718,8 @@
 
       - id: survey_length
         template: single_option2
+        queryOptions:
+            sectionId: user_info
 
 # - id: anjana_vakil
 #   path: /anjana-vakil
