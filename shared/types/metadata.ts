@@ -42,6 +42,10 @@ export interface QuestionMetadata extends Omit<QuestionTemplateOutput, 'options'
     options?: OptionMetadata[]
 }
 
+export interface QuestionMetadataWithSection extends QuestionMetadata {
+    section: Omit<SectionMetadata, 'questions'>
+}
+
 export type FacetItem = Pick<QuestionMetadata, 'id' | 'sectionId' | 'optionsAreSequential'> & {
     sectionIdOverride?: string
 }

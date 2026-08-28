@@ -46,6 +46,7 @@ export type StandardQuestionData = QuestionData & {
     entity: Entity
     comments: ItemComments
     _metadata: QuestionMetadata
+    _correlations: Correlations
     rawData?: RawDataItem
 } & {
     [key in Exclude<
@@ -54,6 +55,7 @@ export type StandardQuestionData = QuestionData & {
         | ResultsSubFieldEnum.ID
         | ResultsSubFieldEnum.ENTITY
         | ResultsSubFieldEnum.COMMENTS
+        | ResultsSubFieldEnum.CORRELATIONS
         | ResultsSubFieldEnum.RAW_DATA
     >]: ResponseData
 }
@@ -339,4 +341,82 @@ Explorer
 
 export interface ExplorerData {
     items: ResponseEditionData[]
+}
+
+/*
+
+Correlations (EXPERIMENTAL)
+
+Automatically detected associations between survey variables. These are
+statistical associations only and do not imply causation; they are generated
+without human review, and no controls are applied for other variables.
+
+Keep in sync with the Correlations types in
+api/src/graphql/typedefs/schema.graphql
+
+*/
+
+export type CorrelationStrength = 'very_strong' | 'strong' | 'moderate' | 'weak'
+
+export type CorrelationDirection = 'positive' | 'negative'
+
+export interface CorrelationItem {
+    questionId1: string
+    sectionId1?: string
+    /**
+     * Set when the variable is one specific answer (e.g. one game of
+     * favorite_video_games, or one gender option): the correlation is between
+     * picking that answer or not, and the other variable
+     */
+    optionId1?: string
+    questionId2: string
+    sectionId2?: string
+    optionId2?: string
+    /** Number of respondents who answered both questions */
+    n: number
+    /**
+     * Signed rank correlation (-1 to 1): positive means higher values of one
+     * variable go with higher values of the other (for answers: picking the
+     * answer goes with higher values), negative means the reverse
+     */
+    correlation: number
+    /**
+     * How strong the correlation is, judged against bands appropriate for its
+     * type (answer correlations use lower thresholds, since binary variables
+     * have a mechanical ceiling on their correlation)
+     */
+    strength: CorrelationStrength
+    direction: CorrelationDirection
+    sameSection: boolean
+}
+
+/** The strongest correlations involving one specific answer to a question */
+export interface OptionCorrelations {
+    /** Id of the option, matching the corresponding response bucket's id */
+    id: string
+    /** Strongest first */
+    correlations: CorrelationItem[]
+}
+
+/** Correlations for a single question (the `_correlations` subfield) */
+export interface Correlations {
+    /**
+     * Everything this question correlates with as a whole, strongest first.
+     * Only questions whose options have an order (salary, experience…) take
+     * part this way, so this is empty for questions like gender, whose
+     * correlations all appear under optionCorrelations instead.
+     */
+    questionCorrelations: CorrelationItem[]
+    /**
+     * Correlations grouped by each of this question's own answers, for showing
+     * indicators on individual options. Empty for questions whose options have
+     * an order.
+     */
+    optionCorrelations: OptionCorrelations[]
+}
+
+/** Every correlation detected across a whole edition, as a flat ranked list */
+export interface EditionCorrelations {
+    questionCorrelations: CorrelationItem[]
+    answerCorrelations: CorrelationItem[]
 }

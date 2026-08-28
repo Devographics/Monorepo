@@ -66,6 +66,7 @@ export * from './Document'
 export * from './Experimental'
 export * from './Lightbulb'
 export * from './LightbulbOn'
+export * from './Correlations'
 
 // browsers
 export * from './Chrome'

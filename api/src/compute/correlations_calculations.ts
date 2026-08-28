@@ -1,6 +1,15 @@
 import get from 'lodash/get.js'
 import { NO_ANSWER, INVALID_VALUES } from '@devographics/constants'
+import type {
+    CorrelationDirection,
+    CorrelationItem,
+    CorrelationStrength,
+    OptionCorrelations
+} from '@devographics/types'
 import type { EditionApiObject, QuestionApiObject } from '../types/surveys'
+
+// re-exported so callers can keep importing correlation types from here
+export type { CorrelationDirection, CorrelationItem, CorrelationStrength, OptionCorrelations }
 
 /*
 
@@ -37,9 +46,6 @@ export const EXCLUDED_QUESTION_IDS = [
     'source',
     'survey_feedback'
 ]
-
-export type CorrelationStrength = 'very_strong' | 'strong' | 'moderate' | 'weak'
-export type CorrelationDirection = 'positive' | 'negative'
 
 /*
 
@@ -107,40 +113,6 @@ export const filterCorrelations = (
         item => CORRELATION_STRENGTHS.indexOf(item.strength) >= minIndex
     )
     return limit === undefined ? filtered : filtered.slice(0, limit)
-}
-
-export interface CorrelationItem {
-    questionId1: string
-    sectionId1?: string
-    // set when the variable is one option of a multi-value question
-    optionId1?: string
-    questionId2: string
-    sectionId2?: string
-    optionId2?: string
-    // number of respondents who answered both questions
-    n: number
-    /*
-    Signed Spearman rank correlation (-1 to 1): positive means higher values of
-    one variable go with higher values of the other (for answers: picking the
-    answer goes with higher values), negative means the reverse. Only pairs of
-    ordered variables (ordinal questions and binary answer variables) are
-    correlated, so this is always defined.
-    */
-    correlation: number
-    strength: CorrelationStrength
-    direction: CorrelationDirection
-    sameSection: boolean
-}
-
-/*
-
-Correlations for one of a question's own answers, so that the results app can
-show indicators on individual options ("respondents who picked this also…").
-
-*/
-export interface OptionCorrelations {
-    id: string
-    correlations: CorrelationItem[]
 }
 
 // the full computed (and cached) result for one edition
