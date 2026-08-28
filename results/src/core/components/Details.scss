@@ -14,12 +14,12 @@
     padding: var(--halfSpacing);
 
     .details-open & {
-        background-color: rgba(0, 0, 0, 0.28);
+        background-color: rgba(0, 0, 0, 0.2);
     }
     .details-closed & {
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.2);
         &:hover {
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: rgba(0, 0, 0, 0.4);
         }
     }
 }

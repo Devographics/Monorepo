@@ -9,7 +9,8 @@ import {
     NOT_APPLICABLE
 } from '@devographics/constants'
 import { StringTranslator } from '@devographics/react-i18n'
-import { Entity, Token } from '@devographics/types'
+import { Entity, QuestionMetadata, Token } from '@devographics/types'
+import { BlockVariantDefinition } from 'core/types'
 
 const predefinedKeys: { [key: string]: string } = {
     [NOT_APPLICABLE]: 'options.na',
@@ -189,4 +190,21 @@ export const getItemLabel = (options: {
     // console.log(result)
     // console.log(result.key)
     return result
+}
+
+export const getOptionsNamespace = ({
+    question,
+    block
+}: {
+    question?: QuestionMetadata
+    block?: BlockVariantDefinition
+}) => {
+    return (
+        question?.i18nNamespace ||
+        question?.id ||
+        block?.i18nNamespace ||
+        block?.fieldId ||
+        block?.id ||
+        'no_option_namespace'
+    )
 }

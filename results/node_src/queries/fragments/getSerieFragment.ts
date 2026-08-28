@@ -7,8 +7,11 @@ import { getAllEditionsFragment } from './getAllEditionsFragment'
 import { getRatiosFragment } from './getRatiosFragment'
 import { SENTIMENT_FACET } from '../imports'
 import { getResponseMetadataFragment } from './getResponseMetadataFragment'
+import { getCorrelationsFragment } from './getCorrelationsFragment'
 
 const DEFAULT_EDITION_COUNT = 2
+
+const addCorrelations = true
 
 export const getSerieFragment = ({
     queryOptions,
@@ -47,32 +50,33 @@ export const getSerieFragment = ({
             id
             ${addQuestionEntity ? getEntityFragment() : ''}
             ${addQuestionComments ? getCommentsCountFragment() : ''}
+            ${addCorrelations ? getCorrelationsFragment() : ''}
             ${subField}${queryArgsString} {
-            ${editionType} {
-                ${getResponseMetadataFragment()}
-                ${getAllEditionsFragment()}
-                completion {
-                    count
-                    percentageSurvey
-                    total
+                ${editionType} {
+                    ${getResponseMetadataFragment()}
+                    ${getAllEditionsFragment()}
+                    completion {
+                        count
+                        percentageSurvey
+                        total
+                    }
+                    average
+                    percentiles {
+                        p50
+                    }
+                    ${addRatios ? getRatiosFragment() : ''}
+                    ${
+                        addBuckets
+                            ? getBucketsFragment({
+                                  addBucketsEntities,
+                                  addGroupedBuckets,
+                                  addNestedBuckets,
+                                  queryArgs,
+                                  currentDepth: 0
+                              })
+                            : ''
+                    }
                 }
-                average
-                percentiles {
-                    p50
-                }
-                ${addRatios ? getRatiosFragment() : ''}
-                ${
-                    addBuckets
-                        ? getBucketsFragment({
-                              addBucketsEntities,
-                              addGroupedBuckets,
-                              addNestedBuckets,
-                              queryArgs,
-                              currentDepth: 0
-                          })
-                        : ''
-                }
-            }
             }
         }`
 }

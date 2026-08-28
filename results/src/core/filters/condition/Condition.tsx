@@ -99,7 +99,7 @@ const Condition = ({
 }
 
 export const Condition_ = styled.div`
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     position: relative;
 `

@@ -1,4 +1,4 @@
-import { QuestionMetadata } from '@devographics/types'
+import { QuestionMetadata, QuestionMetadataWithSection } from '@devographics/types'
 import type { StringTranslator } from '@devographics/react-i18n'
 import { getEntityName } from 'core/helpers/entities'
 import { CustomizationFiltersSeries, FilterItem } from 'core/filters/types'
@@ -18,15 +18,17 @@ export const getQuestionLabel = ({
     block
 }: {
     getString: StringTranslator
-    question: QuestionMetadata
+    question: QuestionMetadataWithSection
     i18nNamespace?: string
     block?: BlockVariantDefinition
 }) => {
-    let key, label, i18nNamespace_, questionLabel
-    const { sectionId, template, entity, id } = question
+    let key, label, i18nNamespace_, questionLabel, questionName
+    const { template, entity, id } = question
+    const sectionId = question.sectionId || question?.section?.id
     const entityName = entity && getEntityName(entity)
     if (entityName) {
         label = entityName
+        questionName = entityName
     } else {
         if (block?.titleId) {
             key = block.titleId
@@ -46,10 +48,11 @@ export const getQuestionLabel = ({
         }
         const s = getString(key)
         const q = getString(`${key}.question`)
-        label = s?.tClean || s?.t || id
+        questionName = s?.tClean || s?.t
+        label = questionName || id
         questionLabel = q?.tClean || q?.t
     }
-    return { key, label, question: questionLabel }
+    return { key, label, question: questionLabel, questionName }
 }
 
 export const useFiltersLabel = (filters: CustomizationFiltersSeries) => {

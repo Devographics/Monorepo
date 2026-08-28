@@ -4,6 +4,7 @@ import { RowComponentProps } from '../types'
 import { FreeformIndicator } from 'core/charts/common2'
 import T from 'core/i18n/T'
 import { useQuestionById } from 'core/helpers/options'
+import { getOptionsNamespace } from 'core/helpers/labels'
 
 export const RowHeading = ({
     bucket,
@@ -20,12 +21,7 @@ export const RowHeading = ({
     const axis1 = block?.filtersState?.axis1
     const axis1Question = axis1 && useQuestionById(axis1.id)
 
-    const i18nNamespace =
-        axis1Question?.i18nNamespace ||
-        axis1Question?.id ||
-        block.i18nNamespace ||
-        block.fieldId ||
-        block.id
+    const i18nNamespace = getOptionsNamespace({ question: axis1Question, block })
     const sectionId = bucket?._metadata?.sectionId
 
     return (

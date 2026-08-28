@@ -80,6 +80,7 @@ export const HorizontalBarSerie = (
     const contentWidth = useWidth(contentRef) || 0
 
     const chartValues = useChartValues({
+        serie,
         seriesMetadata,
         serieMetadata,
         serieMetadataProps,

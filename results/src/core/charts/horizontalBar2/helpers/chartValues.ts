@@ -1,4 +1,9 @@
-import { Bucket, QuestionMetadata, ResponseEditionMetadata } from '@devographics/types'
+import {
+    Bucket,
+    QuestionMetadata,
+    ResponseEditionMetadata,
+    StandardQuestionData
+} from '@devographics/types'
 import {
     HorizontalBarChartState,
     HorizontalBarChartValues,
@@ -7,12 +12,14 @@ import {
 import { useAllQuestions, useAllQuestionsWithOptions } from '../../hooks'
 import { SerieMetadataProps, SeriesMetadata } from 'core/charts/common2/types'
 import { getMaxValue } from './other'
+import { DataSeries } from 'core/filters/types'
 
 export const useChartValues = ({
     buckets,
     chartState,
     question,
     seriesMetadata,
+    serie,
     serieMetadata,
     serieMetadataProps,
     viewDefinition,
@@ -22,6 +29,7 @@ export const useChartValues = ({
     chartState: HorizontalBarChartState
     question: QuestionMetadata
     seriesMetadata: SeriesMetadata
+    serie: DataSeries<StandardQuestionData>
     serieMetadata: ResponseEditionMetadata
     serieMetadataProps: SerieMetadataProps
     viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
@@ -43,6 +51,10 @@ export const useChartValues = ({
     const maxOverallValue = seriesMetadata.seriesMaxValue || getMaxValue({ values, view })
 
     chartValues.maxOverallValue = maxOverallValue
+
+    if (serie.data._correlations) {
+        chartValues._correlations = serie.data._correlations
+    }
 
     if (getTicks) {
         chartValues.ticks = getTicks({

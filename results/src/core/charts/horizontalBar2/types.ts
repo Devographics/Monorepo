@@ -10,7 +10,13 @@ import {
 } from '../common2/types'
 import { FacetItem } from 'core/filters/types'
 import { IconProps } from '@devographics/icons'
-import { Bucket, FacetBucket, QuestionMetadata, ResponseEditionMetadata } from '@devographics/types'
+import {
+    Bucket,
+    Correlations,
+    FacetBucket,
+    QuestionMetadata,
+    ResponseEditionMetadata
+} from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import { Dimension } from '../multiItemsExperience/types'
 
@@ -42,6 +48,7 @@ export interface HorizontalBarChartValues extends ChartValues {
     totalRows: number
     facetQuestion?: QuestionMetadata
     ticks?: Tick[]
+    _correlations?: Correlations
 }
 
 export type Control = {

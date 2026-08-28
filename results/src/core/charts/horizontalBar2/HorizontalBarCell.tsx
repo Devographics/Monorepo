@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Tooltip from 'core/components/Tooltip'
-import { Bucket, FacetBucket } from '@devographics/types'
+import { Bucket, CorrelationItem, FacetBucket } from '@devographics/types'
 import {
     HorizontalBarChartState,
     HorizontalBarChartValues,
@@ -20,6 +20,7 @@ import OtherBucketMarker from './OtherBucketMarker'
 import { OTHER_ANSWERS } from '@devographics/constants'
 import classNames from 'classnames'
 import { ChevronUpIcon, ChevronDownIcon } from '@devographics/icons'
+import { CorrelationsTrigger } from '../common2/Correlations'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -76,7 +77,8 @@ export const Cell = ({
 
     // const entities = useEntities()
     // const entity = entities.find(e => e.id === bucket.id)
-    const { question, facetQuestion, totalRespondents, serieMetadataProps } = chartValues
+    const { question, facetQuestion, _correlations, totalRespondents, serieMetadataProps } =
+        chartValues
     const { sort, view, highlightedCell, setHighlightedCell, columnMode } = chartState
     const { getValue, formatValue } = viewDefinition
     const { getString } = useI18n()
@@ -151,6 +153,9 @@ export const Cell = ({
     // respondents (because many questions allow more than one answers)
     const isStacked = columnMode === ColumnModes.STACKED
 
+    const optionCorrelations =
+        _correlations?.optionCorrelations?.find(c => c.id === bucket.id)?.correlations || []
+
     return (
         <div
             className={className}
@@ -213,6 +218,14 @@ export const Cell = ({
                         />
                     </>
                 )}
+            {optionCorrelations.length > 0 && (
+                <CorrelationsTrigger
+                    question={question}
+                    optionId={bucket.id}
+                    correlations={optionCorrelations}
+                    block={block}
+                />
+            )}
         </div>
     )
 }

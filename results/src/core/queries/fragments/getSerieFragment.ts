@@ -7,8 +7,11 @@ import { getAllEditionsFragment } from './getAllEditionsFragment'
 import { getRatiosFragment } from './getRatiosFragment'
 import { SENTIMENT_FACET } from '@devographics/constants'
 import { getResponseMetadataFragment } from './getResponseMetadataFragment'
+import { getCorrelationsFragment } from './getCorrelationsFragment'
 
 const DEFAULT_EDITION_COUNT = 1
+
+const addCorrelations = true
 
 export const getSerieFragment = ({
     queryOptions,
@@ -47,6 +50,7 @@ export const getSerieFragment = ({
             id
             ${addQuestionEntity ? getEntityFragment() : ''}
             ${addQuestionComments ? getCommentsCountFragment() : ''}
+            ${addCorrelations ? getCorrelationsFragment() : ''}
             ${subField}${queryArgsString} {
             ${editionType} {
                 ${getResponseMetadataFragment()}
