@@ -144,6 +144,28 @@ describe('encodeQuestion', () => {
         expect(encodeQuestion(question, docs)).toBeNull()
     })
 
+    test('a numeric question with no options is ordinal, ordered by value', () => {
+        // the `years` template supplies display groups, not options, so the
+        // order has to come from the answers themselves
+        const question = makeQuestion({ optionsAreNumeric: true })
+        const docs = makeDocs([10, 2, 2, 30, 0.5, 10, 2])
+        const encoded = encodeQuestion(question, docs)!
+        expect(encoded.isOrdinal).toBe(true)
+        // numeric order, not frequency order (2 is the most common answer)
+        expect(encoded.values).toEqual(['0.5', '2', '10', '30'])
+        // ...so the codes are ranks
+        expect(Array.from(encoded.codes)).toEqual([2, 1, 1, 3, 0, 2, 1])
+    })
+
+    test('a non-numeric question with no options stays unordered', () => {
+        const question = makeQuestion({})
+        const docs = makeDocs(['b', 'a', 'a'])
+        const encoded = encodeQuestion(question, docs)!
+        expect(encoded.isOrdinal).toBe(false)
+        // frequency order
+        expect(encoded.values).toEqual(['a', 'b'])
+    })
+
     test('keeps the most common values when there are more than the cap', () => {
         const question = makeQuestion({})
         // 40 distinct values; the first three are answered more than once
@@ -258,6 +280,41 @@ describe('encodeMultiValueQuestion', () => {
         const ids = encoded.map(e => e.optionId)
         expect(ids).not.toContain('rare')
         expect(ids).toContain('common')
+    })
+})
+
+describe('expandOptions with groups', () => {
+    const question = () =>
+        makeQuestion({
+            optionsAreNumeric: true,
+            groups: [
+                { id: 'range_0_4', lowerBound: 0, upperBound: 5 },
+                { id: 'range_5_9', lowerBound: 5, upperBound: 10 },
+                { id: 'range_over_10', lowerBound: 10 }
+            ]
+        })
+
+    test('expands by group so ids match the chart buckets', () => {
+        const docs = makeDocs([2, 7, 30, 4, null])
+        const encoded = encodeQuestion(question(), docs)!
+        const expanded = expandOptions(encoded, 1)
+        expect(expanded.map(e => e.optionId)).toEqual([
+            'range_0_4',
+            'range_5_9',
+            'range_over_10'
+        ])
+        const byId = Object.fromEntries(expanded.map(e => [e.optionId, Array.from(e.codes)]))
+        // bounds are inclusive-lower, exclusive-upper: 4 lands in range_0_4
+        expect(byId.range_0_4).toEqual([1, 0, 0, 1, -1])
+        expect(byId.range_5_9).toEqual([0, 1, 0, 0, -1])
+        expect(byId.range_over_10).toEqual([0, 0, 1, 0, -1])
+    })
+
+    test('the whole question stays an ungrouped ordinal scale', () => {
+        const encoded = encodeQuestion(question(), makeDocs([2, 7, 30]))!
+        // raw values give finer ranks for the trend than the groups would
+        expect(encoded.isOrdinal).toBe(true)
+        expect(encoded.values).toEqual(['2', '7', '30'])
     })
 })
 

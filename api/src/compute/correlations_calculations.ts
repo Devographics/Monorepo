@@ -5,7 +5,8 @@ import type {
     CorrelationDirection,
     CorrelationItem,
     CorrelationStrength,
-    OptionCorrelations
+    OptionCorrelations,
+    OptionGroup
 } from '@devographics/types'
 import type { EditionApiObject, QuestionApiObject } from '../types/surveys'
 
@@ -196,9 +197,12 @@ export const splitQuestionCorrelations = (
     // follow the question's own option order so groups line up with its buckets;
     // answers with no declared option (a question indexed from the data, or a
     // value outside the declared list) keep their strength order at the end
-    const declaredOrder = (question.options ?? [])
-        .map(option => String(option.id))
-        .filter(id => itemsByOption.has(id))
+    // questions that collect a raw value declare groups rather than options, and
+    // those groups are the buckets the chart renders
+    const declaredIds = question.options?.length
+        ? question.options.map(option => String(option.id))
+        : (question.groups ?? []).map(group => String(group.id))
+    const declaredOrder = declaredIds.filter(id => itemsByOption.has(id))
     const remaining = [...itemsByOption.keys()].filter(id => !declaredOrder.includes(id))
     const optionCorrelations: OptionCorrelations[] = [...declaredOrder, ...remaining].map(id => ({
         id,
@@ -316,8 +320,21 @@ export const isNormalizationArtifact = (value: string) => value === NO_MATCH
 export const isNonAnswerPair = (optionId1?: string, optionId2?: string) =>
     optionId1 === OPTION_NA && optionId2 === OPTION_NA
 
-export const isOrdinalQuestion = (q: QuestionApiObject) =>
-    !!q.options && !!(q.optionsAreSequential || q.optionsAreNumeric || q.optionsAreRange)
+/*
+
+A question is ordinal when its answers have an inherent order, which can come
+from two places: a declared list of options in a meaningful sequence (salary
+bands), or numeric answers that carry their own order with no option list at
+all (years of experience, age — templates like `years` supply display `groups`
+rather than options).
+
+*/
+export const isOrdinalQuestion = (q: QuestionApiObject) => {
+    if (q.options?.length) {
+        return !!(q.optionsAreSequential || q.optionsAreNumeric || q.optionsAreRange)
+    }
+    return !!q.optionsAreNumeric || q.contentType === 'number'
+}
 
 // the two states of a binary "picked it or not" variable
 const BINARY_VALUES = ['0', '1']
@@ -374,29 +391,36 @@ export const encodeQuestion = (
         return isMissing(value) ? null : String(value)
     })
 
+    const counts = new Map<string, number>()
+    for (const key of keys) {
+        if (key !== null) {
+            counts.set(key, (counts.get(key) ?? 0) + 1)
+        }
+    }
+    // any observed value is eligible, whether or not it was predefined:
+    // questions that offer an "other…" field produce perfectly good answers
+    // that appear nowhere in the option list
+    const mostCommon = [...counts.entries()]
+        .filter(([key]) => !isNormalizationArtifact(key))
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, maxCardinality)
+        .map(([key]) => key)
+
     let values: string[]
-    if (isOrdinal) {
-        // option order is the rank order, so it cannot be rebuilt from the data;
-        // a scale with more bands than the cap is left out rather than truncated
-        values = question.options!.map(option => String(option.id))
+    if (isOrdinal && question.options?.length) {
+        // declared bands: option order is the rank order, so it cannot be
+        // rebuilt from the data, and a scale with more bands than the cap is
+        // left out rather than truncated
+        values = question.options.map(option => String(option.id))
         if (values.length > maxCardinality) {
             return null
         }
+    } else if (isOrdinal) {
+        // numeric answers with no declared options carry their own order: keep
+        // the most common, then restore numeric order so the indices are ranks
+        values = [...mostCommon].sort((a, b) => Number(a) - Number(b))
     } else {
-        const counts = new Map<string, number>()
-        for (const key of keys) {
-            if (key !== null) {
-                counts.set(key, (counts.get(key) ?? 0) + 1)
-            }
-        }
-        // any observed value is eligible, whether or not it was predefined:
-        // questions that offer an "other…" field produce perfectly good answers
-        // that appear nowhere in the option list
-        values = [...counts.entries()]
-            .filter(([key]) => !isNormalizationArtifact(key))
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, maxCardinality)
-            .map(([key]) => key)
+        values = mostCommon
     }
 
     const valueIndex = new Map(values.map((value, index) => [value, index]))
@@ -544,21 +568,64 @@ stands out while neither extreme does — cannot surface at all.
 Operates on the already-encoded question to avoid re-reading the documents.
 
 */
+// mirrors the bounds check used when grouping response buckets, so that a
+// correlation's id always matches the bucket the chart renders
+const isInGroup = (value: string, group: OptionGroup) => {
+    const { items, lowerBound, upperBound } = group
+    if (items) {
+        return items.includes(value)
+    }
+    const hasLower = typeof lowerBound !== 'undefined'
+    const hasUpper = typeof upperBound !== 'undefined'
+    if (!hasLower && !hasUpper) {
+        return false
+    }
+    const n = Number(value)
+    if (Number.isNaN(n)) {
+        return false
+    }
+    if (hasLower && hasUpper) {
+        return n >= lowerBound! && n < upperBound!
+    }
+    return hasLower ? n >= lowerBound! : n < upperBound!
+}
+
 export const expandOptions = (
     encoded: EncodedQuestion,
     minSelections: number = MIN_OPTION_SELECTIONS
 ): EncodedQuestion[] => {
     const { question, codes, values } = encoded
-    return values
-        .map((value, optionIdx) => {
+
+    /*
+    Questions that collect a raw value and group it for display (years of
+    experience, age…) are expanded by group, not by value: "5 to 9 years" is
+    both a meaningful variable and something the chart can attach an indicator
+    to, whereas "exactly 7 years" is neither.
+    */
+    const groups = question.groups
+    const variables = groups?.length
+        ? groups.map(group => ({
+              id: String(group.id),
+              // the value indices that fall into this group
+              members: new Set(
+                  values.reduce<number[]>((indices, value, index) => {
+                      if (isInGroup(value, group)) indices.push(index)
+                      return indices
+                  }, [])
+              )
+          }))
+        : values.map((value, index) => ({ id: value, members: new Set([index]) }))
+
+    return variables
+        .map(({ id, members }) => {
             const binaryCodes = new Int16Array(codes.length)
             for (let i = 0; i < codes.length; i++) {
                 const code = codes[i]
-                binaryCodes[i] = code < 0 ? -1 : code === optionIdx ? 1 : 0
+                binaryCodes[i] = code < 0 ? -1 : members.has(code) ? 1 : 0
             }
             return {
                 question,
-                optionId: value,
+                optionId: id,
                 isOrdinal: true,
                 values: BINARY_VALUES,
                 cardinality: 2,

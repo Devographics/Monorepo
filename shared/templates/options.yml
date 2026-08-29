@@ -1,6 +1,7 @@
 age:
     optionsAreRange: true
     optionsAreSequential: true
+    doNotCorrelateWith: [years_of_experience]
     options:
         - id: range_less_than_10
           average: 10
@@ -22,6 +23,7 @@ age:
 years_of_experience:
     optionsAreRange: true
     optionsAreSequential: true
+    doNotCorrelateWith: [age]
     options:
         - id: range_less_than_1
           average: 1
