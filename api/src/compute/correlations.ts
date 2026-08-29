@@ -7,7 +7,6 @@ import {
     ComputedCorrelations,
     OptionCorrelations,
     EncodedQuestion,
-    MIN_PAIRWISE_N,
     computePairStats,
     encodeMultiValueQuestion,
     encodeQuestion,
@@ -24,6 +23,11 @@ import {
     round,
     splitQuestionCorrelations
 } from './correlations_calculations'
+import {
+    CACHE_VERSION,
+    MIN_CORRELATION,
+    MIN_PAIRWISE_N
+} from './correlations_constants'
 
 export * from './correlations_calculations'
 
@@ -47,15 +51,6 @@ The full result is cached per-edition (survey data is immutable once an edition
 closes).
 
 */
-
-// how many (sorted) pairs to return at the edition level
-export const EDITION_CORRELATIONS_LIMIT = 1000
-// discard pairs below this correlation strength; answer expansion produces
-// hundreds of binary variables, and keeping every near-zero pair would bloat
-// the cached result with noise
-const MIN_CORRELATION = 0.05
-// bump to invalidate cached results when the algorithm changes
-const CACHE_VERSION = 15
 
 interface ComputeOptions {
     survey: SurveyApiObject

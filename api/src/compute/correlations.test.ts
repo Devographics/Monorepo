@@ -15,6 +15,7 @@ import {
     splitQuestionCorrelations
 } from './correlations_calculations'
 import type { CorrelationItem } from './correlations_calculations'
+import { OPTION_CORRELATIONS_LIMIT } from './correlations_constants'
 import type { EditionApiObject, QuestionApiObject } from '../types/surveys'
 
 describe('computePairStats', () => {
@@ -480,14 +481,17 @@ describe('splitQuestionCorrelations', () => {
             id: 'gender',
             options: [{ id: 'male' }, { id: 'female' }]
         })
+        const perOption = OPTION_CORRELATIONS_LIMIT + 3
         const items = [
-            ...Array.from({ length: 8 }, () => item({ optionId1: 'male' })),
-            ...Array.from({ length: 8 }, () => item({ optionId1: 'female' }))
+            ...Array.from({ length: perOption }, () => item({ optionId1: 'male' })),
+            ...Array.from({ length: perOption }, () => item({ optionId1: 'female' }))
         ]
         const { optionCorrelations } = splitQuestionCorrelations(items, question)
-        // both groups are capped at OPTION_CORRELATIONS_LIMIT rather than
-        // competing for a single shared budget
-        expect(optionCorrelations.map(g => g.correlations.length)).toEqual([5, 5])
+        // both groups get their own budget rather than competing for a shared one
+        expect(optionCorrelations.map(g => g.correlations.length)).toEqual([
+            OPTION_CORRELATIONS_LIMIT,
+            OPTION_CORRELATIONS_LIMIT
+        ])
     })
 })
 

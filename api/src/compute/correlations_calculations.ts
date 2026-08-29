@@ -9,6 +9,18 @@ import type {
     OptionGroup
 } from '@devographics/types'
 import type { EditionApiObject, QuestionApiObject } from '../types/surveys'
+import {
+    CORRELATION_STRENGTH_BANDS,
+    EXCLUDED_QUESTION_IDS,
+    MAX_CARDINALITY,
+    MIN_OPTION_SELECTIONS,
+    OPTION_CORRELATIONS_LIMIT,
+    QUESTION_CORRELATIONS_LIMIT
+} from './correlations_constants'
+
+// the tuning knobs live in their own module; re-exported so importers of this
+// one keep working
+export * from './correlations_constants'
 
 // re-exported so callers can keep importing correlation types from here
 export type { CorrelationDirection, CorrelationItem, CorrelationStrength, OptionCorrelations }
@@ -20,51 +32,6 @@ response encoding, and pair statistics. Kept free of db/caching imports so
 they stay easily unit-testable; the orchestration lives in correlations.ts.
 
 */
-
-// discard pairs with fewer respondents than this having answered both questions
-export const MIN_PAIRWISE_N = 100
-// skip questions with more distinct values than this (e.g. country)
-export const MAX_CARDINALITY = 30
-// binary (per-option) variables need at least this many respondents on each
-// side (selected/not selected) to be worth correlating
-export const MIN_OPTION_SELECTIONS = 30
-
-/*
-
-Survey-process meta questions: they generate statistically valid but
-uninteresting pairs (e.g. people who skipped questions also skipped other
-questions), so keep them out of the correlations dataset entirely.
-
-*/
-export const EXCLUDED_QUESTION_IDS = [
-    'authmode',
-    'completion_stats',
-    'did_you_run_into_technical_issues',
-    'how_can_we_improve',
-    'how_did_user_find_out_about_the_survey',
-    'knowledge_score',
-    'missing_questions',
-    'skipped',
-    'source',
-    'survey_feedback'
-]
-
-/*
-
-Strength bands (lower bound of |correlation| for each label).
-
-One scale is used for every kind of correlation. Binary "picked it or not"
-variables do have a mechanical ceiling below 1, which once justified scoring
-them on a separate, lower scale — but that ceiling depends on how common the
-answer is, so a single fixed discount corrected nothing while making labels
-inconsistent wherever the two kinds appear in the same list.
-
-*/
-export const CORRELATION_STRENGTH_BANDS: [CorrelationStrength, number][] = [
-    ['very_strong', 0.4],
-    ['strong', 0.25],
-    ['moderate', 0.1]
-]
 
 export const getCorrelationStrength = (correlation: number): CorrelationStrength => {
     const value = Math.abs(correlation)
@@ -96,15 +63,10 @@ never consume one of the slots.
 */
 export const filterCorrelations = (
     items: CorrelationItem[],
-    {
-        minStrength = 'moderate',
-        limit
-    }: { minStrength?: CorrelationStrength; limit?: number } = {}
+    { minStrength = 'moderate', limit }: { minStrength?: CorrelationStrength; limit?: number } = {}
 ) => {
     const minIndex = CORRELATION_STRENGTHS.indexOf(minStrength)
-    const filtered = items.filter(
-        item => CORRELATION_STRENGTHS.indexOf(item.strength) >= minIndex
-    )
+    const filtered = items.filter(item => CORRELATION_STRENGTHS.indexOf(item.strength) >= minIndex)
     return limit === undefined ? filtered : filtered.slice(0, limit)
 }
 
@@ -148,11 +110,6 @@ export const putQuestionFirst = (item: CorrelationItem, questionId: string): Cor
               optionId2: item.optionId1
           }
         : item
-
-// how many correlations to return for a question as a whole…
-export const QUESTION_CORRELATIONS_LIMIT = 10
-// …and for each of its individual options
-export const OPTION_CORRELATIONS_LIMIT = 5
 
 /*
 
@@ -300,10 +257,7 @@ definitional rather than informative (race and country of origin, say).
 The check is symmetric, so the field only has to be declared on one side.
 
 */
-export const isBlockedPair = (
-    question1: QuestionApiObject,
-    question2: QuestionApiObject
-) =>
+export const isBlockedPair = (question1: QuestionApiObject, question2: QuestionApiObject) =>
     !!question1.doNotCorrelateWith?.includes(question2.id) ||
     !!question2.doNotCorrelateWith?.includes(question1.id)
 
