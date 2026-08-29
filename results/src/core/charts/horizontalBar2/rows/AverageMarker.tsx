@@ -64,7 +64,7 @@ export const AverageMarker = (
 ) => {
     const { serieMetadataProps, question, buckets, block } = props
     const { chartOptions = {} } = block
-    const { defaultMarker = AVERAGE } = chartOptions
+    const { defaultMarker = MEDIAN } = chartOptions
     const [type, setType] = useState<typeof AVERAGE | typeof MEDIAN>(defaultMarker)
 
     const value = serieMetadataProps[type]

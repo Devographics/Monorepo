@@ -28,8 +28,12 @@
 }
 .correlations-heading {
     margin: 0;
+    font-weight: normal;
     background-color: var(--backgroundAltColor);
     padding: var(--doubleSpacing) var(--doubleSpacing) var(--spacing) var(--doubleSpacing);
+    strong {
+        font-style: italic;
+    }
     transition: box-shadow 0.3s ease;
 
     @container scroll-state(stuck: top) {
