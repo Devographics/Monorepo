@@ -179,6 +179,10 @@ gender:
         - id: not_listed
 
 race_ethnicity:
+    # correlating ethnicity with where someone is from is definitional rather
+    # than a finding. Surveys can override this by redeclaring
+    # doNotCorrelateWith on the question itself.
+    doNotCorrelateWith: [country, country_of_origin]
     options:
         - id: black_african
         - id: east_asian

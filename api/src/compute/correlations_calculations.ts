@@ -289,6 +289,22 @@ against a real answer can still be informative (who declines to say).
 */
 /*
 
+Questions can opt out of being correlated with specific other questions via
+`doNotCorrelateWith` in the survey outline, for relationships that are
+definitional rather than informative (race and country of origin, say).
+
+The check is symmetric, so the field only has to be declared on one side.
+
+*/
+export const isBlockedPair = (
+    question1: QuestionApiObject,
+    question2: QuestionApiObject
+) =>
+    !!question1.doNotCorrelateWith?.includes(question2.id) ||
+    !!question2.doNotCorrelateWith?.includes(question1.id)
+
+/*
+
 NO_MATCH marks a free-form answer that normalisation could not match to any
 entity. It describes the pipeline's coverage rather than the respondent, so it
 never becomes a variable at all — unlike `na`, which is an answer someone

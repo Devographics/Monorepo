@@ -7,6 +7,7 @@ import {
     getCorrelationDirection,
     getCorrelationQuestions,
     getCorrelationStrength,
+    isBlockedPair,
     isNonAnswerPair,
     isNormalizationArtifact,
     putQuestionFirst,
@@ -516,6 +517,25 @@ describe('getCorrelationStrength', () => {
         // which read as an inversion wherever both appeared in one list
         expect(getCorrelationStrength(0.27)).toBe('strong')
         expect(getCorrelationStrength(-0.25)).toBe('strong')
+    })
+})
+
+describe('isBlockedPair', () => {
+    const q = (id: string, doNotCorrelateWith?: string[]) =>
+        ({ id, doNotCorrelateWith } as QuestionApiObject)
+
+    test('blocks the pair in both directions from a single declaration', () => {
+        const race = q('race_ethnicity', ['country', 'country_of_origin'])
+        const country = q('country')
+        expect(isBlockedPair(race, country)).toBe(true)
+        // symmetric: the field is only declared on race_ethnicity
+        expect(isBlockedPair(country, race)).toBe(true)
+    })
+
+    test('leaves other pairs alone', () => {
+        const race = q('race_ethnicity', ['country'])
+        expect(isBlockedPair(race, q('yearly_salary'))).toBe(false)
+        expect(isBlockedPair(q('gender'), q('yearly_salary'))).toBe(false)
     })
 })
 

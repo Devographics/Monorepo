@@ -239,6 +239,13 @@ export type Question = {
      */
     allowMultiple?: boolean
     /**
+     * Ids of questions this question should never be correlated with, because
+     * the relationship is definitional rather than informative (e.g. race and
+     * country of origin). Applies in both directions, so it only needs to be
+     * declared on one of the two questions.
+     */
+    doNotCorrelateWith?: string[]
+    /**
      * For single and multiple question
      * "multipleWithOther" is a shortcut to "multiple" + allowOther=true
      */

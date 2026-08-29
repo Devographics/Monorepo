@@ -206,6 +206,13 @@ type QuestionMetadata {
     optionsAreRange: Boolean
     # options follow each other sequentially
     optionsAreSequential: Boolean
+    """
+    Ids of questions this question should never be correlated with, because the
+    relationship is definitional rather than informative (e.g. race and country
+    of origin). Applies in both directions, so it only needs to be declared on
+    one of the two questions.
+    """
+    doNotCorrelateWith: [String]
     # whether a question only exists in the API and not the ouline
     apiOnly: Boolean
     # whether a question should be hidden in the survey form

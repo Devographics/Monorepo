@@ -18,6 +18,7 @@ import {
     getMultiValueCorrelationQuestions,
     getMultiValueDbPaths,
     getSectionId,
+    isBlockedPair,
     isNonAnswerPair,
     putQuestionFirst,
     round,
@@ -54,7 +55,7 @@ export const EDITION_CORRELATIONS_LIMIT = 1000
 // the cached result with noise
 const MIN_CORRELATION = 0.05
 // bump to invalidate cached results when the algorithm changes
-const CACHE_VERSION = 11
+const CACHE_VERSION = 13
 
 interface ComputeOptions {
     survey: SurveyApiObject
@@ -110,6 +111,8 @@ export async function computeEditionCorrelations(
             // (they compete for the same selections), skip them
             if (eq1.question.id === eq2.question.id) continue
             if (isNonAnswerPair(eq1.optionId, eq2.optionId)) continue
+            // pairs the survey outline has opted out of
+            if (isBlockedPair(eq1.question, eq2.question)) continue
             const rows = eq1.cardinality
             const cols = eq2.cardinality
             const table = new Int32Array(rows * cols)
