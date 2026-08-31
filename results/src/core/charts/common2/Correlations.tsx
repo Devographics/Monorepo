@@ -8,13 +8,19 @@ import Button from 'core/components/Button'
 import { useI18n } from '@devographics/react-i18n'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
-import { CorrelationItem, QuestionMetadata, QuestionMetadataWithSection } from '@devographics/types'
+import {
+    CorrelationItem,
+    CorrelationStrength,
+    QuestionMetadata,
+    QuestionMetadataWithSection
+} from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import { getItemLabel, getOptionsNamespace } from 'core/helpers/labels'
 import { getQuestionLabel } from './helpers/labels'
 import { getQuestionById } from 'core/helpers/options'
 import { formatNumber } from './helpers/format'
 import { StringTranslator } from '@devographics/i18n'
+import take from 'lodash/take.js'
 
 export const CorrelationsTrigger = ({
     question,
@@ -40,18 +46,8 @@ export const CorrelationsTrigger = ({
             size="l"
             className="correlations-modal"
             trigger={
-                <div className="chart-correlation-indicator">
-                    <Tooltip
-                        trigger={
-                            <Button className="chart-correlation-indicator-button button-round ">
-                                <CorrelationsIcon size={'small'} />
-                                <span className="chart-correlation-count">{count}</span>
-                            </Button>
-                        }
-                        contents={
-                            <T k="correlations.correlations_trigger" values={{ count }} md={true} />
-                        }
-                    />
+                <div>
+                    <CorrelationsIndicator correlations={correlations} />
                 </div>
             }
         >
@@ -65,6 +61,80 @@ export const CorrelationsTrigger = ({
     )
 }
 
+const correlationColors: Record<CorrelationStrength | 'empty', string> = {
+    very_strong: '#EC5B4B',
+    strong: '#E08B36',
+    moderate: '#FBF467',
+    weak: '#cccccc',
+    empty: 'rgba(255,255,255,0.2)'
+}
+
+const formatCorrelation = (value: number) => `${value > 0 ? '+' : '-'}${Math.abs(value).toFixed(2)}`
+
+const CorrelationsIndicator = ({ correlations }: { correlations: CorrelationItem[] }) => {
+    const top9 = []
+    for (let i = 0; i < 9; i++) {
+        console.log('999')
+        if (correlations[i]) {
+            top9.push(correlations[i])
+        } else {
+            top9.push({ strength: 'empty' })
+        }
+    }
+    const maxCorrelation = correlations[0]
+    return (
+        <div className="chart-correlation-indicator">
+            <Tooltip
+                trigger={
+                    <Button className="chart-correlation-indicator-button button-round ">
+                        {/* <CorrelationsIcon size={'small'} /> */}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            {top9.map((c, i) => {
+                                const col = Math.floor(i / 3)
+                                const row = i % 3
+                                return (
+                                    <rect
+                                        key={i}
+                                        width="6"
+                                        height="6"
+                                        x={1 + row * 8}
+                                        y={1 + col * 8}
+                                        fill={correlationColors[c.strength]}
+                                        rx="1"
+                                    ></rect>
+                                )
+                            })}
+                            {/* <rect width="6" height="6" x="1" y="9" fill="#E08B36" rx="1"></rect>
+            <rect width="6" height="6" x="1" y="17" fill="#FBF467" rx="1"></rect>
+            <rect width="6" height="6" x="9" y="1" fill="#E08B36" rx="1"></rect>
+            <rect width="6" height="6" x="9" y="9" fill="#FBF467" rx="1"></rect>
+            <rect width="6" height="6" x="9" y="17" fill="#D9D9D9" fillOpacity="0.2" rx="1"></rect>
+            <rect width="6" height="6" x="17" y="1" fill="#E08B36" rx="1"></rect>
+            <rect width="6" height="6" x="17" y="9" fill="#FBF467" rx="1"></rect>
+            <rect width="6" height="6" x="17" y="17" fill="#D9D9D9" fillOpacity="0.2" rx="1"></rect> */}
+                        </svg>
+                        <span className="chart-correlation-count">
+                            {formatCorrelation(maxCorrelation.correlation)}
+                        </span>
+                    </Button>
+                }
+                contents={
+                    <T
+                        k="correlations.correlations_trigger"
+                        values={{ count: correlations.length }}
+                        md={true}
+                    />
+                }
+            />
+        </div>
+    )
+}
 type CorrelationProps = {
     question: QuestionMetadataWithSection
     optionId?: string
@@ -121,7 +191,7 @@ export const Correlations = ({ question, block, optionId, correlations }: Correl
                 </div>
                 <div className="correlation-items">
                     {correlations.map((c, i) => (
-                        <CorrelationItemComponent key={i} correlation={c} block={block} />
+                        <CorrelationItemComponent index={i} key={i} correlation={c} block={block} />
                     ))}
                 </div>
                 <div className="correlations-note">
@@ -134,10 +204,12 @@ export const Correlations = ({ question, block, optionId, correlations }: Correl
 
 const CorrelationItemComponent = ({
     correlation,
-    block
+    block,
+    index
 }: {
     correlation: CorrelationItem
     block: BlockVariantDefinition
+    index: number
 }) => {
     const pageContext = usePageContext()
     const { currentEdition } = pageContext
@@ -178,13 +250,14 @@ const CorrelationItemComponent = ({
     })
     const questionLabel = questionLabelObject.question
 
-    let optionLabel
+    let optionLabelObject, optionLabel
     if (optionId2) {
-        optionLabel = getItemLabel({
+        optionLabelObject = getItemLabel({
             id: optionId2,
             getString,
             i18nNamespace: questionId2
-        })?.shortLabel
+        })
+        optionLabel = optionLabelObject?.shortLabel
     }
 
     const takeawayKey = `correlations.takeaway.${shape}`
@@ -201,13 +274,19 @@ const CorrelationItemComponent = ({
                     questionName={questionLabelObject.questionName}
                     n={n}
                     optionLabel={optionLabel}
+                    index={index}
                 />
-                <T
-                    k={takeawayKey}
-                    values={{ strengthLevelLabel, directionLabel, questionLabel, optionLabel }}
-                    md={true}
-                    html={true}
-                />
+                <div
+                    data-questionKey={questionLabelObject?.key}
+                    data-optionKey={optionLabelObject?.key}
+                >
+                    <T
+                        k={takeawayKey}
+                        values={{ strengthLevelLabel, directionLabel, questionLabel, optionLabel }}
+                        md={true}
+                        html={true}
+                    />
+                </div>
             </div>
         </div>
     )
@@ -217,10 +296,7 @@ const CorrelationValue = ({ value, direction }: { value: number; direction: stri
     const IconComponent = direction === 'positive' ? PositiveCorrelation : NegativeCorrelation
     return (
         <div className="correlation-item-value">
-            <span className="correlation-item-value-figure">
-                {value > 0 && '+'}
-                {value.toFixed(2)}
-            </span>
+            <span className="correlation-item-value-figure">{formatCorrelation(value)}</span>
             <IconComponent />
         </div>
     )
@@ -229,16 +305,20 @@ const CorrelationValue = ({ value, direction }: { value: number; direction: stri
 const CorrelationSubheading = ({
     questionName,
     optionLabel,
-    n
+    n,
+    index
 }: {
     questionName: string
     optionLabel?: string
     n: number
+    index: number
 }) => {
     return (
         <div className="correlation-item-subheading">
             <h4 className="correlation-item-breadcrumbs">
-                <span>{questionName}</span>
+                <span>
+                    {index + 1}. {questionName}
+                </span>
                 {optionLabel && (
                     <>
                         {' '}

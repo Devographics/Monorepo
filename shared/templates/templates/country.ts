@@ -1354,6 +1354,7 @@ export const country: TemplateFunction = options => {
         options: countries
             // .filter(country => enabledCountries.includes(country['alpha-3']))
             .map(country => ({ id: country['alpha-3'], label: country.name })),
+        doNotCorrelateWith: ['country_of_origin', 'native_languages', 'other_languages'],
         rawPaths: {
             response: `${sectionId}__${questionId}`,
             skip: `${sectionId}__${questionId}__${DbPathsEnum.SKIP}`,
