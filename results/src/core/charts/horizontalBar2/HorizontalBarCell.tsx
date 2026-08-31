@@ -77,8 +77,7 @@ export const Cell = ({
 
     // const entities = useEntities()
     // const entity = entities.find(e => e.id === bucket.id)
-    const { question, facetQuestion, _correlations, totalRespondents, serieMetadataProps } =
-        chartValues
+    const { question, facetQuestion } = chartValues
     const { sort, view, highlightedCell, setHighlightedCell, columnMode } = chartState
     const { getValue, formatValue } = viewDefinition
     const { getString } = useI18n()
@@ -153,9 +152,6 @@ export const Cell = ({
     // respondents (because many questions allow more than one answers)
     const isStacked = columnMode === ColumnModes.STACKED
 
-    const optionCorrelations =
-        _correlations?.optionCorrelations?.find(c => c.id === bucket.id)?.correlations || []
-
     return (
         <div
             className={className}
@@ -218,14 +214,6 @@ export const Cell = ({
                         />
                     </>
                 )}
-            {optionCorrelations.length > 0 && (
-                <CorrelationsTrigger
-                    question={question}
-                    optionId={bucket.id}
-                    correlations={optionCorrelations}
-                    block={block}
-                />
-            )}
         </div>
     )
 }

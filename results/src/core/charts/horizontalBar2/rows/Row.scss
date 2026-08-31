@@ -9,7 +9,7 @@
         display: grid;
         grid-template-columns: subgrid;
         grid-column-start: 1;
-        grid-column-end: 4;
+        grid-column-end: -1;
         // gap: 20px;
         // grid-template-areas: 'heading content metadata';
     }
@@ -118,6 +118,7 @@
 
 .chart-row-left {
     grid-area: heading;
+    grid-row: 1;
     display: flex;
     height: 100%;
     @include breakpoints.small {
@@ -158,12 +159,14 @@
 }
 .chart-row-content {
     grid-area: content;
+    grid-row: 1;
     @include breakpoints.small {
         padding: 0;
     }
 }
-.chart-row-right {
-    grid-area: metadata;
+.chart-row-metadata {
+    grid-column: respondents-start / correlations-end;
+    grid-row: 1;
     display: flex;
     align-items: center;
     gap: var(--spacing);
@@ -173,6 +176,16 @@
         position: relative;
         z-index: 1;
     }
+}
+
+.chart-row-respondents {
+    grid-area: respondents;
+    grid-row: 1;
+}
+
+.chart-row-correlations {
+    grid-area: correlations;
+    grid-row: 1;
 }
 
 .chart-row-heading-label {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { RowWrapper } from './RowWrapper'
+import { RowWrapper, RowWrapperProps } from './RowWrapper'
 import { Cell } from '../HorizontalBarCell'
 import { RowComponentProps } from '../types'
 import { useTheme } from 'styled-components'
@@ -9,6 +9,7 @@ import { CUTOFF_ANSWERS, OVERLIMIT_ANSWERS } from '@devographics/constants'
 import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataIndicator'
 import { ResultsSubFieldEnum } from '@devographics/types'
 import { getTopBound } from '../views'
+import { CorrelationsTrigger } from 'core/charts/common2/Correlations'
 
 export const RowSingle = (props: RowComponentProps) => {
     const theme = useTheme()
@@ -29,7 +30,7 @@ export const RowSingle = (props: RowComponentProps) => {
     } = props
     const { isFreeformData, hasInsufficientData } = bucket
     const otherBucket = otherBuckets && otherBuckets.find(b => b.id === bucket.id)
-    const { question, maxOverallValue = 1, serieMetadataProps } = chartValues
+    const { question, maxOverallValue = 1, serieMetadataProps, _correlations } = chartValues
     const { completion } = serieMetadataProps
     const { count: totalSerieRespondents } = completion
 
@@ -73,19 +74,35 @@ export const RowSingle = (props: RowComponentProps) => {
     const isSpecialBucket = [OVERLIMIT_ANSWERS, CUTOFF_ANSWERS].includes(bucket.id)
     const showFreeformAnswers = !isSpecialBucket && (isFreeformQuestion || isFreeformData)
 
-    const rowMetadata = showFreeformAnswers ? (
-        <FreeformAnswersTrigger
-            bucket={bucket}
-            buckets={buckets}
-            questionId={question.id}
-            sectionId={block.sectionId}
-            block={block}
-            enableModal={true}
-        />
-    ) : (
-        <RespondentCount count={bucket.count} />
-    )
-    const rowWrapperProps = showCount ? { ...props, rowMetadata } : props
+    const optionCorrelations =
+        _correlations?.optionCorrelations?.find(c => c.id === bucket.id)?.correlations || []
+
+    const rowWrapperProps = { ...props } as RowWrapperProps
+
+    if (showCount) {
+        rowWrapperProps.rowRespondents = showFreeformAnswers ? (
+            <FreeformAnswersTrigger
+                bucket={bucket}
+                buckets={buckets}
+                questionId={question.id}
+                sectionId={block.sectionId}
+                block={block}
+                enableModal={true}
+            />
+        ) : (
+            <RespondentCount count={bucket.count} />
+        )
+    }
+    if (optionCorrelations.length > 0) {
+        rowWrapperProps.rowCorrelations = (
+            <CorrelationsTrigger
+                question={question}
+                optionId={bucket.id}
+                correlations={optionCorrelations}
+                block={block}
+            />
+        )
+    }
 
     return (
         <RowWrapper {...rowWrapperProps}>

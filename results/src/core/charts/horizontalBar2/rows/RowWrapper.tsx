@@ -6,12 +6,13 @@ import { Gridlines } from './Gridlines'
 import { RowComponentProps } from '../types'
 import { RowDepth } from './RowDepth'
 
-export const RowWrapper = (
-    props: RowComponentProps & {
-        rowMetadata?: JSX.Element
-        children: JSX.Element
-    }
-) => {
+export type RowWrapperProps = RowComponentProps & {
+    rowMetadata?: JSX.Element
+    rowCorrelations?: JSX.Element
+    rowRespondents?: JSX.Element
+    children: JSX.Element
+}
+export const RowWrapper = (props: RowWrapperProps) => {
     const {
         chartState,
         chartValues,
@@ -21,6 +22,8 @@ export const RowWrapper = (
         isNestedBucket = false,
         children,
         rowMetadata,
+        rowCorrelations,
+        rowRespondents,
         rowIndex,
         depth = 0,
         hasNestedBuckets,
@@ -88,7 +91,10 @@ export const RowWrapper = (
                 {ticks && <Gridlines ticks={ticks} />}
                 <div className="chart-bar">{children}</div>
             </div>
-            {rowMetadata && <div className="chart-row-right">{rowMetadata}</div>}
+
+            {rowCorrelations && <div className="chart-row-correlations">{rowCorrelations}</div>}
+            {rowRespondents && <div className="chart-row-respondents">{rowRespondents}</div>}
+            {rowMetadata && <div className="chart-row-metadata">{rowMetadata}</div>}
         </div>
     )
 }

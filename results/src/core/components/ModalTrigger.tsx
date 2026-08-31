@@ -91,6 +91,7 @@ const Close = styled.button`
     border: 2px solid transparent;
     outline: none;
     color: ${props => props.theme.colors.text};
+    z-index: 100;
     &:hover,
     &:focus {
         color: ${props => props.theme.colors.link};
