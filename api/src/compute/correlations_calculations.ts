@@ -113,6 +113,30 @@ export const putQuestionFirst = (item: CorrelationItem, questionId: string): Cor
 
 /*
 
+Rules applied to one card's ranked list of correlations, to stop it spending
+slots on weaker restatements of something already shown.
+
+Currently one rule: once a correlation with a whole question is shown ("scoring
+higher on the political spectrum"), correlations with that same question's
+individual answers ("answered far-left") are dropped, since the trend already
+says it and says it more generally. Only weaker ones are affected — the list
+arrives sorted strongest-first.
+
+*/
+export const applyCorrelationRules = (items: CorrelationItem[]) => {
+    // questions already covered by a correlation with the question as a whole
+    const coveredByTrend = new Set<string>()
+    return items.filter(item => {
+        if (!item.optionId2) {
+            coveredByTrend.add(item.questionId2)
+            return true
+        }
+        return !coveredByTrend.has(item.questionId2)
+    })
+}
+
+/*
+
 Build the correlations payload for a single question, from the (already
 filtered and side-normalised) items involving it.
 
@@ -135,11 +159,13 @@ export const splitQuestionCorrelations = (
     // only keep correlations worth putting in front of a reader
     const shownItems = filterCorrelations(items, { minStrength })
 
-    const questionCorrelations = shownItems
-        .filter(item => !item.optionId1)
-        .slice(0, QUESTION_CORRELATIONS_LIMIT)
+    const questionCorrelations = applyCorrelationRules(
+        shownItems.filter(item => !item.optionId1)
+    ).slice(0, QUESTION_CORRELATIONS_LIMIT)
 
-    // items arrive sorted strongest-first, so each group keeps that order
+    // items arrive sorted strongest-first, so each group keeps that order.
+    // Groups are collected in full and capped further down, after the rules
+    // have run, so that a suppressed correlation never consumes a slot.
     const itemsByOption = new Map<string, CorrelationItem[]>()
     for (const item of shownItems) {
         const { optionId1 } = item
@@ -147,7 +173,7 @@ export const splitQuestionCorrelations = (
         const groupItems = itemsByOption.get(optionId1)
         if (!groupItems) {
             itemsByOption.set(optionId1, [item])
-        } else if (groupItems.length < OPTION_CORRELATIONS_LIMIT) {
+        } else {
             groupItems.push(item)
         }
     }
@@ -161,10 +187,14 @@ export const splitQuestionCorrelations = (
         : (question.groups ?? []).map(group => String(group.id))
     const declaredOrder = declaredIds.filter(id => itemsByOption.has(id))
     const remaining = [...itemsByOption.keys()].filter(id => !declaredOrder.includes(id))
-    const optionCorrelations: OptionCorrelations[] = [...declaredOrder, ...remaining].map(id => ({
-        id,
-        correlations: itemsByOption.get(id)!
-    }))
+    const optionCorrelations: OptionCorrelations[] = [...declaredOrder, ...remaining]
+        .map(id => ({
+            id,
+            correlations: applyCorrelationRules(itemsByOption.get(id)!).slice(
+                0,
+                OPTION_CORRELATIONS_LIMIT
+            )
+        }))
 
     return { questionCorrelations, optionCorrelations }
 }

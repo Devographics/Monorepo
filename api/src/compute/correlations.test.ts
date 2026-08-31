@@ -1,4 +1,5 @@
 import {
+    applyCorrelationRules,
     computePairStats,
     encodeMultiValueQuestion,
     encodeQuestion,
@@ -401,6 +402,43 @@ describe('filterCorrelations', () => {
 
     test('returns nothing when everything is too weak', () => {
         expect(filterCorrelations([item('weak'), item('weak')])).toEqual([])
+    })
+})
+
+describe('applyCorrelationRules', () => {
+    const item = (questionId2: string, optionId2?: string, correlation = 0.5) =>
+        ({ questionId1: 'gender', questionId2, optionId2, correlation } as CorrelationItem)
+
+    test('a trend suppresses weaker correlations with that question own answers', () => {
+        const items = [
+            item('political_spectrum', undefined, 0.31),
+            item('political_spectrum', 'far_left', 0.24),
+            item('political_spectrum', 'left', 0.2),
+            item('yearly_salary', 'range_0_20', 0.18)
+        ]
+        expect(applyCorrelationRules(items).map(i => i.optionId2)).toEqual([
+            undefined,
+            // the salary answer survives: no trend for that question was shown
+            'range_0_20'
+        ])
+    })
+
+    test('a stronger answer is kept when the trend comes after it', () => {
+        // only weaker restatements are dropped, so order matters
+        const items = [
+            item('political_spectrum', 'far_left', 0.31),
+            item('political_spectrum', undefined, 0.24)
+        ]
+        expect(applyCorrelationRules(items)).toHaveLength(2)
+    })
+
+    test('answers of different questions are unaffected', () => {
+        const items = [
+            item('political_spectrum', undefined, 0.31),
+            item('ai_sentiment', 'excited', 0.2),
+            item('hobbies', 'golf', 0.18)
+        ]
+        expect(applyCorrelationRules(items)).toHaveLength(3)
     })
 })
 
