@@ -10,7 +10,7 @@ the same time or existing editions will keep serving their cached output.
 */
 
 // bump to invalidate cached results when the algorithm or any knob below changes
-export const CACHE_VERSION = 15
+export const CACHE_VERSION = 17
 
 /*
 
@@ -39,9 +39,9 @@ these can change without recomputing anything.
 */
 
 // how many correlations to return for a question as a whole…
-export const QUESTION_CORRELATIONS_LIMIT = 20
+export const QUESTION_CORRELATIONS_LIMIT = 15
 // …and for each of its individual options
-export const OPTION_CORRELATIONS_LIMIT = 20
+export const OPTION_CORRELATIONS_LIMIT = 15
 // how many (sorted) pairs to return at the edition level
 export const EDITION_CORRELATIONS_LIMIT = 1000
 
@@ -59,7 +59,7 @@ inconsistent wherever the two kinds appear in the same list.
 export const CORRELATION_STRENGTH_BANDS: [CorrelationStrength, number][] = [
     ['very_strong', 0.4],
     ['strong', 0.25],
-    ['moderate', 0.1]
+    ['moderate', 0.15]
 ]
 
 /*
