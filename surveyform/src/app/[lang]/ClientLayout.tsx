@@ -101,7 +101,7 @@ export function ClientLayout(props: AppLayoutProps) {
         </SWRConfig>
       </ErrorBoundary>
       <Referrer />
-      <Analytics />
+      {process.env.VERCEL === "1" && <Analytics />}
     </>
   );
 }

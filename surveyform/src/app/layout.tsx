@@ -31,7 +31,7 @@ export default function RootLayout({
       </head>
       <body className={configClass}>
         {children}
-        <SpeedInsights />
+        {process.env.VERCEL === "1" && <SpeedInsights />}
       </body>
     </html>
   );
