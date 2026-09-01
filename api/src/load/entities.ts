@@ -197,6 +197,24 @@ export const getLocalDirEntities = async (entitiesDirPath: string, parentDirs: s
 
 export const getEntitiesLoadMethod = () => (getEnvVar(EnvVar.ENTITIES_PATH) ? 'local' : 'github')
 
+// warn about any entity ids that appear in more than one loaded entity
+export const checkDuplicateEntityIds = (entities: Entity[]) => {
+    const idCounts: { [id: string]: number } = {}
+    for (const entity of entities) {
+        if (entity.id) {
+            idCounts[entity.id] = (idCounts[entity.id] || 0) + 1
+        }
+    }
+    const duplicateIds = Object.keys(idCounts).filter(id => idCounts[id] > 1)
+    for (const id of duplicateIds) {
+        console.warn(
+            `⚠️ Duplicate entity id "${id}" found ${idCounts[id]} times while loading entities`
+        )
+    }
+    const duplicates = duplicateIds.map(id => ({ id, count: idCounts[id] }))
+    logToFile('entities_duplicates.json', duplicates, { mode: 'overwrite' })
+}
+
 // load locales contents through GitHub API or locally
 export const loadEntities = async () => {
     const mode = getEntitiesLoadMethod()
@@ -204,6 +222,7 @@ export const loadEntities = async () => {
     const entities: Entity[] =
         mode === 'local' ? await loadLocally() : await loadEntitiesFromGitHub()
     console.log('// done loading entities')
+    checkDuplicateEntityIds(entities)
     logToFile('entities.json', entities, { mode: 'overwrite' })
     return entities
 }
