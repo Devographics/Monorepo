@@ -58,6 +58,13 @@ export const tool: ApiTemplateFunction = options => {
 }
 
 // this one is used!!
+// NOTE: this typedef is hardcoded rather than generated from `subFields`, so it
+// must be kept in sync by hand: every subfield whose `addIf` can pass for a
+// tool-template question needs a matching line here. A resolver present (via
+// getQuestionResolverMap, which does iterate subFields) without a matching
+// schema field crashes the server at startup with "defined in resolvers, but
+// not in schema". `_cardinalities` is intentionally omitted because its `addIf`
+// requires `allowMultiple`, which no tool-template question sets.
 const getTypeDef = ({
     fieldTypeName,
     survey,

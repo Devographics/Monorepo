@@ -47,6 +47,7 @@ export type StandardQuestionData = QuestionData & {
     comments: ItemComments
     _metadata: QuestionMetadata
     _correlations: Correlations
+    _cardinalities: Cardinalities
     rawData?: RawDataItem
 } & {
     [key in Exclude<
@@ -56,6 +57,7 @@ export type StandardQuestionData = QuestionData & {
         | ResultsSubFieldEnum.ENTITY
         | ResultsSubFieldEnum.COMMENTS
         | ResultsSubFieldEnum.CORRELATIONS
+        | ResultsSubFieldEnum.CARDINALITIES
         | ResultsSubFieldEnum.RAW_DATA
     >]: ResponseData
 }
@@ -420,4 +422,38 @@ export interface Correlations {
 export interface EditionCorrelations {
     questionCorrelations: CorrelationItem[]
     answerCorrelations: CorrelationItem[]
+}
+
+/*
+
+Cardinalities (EXPERIMENTAL)
+
+For multiple-choice questions, the distribution of how many distinct answers
+each respondent selected. Computed per question, always over every response of
+the edition (not affected by filters on sibling fields). "na" selections are
+excluded.
+
+Keep in sync with the Cardinalities types in
+api/src/graphql/typedefs/schema.graphql
+
+*/
+
+/** One point of the distribution: respondents who selected exactly `answerCount` answers */
+export interface CardinalityBucket {
+    answerCount: number
+    count: number
+    /** count as a percentage of n */
+    percentage: number
+}
+
+/** Answer-count distribution for a single question (the `_cardinalities` subfield) */
+export interface Cardinalities {
+    /** Respondents who selected at least one answer */
+    n: number
+    /** Mean number of answers selected, across the n respondents */
+    mean: number
+    /** Highest number of answers any respondent selected */
+    max: number
+    /** One entry per observed answer count, ascending */
+    buckets: CardinalityBucket[]
 }

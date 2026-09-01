@@ -915,13 +915,46 @@ input GenericFilter {
     hasTags: [EntitiesTagsEnum]
 }
 
-# not used
+"""
+EXPERIMENTAL. For a multiple-choice question, the distribution of how many
+distinct answers each respondent selected — respondents who picked exactly one
+option, exactly two, and so on. "na" selections are excluded.
+
+Computed per question, always over every response of the edition, so it is NOT
+affected by filters applied to sibling fields.
+"""
 type Cardinalities {
+    """
+    Respondents who selected at least one answer
+    """
     n: Int
-    heard_count: Float
-    used_count: Float
-    heard_percentageSurvey: Float
-    used_percentageSurvey: Float
+    """
+    Mean number of answers selected, across the n respondents
+    """
+    mean: Float
+    """
+    Highest number of answers any respondent selected
+    """
+    max: Int
+    """
+    One entry per observed answer count, ascending
+    """
+    buckets: [CardinalityBucket]
+}
+
+type CardinalityBucket {
+    """
+    Number of distinct answers selected (1, 2, 3, …)
+    """
+    answerCount: Int
+    """
+    How many respondents selected exactly this many answers
+    """
+    count: Int
+    """
+    count as a percentage of n
+    """
+    percentage: Float
 }
 
 type CardinalitiesItem {

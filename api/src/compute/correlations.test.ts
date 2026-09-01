@@ -15,8 +15,12 @@ import {
     splitEditionCorrelations,
     splitQuestionCorrelations
 } from './correlations_calculations'
-import type { CorrelationItem } from './correlations_calculations'
-import { OPTION_CORRELATIONS_LIMIT } from './correlations_constants'
+import { CORRELATION_STRENGTHS } from './correlations_calculations'
+import type { CorrelationItem, CorrelationStrength } from './correlations_calculations'
+import {
+    CORRELATION_STRENGTH_BANDS,
+    OPTION_CORRELATIONS_LIMIT
+} from './correlations_constants'
 import type { EditionApiObject, QuestionApiObject } from '../types/surveys'
 
 describe('computePairStats', () => {
@@ -600,22 +604,28 @@ describe('putQuestionFirst', () => {
 })
 
 describe('getCorrelationStrength', () => {
-    test('one scale is used for every kind of correlation', () => {
-        expect(getCorrelationStrength(0.4)).toBe('very_strong')
-        expect(getCorrelationStrength(-0.4)).toBe('very_strong')
-        expect(getCorrelationStrength(0.39)).toBe('strong')
-        expect(getCorrelationStrength(0.25)).toBe('strong')
-        expect(getCorrelationStrength(-0.25)).toBe('strong')
-        expect(getCorrelationStrength(0.24)).toBe('moderate')
-        expect(getCorrelationStrength(0.1)).toBe('moderate')
-        expect(getCorrelationStrength(0.09)).toBe('weak')
+    // derived from the bands rather than hardcoded, so retuning a threshold
+    // does not break these
+    const nextWeaker = (strength: CorrelationStrength) =>
+        CORRELATION_STRENGTHS[CORRELATION_STRENGTHS.indexOf(strength) - 1]
+
+    test('each band boundary maps to its own label, in both directions', () => {
+        for (const [strength, lowerBound] of CORRELATION_STRENGTH_BANDS) {
+            expect(getCorrelationStrength(lowerBound)).toBe(strength)
+            expect(getCorrelationStrength(-lowerBound)).toBe(strength)
+            // just below the boundary falls to the next weaker band
+            expect(getCorrelationStrength(lowerBound - 0.01)).toBe(nextWeaker(strength))
+        }
     })
 
     test('a larger correlation is never labelled weaker than a smaller one', () => {
-        // the two-table scale used to label 0.27 "moderate" and 0.25 "strong",
-        // which read as an inversion wherever both appeared in one list
-        expect(getCorrelationStrength(0.27)).toBe('strong')
-        expect(getCorrelationStrength(-0.25)).toBe('strong')
+        // one scale for every kind of correlation: the old two-table scheme
+        // could label 0.27 "moderate" while labelling 0.25 "strong"
+        const values = [0.02, 0.09, 0.14, 0.2, 0.26, 0.33, 0.45, 0.8]
+        const ranks = values.map(v =>
+            CORRELATION_STRENGTHS.indexOf(getCorrelationStrength(v))
+        )
+        expect(ranks).toEqual([...ranks].sort((a, b) => a - b))
     })
 })
 

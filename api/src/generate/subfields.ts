@@ -6,6 +6,8 @@ import { getResponseTypeName } from '../graphql/templates'
 import intersection from 'lodash/intersection.js'
 import { rawDataResolver } from './resolvers/raw_data'
 import { getQuestionCorrelations } from '../compute/correlations'
+import { getMultiValueDbPaths } from '../compute/correlations_calculations'
+import { getQuestionCardinalities } from '../compute/question_cardinalities'
 
 interface SubField {
     id: ResultsSubFieldEnum
@@ -86,6 +88,23 @@ export const subFields: Array<SubField> = [
                 edition,
                 question,
                 questionObjects,
+                context
+            })
+        }
+    },
+    {
+        id: ResultsSubFieldEnum.CARDINALITIES,
+        def: () => `${ResultsSubFieldEnum.CARDINALITIES}: Cardinalities`,
+        // multiple-choice questions only (predefined choices, normalized freeform,
+        // or prenormalized lists — anything getMultiValueDbPaths can read)
+        addIf: question => !!question.allowMultiple && getMultiValueDbPaths(question).length > 0,
+        resolverFunction: async (parent, args, context) => {
+            console.log('// question cardinalities resolver')
+            const { survey, edition, question } = parent
+            return await getQuestionCardinalities({
+                survey,
+                edition,
+                question,
                 context
             })
         }

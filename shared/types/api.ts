@@ -24,6 +24,7 @@ export enum ResultsSubFieldEnum {
     METADATA = '_metadata',
     CODEBOOK = '_codebook',
     CORRELATIONS = '_correlations',
+    CARDINALITIES = '_cardinalities',
     RAW_DATA = 'rawData'
 }
 
@@ -42,6 +43,8 @@ export const subfieldDocs = {
     [ResultsSubFieldEnum.CODEBOOK]:
         "Codebook containing relevant entities that could potentially match the question's contents",
     [ResultsSubFieldEnum.CORRELATIONS]: 'Correlation coefficients',
+    [ResultsSubFieldEnum.CARDINALITIES]:
+        'For multiple-choice questions, the distribution of how many distinct answers each respondent selected. Computed per question over the whole edition.',
     [ResultsSubFieldEnum.FOLLOWUPS]: null,
     [ResultsSubFieldEnum.MEDIANS]: null,
     [ResultsSubFieldEnum.ID]: null,
