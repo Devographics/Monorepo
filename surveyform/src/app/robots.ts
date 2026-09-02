@@ -27,13 +27,14 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
     .flat()
     .flat();
   const allEditionsPaths = allEditions.map(
-    ({ localeId, surveySlug, year }) => `/${localeId}/${surveySlug}/${year}$`
+    ({ localeId, surveySlug, year }) =>
+      `/${localeId}/survey/${surveySlug}/${year}$`,
   );
 
   const indexPagePaths = locales.map((locale) => `/${locale.id}$`);
 
   const privacyPolicyPaths = locales.map(
-    (locale) => `/${locale.id}/privacy-policy$`
+    (locale) => `/${locale.id}/privacy-policy$`,
   );
 
   const allowPaths = [
