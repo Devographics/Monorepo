@@ -26,7 +26,8 @@ export const RowSingle = (props: RowComponentProps) => {
         viewDefinition,
         otherBuckets,
         otherBucketsType,
-        depth = 0
+        depth = 0,
+        series
     } = props
     const { isFreeformData, hasInsufficientData } = bucket
     const otherBucket = otherBuckets && otherBuckets.find(b => b.id === bucket.id)
@@ -77,24 +78,29 @@ export const RowSingle = (props: RowComponentProps) => {
     const optionCorrelations =
         _correlations?.optionCorrelations?.find(c => c.id === bucket.id)?.correlations || []
 
-    const rowWrapperProps = { ...props } as RowWrapperProps
+    const showCorrelations = series.length === 1 && optionCorrelations.length > 0
+
+    const metadataItems = []
 
     if (showCount) {
-        rowWrapperProps.rowRespondents = showFreeformAnswers ? (
-            <FreeformAnswersTrigger
-                bucket={bucket}
-                buckets={buckets}
-                questionId={question.id}
-                sectionId={block.sectionId}
-                block={block}
-                enableModal={true}
-            />
-        ) : (
-            <RespondentCount count={bucket.count} />
+        metadataItems.push(
+            showFreeformAnswers ? (
+                <FreeformAnswersTrigger
+                    bucket={bucket}
+                    buckets={buckets}
+                    questionId={question.id}
+                    sectionId={block.sectionId}
+                    block={block}
+                    enableModal={true}
+                />
+            ) : (
+                <RespondentCount count={bucket.count} />
+            )
         )
     }
-    if (optionCorrelations.length > 0) {
-        rowWrapperProps.rowCorrelations = (
+
+    if (showCorrelations) {
+        metadataItems.push(
             <CorrelationsTrigger
                 question={question}
                 optionId={bucket.id}
@@ -103,6 +109,8 @@ export const RowSingle = (props: RowComponentProps) => {
             />
         )
     }
+
+    const rowWrapperProps = { ...props, metadataItems } as RowWrapperProps
 
     return (
         <RowWrapper {...rowWrapperProps}>

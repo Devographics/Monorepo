@@ -7,9 +7,7 @@ import { RowComponentProps } from '../types'
 import { RowDepth } from './RowDepth'
 
 export type RowWrapperProps = RowComponentProps & {
-    rowMetadata?: JSX.Element
-    rowCorrelations?: JSX.Element
-    rowRespondents?: JSX.Element
+    metadataItems?: JSX.Element[]
     children: JSX.Element
 }
 export const RowWrapper = (props: RowWrapperProps) => {
@@ -21,17 +19,16 @@ export const RowWrapper = (props: RowWrapperProps) => {
         items,
         isNestedBucket = false,
         children,
-        rowMetadata,
-        rowCorrelations,
-        rowRespondents,
         rowIndex,
         depth = 0,
         hasNestedBuckets,
         showNestedBuckets,
         setShowNestedBuckets,
         isLastChild,
-        contentRef
+        contentRef,
+        metadataItems
     } = props
+
     const { highlightedRow, setHighlightedRow } = chartState
     const { ticks } = chartValues
     const isOverallBucket = bucket.id === OVERALL
@@ -92,9 +89,12 @@ export const RowWrapper = (props: RowWrapperProps) => {
                 <div className="chart-bar">{children}</div>
             </div>
 
-            {rowCorrelations && <div className="chart-row-correlations">{rowCorrelations}</div>}
-            {rowRespondents && <div className="chart-row-respondents">{rowRespondents}</div>}
-            {rowMetadata && <div className="chart-row-metadata">{rowMetadata}</div>}
+            {metadataItems &&
+                metadataItems.map((item, i) => (
+                    <div className={`chart-metadata-item chart-metadata-item-${i + 1}`} key={i}>
+                        {item}
+                    </div>
+                ))}
         </div>
     )
 }

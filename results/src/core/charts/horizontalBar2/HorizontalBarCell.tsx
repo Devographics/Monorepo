@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Tooltip from 'core/components/Tooltip'
-import { Bucket, CorrelationItem, FacetBucket } from '@devographics/types'
+import { Bucket, FacetBucket } from '@devographics/types'
 import {
     HorizontalBarChartState,
     HorizontalBarChartValues,
@@ -20,7 +20,6 @@ import OtherBucketMarker from './OtherBucketMarker'
 import { OTHER_ANSWERS } from '@devographics/constants'
 import classNames from 'classnames'
 import { ChevronUpIcon, ChevronDownIcon } from '@devographics/icons'
-import { CorrelationsTrigger } from '../common2/Correlations'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30

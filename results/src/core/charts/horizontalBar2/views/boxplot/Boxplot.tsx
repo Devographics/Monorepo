@@ -158,7 +158,7 @@ const BoxplotRow = (props: BoxplotRowProps) => {
     }
 
     return (
-        <RowWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
+        <RowWrapper {...props} metadataItems={[<RespondentCount key={1} count={bucket.count} />]}>
             <svg style={{ height: BAR_HEIGHT }} className="boxplot-svg">
                 {view === HorizontalBarViews.AVERAGE ? (
                     <AverageBox {...boxProps} />

@@ -3,7 +3,7 @@ import React from 'react'
 import ModalTrigger from 'core/components/ModalTrigger'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
-import { CorrelationsIcon, UserIcon } from '@devographics/icons'
+import { UserIcon } from '@devographics/icons'
 import Button from 'core/components/Button'
 import { useI18n } from '@devographics/react-i18n'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
@@ -11,7 +11,6 @@ import { usePageContext } from 'core/helpers/pageContext'
 import {
     CorrelationItem,
     CorrelationStrength,
-    QuestionMetadata,
     QuestionMetadataWithSection
 } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
@@ -20,7 +19,6 @@ import { getQuestionLabel } from './helpers/labels'
 import { getQuestionById } from 'core/helpers/options'
 import { formatNumber } from './helpers/format'
 import { StringTranslator } from '@devographics/i18n'
-import take from 'lodash/take.js'
 
 export const CorrelationsTrigger = ({
     question,
@@ -74,7 +72,6 @@ const formatCorrelation = (value: number) => `${value > 0 ? '+' : '-'}${Math.abs
 const CorrelationsIndicator = ({ correlations }: { correlations: CorrelationItem[] }) => {
     const top9 = []
     for (let i = 0; i < 9; i++) {
-        console.log('999')
         if (correlations[i]) {
             top9.push(correlations[i])
         } else {

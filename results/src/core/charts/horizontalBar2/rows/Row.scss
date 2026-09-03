@@ -164,27 +164,31 @@
         padding: 0;
     }
 }
-.chart-row-metadata {
-    grid-column: respondents-start / correlations-end;
+.chart-metadata-item {
+}
+
+.chart-metadata-item-1 {
+    grid-area: metadata1;
     grid-row: 1;
-    display: flex;
-    align-items: center;
-    gap: var(--spacing);
-    @include breakpoints.small {
-        justify-content: flex-end;
-        padding-right: var(--quarterSpacing);
-        position: relative;
-        z-index: 1;
+    .chart-row:not(:has(.chart-metadata-item-2)) & {
+        // if this row does not have two metadata items,
+        // make this one span two columns
+        grid-column: metadata1-start / metadata2-end;
+        // grid-row: 1;
+        // display: flex;
+        // align-items: center;
+        // gap: var(--spacing);
+        // @include breakpoints.small {
+        //     justify-content: flex-end;
+        //     padding-right: var(--quarterSpacing);
+        //     position: relative;
+        //     z-index: 1;
+        // }
     }
 }
 
-.chart-row-respondents {
-    grid-area: respondents;
-    grid-row: 1;
-}
-
-.chart-row-correlations {
-    grid-area: correlations;
+.chart-metadata-item-2 {
+    grid-area: metadata2;
     grid-row: 1;
 }
 

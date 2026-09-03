@@ -3,6 +3,7 @@ import {
     ChartStateWithSort,
     ChartValues,
     ColumnModes,
+    CommonProps,
     SerieMetadata,
     SeriesMetadata,
     Tick,
@@ -72,7 +73,7 @@ export enum OtherBucketsType {
     DIFFERENT_SERIE = 'different_serie'
 }
 
-export type HorizontalBarViewProps = {
+export type HorizontalBarViewProps = CommonProps<HorizontalBarChartState> & {
     chartState: HorizontalBarChartState
     chartValues: HorizontalBarChartValues
     buckets: Bucket[]
