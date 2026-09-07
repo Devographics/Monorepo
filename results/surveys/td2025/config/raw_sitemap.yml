@@ -24,6 +24,7 @@
         i18nNamespace: years_of_experience
         queryOptions:
             sectionId: user_info
+            addCorrelations: false
         fieldId: years_of_experience
         defaultUnits: percentageQuestion
         parameters:
@@ -43,6 +44,7 @@
         i18nNamespace: current_employer
         queryOptions:
             sectionId: job_info
+            addCorrelations: false
         fieldId: current_employer
         defaultUnits: percentageQuestion
 
@@ -58,6 +60,7 @@
         showInNav: false
         queryOptions:
             sectionId: technology
+            addCorrelations: false
         fieldId: software_engineering_practices
         i18nNamespace: software_engineering_practices
         id: software_engineering_practices_vs_language_used
@@ -103,6 +106,7 @@
         i18nNamespace: languages_used_colleagues_english
         queryOptions:
             sectionId: job_info
+            addCorrelations: false
         fieldId: languages_used_colleagues_english
         defaultUnits: percentageQuestion
         parameters:
@@ -122,6 +126,7 @@
         i18nNamespace: languages_used_colleagues_english
         queryOptions:
             sectionId: job_info
+            addCorrelations: false
         fieldId: languages_used_colleagues_english
         defaultUnits: percentageQuestion
         parameters:
@@ -140,6 +145,7 @@
         i18nNamespace: languages_used_colleagues_english
         queryOptions:
             sectionId: job_info
+            addCorrelations: false
         fieldId: languages_used_colleagues_english
         id: languages_used_colleagues_english_vs_compensation_by_years_of_experience
         tabId: tabs.by_compensation_by_experience
@@ -193,6 +199,7 @@
         i18nNamespace: languages_used_colleagues_english
         queryOptions:
             sectionId: job_info
+            addCorrelations: false
         fieldId: languages_used_colleagues_english
         id: languages_used_colleagues_english_by_years_of_experience
         tabId: tabs.by_years_of_experience
@@ -242,7 +249,9 @@
         i18nNamespace: remote_work_policy
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
-        queryOptions: { sectionId: job_info }
+        queryOptions:
+            sectionId: job_info
+            addCorrelations: false
         fieldId: remote_work_policy
 
       - id: overview_9_remote_work_happiness.td2025
@@ -258,6 +267,7 @@
         i18nNamespace: remote_work_policy
         queryOptions:
             sectionId: job_info
+            addCorrelations: false
         fieldId: remote_work_policy
         id: remote_work_policy_vs_job_happiness
         tabId: tabs.by_job_happiness
@@ -282,6 +292,7 @@
         fieldId: searching_for_job
         queryOptions:
             sectionId: job_info
+            addCorrelations: false
         template: tokyodev_variant_base
         tabId: tabs.by_remote_work_policy
         filtersState:
@@ -322,6 +333,7 @@
         i18nNamespace: life_japan_positive_aspects
         queryOptions:
             sectionId: life_in_japan
+            addCorrelations: false
 
       - id: overview_12_ai_usage.td2025
         blockType: TextBlock
@@ -338,6 +350,7 @@
         i18nNamespace: ai_uses
         queryOptions:
             sectionId: ai_usage
+            addCorrelations: false
 
       - id: overview_13_gender_gap.td2025
         blockType: TextBlock
@@ -354,6 +367,7 @@
         i18nNamespace: gender
         queryOptions:
             sectionId: user_info
+            addCorrelations: false
 
       - id: overview_14_gender_gap2.td2025
         blockType: TextBlock
@@ -368,6 +382,7 @@
         fieldId: gender
         queryOptions:
             sectionId: user_info
+            addCorrelations: false
         i18nNamespace: gender
         id: gender_by_compensation_by_experience
         tabId: tabs.by_compensation_by_experience
