@@ -4,6 +4,8 @@ blockType: HorizontalBarBlock2
 hasData: true
 parameters:
     showNoAnswer: true
+queryOptions:
+    addCorrelations: false
 defaultUnits: percentageQuestion
 tabId: tabs.men_vs_non_men
 filtersState:

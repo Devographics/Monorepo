@@ -8,6 +8,7 @@ hasData: true
 queryOptions:
     addBucketsEntities: false
     editionsCount: 1
+    addCorrelations: false
 parameters:
     showNoAnswer: true
     cutoff: 10

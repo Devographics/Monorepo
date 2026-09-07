@@ -9,6 +9,7 @@ parameters:
     showNoAnswer: true
 queryOptions:
     editionsCount: 1
+    addCorrelations: false
 filtersState:
     facet:
         # sectionId: employer_info

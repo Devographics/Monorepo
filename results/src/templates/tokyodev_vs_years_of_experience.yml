@@ -10,6 +10,7 @@ defaultUnits: percentageBucket
 queryOptions:
     addBucketsEntities: true
     editionsCount: 1
+    addCorrelations: false
 filtersState:
     facet:
         sectionId: user_info

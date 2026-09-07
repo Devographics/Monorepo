@@ -11,8 +11,6 @@ import { getCorrelationsFragment } from './getCorrelationsFragment'
 
 const DEFAULT_EDITION_COUNT = 1
 
-const addCorrelations = true
-
 export const getSerieFragment = ({
     queryOptions,
     serie
@@ -32,7 +30,8 @@ export const getSerieFragment = ({
         addBuckets = true,
         addRatios = false,
         addGroupedBuckets = false,
-        addNestedBuckets = false
+        addNestedBuckets = false,
+        addCorrelations = true
     } = queryOptions
 
     // for ratios to work, the facet needs to be "_sentiment"
