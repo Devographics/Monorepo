@@ -26,15 +26,23 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
     })
     .flat()
     .flat();
-  const allEditionsPaths = allEditions.map(
-    ({ localeId, surveySlug, year }) =>
-      `/${localeId}/survey/${surveySlug}/${year}$`,
+  // For each path, allow both the exact URL (`$`) and the same URL followed by
+  // a query string (`?*`). In robots.txt the tested path includes the query
+  // string, so a bare `$` rule would reject e.g. `?source=foobar`. Since `?` is
+  // a literal here and a query always starts with it, this still blocks extra
+  // path segments like `/xyz123` (session ids), which start with `/`, not `?`.
+  const allowWithQuery = (path: string) => [`${path}$`, `${path}?*`];
+
+  const allEditionsPaths = allEditions.flatMap(({ localeId, surveySlug, year }) =>
+    allowWithQuery(`/${localeId}/survey/${surveySlug}/${year}`),
   );
 
-  const indexPagePaths = locales.map((locale) => `/${locale.id}$`);
+  const indexPagePaths = locales.flatMap((locale) =>
+    allowWithQuery(`/${locale.id}`),
+  );
 
-  const privacyPolicyPaths = locales.map(
-    (locale) => `/${locale.id}/privacy-policy$`,
+  const privacyPolicyPaths = locales.flatMap((locale) =>
+    allowWithQuery(`/${locale.id}/privacy-policy`),
   );
 
   const allowPaths = [
