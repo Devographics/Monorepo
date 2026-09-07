@@ -98,7 +98,7 @@ export async function saveResponse({
     if (!existingResponse.isSubscribed) {
       const listId = survey?.emailOctopus?.listId;
       try {
-        subscribe({ email, listId });
+        subscribe({ email, listId, editionId });
         serverData.isSubscribed = true;
       } catch (error) {
         // We do not hard fail on subscription error, just log them

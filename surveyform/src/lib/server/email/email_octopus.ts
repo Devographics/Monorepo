@@ -8,19 +8,19 @@ const apiKey = process.env.EMAIL_OCTOPUS_APIKEY;
 /**
  * Subscribe a user to the mailing list
  */
-export async function subscribe({ email, confirm = false, listId }) {
+export async function subscribe({ email, confirm = false, listId, editionId }) {
   try {
     if (!(apiKey && listId)) {
       if (!serverConfig().isProd) {
         console.warn(
           "EMAIL_OCTOPUS_APIKEY or listId not set, current NODE_ENV:",
           process.env.NODE_ENV,
-          process.env.NEXT_PUBLIC_NODE_ENV
+          process.env.NEXT_PUBLIC_NODE_ENV,
         );
         return;
       } else {
         throw new Error(
-          "Octopus EMAIL_OCTOPUS_APIKEY or listId not set in production, can't subscribe user."
+          "Octopus EMAIL_OCTOPUS_APIKEY or listId not set in production, can't subscribe user.",
         );
       }
     }
@@ -29,6 +29,8 @@ export async function subscribe({ email, confirm = false, listId }) {
       api_key: apiKey,
       email_address: email,
       status: "SUBSCRIBED",
+      fields: { editionId },
+      tags: [editionId],
     };
     const subscribe = await fetch(
       `https://emailoctopus.com/api/1.5/lists/${listId}/contacts`,
@@ -36,7 +38,7 @@ export async function subscribe({ email, confirm = false, listId }) {
         method: "post",
         body: JSON.stringify(body),
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
     const json: any = await subscribe.json();
     // console.log("// emailOctopus subscribe");
@@ -64,6 +66,6 @@ export async function unsubscribe(email) {
 export async function send({ subject, text, html, isTest = false }) {
   // not available
   throw Error(
-    `EmailOctopus API doesn't support sending campaigns currently (June 2020)`
+    `EmailOctopus API doesn't support sending campaigns currently (June 2020)`,
   );
 }
