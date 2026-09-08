@@ -10,7 +10,7 @@ the same time or existing editions will keep serving their cached output.
 */
 
 // bump to invalidate cached results when the algorithm or any knob below changes
-export const CACHE_VERSION = 18
+export const CACHE_VERSION = 20
 
 /*
 
@@ -81,8 +81,11 @@ export const EXCLUDED_QUESTION_IDS = [
     'how_did_user_find_out_about_the_survey',
     'knowledge_score',
     'missing_questions',
+    'referrer',
     'skipped',
-    'survey_feedback'
+    'sourcetag',
+    'survey_feedback',
+    'created_at_date'
 ]
 
 /*

@@ -224,6 +224,17 @@ Single-answer questions with normalized responses: correlated as one
 categorical variable each.
 
 */
+/*
+
+Whether a question is encoded as one variable (`encodeQuestion`) rather than as
+one binary variable per answer (`encodeMultiValueQuestion`). The two are a
+partition — a question must go through exactly one of them, or its variables
+would be built twice and every resulting pair duplicated.
+
+*/
+export const isSingleAnswerQuestion = (q: QuestionApiObject) =>
+    !!q.normPaths?.response && !q.allowMultiple
+
 export const getCorrelationQuestions = ({
     questionObjects,
     edition
@@ -231,9 +242,7 @@ export const getCorrelationQuestions = ({
     questionObjects: QuestionApiObject[]
     edition: EditionApiObject
 }) =>
-    questionObjects.filter(
-        q => !!q.normPaths?.response && !q.allowMultiple && isEligibleQuestion(q, edition)
-    )
+    questionObjects.filter(q => isSingleAnswerQuestion(q) && isEligibleQuestion(q, edition))
 
 /*
 
@@ -258,7 +267,7 @@ export const getMultiValueCorrelationQuestions = ({
 }) =>
     questionObjects.filter(
         q =>
-            (!!q.allowMultiple || !q.normPaths?.response) &&
+            !isSingleAnswerQuestion(q) &&
             getMultiValueDbPaths(q).length > 0 &&
             isEligibleQuestion(q, edition)
     )
