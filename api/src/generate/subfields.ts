@@ -79,7 +79,7 @@ export const subFields: Array<SubField> = [
     {
         id: ResultsSubFieldEnum.CORRELATIONS,
         def: () => `${ResultsSubFieldEnum.CORRELATIONS}: Correlations`,
-        addIf: ({ normPaths }) => !!normPaths?.response,
+        addIf: ({ normPaths }) => !!normPaths?.response || !!normPaths?.other,
         resolverFunction: async (parent, args, context) => {
             console.log('// question correlations resolver')
             const { survey, edition, question, questionObjects } = parent

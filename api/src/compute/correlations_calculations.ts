@@ -242,6 +242,12 @@ each answer becomes its own binary selected/not-selected variable. The answers
 are read from the data, so a question needs no predefined option list to take
 part.
 
+Questions with no `response` path are handled here too, whatever their
+`allowMultiple` flag says. Their content is normalised freeform living under
+`other` (the composite `source` field, for instance), which is list-shaped in
+the data even when the question was never declared as multiple-choice — and
+`encodeQuestion` only ever reads `response`, so this is their only route in.
+
 */
 export const getMultiValueCorrelationQuestions = ({
     questionObjects,
@@ -252,7 +258,7 @@ export const getMultiValueCorrelationQuestions = ({
 }) =>
     questionObjects.filter(
         q =>
-            !!q.allowMultiple &&
+            (!!q.allowMultiple || !q.normPaths?.response) &&
             getMultiValueDbPaths(q).length > 0 &&
             isEligibleQuestion(q, edition)
     )

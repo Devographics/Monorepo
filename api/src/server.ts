@@ -233,7 +233,8 @@ const start = async () => {
             // TODO: do this better with a custom header
             const isDebug =
                 expressContext?.req?.rawHeaders?.includes('http://localhost:4030') ||
-                expressContext?.req?.rawHeaders?.includes('http://localhost:5030')
+                expressContext?.req?.rawHeaders?.includes('http://localhost:5030') ||
+                expressContext?.req?.rawHeaders?.includes('http://localhost:5173')
 
             // add a way to disable cache through headers, so we don't need to modify
             // the actual GraphQL query

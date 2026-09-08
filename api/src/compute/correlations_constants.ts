@@ -10,7 +10,7 @@ the same time or existing editions will keep serving their cached output.
 */
 
 // bump to invalidate cached results when the algorithm or any knob below changes
-export const CACHE_VERSION = 17
+export const CACHE_VERSION = 18
 
 /*
 
@@ -82,6 +82,14 @@ export const EXCLUDED_QUESTION_IDS = [
     'knowledge_score',
     'missing_questions',
     'skipped',
-    'source',
     'survey_feedback'
 ]
+
+/*
+
+Note: `source` is deliberately NOT excluded — where a respondent came from is a
+usable demographic. Its component `how_did_user_find_out_about_the_survey` stays
+excluded above, both because it is survey-process metadata and because enabling
+both would produce a near-definitional pair.
+
+*/
