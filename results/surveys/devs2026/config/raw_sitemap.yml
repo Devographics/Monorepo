@@ -43,7 +43,6 @@
         variants:
             - template: vs_salary
               parameters:
-                  limit: 40
                   cutoff: 20
                   sort: { property: medianByFacet, order: desc }
               chartOptions:
@@ -52,35 +51,58 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
-
-      - id: country_of_origin
-        template: multiple_options2
-        parameters: { limit: 40 }
-        i18nNamespace: country # (options namespace)
-        chartOptions:
-            limit: 10
-            cutoff: 20
-        queryOptions:
-            addBucketsEntities: false
-        variants:
-            - template: vs_salary
+            - id: country_by_work_hours
+              fieldId: country
+              template: single_option2
+              tabId: tabs.by_work_hours
               parameters:
-                  limit: 40
                   cutoff: 20
-                  sort: { property: medianByFacet, order: desc }
+                  sort: { property: medianByFacet, order: asc }
               chartOptions:
                   limit: 20
+              queryOptions:
+                  editionsCount: 1
               filtersState:
                   facet:
                       sectionId: workplace
-                      id: yearly_salary
+                      id: work_hours_per_week
+            - id: country_of_origin
+              template: single_option2
+              tabId: user_info.country_of_origin
+              parameters:
+                  cutoff: 20
+              i18nNamespace: country # (options namespace)
+              chartOptions:
+                  limit: 20
+              queryOptions:
+                  addBucketsEntities: false
+
+      # - id: country_of_origin
+      #   template: single_option2
+      #   parameters: { limit: 40 }
+      #   i18nNamespace: country # (options namespace)
+      #   chartOptions:
+      #       limit: 10
+      #       cutoff: 20
+      #   queryOptions:
+      #       addBucketsEntities: false
+      #   variants:
+      #       - template: vs_salary
+      #         parameters:
+      #             limit: 40
+      #             cutoff: 20
+      #             sort: { property: medianByFacet, order: desc }
+      #         chartOptions:
+      #             limit: 20
+      #         filtersState:
+      #             facet:
+      #                 sectionId: workplace
+      #                 id: yearly_salary
 
       - id: migration_experience
         template: multiple_options2_combined
-        parameters: { limit: 40 }
         chartOptions:
             limit: 20
-            cutoff: 20
         queryOptions:
             addBucketsEntities: false
         variants:
@@ -95,50 +117,60 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
+            - id: country_vs_migration_experience
+              fieldId: country
+              template: single_option2
+              tabId: tabs.by_country
+              parameters:
+                  cutoff: 20
+              chartOptions:
+                  limit: 20
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: migration_experience
+
       #   - id: hint_hint
       #     template: hint
 
       - id: native_languages
         template: multiple_options2_freeform
-        parameters: { limit: 40 }
+        parameters: { limit: 40, cutoff: 20 }
+        tabId: user_info.native_languages
         chartOptions:
             limit: 20
-            cutoff: 20
         queryOptions:
             addBucketsEntities: false
         variants:
-            - template: vs_salary
-              parameters:
-                  limit: 40
-                  cutoff: 20
-                  sort: { property: medianByFacet, order: desc }
+            - id: other_languages
+              tabId: user_info.other_languages
+              template: multiple_options2_freeform
+              parameters: { limit: 40, cutoff: 20 }
               chartOptions:
                   limit: 20
-              filtersState:
-                  facet:
-                      sectionId: workplace
-                      id: yearly_salary
+              queryOptions:
+                  addBucketsEntities: false
 
-      - id: other_languages
-        template: multiple_options2_freeform
-        parameters: { limit: 40 }
-        chartOptions:
-            limit: 20
-            cutoff: 20
-        queryOptions:
-            addBucketsEntities: false
-        variants:
-            - template: vs_salary
-              parameters:
-                  limit: 40
-                  cutoff: 20
-                  sort: { property: medianByFacet, order: desc }
-              chartOptions:
-                  limit: 20
-              filtersState:
-                  facet:
-                      sectionId: workplace
-                      id: yearly_salary
+      # - id: other_languages
+      #   template: multiple_options2_freeform
+      #   parameters: { limit: 40 }
+      #   chartOptions:
+      #       limit: 20
+      #       cutoff: 20
+      #   queryOptions:
+      #       addBucketsEntities: false
+      #   variants:
+      #       - template: vs_salary
+      #         parameters:
+      #             limit: 40
+      #             cutoff: 20
+      #             sort: { property: medianByFacet, order: desc }
+      #         chartOptions:
+      #             limit: 20
+      #         filtersState:
+      #             facet:
+      #                 sectionId: workplace
+      #                 id: yearly_salary
 
       - id: figure_gender
         template: figure
@@ -148,119 +180,71 @@
 
       - id: gender
         template: multiple_options2
-        variants:
-            - template: vs_salary
-              parameters:
-                  sort: { property: medianByFacet }
-              filtersState:
-                  facet:
-                      sectionId: workplace
-                      id: yearly_salary
-            - template: vs_salary
-              id: gender_vs_salary_experience_fixed
-              tabId: tabs.by_salary_experience_fixed
-              parameters:
-                  sort: { property: medianByFacet }
-              filtersState:
-                  filters:
-                      - year: 2025
-                        conditions:
-                            - fieldId: years_of_experience
-                              sectionId: career
-                              operator: eq
-                              value: range_10_14
-                      - year: 2025
-                        conditions:
-                            - fieldId: years_of_experience
-                              sectionId: career
-                              operator: eq
-                              value: range_10_14
-                  facet:
-                      sectionId: workplace
-                      id: yearly_salary
+        # variants:
+        # - template: vs_salary
+        #   parameters:
+        #       sort: { property: medianByFacet }
+        #   filtersState:
+        #       facet:
+        #           sectionId: workplace
+        #           id: yearly_salary
+        # - template: vs_salary
+        #   id: gender_vs_salary_experience_fixed
+        #   tabId: tabs.by_salary_experience_fixed
+        #   parameters:
+        #       sort: { property: medianByFacet }
+        #   filtersState:
+        #       filters:
+        #           - year: 2025
+        #             conditions:
+        #                 - fieldId: years_of_experience
+        #                   sectionId: career
+        #                   operator: eq
+        #                   value: range_10_14
+        #           - year: 2025
+        #             conditions:
+        #                 - fieldId: years_of_experience
+        #                   sectionId: career
+        #                   operator: eq
+        #                   value: range_10_14
+        #       facet:
+        #           sectionId: workplace
+        #           id: yearly_salary
 
-            - id: country_vs_gender
-              fieldId: country
-              tabId: tabs.by_country
-              template: multiple_options2
-              parameters:
-                  showNoAnswer: true
-                  limit: 20
-              filtersState:
-                  options:
-                      mode: facet
-                      sort: female
-                      order: desc
-                  facet:
-                      sectionId: user_info
-                      id: gender
-            - template: vs_years_of_experience
-              filtersState:
-                  facet:
-                      sectionId: career
-                      id: years_of_experience
-              parameters:
-                  sort: { property: medianByFacet }
-            # - template: vs_age
-            #   filtersState:
-            #       facet:
-            #           sectionId: health
-            #           id: age
+        # - id: country_vs_gender
+        #   fieldId: country
+        #   tabId: tabs.by_country
+        #   template: multiple_options2
+        #   parameters:
+        #       showNoAnswer: true
+        #       limit: 20
+        #   filtersState:
+        #       options:
+        #           mode: facet
+        #           sort: female
+        #           order: desc
+        #       facet:
+        #           sectionId: user_info
+        #           id: gender
+        # - template: vs_years_of_experience
+        #   filtersState:
+        #       facet:
+        #           sectionId: career
+        #           id: years_of_experience
+        #   parameters:
+        #       sort: { property: medianByFacet }
+        # - template: vs_age
+        #   filtersState:
+        #       facet:
+        #           sectionId: health
+        #           id: age
 
       - id: sexual_orientation
         template: multiple_options2
-        variants:
-            - template: vs_salary
-              parameters:
-                  sort: { property: medianByFacet }
-              filtersState:
-                  facet:
-                      sectionId: workplace
-                      id: yearly_salary
-            - template: vs_salary
-              id: sexual_orientation_vs_salary_experience_fixed
-              tabId: tabs.by_salary_experience_fixed
-              parameters:
-                  sort: { property: medianByFacet }
-              filtersState:
-                  filters:
-                      - year: 2025
-                        conditions:
-                            - fieldId: years_of_experience
-                              sectionId: career
-                              operator: eq
-                              value: range_10_14
-                      - year: 2025
-                        conditions:
-                            - fieldId: years_of_experience
-                              sectionId: career
-                              operator: eq
-                              value: range_10_14
-                  facet:
-                      sectionId: workplace
-                      id: yearly_salary
 
       - id: race_ethnicity
         template: multiple_options2_combined
-        takeaway: >
-            The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
         variants:
-            - template: vs_salary
-              parameters:
-                  sort: { property: medianByFacet }
-              filtersState:
-                  facet:
-                      sectionId: workplace
-                      id: yearly_salary
-            - template: vs_gender
-              filtersState:
-                  options:
-                      mode: facet
-                      sort: female
-                      order: desc
-                  facet:
-                      sectionId: user_info
-                      id: gender
             - template: vs_years_of_experience
               parameters:
                   sort: { property: medianByFacet }
