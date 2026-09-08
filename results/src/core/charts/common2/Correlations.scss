@@ -185,3 +185,27 @@
 .correlations-note {
     font-size: var(--fontSizeSmallish);
 }
+
+.correlations-exclusions {
+    display: flex;
+    gap: var(--halfSpacing);
+    border-radius: 10px;
+    padding: var(--spacing);
+    background: var(--backgroundAlt2Color);
+    h4 {
+        margin: 0;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: var(--halfSpacing);
+    }
+    li {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+        padding: 3px 8px;
+        font-size: var(--fontSizeSmall);
+    }
+}

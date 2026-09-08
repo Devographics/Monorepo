@@ -52,7 +52,14 @@ export default {
             }
         },
         'gatsby-plugin-react-helmet',
-        'gatsby-plugin-sass',
+        {
+            resolve: 'gatsby-plugin-sass',
+            options: {
+                sassOptions: {
+                    silenceDeprecations: ['legacy-js-api']
+                }
+            }
+        },
         // { resolve: 'gatsby-plugin-netlify', options: {} },
         'gatsby-plugin-styled-components',
         `gatsby-plugin-mdx`,

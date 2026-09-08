@@ -94,6 +94,7 @@ query {
                                 allowOther
                                 yearAdded
                                 limit
+                                doNotCorrelateWith
                                 entity {
                                     id
                                     name

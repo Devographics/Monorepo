@@ -39,8 +39,13 @@ export const RowStacked = (props: RowComponentProps) => {
     const allFacetBucketIds = getBucketsAllFacetBucketIds(buckets)
     const colorScale = useColorScale({ question: facetQuestion, bucketIds: allFacetBucketIds })
 
+    const rowWrapperProps = {
+        ...props,
+        metadataItems: [<AnswersCount key={1} count={bucket.count} />]
+    }
+
     return (
-        <RowWrapper {...props} rowMetadata={<AnswersCount count={bucket.count} />}>
+        <RowWrapper {...rowWrapperProps}>
             <div className="chart-faceted-bar">
                 {hasInsufficientData ? (
                     <div className="chart-row-insufficient-data-wrapper">
