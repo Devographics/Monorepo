@@ -246,6 +246,7 @@ const CorrelationItemComponent = ({
         block
     })
     const questionLabel = questionLabelObject.question
+    const questionName = questionLabelObject.questionName
 
     let optionLabelObject, optionLabel
     if (optionId2) {
@@ -268,18 +269,26 @@ const CorrelationItemComponent = ({
             <div className="correlation-item-description">
                 {/* <div>{shape}</div> */}
                 <CorrelationSubheading
-                    questionName={questionLabelObject.questionName}
+                    questionName={questionName}
                     n={n}
                     optionLabel={optionLabel}
                     index={index}
                 />
                 <div
                     data-questionKey={questionLabelObject?.key}
+                    data-questionName={questionName}
+                    data-questionLabel={questionLabel}
                     data-optionKey={optionLabelObject?.key}
+                    data-optionLabel={optionLabel}
                 >
                     <T
                         k={takeawayKey}
-                        values={{ strengthLevelLabel, directionLabel, questionLabel, optionLabel }}
+                        values={{
+                            strengthLevelLabel,
+                            directionLabel,
+                            questionLabel: questionLabel || questionName,
+                            optionLabel
+                        }}
                         md={true}
                         html={true}
                     />
