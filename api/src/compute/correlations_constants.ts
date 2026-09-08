@@ -10,7 +10,7 @@ the same time or existing editions will keep serving their cached output.
 */
 
 // bump to invalidate cached results when the algorithm or any knob below changes
-export const CACHE_VERSION = 20
+export const CACHE_VERSION = 21
 
 /*
 
