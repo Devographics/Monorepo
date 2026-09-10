@@ -362,7 +362,30 @@ export type CorrelationStrength = 'very_strong' | 'strong' | 'moderate' | 'weak'
 
 export type CorrelationDirection = 'positive' | 'negative'
 
+/**
+ * What each side of a correlation actually is. A correlation always has one of
+ * these on each side, so the pair (kind1, kind2) names its shape — which is what
+ * decides how it should be worded.
+ *
+ * - `question`: the question as a whole, as an ordered scale (salary, experience)
+ * - `option`: one specific answer, as "picked it or not"
+ * - `cardinality`: how many distinct answers the respondent selected for a
+ *   multiple-choice question, as an ordered scale — a claim about the *number*
+ *   of answers ("respondents with one employer reported fewer workplace
+ *   issues") rather than about any particular one
+ */
+export type CorrelationVariableKind = 'question' | 'option' | 'cardinality'
+
 export interface CorrelationItem {
+    /**
+     * What side 1 is. `optionId1` is set if and only if this is `option`.
+     *
+     * In a question's `_correlations` this is never `cardinality`: a
+     * correlation whose own side is an answer count is a different claim
+     * needing its own card, and is left out until that exists. Edition-level
+     * correlations do include them, so all nine (kind1, kind2) shapes exist.
+     */
+    kind1: CorrelationVariableKind
     questionId1: string
     sectionId1?: string
     /**
@@ -371,6 +394,8 @@ export interface CorrelationItem {
      * picking that answer or not, and the other variable
      */
     optionId1?: string
+    /** What side 2 is. `optionId2` is set if and only if this is `option`. */
+    kind2: CorrelationVariableKind
     questionId2: string
     sectionId2?: string
     optionId2?: string
