@@ -175,7 +175,7 @@
       - id: figure_gender
         template: figure
         variables:
-            value: 18
+            value: 16
             unit: percentage
 
       - id: gender
@@ -275,21 +275,6 @@
                   facet:
                       sectionId: user_info
                       id: relationship_status
-            - id: country_vs_relationship_status
-              fieldId: country
-              tabId: tabs.by_country
-              template: multiple_options2
-              parameters:
-                  showNoAnswer: true
-                  limit: 20
-              filtersState:
-                  options:
-                      mode: facet
-                      sort: single
-                      order: desc
-                  facet:
-                      sectionId: user_info
-                      id: relationship_status
             - id: gender_vs_relationship_status
               fieldId: gender
               tabId: tabs.by_gender
@@ -305,20 +290,26 @@
                   facet:
                       sectionId: user_info
                       id: relationship_status
+            - id: relationship_status_vs_number_of_kids
+              fieldId: relationship_status
+              tabId: tabs.vs_number_of_kids
+              template: single_option2
+              parameters:
+                  showNoAnswer: true
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: number_of_kids
 
       - id: number_of_kids
         template: single_option2
         variants:
-            - template: vs_age
-              filtersState:
-                  facet:
-                      sectionId: health
-                      id: age
-            - id: gender_vs_number_of_kids
-              tabId: tabs.by_gender
-              template: vs_facet
-              fieldId: gender
-              defaultView: average
+            - id: age_vs_number_of_kids
+              fieldId: age
+              queryOptions:
+                  sectionId: health
+              template: single_option2
+              tabId: tabs.vs_age
               filtersState:
                   facet:
                       sectionId: user_info
@@ -374,26 +365,6 @@
                       id: how_many_jobs
             - template: vs_salary
               filtersState:
-                  facet:
-                      sectionId: workplace
-                      id: yearly_salary
-            - id: how_many_jobs_vs_salary_fixed
-              template: vs_salary
-              tabId: tabs.by_salary_experience_fixed
-              filtersState:
-                  filters:
-                      - year: 2025
-                        conditions:
-                            - fieldId: years_of_experience
-                              sectionId: career
-                              operator: eq
-                              value: range_10_14
-                      - year: 2025
-                        conditions:
-                            - fieldId: years_of_experience
-                              sectionId: career
-                              operator: eq
-                              value: range_10_14
                   facet:
                       sectionId: workplace
                       id: yearly_salary
