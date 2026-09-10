@@ -8,6 +8,7 @@ import {
     OptionCorrelations,
     EncodedQuestion,
     computePairStats,
+    encodeCardinality,
     encodeMultiValueQuestion,
     encodeQuestion,
     expandOptions,
@@ -46,6 +47,10 @@ correlation ("more X goes with more Y"). That includes ordinal questions
 (salary, experience…) and the binary variables expanded from individual answers
 ("picked it or not"); categorical questions like gender or os participate
 through their per-answer expansions rather than as whole variables.
+
+Multiple-choice questions contribute one further variable: how many answers each
+respondent selected, which is ordered by construction and surfaces claims about
+the number of answers rather than about any particular one.
 
 The full result is cached per-edition (survey data is immutable once an edition
 closes).
@@ -90,7 +95,12 @@ export async function computeEditionCorrelations(
         // one-vs-rest binary variable for each option of every single-answer
         // question, ordinal ones included (they also stay whole, above)
         ...singleEncoded.flatMap(encoded => expandOptions(encoded)),
-        ...multiValueQuestions.flatMap(question => encodeMultiValueQuestion(question, docs))
+        ...multiValueQuestions.flatMap(question => encodeMultiValueQuestion(question, docs)),
+        // how many answers each respondent selected, as one ordered scale per
+        // multiple-choice question
+        ...multiValueQuestions
+            .map(question => encodeCardinality(question, docs))
+            .filter((e): e is EncodedQuestion => e !== null)
     ]
     // only pair variables with an inherent order, so that every pair gets a
     // signed correlation; categorical questions (gender, os…) participate
@@ -127,9 +137,11 @@ export async function computeEditionCorrelations(
             const sectionId1 = getSectionId(eq1.question)
             const sectionId2 = getSectionId(eq2.question)
             items.push({
+                kind1: eq1.kind,
                 questionId1: eq1.question.id,
                 sectionId1,
                 ...(eq1.optionId && { optionId1: eq1.optionId }),
+                kind2: eq2.kind,
                 questionId2: eq2.question.id,
                 sectionId2,
                 ...(eq2.optionId && { optionId2: eq2.optionId }),

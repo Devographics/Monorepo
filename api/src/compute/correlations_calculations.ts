@@ -5,6 +5,7 @@ import type {
     CorrelationDirection,
     CorrelationItem,
     CorrelationStrength,
+    CorrelationVariableKind,
     OptionCorrelations,
     OptionGroup
 } from '@devographics/types'
@@ -23,7 +24,13 @@ import {
 export * from './correlations_constants'
 
 // re-exported so callers can keep importing correlation types from here
-export type { CorrelationDirection, CorrelationItem, CorrelationStrength, OptionCorrelations }
+export type {
+    CorrelationDirection,
+    CorrelationItem,
+    CorrelationStrength,
+    CorrelationVariableKind,
+    OptionCorrelations
+}
 
 /*
 
@@ -88,7 +95,8 @@ more experience"); "answer correlations" involve one specific answer on at
 least one side ("respondents who picked X tend to…").
 
 */
-export const isAnswerCorrelation = (item: CorrelationItem) => !!(item.optionId1 || item.optionId2)
+export const isAnswerCorrelation = (item: CorrelationItem) =>
+    item.kind1 === 'option' || item.kind2 === 'option'
 
 /*
 
@@ -102,9 +110,11 @@ export const putQuestionFirst = (item: CorrelationItem, questionId: string): Cor
     item.questionId2 === questionId
         ? {
               ...item,
+              kind1: item.kind2,
               questionId1: item.questionId2,
               sectionId1: item.sectionId2,
               optionId1: item.optionId2,
+              kind2: item.kind1,
               questionId2: item.questionId1,
               sectionId2: item.sectionId1,
               optionId2: item.optionId1
@@ -127,7 +137,13 @@ export const applyCorrelationRules = (items: CorrelationItem[]) => {
     // questions already covered by a correlation with the question as a whole
     const coveredByTrend = new Set<string>()
     return items.filter(item => {
-        if (!item.optionId2) {
+        // an answer-count correlation makes a claim no other item restates
+        // ("selected more of them", not "selected this one"), so it neither
+        // covers a question nor is covered by one
+        if (item.kind2 === 'cardinality') {
+            return true
+        }
+        if (item.kind2 === 'question') {
             coveredByTrend.add(item.questionId2)
             return true
         }
@@ -156,11 +172,20 @@ export const splitQuestionCorrelations = (
     question: QuestionApiObject,
     minStrength: CorrelationStrength = 'moderate'
 ) => {
+    /*
+    Items where the *queried* question's own side is its answer count ("people
+    who reported more workplace issues also…") are a different kind of claim,
+    needing their own card and their own wording. Until that exists they are
+    left out, rather than being silently rendered as this question's overall
+    trend, which is what landing in `questionCorrelations` would mean.
+    */
+    const ownItems = items.filter(item => item.kind1 !== 'cardinality')
+
     // only keep correlations worth putting in front of a reader
-    const shownItems = filterCorrelations(items, { minStrength })
+    const shownItems = filterCorrelations(ownItems, { minStrength })
 
     const questionCorrelations = applyCorrelationRules(
-        shownItems.filter(item => !item.optionId1)
+        shownItems.filter(item => item.kind1 === 'question')
     ).slice(0, QUESTION_CORRELATIONS_LIMIT)
 
     // items arrive sorted strongest-first, so each group keeps that order.
@@ -169,7 +194,7 @@ export const splitQuestionCorrelations = (
     const itemsByOption = new Map<string, CorrelationItem[]>()
     for (const item of shownItems) {
         const { optionId1 } = item
-        if (!optionId1) continue
+        if (item.kind1 !== 'option' || !optionId1) continue
         const groupItems = itemsByOption.get(optionId1)
         if (!groupItems) {
             itemsByOption.set(optionId1, [item])
@@ -342,6 +367,9 @@ export interface EncodedQuestion {
     question: QuestionApiObject
     // for binary variables expanded from a multi-value question's option
     optionId?: string
+    // what this variable is: the question as a whole, one of its answers, or
+    // how many answers were selected. Becomes the item's kind1/kind2.
+    kind: CorrelationVariableKind
     isOrdinal: boolean
     // the answer value at each index, in code order
     values: string[]
@@ -440,6 +468,7 @@ export const encodeQuestion = (
     }
     return {
         question,
+        kind: 'question',
         isOrdinal,
         values,
         cardinality: values.length,
@@ -461,19 +490,19 @@ Binary variables are marked ordinal (not-selected < selected) so that pairs
 involving them get a signed Spearman coefficient indicating direction.
 
 */
-export const encodeMultiValueQuestion = (
-    question: QuestionApiObject,
-    docs: any[],
-    minSelections: number = MIN_OPTION_SELECTIONS,
-    maxCardinality: number = MAX_CARDINALITY
-): EncodedQuestion[] => {
-    const dbPaths = getMultiValueDbPaths(question)
-    if (dbPaths.length === 0) {
-        return []
-    }
+/*
 
-    // read each respondent's answers once, across every path the question uses
-    const answersPerDoc: string[][] = docs.map(doc => {
+Read each respondent's answers to a multi-value question, across every
+normalized path the question uses. Shared by the two encoders that read
+multi-value data, so they cannot drift on what counts as an answer.
+
+An empty array means the respondent has no answer at all, whether they scrolled
+past the question or actively clicked its "skip" button.
+
+*/
+export const readMultiValueAnswers = (question: QuestionApiObject, docs: any[]): string[][] => {
+    const dbPaths = getMultiValueDbPaths(question)
+    return docs.map(doc => {
         const answers: string[] = []
         for (const dbPath of dbPaths) {
             let values = get(doc, dbPath)
@@ -491,6 +520,19 @@ export const encodeMultiValueQuestion = (
         }
         return answers
     })
+}
+
+export const encodeMultiValueQuestion = (
+    question: QuestionApiObject,
+    docs: any[],
+    minSelections: number = MIN_OPTION_SELECTIONS,
+    maxCardinality: number = MAX_CARDINALITY
+): EncodedQuestion[] => {
+    if (getMultiValueDbPaths(question).length === 0) {
+        return []
+    }
+
+    const answersPerDoc = readMultiValueAnswers(question, docs)
 
     // count respondents per answer (not occurrences: the same answer can arrive
     // from both the predefined and the free-form path), keep the most common
@@ -530,6 +572,7 @@ export const encodeMultiValueQuestion = (
         values
             .map((value, index) => ({
                 question,
+                kind: 'option' as const,
                 optionId: value,
                 isOrdinal: true,
                 values: BINARY_VALUES,
@@ -539,6 +582,86 @@ export const encodeMultiValueQuestion = (
             // drop answers without enough respondents on both sides
             .filter(encoded => hasEnoughSelections(encoded.codes, minSelections))
     )
+}
+
+/*
+
+Encode *how many* distinct answers each respondent selected for a multi-value
+question, as a single ordinal variable: someone who reported five workplace
+issues ranks above someone who reported two. This is what makes findings like
+"respondents with only one employer report fewer workplace issues" possible —
+a claim about the number of answers rather than about any particular one.
+
+`na` ("none of the above") does not count as a selection, so a respondent who
+picked only `na` gets a count of 0. That is a real answer and the meaningful
+bottom of the scale, so it is kept. Respondents with no answer at all are left
+out entirely (-1): a passive skip and an actively skipped question look the
+same here, and neither says anything about how many issues someone has.
+
+The alternative would be to treat an `na`-only answer as unanswered too, which
+is what `question_cardinalities.ts` effectively does by dropping zero-answer
+respondents from its distribution. That endpoint is describing a distribution,
+where a pile of zeroes is not interesting; here it would remove the entire
+bottom of the range and bias every correlation upward. To switch, drop the
+OPTION_NA filter below and let an empty post-filter set encode as -1.
+
+*/
+export const encodeCardinality = (
+    question: QuestionApiObject,
+    docs: any[],
+    maxCardinality: number = MAX_CARDINALITY
+): EncodedQuestion | null => {
+    if (getMultiValueDbPaths(question).length === 0) {
+        return null
+    }
+    const answersPerDoc = readMultiValueAnswers(question, docs)
+
+    // the same answer can arrive from both the predefined and the free-form
+    // path, so count distinct answers rather than occurrences
+    const answerCounts = answersPerDoc.map(answers =>
+        answers.length === 0
+            ? -1
+            : new Set(answers.filter(answer => answer !== OPTION_NA)).size
+    )
+
+    const counts = new Map<number, number>()
+    for (const answerCount of answerCounts) {
+        if (answerCount >= 0) {
+            counts.set(answerCount, (counts.get(answerCount) ?? 0) + 1)
+        }
+    }
+    // counts carry their own order: keep the most common, then restore numeric
+    // order so that the indices double as ranks — the same treatment a numeric
+    // question with no declared options gets in `encodeQuestion`
+    const keptCounts = [...counts.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, maxCardinality)
+        .map(([answerCount]) => answerCount)
+        .sort((a, b) => a - b)
+
+    const valueIndex = new Map(keptCounts.map((answerCount, index) => [answerCount, index]))
+    const codes = new Int16Array(docs.length).fill(-1)
+    const seen = new Set<number>()
+    answerCounts.forEach((answerCount, docIndex) => {
+        // unanswered (-1), and counts outside the kept set, stay unanswered
+        const index = valueIndex.get(answerCount)
+        if (index === undefined) return
+        codes[docIndex] = index
+        seen.add(index)
+    })
+
+    // need at least two distinct observed counts for any association to exist
+    if (seen.size < 2) {
+        return null
+    }
+    return {
+        question,
+        kind: 'cardinality',
+        isOrdinal: true,
+        values: keptCounts.map(String),
+        cardinality: keptCounts.length,
+        codes
+    }
 }
 
 const hasEnoughSelections = (codes: Int16Array, minSelections: number) => {
@@ -624,6 +747,7 @@ export const expandOptions = (
             }
             return {
                 question,
+                kind: 'option' as const,
                 optionId: id,
                 isOrdinal: true,
                 values: BINARY_VALUES,

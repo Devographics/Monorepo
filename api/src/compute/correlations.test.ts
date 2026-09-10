@@ -1,6 +1,7 @@
 import {
     applyCorrelationRules,
     computePairStats,
+    encodeCardinality,
     encodeMultiValueQuestion,
     encodeQuestion,
     expandOptions,
@@ -289,6 +290,79 @@ describe('encodeMultiValueQuestion', () => {
     })
 })
 
+describe('encodeCardinality', () => {
+    const question = makeQuestion({
+        allowMultiple: true,
+        options: [{ id: 'burnout' }, { id: 'ageism' }, { id: 'sexism' }, { id: 'na' }]
+    })
+
+    test('encodes how many distinct answers each respondent selected, as ranks', () => {
+        const docs = makeDocs([
+            ['burnout', 'ageism', 'sexism'], // 3
+            ['burnout'], // 1
+            ['burnout', 'ageism'], // 2
+            ['ageism'] // 1
+        ])
+        const encoded = encodeCardinality(question, docs)!
+        // values are the observed counts in numeric order, so the codes are ranks
+        expect(encoded.values).toEqual(['1', '2', '3'])
+        expect(Array.from(encoded.codes)).toEqual([2, 0, 1, 0])
+        expect(encoded.isOrdinal).toBe(true)
+        expect(encoded.kind).toBe('cardinality')
+        expect(encoded.cardinality).toBe(3)
+    })
+
+    test('an na-only answer counts as zero rather than as unanswered', () => {
+        const docs = makeDocs([
+            ['na'], // deliberately reported no issues: a real 0
+            ['burnout'],
+            ['burnout', 'ageism'],
+            null // no answer at all
+        ])
+        const encoded = encodeCardinality(question, docs)!
+        expect(encoded.values).toEqual(['0', '1', '2'])
+        expect(Array.from(encoded.codes)).toEqual([0, 1, 2, -1])
+    })
+
+    test('na alongside real answers does not inflate the count', () => {
+        const docs = makeDocs([['na', 'burnout'], ['burnout', 'ageism']])
+        const encoded = encodeCardinality(question, docs)!
+        expect(encoded.values).toEqual(['1', '2'])
+    })
+
+    test('counts distinct answers when a value arrives from two paths', () => {
+        const multiPath = makeQuestion({
+            allowMultiple: true,
+            normPaths: { response: 'section.q1.choices', other: 'section.q1.others.normalized' }
+        })
+        const docs = [
+            // "burnout" appears twice but is one answer; "other_issue" adds a second
+            {
+                section: {
+                    q1: {
+                        choices: ['burnout'],
+                        others: { normalized: ['burnout', 'other_issue'] }
+                    }
+                }
+            },
+            { section: { q1: { choices: ['burnout'] } } }
+        ]
+        const encoded = encodeCardinality(multiPath, docs)!
+        expect(encoded.values).toEqual(['1', '2'])
+        expect(Array.from(encoded.codes)).toEqual([1, 0])
+    })
+
+    test('returns null when every respondent selected the same number of answers', () => {
+        const docs = makeDocs([['burnout'], ['ageism'], ['sexism']])
+        expect(encodeCardinality(question, docs)).toBeNull()
+    })
+
+    test('returns null for a question with no multi-value paths', () => {
+        const noPaths = makeQuestion({ normPaths: {} })
+        expect(encodeCardinality(noPaths, makeDocs([['a', 'b'], ['a']]))).toBeNull()
+    })
+})
+
 describe('expandOptions with groups', () => {
     const question = () =>
         makeQuestion({
@@ -411,7 +485,14 @@ describe('filterCorrelations', () => {
 
 describe('applyCorrelationRules', () => {
     const item = (questionId2: string, optionId2?: string, correlation = 0.5) =>
-        ({ questionId1: 'gender', questionId2, optionId2, correlation } as CorrelationItem)
+        ({
+            kind1: 'option',
+            questionId1: 'gender',
+            kind2: optionId2 ? 'option' : 'question',
+            questionId2,
+            optionId2,
+            correlation
+        } as CorrelationItem)
 
     test('a trend suppresses weaker correlations with that question own answers', () => {
         const items = [
@@ -436,6 +517,27 @@ describe('applyCorrelationRules', () => {
         expect(applyCorrelationRules(items)).toHaveLength(2)
     })
 
+    test('an answer-count correlation neither suppresses nor is suppressed', () => {
+        const cardinality = (questionId2: string, correlation: number) =>
+            ({
+                kind1: 'option',
+                questionId1: 'gender',
+                kind2: 'cardinality',
+                questionId2,
+                correlation
+            } as CorrelationItem)
+        const items = [
+            // an answer count must not be mistaken for a whole-question trend
+            // and swallow that question's own answers
+            cardinality('workplace_issues', 0.3),
+            item('workplace_issues', 'burnout', 0.25),
+            // nor may a trend suppress the answer count, which says something else
+            item('political_spectrum', undefined, 0.2),
+            cardinality('political_spectrum', 0.18)
+        ]
+        expect(applyCorrelationRules(items)).toHaveLength(4)
+    })
+
     test('answers of different questions are unaffected', () => {
         const items = [
             item('political_spectrum', undefined, 0.31),
@@ -456,6 +558,9 @@ describe('splitQuestionCorrelations', () => {
             correlation: 0.5,
             strength: 'strong',
             direction: 'positive',
+            // kinds follow the ids unless a test states them explicitly
+            kind1: fields.optionId1 ? 'option' : 'question',
+            kind2: fields.optionId2 ? 'option' : 'question',
             ...fields
         } as CorrelationItem)
 
@@ -502,6 +607,28 @@ describe('splitQuestionCorrelations', () => {
         expect(optionCorrelations).toEqual([])
     })
 
+    test('keeps answer-count correlations with other questions', () => {
+        const question = makeQuestion({ id: 'number_of_employers' })
+        const items = [
+            item({ questionId2: 'workplace_issues', kind2: 'cardinality' }),
+            item({ questionId2: 'yearly_salary' })
+        ]
+        const { questionCorrelations } = splitQuestionCorrelations(items, question)
+        expect(questionCorrelations.map(i => i.kind2)).toEqual(['cardinality', 'question'])
+    })
+
+    test('leaves out items whose own side is an answer count', () => {
+        // those need their own card and their own wording, so they must not be
+        // rendered as this question's overall trend
+        const question = makeQuestion({ id: 'workplace_issues' })
+        const items = [
+            item({ questionId1: 'workplace_issues', kind1: 'cardinality' }),
+            item({ questionId2: 'yearly_salary' })
+        ]
+        const { questionCorrelations } = splitQuestionCorrelations(items, question)
+        expect(questionCorrelations.map(i => i.questionId2)).toEqual(['yearly_salary'])
+    })
+
     test('drops weak correlations, and options left with none', () => {
         const question = makeQuestion({
             id: 'gender',
@@ -545,6 +672,9 @@ describe('splitEditionCorrelations', () => {
             n: 1000,
             sameSection: false,
             correlation: 0.5,
+            // kinds follow the ids unless a test states them explicitly
+            kind1: fields.optionId1 ? 'option' : 'question',
+            kind2: fields.optionId2 ? 'option' : 'question',
             ...fields
         } as CorrelationItem)
 
@@ -575,8 +705,10 @@ describe('splitEditionCorrelations', () => {
 
 describe('putQuestionFirst', () => {
     const item = {
+        kind1: 'question',
         questionId1: 'yearly_salary',
         sectionId1: 'workplace',
+        kind2: 'option',
         questionId2: 'gender',
         sectionId2: 'user_info',
         optionId2: 'female',
@@ -600,6 +732,21 @@ describe('putQuestionFirst', () => {
 
     test('leaves items alone when the question is already first', () => {
         expect(putQuestionFirst(item, 'yearly_salary')).toBe(item)
+    })
+
+    test('swaps the kinds along with their sides', () => {
+        const swapped = putQuestionFirst(item, 'gender')
+        expect(swapped.kind1).toBe('option')
+        expect(swapped.kind2).toBe('question')
+
+        const cardinalityItem = {
+            ...item,
+            kind2: 'cardinality',
+            optionId2: undefined
+        } as CorrelationItem
+        const swappedCardinality = putQuestionFirst(cardinalityItem, 'gender')
+        expect(swappedCardinality.kind1).toBe('cardinality')
+        expect(swappedCardinality.kind2).toBe('question')
     })
 })
 
