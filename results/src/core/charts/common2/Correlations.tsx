@@ -10,6 +10,7 @@ import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import {
     CorrelationItem,
+    CorrelationVariableKind,
     CorrelationStrength,
     EditionMetadata,
     QuestionMetadataWithSection
@@ -161,7 +162,8 @@ export const CorrelationsList = ({ question, block, optionId, correlations }: Co
         optionLabel = typeof optionId !== undefined && optionLabelObject?.shortLabel
     }
 
-    const directionLabel = getTrendDirectionLabel({ question, direction: 'positive', getString })
+    const directionKey = getTrendDirectionKey({ question, direction: 'positive', getString })
+    const directionLabel = getString(directionKey)?.t
 
     return (
         <div className="correlations-wrapper">
@@ -285,10 +287,14 @@ const CorrelationItemComponent = ({
 
     const strengthLevelLabel = getString(`correlations.strength.${strength}`)?.t
 
-    let directionLabel = getString(`correlations.direction.${direction}`)?.t
+    let directionKey = `correlations.direction.${direction}`
     if (['shape1', 'shape2'].includes(shape)) {
-        directionLabel = getTrendDirectionLabel({ question, direction, getString })
+        directionKey = getTrendDirectionKey({ question, direction, getString })
     }
+    if (['shape5', 'shape6'].includes(shape)) {
+        directionKey = `correlations.cardinality.${direction}`
+    }
+    const directionLabel = getString(directionKey)?.t
 
     const questionLabelObject = getQuestionLabel({
         getString,
@@ -330,6 +336,7 @@ const CorrelationItemComponent = ({
                     data-questionLabel={questionLabel}
                     data-optionKey={optionLabelObject?.key}
                     data-optionLabel={optionLabel}
+                    data-directionKey={directionKey}
                 >
                     <T
                         k={takeawayKey}
@@ -413,41 +420,56 @@ const NegativeCorrelation = () => (
     </svg>
 )
 
-export const getCorrelationShape = (correlation: CorrelationItem) => {
-    const { optionId1, optionId2 } = correlation
-    if (optionId1) {
-        if (optionId2) {
-            /*
-            ### Shape 3 
-            An option is correlated with another option, e.g. "respondents who picked [women] tend to also pick discrimination = based on gender"
-            */
-            return 'shape3'
-        } else {
-            /*
-            ### Shape 2
-            An option is correlated with a trend, e.g. "respondents who picked [women] tend to have a lower salary"
-            */
-            return 'shape2'
-        }
-    } else if (!optionId1) {
-        if (optionId2) {
-            /*
-            ### Shape 4 (same as shape 2)
-            A trend is correlated with an option, e.g. "people who work for larger companies tend to pick "I live in the US" more"
-            */
-            return 'shape4'
-        } else {
-            /* 
-            ### Shape 1
-            A trend is correlated with a trend, e.g. "people who work for larger companies tend to earn more"
-            */
-            return 'shape1'
-        }
-    }
-    throw new Error('Could not identify correlation shape')
+/*
+
+Every correlation carries a kind on each side — `question` (the whole question
+as an ordered scale), `option` (one answer, picked or not), or `cardinality`
+(how many answers were selected) — and the pair of kinds is what decides how the
+item has to be worded. Side 1 is the question being displayed, side 2 the
+variable it correlates with.
+
+The shape names double as i18n keys (`correlations.takeaway.<shape>`), so they
+are kept as they are even though they no longer read as a sequence.
+
+*/
+type CorrelationShapeKey = `${CorrelationVariableKind}_${CorrelationVariableKind}`
+
+export type CorrelationShape = 'shape1' | 'shape2' | 'shape3' | 'shape4' | 'shape5' | 'shape6'
+
+const CORRELATION_SHAPES: Partial<Record<CorrelationShapeKey, CorrelationShape>> = {
+    // a trend with a trend: "people who work for larger companies tend to earn more"
+    question_question: 'shape1',
+    // an option with a trend: "respondents who picked [women] tend to have a lower salary"
+    option_question: 'shape2',
+    // an option with an option: "respondents who picked [women] tend to also pick
+    // discrimination = based on gender"
+    option_option: 'shape3',
+    // a trend with an option: "people who work for larger companies tend to pick
+    // 'I live in the US' more"
+    question_option: 'shape4',
+    // a trend with an answer count: "people who work for larger companies reported
+    // more workplace issues"
+    question_cardinality: 'shape5',
+    // an option with an answer count: "respondents who have had one employer
+    // reported fewer workplace issues"
+    option_cardinality: 'shape6'
 }
 
-const getTrendDirectionLabel = ({
+export const getCorrelationShape = (correlation: CorrelationItem): CorrelationShape => {
+    const { kind1, kind2 } = correlation
+    const shape = CORRELATION_SHAPES[`${kind1}_${kind2}`]
+    if (!shape) {
+        // the remaining combinations all have an answer count on side 1, which
+        // only edition-level correlations produce; a question's own correlations
+        // leave those out because they need their own card and their own wording
+        throw new Error(
+            `No correlation shape defined for ${kind1} × ${kind2} (${correlation.questionId1} × ${correlation.questionId2})`
+        )
+    }
+    return shape
+}
+
+const getTrendDirectionKey = ({
     direction,
     getString,
     question
@@ -456,16 +478,17 @@ const getTrendDirectionLabel = ({
     getString: StringTranslator
     question: QuestionMetadataWithSection
 }) => {
-    let directionLabel
+    let directionKey
     const shape2Directions = { positive: 'higher', negative: 'lower' }
     const shape2DirectionKey = shape2Directions[direction]
     const customDirectionLabelKey = `${question?.section?.id}.${question.id}.${shape2DirectionKey}`
+
     const customDirectionLabel = getString(customDirectionLabelKey)?.t
 
     if (customDirectionLabel) {
-        directionLabel = customDirectionLabel
+        directionKey = customDirectionLabelKey
     } else {
-        directionLabel = getString(`correlations.direction.${shape2DirectionKey}`)?.t
+        directionKey = `correlations.direction.${shape2DirectionKey}`
     }
-    return directionLabel
+    return directionKey
 }
