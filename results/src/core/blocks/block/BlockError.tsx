@@ -21,11 +21,11 @@ export const BlockError = ({
         <div className="error">{message}</div>
         <BlockDebug block={block} data={data} />
         {children}
-        {errorCode && (
+        {/* {errorCode && (
             <pre>
                 <code>{JSON.stringify(errorCode, null, 2)}</code>
             </pre>
-        )}
+        )} */}
     </div>
 )
 

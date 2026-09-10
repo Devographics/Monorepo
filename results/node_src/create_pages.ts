@@ -208,6 +208,7 @@ export const createPagesSingleLoop = async ({
         for (const page of flat) {
             console.log('// Building page ' + page.path)
             let pageData = {}
+            let blockErrors = {}
             const context = getPageContext(page)
 
             const fullContext = {
@@ -226,13 +227,15 @@ export const createPagesSingleLoop = async ({
 
             try {
                 // pageData = await runPageQuery({ page, graphql })
-                pageData = await runPageQueries({
+                const queryResults = await runPageQueries({
                     page,
                     graphql,
                     surveyId,
                     editionId,
                     currentEdition
                 })
+                pageData = queryResults.pageData
+                blockErrors = queryResults.blockErrors
             } catch (error) {
                 console.log(`// GraphQL error for page ${page.id}`)
                 console.log(page)
@@ -252,6 +255,7 @@ export const createPagesSingleLoop = async ({
                     context: {
                         ...fullContext,
                         pageData,
+                        blockErrors,
                         locale,
                         localePath,
                         localeId: locale.id,
@@ -276,7 +280,13 @@ export const createPagesSingleLoop = async ({
 
             if (GENERATE_BLOCKS) {
                 // skip this is fast_build option is enabled
-                createBlockPages(page, fullContext, createPage, activeLocales, buildInfo)
+                createBlockPages(
+                    page,
+                    { ...fullContext, blockErrors },
+                    createPage,
+                    activeLocales,
+                    buildInfo
+                )
             }
         }
         logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), {

@@ -6,6 +6,7 @@ import { logToFile } from './log_to_file'
 import { parse } from 'graphql'
 import { print } from 'graphql-print'
 import { getBlockQuery } from './queries/queries'
+import type { BlockQueryError, BlockQueryErrors } from '../src/core/types/context'
 import {
     allowedCachingMethods,
     getDataLocations,
@@ -19,6 +20,12 @@ import {
 /*
 
 Try loading data from disk or GitHub, or else run queries for *each block* in a page
+
+Blocks whose query fails do not stop the build: the failure is collected in
+`blockErrors`, keyed by block variant id, and returned alongside the data so it
+can be put in the page context and shown by the block itself. Without this a
+failed query is indistinguishable at render time from a block that legitimately
+has no data.
 
 */
 
@@ -34,6 +41,12 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
     const baseUrl = paths.url + '/results'
 
     let pageData = {}
+    const blockErrors: BlockQueryErrors = {}
+
+    const recordError = (error: BlockQueryError) => {
+        blockErrors[error.blockId] = error
+        console.log(`⚠️ Query error for block ${error.blockId}: ${error.message}`)
+    }
 
     for (const b of page.blocks) {
         for (const block of b.variants) {
@@ -87,6 +100,16 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                     console.warn(error)
                     console.log('⚠️ Detected issue in follwing query: ')
                     console.log(newQuery)
+                    recordError({
+                        blockId: block.id,
+                        sectionId,
+                        type: 'parse',
+                        message: error.message,
+                        query: newQuery
+                    })
+                    // nothing was formatted, so there is no query to run and
+                    // nothing to merge into the page data
+                    continue
                 }
 
                 const queryHasChanged = newQueryFormatted !== existingQueryFormatted
@@ -119,15 +142,29 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                     const wrappedQuery =
                         newQueryFormatted.replace('query {', 'query { dataAPI {') + '}'
 
-                    const result = removeNull(await graphql(wrappedQuery))
+                    // read the errors off the raw result: removeNull walks the
+                    // whole object and would not preserve GraphQL error objects
+                    const rawResult = await graphql(wrappedQuery)
+                    const result = removeNull(rawResult)
                     data = result.data
 
-                    if (!data) {
+                    const queryErrors = rawResult.errors
+                    if (queryErrors?.length || !data) {
                         logToFile(queryFileName, newQueryFormatted, {
                             mode: 'overwrite',
                             subDir: 'error_queries'
                         })
                         console.log(result)
+                        recordError({
+                            blockId: block.id,
+                            sectionId,
+                            type: 'query',
+                            message:
+                                queryErrors?.map(e => e.message).join('; ') ||
+                                'Query returned no data',
+                            errors: queryErrors?.map(e => ({ message: e.message, path: e.path })),
+                            query: newQueryFormatted
+                        })
                     }
                     logToFile(dataFileName, data, {
                         mode: 'overwrite',
@@ -143,6 +180,9 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
     const finishedAt = new Date()
     const duration = finishedAt.getTime() - startedAt.getTime()
 
-    console.log(`-> Done in ${duration}ms`)
-    return pageData
+    const errorCount = Object.keys(blockErrors).length
+    console.log(
+        `-> Done in ${duration}ms${errorCount ? ` (${errorCount} block(s) with query errors)` : ''}`
+    )
+    return { pageData, blockErrors }
 }

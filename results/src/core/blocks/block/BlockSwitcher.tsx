@@ -47,6 +47,25 @@ const BlockSwitcher = ({
             />
         )
     }
+    /*
+    A query that failed while the site was being built. Without this the block
+    would fall through to the generic "No available data" message below, which
+    looks the same whether the query was broken or the question simply has no
+    results — so a broken query could ship unnoticed.
+    */
+    const blockError = pageContext.blockErrors?.[id]
+    if (blockError) {
+        return (
+            <BlockError
+                block={block}
+                message={`Build-time ${blockError.type} error | Block ID: ${id} | ${blockError.message}`}
+                errorCode={blockError.errors}
+            >
+                {blockError.query && <textarea readOnly value={blockError.query} />}
+            </BlockError>
+        )
+    }
+
     const BlockComponent = blockRegistry[blockType]
 
     const series = isCustomVariant
