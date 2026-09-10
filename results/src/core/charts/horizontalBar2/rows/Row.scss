@@ -172,7 +172,7 @@
         z-index: 1;
     }
     @include breakpoints.medium-large {
-        grid-row: 1;
+        grid-row: 1 !important; // for whatever reason we need !important here
     }
 }
 
