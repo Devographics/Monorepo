@@ -17,9 +17,16 @@ export const ChartWrapper = (
     const style = {
         '--barHeight': `${BAR_HEIGHT}px`
     }
-    const classes = ['chart-wrapper', `chart-${block?.id}`, `chart-${block?.template}`, className]
-    const { descriptionId } = block
     const hasNestedData = block?.queryOptions?.addNestedBuckets
+
+    const classes = [
+        'chart-wrapper',
+        `chart-${block?.id}`,
+        `chart-${block?.template}`,
+        `chart-wrapper-${hasNestedData ? 'hasNestedData' : 'noNestedData'}`,
+        className
+    ]
+    const { descriptionId } = block
 
     return (
         <div className="chart-wrapper-outer">

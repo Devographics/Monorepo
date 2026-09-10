@@ -23,10 +23,10 @@
         display: grid;
         column-gap: var(--halfSpacing);
         row-gap: var(--spacing);
-        grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) minmax(0, max-content) minmax(0, max-content);
         grid-template-areas:
-            'heading metadata'
-            'content content';
+            'heading heading metadata2'
+            'content content metadata1';
         position: relative;
     }
 }
@@ -101,15 +101,6 @@
     }
 }
 
-.chart-row-content {
-    padding: var(--rowPadding) 0;
-    @include breakpoints.medium-large {
-        position: relative;
-    }
-    // height: calc(var(--barHeight) + var(--spacing));
-    // height: var(--barHeight);
-}
-
 .chart-bar {
     position: relative;
     height: var(--barHeight);
@@ -125,6 +116,7 @@
         align-items: center;
         gap: var(--halfSpacing);
         .chart-row-index {
+            display: none;
             order: 2;
             &::before {
                 content: '#';
@@ -159,37 +151,42 @@
 }
 .chart-row-content {
     grid-area: content;
-    grid-row: 1;
     @include breakpoints.small {
         padding: 0;
+        grid-row: 2;
+    }
+    @include breakpoints.medium-large {
+        position: relative;
+        grid-row: 1;
+        padding: var(--rowPadding) 0;
+    }
+    // height: calc(var(--barHeight) + var(--spacing));
+    // height: var(--barHeight);
+}
+.chart-row-metadata-item {
+    @include breakpoints.small {
+        grid-row: 2;
+        display: flex;
+        justify-content: flex-end;
+        position: relative;
+        z-index: 1;
+    }
+    @include breakpoints.medium-large {
+        grid-row: 1;
     }
 }
-.chart-metadata-item {
-}
 
-.chart-metadata-item-1 {
+.chart-row-metadata-item-1 {
     grid-area: metadata1;
-    grid-row: 1;
-    .chart-row:not(:has(.chart-metadata-item-2)) & {
+    .chart-row:not(:has(.chart-row-metadata-item-2)) & {
         // if this row does not have two metadata items,
         // make this one span two columns
         grid-column: metadata1-start / metadata2-end;
-        // grid-row: 1;
-        // display: flex;
-        // align-items: center;
-        // gap: var(--spacing);
-        // @include breakpoints.small {
-        //     justify-content: flex-end;
-        //     padding-right: var(--quarterSpacing);
-        //     position: relative;
-        //     z-index: 1;
-        // }
     }
 }
 
-.chart-metadata-item-2 {
+.chart-row-metadata-item-2 {
     grid-area: metadata2;
-    grid-row: 1;
 }
 
 .chart-row-heading-label {

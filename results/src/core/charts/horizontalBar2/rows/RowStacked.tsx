@@ -41,7 +41,9 @@ export const RowStacked = (props: RowComponentProps) => {
 
     const rowWrapperProps = {
         ...props,
-        metadataItems: [<AnswersCount key={1} count={bucket.count} />]
+        metadataItems: [
+            { id: 'answersCount', component: <AnswersCount key={1} count={bucket.count} /> }
+        ]
     }
 
     return (

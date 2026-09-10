@@ -6,10 +6,13 @@ import { Gridlines } from './Gridlines'
 import { RowComponentProps } from '../types'
 import { RowDepth } from './RowDepth'
 
+export type MetadataItem = { id: string; component: JSX.Element }
+
 export type RowWrapperProps = RowComponentProps & {
-    metadataItems?: JSX.Element[]
+    metadataItems?: MetadataItem[]
     children: JSX.Element
 }
+
 export const RowWrapper = (props: RowWrapperProps) => {
     const {
         chartState,
@@ -90,11 +93,19 @@ export const RowWrapper = (props: RowWrapperProps) => {
             </div>
 
             {metadataItems &&
-                metadataItems.map((item, i) => (
-                    <div className={`chart-metadata-item chart-metadata-item-${i + 1}`} key={i}>
-                        {item}
-                    </div>
-                ))}
+                metadataItems.map((metadataItem, i) => {
+                    const { id, component } = metadataItem
+                    return (
+                        <div
+                            className={`chart-row-metadata-item chart-row-metadata-item-${id}  chart-row-metadata-item-${
+                                i + 1
+                            }`}
+                            key={i}
+                        >
+                            {component}
+                        </div>
+                    )
+                })}
         </div>
     )
 }

@@ -122,6 +122,9 @@ should hide their first and second vertical segments
 .chart-depth-placeholder {
     // even without width this will still create a flexbox gap of --spacing
     width: 0px;
+    .chart-wrapper-noNestedData & {
+        display: none;
+    }
 }
 .chart-depth-node-empty {
     display: none;

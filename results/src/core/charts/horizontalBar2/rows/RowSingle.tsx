@@ -1,5 +1,5 @@
 import React from 'react'
-import { RowWrapper, RowWrapperProps } from './RowWrapper'
+import { MetadataItem, RowWrapper, RowWrapperProps } from './RowWrapper'
 import { Cell } from '../HorizontalBarCell'
 import { RowComponentProps } from '../types'
 import { useTheme } from 'styled-components'
@@ -80,34 +80,40 @@ export const RowSingle = (props: RowComponentProps) => {
 
     const showCorrelations = series.length === 1 && optionCorrelations.length > 0
 
-    const metadataItems = []
+    const metadataItems: MetadataItem[] = []
 
     if (showCount) {
         metadataItems.push(
-            showFreeformAnswers ? (
-                <FreeformAnswersTrigger
-                    bucket={bucket}
-                    buckets={buckets}
-                    questionId={question.id}
-                    sectionId={block.sectionId}
-                    block={block}
-                    enableModal={true}
-                />
-            ) : (
-                <RespondentCount count={bucket.count} />
-            )
+            showFreeformAnswers
+                ? {
+                      id: 'freeformAnswers',
+                      component: (
+                          <FreeformAnswersTrigger
+                              bucket={bucket}
+                              buckets={buckets}
+                              questionId={question.id}
+                              sectionId={block.sectionId}
+                              block={block}
+                              enableModal={true}
+                          />
+                      )
+                  }
+                : { id: 'respondentCount', component: <RespondentCount count={bucket.count} /> }
         )
     }
 
     if (showCorrelations) {
-        metadataItems.push(
-            <CorrelationsTrigger
-                question={question}
-                optionId={bucket.id}
-                correlations={optionCorrelations}
-                block={block}
-            />
-        )
+        metadataItems.push({
+            id: 'correlations',
+            component: (
+                <CorrelationsTrigger
+                    question={question}
+                    optionId={bucket.id}
+                    correlations={optionCorrelations}
+                    block={block}
+                />
+            )
+        })
     }
 
     const rowWrapperProps = { ...props, metadataItems } as RowWrapperProps
