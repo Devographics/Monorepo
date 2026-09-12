@@ -47,7 +47,6 @@ export type StandardQuestionData = QuestionData & {
     comments: ItemComments
     _metadata: QuestionMetadata
     _correlations: Correlations
-    _cardinalities: Cardinalities
     rawData?: RawDataItem
 } & {
     [key in Exclude<
@@ -57,7 +56,6 @@ export type StandardQuestionData = QuestionData & {
         | ResultsSubFieldEnum.ENTITY
         | ResultsSubFieldEnum.COMMENTS
         | ResultsSubFieldEnum.CORRELATIONS
-        | ResultsSubFieldEnum.CARDINALITIES
         | ResultsSubFieldEnum.RAW_DATA
     >]: ResponseData
 }
@@ -116,6 +114,8 @@ export interface ResponseData {
 
 export interface ResponseEditionData {
     _metadata: ResponseEditionMetadata
+    /** Null for questions that accept a single answer */
+    _cardinalities?: Cardinalities | null
     editionId: string
     year: number
     completion: YearCompletion
@@ -471,7 +471,7 @@ export interface CardinalityBucket {
     percentage: number
 }
 
-/** Answer-count distribution for a single question (the `_cardinalities` subfield) */
+/** Answer-count distribution for a single question (`ResponseEditionData._cardinalities`) */
 export interface Cardinalities {
     /** Respondents who selected at least one answer */
     n: number

@@ -417,6 +417,7 @@ type ResponseEditionData {
     Metadata about the current query results
     """
     _metadata: ResponseEditionMetadata
+    _cardinalities: Cardinalities
     year: Int
     editionId: String
     completion: YearCompletion
@@ -920,8 +921,11 @@ EXPERIMENTAL. For a multiple-choice question, the distribution of how many
 distinct answers each respondent selected — respondents who picked exactly one
 option, exactly two, and so on. "na" selections are excluded.
 
-Computed per question, always over every response of the edition, so it is NOT
-affected by filters applied to sibling fields.
+Describes the same population as the buckets alongside it: the edition of its own
+data object, narrowed by whatever filters the enclosing field was queried with.
+Presentation parameters (cutoff, limit, sort) are not applied — they choose which
+buckets to display, which says nothing about how many answers a respondent
+selected. Null for questions that accept a single answer.
 """
 type Cardinalities {
     """

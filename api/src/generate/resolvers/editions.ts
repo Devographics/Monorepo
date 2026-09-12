@@ -19,6 +19,7 @@ import { getEntities } from '../../load/entities'
 import intersection from 'lodash/intersection.js'
 import uniqBy from 'lodash/uniqBy.js'
 import { getCollection } from '../../helpers/db'
+import { Filters } from '@devographics/types'
 /*
 
 Responses
@@ -82,8 +83,39 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
     if (question.transformFunction) {
         result = question.transformFunction(parent, result, context)
     }
-    return result
-} /*
+    return attachQueryContext(result, { survey, question, questionObjects, filters })
+}
+
+/*
+
+The computed edition data is plain cached data with no reference to the query it
+came from, but some of its fields resolve on their own and need one (see
+`responseEditionDataResolverMap`). The filters travel with it so those fields
+describe the same population as the buckets they sit next to.
+
+Attached per request rather than in the compute function, so none of it ends up
+in the cache.
+
+Shallow copies: the cached array and its entries are shared between requests and
+must not be mutated. The added keys are not part of the schema, so they are never
+exposed.
+
+*/
+export interface EditionDataQueryContext {
+    survey: SurveyApiObject
+    question: QuestionApiObject
+    questionObjects: QuestionApiObject[]
+    filters?: Filters
+}
+
+const attachQueryContext = (result: any, queryContext: EditionDataQueryContext) =>
+    Array.isArray(result)
+        ? result.map(editionData =>
+              editionData && typeof editionData === 'object'
+                  ? { ...editionData, ...queryContext }
+                  : editionData
+          )
+        : result /*
 
 See getSurveyMetadataResolver() note above
 

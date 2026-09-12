@@ -45,6 +45,7 @@ import { getSurveyMetadataResolver, getSurveyResolver } from './resolvers/survey
 import { commentsResolverMap } from './resolvers/comments'
 import { creditResolverMap } from './resolvers/credits'
 import { responsesResolverMap } from './resolvers/responses'
+import { responseEditionDataResolverMap } from './resolvers/response_edition_data'
 import { creatorResolverMap } from './resolvers/creator'
 import { getGlobalMetadataResolver } from './resolvers/global_metadata'
 import { generalMetadataResolverMap } from './resolvers/general_metadata'
@@ -94,6 +95,7 @@ export const generateResolvers = async ({
         EditionMetadata: editionMetadataResolverMap,
         SectionMetadata: sectionMetadataResolverMap,
         QuestionMetadata: questionMetadataResolverMap,
+        ResponseEditionData: responseEditionDataResolverMap,
         SitemapBlock: sitemapBlockResolverMap,
         SitemapBlockVariant: sitemapBlockResolverMap,
         CardinalitiesItem: cardinalitiesResolverMap,

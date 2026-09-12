@@ -24,8 +24,7 @@ export const getFeatureFieldTypeName = ({ survey }: { survey: Survey }) =>
 // feature-template question needs a matching line here. A resolver present
 // (via getQuestionResolverMap, which does iterate subFields) without a matching
 // schema field crashes the server at startup with "defined in resolvers, but
-// not in schema". `_cardinalities` is intentionally omitted because its `addIf`
-// requires `allowMultiple`, which no feature-template question sets.
+// not in schema".
 const getTypeDef = ({
     fieldTypeName,
     survey,
