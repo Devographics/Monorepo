@@ -8,6 +8,7 @@ queryOptions:
     addGroupedBuckets: false
     addNestedBuckets: true
     sectionId: ${sectionId}
+    addCardinalities: true
 
 hideOtherAnswersBucket: true
 

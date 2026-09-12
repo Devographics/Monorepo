@@ -7,3 +7,5 @@ parameters:
     showNoAnswer: true
     mergeOtherBuckets: true
     cutoff: 10
+queryOptions:
+    addCardinalities: true

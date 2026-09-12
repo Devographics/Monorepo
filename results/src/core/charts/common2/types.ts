@@ -58,9 +58,10 @@ export interface ChartStateWithFilter extends ChartStateWithSort {
 }
 
 export type SerieMetadataProps = {
-    average: number | undefined
-    median: number | undefined
+    average?: number
+    median?: number
     completion: YearCompletion
+    averageCardinality?: number
 }
 
 export interface ChartValues {

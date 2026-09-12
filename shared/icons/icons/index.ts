@@ -67,6 +67,7 @@ export * from './Experimental'
 export * from './Lightbulb'
 export * from './LightbulbOn'
 export * from './Correlations'
+export * from './Cardinality'
 
 // browsers
 export * from './Chrome'

@@ -38,6 +38,7 @@ export interface ProvidedQueryOptions {
     addGroupedBuckets?: boolean
     addNestedBuckets?: boolean
     addCorrelations?: boolean
+    addCardinalities?: boolean
     fieldId?: string
 }
 

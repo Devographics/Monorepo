@@ -8,6 +8,7 @@ import { getRatiosFragment } from './getRatiosFragment'
 import { SENTIMENT_FACET } from '@devographics/constants'
 import { getResponseMetadataFragment } from './getResponseMetadataFragment'
 import { getCorrelationsFragment } from './getCorrelationsFragment'
+import { getCardinalitiesFragment } from './getCardinalitiesFragment'
 
 const DEFAULT_EDITION_COUNT = 1
 
@@ -31,7 +32,8 @@ export const getSerieFragment = ({
         addRatios = false,
         addGroupedBuckets = false,
         addNestedBuckets = false,
-        addCorrelations = true
+        addCorrelations = true,
+        addCardinalities = false
     } = queryOptions
 
     // for ratios to work, the facet needs to be "_sentiment"
@@ -53,6 +55,7 @@ export const getSerieFragment = ({
             ${subField}${queryArgsString} {
             ${editionType} {
                 ${getResponseMetadataFragment()}
+                ${addCardinalities ? getCardinalitiesFragment() : ''}
                 ${getAllEditionsFragment()}
                 completion {
                     count

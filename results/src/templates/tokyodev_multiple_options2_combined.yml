@@ -6,6 +6,7 @@ queryOptions:
     subField: combined
     addGroupedBuckets: true
     addNestedBuckets: false
+    addCardinalities: true
 customizationModes: [filters, facets]
 parameters:
     {

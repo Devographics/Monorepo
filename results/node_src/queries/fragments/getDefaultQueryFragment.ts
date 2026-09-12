@@ -10,16 +10,15 @@ export const getDefaultQueryFragment = ({
 }) => {
     const { surveyId, editionId, sectionId } = queryOptions
 
-    return `
-query {
+    return `query {
     surveys {
-    ${surveyId} {
-        ${editionId} {
-        ${sectionId} {
-            ${series.map(serie => getSerieFragment({ queryOptions, serie }))}
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    ${series.map(serie => getSerieFragment({ queryOptions, serie }))}
+                }
+            }
         }
-        }
-    }
     }
 }
 `

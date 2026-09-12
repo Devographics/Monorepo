@@ -261,10 +261,15 @@ export const getSerieMetadataProps = ({
 }: {
     currentEdition: ResponseEditionData
 }): SerieMetadataProps => {
-    const { average, percentiles, completion } = currentEdition
-    return {
+    const { average, percentiles, completion, _cardinalities } = currentEdition
+    const props: SerieMetadataProps = {
         average,
         median: percentiles?.p50,
         completion
     }
+    const averageCardinality = _cardinalities?.mean
+    if (averageCardinality) {
+        props.averageCardinality = averageCardinality
+    }
+    return props
 }

@@ -11,17 +11,20 @@ import {
     LimitIcon,
     SortDescIcon,
     SortAscIcon,
+    CardinalityIcon,
     IconProps
 } from '@devographics/icons'
 import React from 'react'
 import { formatNumber, formatPercentage, formatQuestionValue } from './helpers/format'
-import { CommonProps, SerieMetadata } from './types'
+import { CommonProps, SerieMetadata, SerieMetadataProps } from './types'
 import { getSerieMetadata } from '../horizontalBar2/helpers/other'
 import { useI18n } from '@devographics/react-i18n'
+import round from 'lodash/round.js'
 
 export const Metadata = <T,>({
     completion,
     average,
+    averageCardinality,
     total: total_,
     question,
     median,
@@ -29,6 +32,7 @@ export const Metadata = <T,>({
     block,
     seriesMetadata
 }: CommonProps<T> &
+    SerieMetadataProps &
     SerieMetadata & {
         question?: QuestionMetadata
     }) => {
@@ -64,6 +68,14 @@ export const Metadata = <T,>({
             id: 'median',
             icon: MedianIcon,
             value: formatQuestionValue(median, question),
+            total
+        })
+    }
+    if (averageCardinality) {
+        items.push({
+            id: 'averageCardinality',
+            icon: CardinalityIcon,
+            value: round(averageCardinality, 1),
             total
         })
     }

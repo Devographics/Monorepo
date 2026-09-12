@@ -1,3 +1,4 @@
+import { getQuestionById } from 'core/helpers/options'
 import { QueryOptions, SeriesParams } from '../types'
 import { getSerieFragment } from './getSerieFragment'
 
@@ -9,17 +10,15 @@ export const getDefaultQueryFragment = ({
     series: SeriesParams[]
 }) => {
     const { surveyId, editionId, sectionId } = queryOptions
-
-    return `
-query {
+    return `query {
     surveys {
-    ${surveyId} {
-        ${editionId} {
-        ${sectionId} {
-            ${series.map(serie => getSerieFragment({ queryOptions, serie }))}
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    ${series.map(serie => getSerieFragment({ queryOptions, serie }))}
+                }
+            }
         }
-        }
-    }
     }
 }
 `

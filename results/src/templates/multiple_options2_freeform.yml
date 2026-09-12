@@ -5,6 +5,7 @@ queryOptions:
     addBucketsEntities: true
     subField: freeform
     addGroupedBuckets: false
+    addCardinalities: true
 customizationModes: [filters, facets]
 parameters:
     showNoAnswer: true
