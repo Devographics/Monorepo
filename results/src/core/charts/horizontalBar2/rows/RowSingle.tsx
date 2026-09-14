@@ -107,6 +107,7 @@ export const RowSingle = (props: RowComponentProps) => {
             id: 'correlations',
             component: (
                 <CorrelationsTrigger
+                    type="option"
                     question={question}
                     optionId={bucket.id}
                     correlations={optionCorrelations}

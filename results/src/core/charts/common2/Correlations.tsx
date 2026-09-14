@@ -33,17 +33,19 @@ export const CorrelationsTrigger = ({
     question,
     optionId,
     correlations,
-    block
+    block,
+    type
 }: CorrelationProps) => {
     const { getString, getFallbacks } = useI18n()
     const pageContext = usePageContext()
-
+    const { allowMultiple } = question
     const count = correlations.length
 
     const { tClean: questionLabel } = getBlockTitle({ block, pageContext, getFallbacks })
     const optionLabel = ''
 
-    const label = getString('correlations.heading', {
+    const headingKey = getMainHeadingKey({ question, type })
+    const label = getString(headingKey, {
         values: { count, questionLabel, optionLabel }
     })?.t
 
@@ -63,6 +65,7 @@ export const CorrelationsTrigger = ({
                 optionId={optionId}
                 correlations={correlations}
                 block={block}
+                type={type}
             />
         </ModalTrigger>
     )
@@ -146,9 +149,16 @@ type CorrelationProps = {
     optionId?: string
     correlations: CorrelationItem[]
     block: BlockVariantDefinition
+    type: 'question' | 'option'
 }
 
-export const CorrelationsList = ({ question, block, optionId, correlations }: CorrelationProps) => {
+export const CorrelationsList = ({
+    question,
+    block,
+    optionId,
+    correlations,
+    type
+}: CorrelationProps) => {
     const { doNotCorrelateWith } = question
     const { getString, getFallbacks } = useI18n()
     const pageContext = usePageContext()
@@ -172,12 +182,13 @@ export const CorrelationsList = ({ question, block, optionId, correlations }: Co
     const directionKey = getTrendDirectionKey({ question, direction: 'positive', getString })
     const directionLabel = getString(directionKey)?.t
 
+    const headingKey = getMainHeadingKey({ question, type })
     return (
         <div className={`correlations-wrapper correlation-positive`}>
             <div className="correlations-heading-wrapper">
                 <h3 className="correlations-heading">
                     <T
-                        k={`correlations.heading${optionLabel ? '.option' : '.direction'}`}
+                        k={headingKey}
                         values={{ count, directionLabel, questionLabel, optionLabel }}
                         md={true}
                     />
@@ -198,6 +209,30 @@ export const CorrelationsList = ({ question, block, optionId, correlations }: Co
             </div>
         </div>
     )
+}
+
+const getMainHeadingKey = ({
+    question,
+    type
+}: {
+    question: QuestionMetadataWithSection
+    type: CorrelationProps['type']
+}) => {
+    let suffix
+    if (type == 'question') {
+        if (question.allowMultiple) {
+            // when a question supports multiple choices
+            // we look at cardinality correlations
+            suffix = 'cardinality'
+        } else {
+            // for ordinal questions (that only support one choice)
+            // we look at overall trend correlations
+            suffix = 'trend'
+        }
+    } else {
+        suffix = 'option'
+    }
+    return `correlations.heading.${suffix}`
 }
 
 const CorrelationsDirections = () => {
@@ -304,11 +339,11 @@ const CorrelationItemComponent = ({
     const strengthLevelLabel = getString(`correlations.strength.${strength}`)?.t
 
     let directionKey = `correlations.direction.${direction}`
-    if (['shape1', 'shape2'].includes(shape)) {
+    if (['shape1', 'shape2', 'shape7'].includes(shape)) {
         directionKey = getTrendDirectionKey({ question, direction, getString })
         optionLabel = getString('correlations.trend.subheading')?.t
     }
-    if (['shape5', 'shape6'].includes(shape)) {
+    if (['shape5', 'shape6', 'shape9'].includes(shape)) {
         directionKey = `correlations.cardinality.${direction}`
         optionLabel = getString('correlations.cardinality.subheading')?.t
     }
@@ -386,7 +421,10 @@ const CorrelationValue = ({
         shape3: CorrelationOptionIcon,
         shape4: CorrelationOptionIcon,
         shape5: CorrelationCardinalityIcon,
-        shape6: CorrelationCardinalityIcon
+        shape6: CorrelationCardinalityIcon,
+        shape7: CorrelationTrendIcon,
+        shape8: CorrelationOptionIcon,
+        shape9: CorrelationCardinalityIcon
     }
     const IconComponent2 = shapeIcons[shape]
     return (
@@ -485,9 +523,20 @@ are kept as they are even though they no longer read as a sequence.
 */
 type CorrelationShapeKey = `${CorrelationVariableKind}_${CorrelationVariableKind}`
 
-export type CorrelationShape = 'shape1' | 'shape2' | 'shape3' | 'shape4' | 'shape5' | 'shape6'
+export type CorrelationShape =
+    | 'shape1'
+    | 'shape2'
+    | 'shape3'
+    | 'shape4'
+    | 'shape5'
+    | 'shape6'
+    | 'shape7'
+    | 'shape8'
+    | 'shape9'
 
-const CORRELATION_SHAPES: Partial<Record<CorrelationShapeKey, CorrelationShape>> = {
+// every combination of kinds is mapped, so adding a kind is a type error here
+// rather than a missing shape at render time
+const CORRELATION_SHAPES: Record<CorrelationShapeKey, CorrelationShape> = {
     // a trend with a trend: "people who work for larger companies tend to earn more"
     question_question: 'shape1',
     // an option with a trend: "respondents who picked [women] tend to have a lower salary"
@@ -503,22 +552,20 @@ const CORRELATION_SHAPES: Partial<Record<CorrelationShapeKey, CorrelationShape>>
     question_cardinality: 'shape5',
     // an option with an answer count: "respondents who have had one employer
     // reported fewer workplace issues"
-    option_cardinality: 'shape6'
+    option_cardinality: 'shape6',
+    // an answer count with a trend: "respondents who selected more workplace perks
+    // tend to score higher on job happiness"
+    cardinality_question: 'shape7',
+    // an answer count with an option: "respondents who selected more physical
+    // activities tend to also pick [sports & exercise] as a hobby"
+    cardinality_option: 'shape8',
+    // an answer count with an answer count: "respondents who selected more career
+    // issues tend to also select more negative impacts"
+    cardinality_cardinality: 'shape9'
 }
 
-export const getCorrelationShape = (correlation: CorrelationItem): CorrelationShape => {
-    const { kind1, kind2 } = correlation
-    const shape = CORRELATION_SHAPES[`${kind1}_${kind2}`]
-    if (!shape) {
-        // the remaining combinations all have an answer count on side 1, which
-        // only edition-level correlations produce; a question's own correlations
-        // leave those out because they need their own card and their own wording
-        throw new Error(
-            `No correlation shape defined for ${kind1} × ${kind2} (${correlation.questionId1} × ${correlation.questionId2})`
-        )
-    }
-    return shape
-}
+export const getCorrelationShape = ({ kind1, kind2 }: CorrelationItem): CorrelationShape =>
+    CORRELATION_SHAPES[`${kind1}_${kind2}`]
 
 const getTrendDirectionKey = ({
     direction,

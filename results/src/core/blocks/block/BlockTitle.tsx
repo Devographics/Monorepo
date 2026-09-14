@@ -132,6 +132,7 @@ const BlockTitle = ({
                 <div className="block-title-right">
                     {showCorrelations && (
                         <CorrelationsTrigger
+                            type="question"
                             block={block}
                             question={question}
                             correlations={questionCorrelations}
