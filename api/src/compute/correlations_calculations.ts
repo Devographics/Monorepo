@@ -172,20 +172,18 @@ export const splitQuestionCorrelations = (
     question: QuestionApiObject,
     minStrength: CorrelationStrength = 'moderate'
 ) => {
-    /*
-    Items where the *queried* question's own side is its answer count ("people
-    who reported more workplace issues also…") are a different kind of claim,
-    needing their own card and their own wording. Until that exists they are
-    left out, rather than being silently rendered as this question's overall
-    trend, which is what landing in `questionCorrelations` would mean.
-    */
-    const ownItems = items.filter(item => item.kind1 !== 'cardinality')
-
     // only keep correlations worth putting in front of a reader
-    const shownItems = filterCorrelations(ownItems, { minStrength })
+    const shownItems = filterCorrelations(items, { minStrength })
 
+    /*
+    Correlations with the queried question as a whole. What "as a whole" means
+    depends on the question, and the two never mix on one card: an ordered
+    single-answer question takes part as its scale (kind1 `question`: "scoring
+    higher on…"), a multiple-choice question as its answer count (kind1
+    `cardinality`: "selecting more items for…").
+    */
     const questionCorrelations = applyCorrelationRules(
-        shownItems.filter(item => item.kind1 === 'question')
+        shownItems.filter(item => item.kind1 === 'question' || item.kind1 === 'cardinality')
     ).slice(0, QUESTION_CORRELATIONS_LIMIT)
 
     // items arrive sorted strongest-first, so each group keeps that order.

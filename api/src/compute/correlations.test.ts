@@ -617,16 +617,31 @@ describe('splitQuestionCorrelations', () => {
         expect(questionCorrelations.map(i => i.kind2)).toEqual(['cardinality', 'question'])
     })
 
-    test('leaves out items whose own side is an answer count', () => {
-        // those need their own card and their own wording, so they must not be
-        // rendered as this question's overall trend
-        const question = makeQuestion({ id: 'workplace_issues' })
+    test("a multiple-choice question's answer count is its whole-question variable", () => {
+        const question = makeQuestion({
+            id: 'career_issues',
+            allowMultiple: true,
+            options: [{ id: 'burnout' }]
+        })
+        const own = { questionId1: 'career_issues', kind1: 'cardinality' as const }
         const items = [
-            item({ questionId1: 'workplace_issues', kind1: 'cardinality' }),
-            item({ questionId2: 'yearly_salary' })
+            item({ ...own, questionId2: 'negative_impacts', kind2: 'cardinality' }),
+            item({ ...own, questionId2: 'job_happiness', kind2: 'question' }),
+            item({ ...own, questionId2: 'hobbies', kind2: 'option', optionId2: 'sports' }),
+            // one of the question's own answers still goes to its option group
+            item({ questionId1: 'career_issues', optionId1: 'burnout', questionId2: 'age' })
         ]
-        const { questionCorrelations } = splitQuestionCorrelations(items, question)
-        expect(questionCorrelations.map(i => i.questionId2)).toEqual(['yearly_salary'])
+        const { questionCorrelations, optionCorrelations } = splitQuestionCorrelations(
+            items,
+            question
+        )
+        // all three shapes with an answer count on side 1
+        expect(questionCorrelations.map(i => i.kind2)).toEqual([
+            'cardinality',
+            'question',
+            'option'
+        ])
+        expect(optionCorrelations.map(g => g.id)).toEqual(['burnout'])
     })
 
     test('drops weak correlations, and options left with none', () => {
