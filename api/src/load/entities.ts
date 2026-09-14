@@ -113,7 +113,9 @@ const getGitHubDirEntities = async (
 
     // loop over repo contents and fetch raw yaml files
     for (const file of files) {
-        if (file.type === 'dir' && file.name[0] !== '.') {
+        if (excludedDirectories.includes(file.name)) {
+            // do nothing
+        } else if (file.type === 'dir' && file.name[0] !== '.') {
             entities = entities.concat(
                 await getGitHubDirEntities(
                     options,
@@ -158,6 +160,8 @@ export const loadLocally = async () => {
     return entities
 }
 
+export const excludedDirectories = ['taxonomies']
+
 export const getLocalDirEntities = async (entitiesDirPath: string, parentDirs: string[]) => {
     let entities = [] as Entity[]
     const files = await readdir(entitiesDirPath)
@@ -173,7 +177,9 @@ export const getLocalDirEntities = async (entitiesDirPath: string, parentDirs: s
     for (const fileName of files) {
         const filePath = entitiesDirPath + '/' + fileName
         const fileStats = await stat(filePath)
-        if (fileStats.isDirectory() && fileName[0] !== '.') {
+        if (excludedDirectories.includes(fileName)) {
+            // do nothing
+        } else if (fileStats.isDirectory() && fileName[0] !== '.') {
             // make sure to exclude directories starting with "." such as ".git"
             entities = entities.concat(
                 await getLocalDirEntities(filePath, [...parentDirs, getIdFromFileName(fileName)])
