@@ -379,11 +379,7 @@ export type CorrelationVariableKind = 'question' | 'option' | 'cardinality'
 export interface CorrelationItem {
     /**
      * What side 1 is. `optionId1` is set if and only if this is `option`.
-     *
-     * In a question's `_correlations` this is never `cardinality`: a
-     * correlation whose own side is an answer count is a different claim
-     * needing its own card, and is left out until that exists. Edition-level
-     * correlations do include them, so all nine (kind1, kind2) shapes exist.
+     * All nine (kind1, kind2) combinations occur.
      */
     kind1: CorrelationVariableKind
     questionId1: string
@@ -429,9 +425,11 @@ export interface OptionCorrelations {
 export interface Correlations {
     /**
      * Everything this question correlates with as a whole, strongest first.
-     * Only questions whose options have an order (salary, experience…) take
-     * part this way, so this is empty for questions like gender, whose
-     * correlations all appear under optionCorrelations instead.
+     * An ordered question (salary, experience…) takes part as its scale
+     * (kind1 `question`), a multiple-choice question as how many answers were
+     * selected (kind1 `cardinality`). Empty for unordered single-answer
+     * questions like gender, whose correlations all appear under
+     * optionCorrelations instead.
      */
     questionCorrelations: CorrelationItem[]
     /**
