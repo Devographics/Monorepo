@@ -402,7 +402,17 @@
             # - template: vs_gender
             # - template: vs_race_ethnicity
             - template: men_vs_non_men
+              queryOptions:
+                  addCardinalities: true
             # - template: white_vs_non_white
+            - id: career_issues_vs_job_insecurity
+              fieldId: career_issues
+              template: multiple_options2_combined
+              tabId: tabs.vs_job_security
+              filtersState:
+                  facet:
+                      sectionId: career
+                      id: job_security
 
       - id: figure_discrimination_therapy
         template: figure
@@ -429,13 +439,16 @@
                       sectionId: career
                       id: discrimination_issues
             - template: men_vs_non_men
-            - template: white_vs_non_white
+              queryOptions:
+                  addCardinalities: true
 
       - id: negative_impacts
         template: multiple_options2_combined
         variants:
             # - template: vs_gender
             - template: men_vs_non_men
+              queryOptions:
+                  addCardinalities: true
             - template: white_vs_non_white
             # - id: negative_impacts_overall_by_gender
             #   fieldId: negative_impacts

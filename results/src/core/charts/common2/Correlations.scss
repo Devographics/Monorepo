@@ -21,10 +21,11 @@
     container-type: scroll-state;
     position: sticky;
     top: -20px;
+    z-index: 1;
 }
 .correlations-heading {
     margin: 0;
-    font-weight: normal;
+    font-weight: var(--fontLight);
     background-color: var(--backgroundAltColor);
     padding: var(--doubleSpacing) var(--doubleSpacing) var(--spacing) var(--doubleSpacing);
 
@@ -32,7 +33,7 @@
         padding: var(--spacing) var(--spacing) var(--halfSpacing) var(--spacing);
     }
     strong {
-        font-style: italic;
+        // font-style: italic;
     }
     transition: box-shadow 0.3s ease;
 
@@ -86,6 +87,7 @@
     @include breakpoints.medium-large {
         display: grid;
         grid-template-columns: min-content 1fr;
+        grid-auto-rows: 1fr; // make every item row the same height
         column-gap: var(--spacing);
         row-gap: var(--spacing);
     }
@@ -133,11 +135,9 @@
         svg {
             display: block;
             height: 100%;
-            width: 100%;
-            max-width: 4rem;
-            max-height: 4rem;
+            width: auto;
             aspect-ratio: 1/1;
-            opacity: 0.28;
+            opacity: 0.3;
         }
     }
 }
@@ -185,12 +185,12 @@
 .correlation-item-content-strength {
     font-weight: bold;
 }
-.correlation-item-content-direction {
+.correlation-direction {
     font-weight: bold;
-    .correlation-item-positive & {
+    .correlation-positive & {
         color: var(--sentimentPositiveColor);
     }
-    .correlation-item-negative & {
+    .correlation-negative & {
         color: var(--sentimentNegativeColor);
     }
 }
@@ -209,6 +209,9 @@
     @include breakpoints.medium-large {
         align-items: center;
         justify-content: space-between;
+    }
+    .correlation-item-breadcrumbs {
+        font-weight: var(--fontLight);
     }
 }
 .correlation-item-breadcrumbs {
@@ -247,4 +250,8 @@
         padding: 3px 8px;
         font-size: var(--fontSizeSmall);
     }
+}
+
+.correlation-item-index {
+    display: none;
 }

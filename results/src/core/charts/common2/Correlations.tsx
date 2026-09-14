@@ -173,7 +173,7 @@ export const CorrelationsList = ({ question, block, optionId, correlations }: Co
     const directionLabel = getString(directionKey)?.t
 
     return (
-        <div className="correlations-wrapper">
+        <div className={`correlations-wrapper correlation-positive`}>
             <div className="correlations-heading-wrapper">
                 <h3 className="correlations-heading">
                     <T
@@ -185,18 +185,8 @@ export const CorrelationsList = ({ question, block, optionId, correlations }: Co
             </div>
             <div className="correlations-content">
                 <CorrelationsExclusions question={question} block={block} />
-                <div className="correlation-directions">
-                    <ul>
-                        <li>
-                            {/* <PositiveCorrelation /> */}
-                            <T k="correlations.direction.positive.description" md={true} />
-                        </li>
-                        <li>
-                            {/* <NegativeCorrelation /> */}
-                            <T k="correlations.direction.negative.description" md={true} />
-                        </li>
-                    </ul>
-                </div>
+                {/* <CorrelationsDirections /> */}
+
                 <div className="correlation-items">
                     {correlations.map((c, i) => (
                         <CorrelationItemComponent index={i} key={i} correlation={c} block={block} />
@@ -206,6 +196,23 @@ export const CorrelationsList = ({ question, block, optionId, correlations }: Co
                     <T k="correlations.note" md={true} html={true} />
                 </div>
             </div>
+        </div>
+    )
+}
+
+const CorrelationsDirections = () => {
+    return (
+        <div className="correlation-directions">
+            <ul>
+                <li>
+                    {/* <PositiveCorrelation /> */}
+                    <T k="correlations.direction.positive.description" md={true} />
+                </li>
+                <li>
+                    {/* <NegativeCorrelation /> */}
+                    <T k="correlations.direction.negative.description" md={true} />
+                </li>
+            </ul>
         </div>
     )
 }
@@ -327,9 +334,7 @@ const CorrelationItemComponent = ({
     const takeawayKey = `correlations.takeaway.${shape}`
 
     return (
-        <div
-            className={`correlation-item correlation-item-${strength} correlation-item-${direction}`}
-        >
+        <div className={`correlation-item correlation-item-${strength} correlation-${direction}`}>
             <CorrelationValue value={correlationValue} direction={direction} shape={shape} />
 
             <div className="correlation-item-description">
@@ -412,12 +417,15 @@ const CorrelationSubheading = ({
     n: number
     index: number
 }) => {
+    const respondentCount = formatNumber(n)
+    const showIndex = false
     return (
         <div className="correlation-item-subheading">
             <h4 className="correlation-item-breadcrumbs">
                 <span>
-                    {index + 1}. {questionName}
+                    <span className="correlation-item-index">{index + 1}.</span> {questionName}
                 </span>
+
                 {optionLabel && (
                     <>
                         {' '}
@@ -425,9 +433,16 @@ const CorrelationSubheading = ({
                     </>
                 )}
             </h4>
-            <div className="correlation-item-n">
-                <UserIcon size={'small'} /> <span>{formatNumber(n)}</span>
-            </div>
+            <Tooltip
+                contents={
+                    <T k="correlations.respondent_count.description" values={{ respondentCount }} />
+                }
+                trigger={
+                    <div className="correlation-item-n">
+                        <UserIcon size={'small'} /> <span>{respondentCount}</span>
+                    </div>
+                }
+            />
         </div>
     )
 }

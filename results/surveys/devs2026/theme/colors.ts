@@ -155,7 +155,7 @@ export const surveyColorTheme = {
         },
         sentiment: {
             positive: 'rgb(92, 229, 186)',
-            negative: 'rgb(232, 64, 131)',
+            negative: 'rgb(255, 95, 119)',
             neutral: 'rgb(128, 137, 139)'
         },
         velocity: [
