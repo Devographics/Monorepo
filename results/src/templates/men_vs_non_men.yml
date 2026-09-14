@@ -14,12 +14,12 @@ filtersState:
                 sectionId: user_info
                 operator: in
                 value:
-                    - male
+                    - female
+                    - non_binary
+                    - not_listed
         - conditions:
               - fieldId: gender
                 sectionId: user_info
                 operator: in
                 value:
-                    - female
-                    - non_binary
-                    - not_listed
+                    - male

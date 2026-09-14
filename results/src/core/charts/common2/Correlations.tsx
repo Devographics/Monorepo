@@ -3,7 +3,14 @@ import React from 'react'
 import ModalTrigger from 'core/components/ModalTrigger'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
-import { UserIcon } from '@devographics/icons'
+import {
+    CardinalityIcon,
+    CorrelationsIcon,
+    CorrelationOptionIcon,
+    CorrelationTrendIcon,
+    UserIcon,
+    CorrelationCardinalityIcon
+} from '@devographics/icons'
 import Button from 'core/components/Button'
 import { useI18n } from '@devographics/react-i18n'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
@@ -181,11 +188,11 @@ export const CorrelationsList = ({ question, block, optionId, correlations }: Co
                 <div className="correlation-directions">
                     <ul>
                         <li>
-                            <PositiveCorrelation />
+                            {/* <PositiveCorrelation /> */}
                             <T k="correlations.direction.positive.description" md={true} />
                         </li>
                         <li>
-                            <NegativeCorrelation />
+                            {/* <NegativeCorrelation /> */}
                             <T k="correlations.direction.negative.description" md={true} />
                         </li>
                     </ul>
@@ -260,6 +267,8 @@ const CorrelationItemComponent = ({
     block: BlockVariantDefinition
     index: number
 }) => {
+    let optionLabelObject, optionLabel
+
     const pageContext = usePageContext()
     const { currentEdition } = pageContext
     const { getString } = useI18n()
@@ -290,9 +299,11 @@ const CorrelationItemComponent = ({
     let directionKey = `correlations.direction.${direction}`
     if (['shape1', 'shape2'].includes(shape)) {
         directionKey = getTrendDirectionKey({ question, direction, getString })
+        optionLabel = getString('correlations.trend.subheading')?.t
     }
     if (['shape5', 'shape6'].includes(shape)) {
         directionKey = `correlations.cardinality.${direction}`
+        optionLabel = getString('correlations.cardinality.subheading')?.t
     }
     const directionLabel = getString(directionKey)?.t
 
@@ -304,7 +315,6 @@ const CorrelationItemComponent = ({
     const questionLabel = questionLabelObject.question
     const questionName = questionLabelObject.questionName
 
-    let optionLabelObject, optionLabel
     if (optionId2) {
         optionLabelObject = getItemLabel({
             id: optionId2,
@@ -320,7 +330,7 @@ const CorrelationItemComponent = ({
         <div
             className={`correlation-item correlation-item-${strength} correlation-item-${direction}`}
         >
-            <CorrelationValue value={correlationValue} direction={direction} />
+            <CorrelationValue value={correlationValue} direction={direction} shape={shape} />
 
             <div className="correlation-item-description">
                 {/* <div>{shape}</div> */}
@@ -355,12 +365,38 @@ const CorrelationItemComponent = ({
     )
 }
 
-const CorrelationValue = ({ value, direction }: { value: number; direction: string }) => {
+const CorrelationValue = ({
+    value,
+    direction,
+    shape
+}: {
+    value: number
+    direction: string
+    shape: CorrelationShape
+}) => {
     const IconComponent = direction === 'positive' ? PositiveCorrelation : NegativeCorrelation
+    const shapeIcons = {
+        shape1: CorrelationTrendIcon,
+        shape2: CorrelationTrendIcon,
+        shape3: CorrelationOptionIcon,
+        shape4: CorrelationOptionIcon,
+        shape5: CorrelationCardinalityIcon,
+        shape6: CorrelationCardinalityIcon
+    }
+    const IconComponent2 = shapeIcons[shape]
     return (
         <div className="correlation-item-value">
-            <span className="correlation-item-value-figure">{formatCorrelation(value)}</span>
-            <IconComponent />
+            <IconComponent2 />
+            <Tooltip
+                contents={<T k={`correlations.direction.${direction}.description`} md={true} />}
+                showBorder={false}
+                trigger={
+                    <span className="correlation-item-value-figure">
+                        {formatCorrelation(value)}
+                    </span>
+                }
+            />
+            {/* <IconComponent /> */}
         </div>
     )
 }
