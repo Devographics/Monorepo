@@ -486,7 +486,7 @@
                   sectionId: user_info
               fieldId: country
               parameters:
-                  limit: 15
+                  limit: 20
               filtersState:
                   options:
                       mode: facet
