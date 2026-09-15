@@ -1,0 +1,14 @@
+fieldId: ${mainBlockId}
+blockType: TwoSeriesScatterplot
+hasData: true
+queryOptions:
+    editionsCount: 1
+    subField: combined
+    addBucketsEntities: false
+    addCorrelations: false
+    addCardinalities: false
+    addComments: false
+parameters:
+    showNoAnswer: false
+    cutoff: 20
+    # sort: { property: medianByFacet }

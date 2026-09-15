@@ -14,6 +14,7 @@ import VerticalBarBlock2 from 'core/charts/verticalBar2'
 // import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
 import MultiItemsExperienceBlock from 'core/charts/multiItemsExperience'
 import MultiItemsRatiosBlock from 'core/charts/multiItemsRatios'
+import TwoSeriesScatterplot from 'core/charts/twoSeriesScatterplot'
 
 // historical trend charts
 import { TimeSeriesByDateBlock } from 'core/charts/timeSeriesByDate/TimeSeriesByDateBlock'
@@ -44,6 +45,7 @@ const chartBlocks = {
     VerticalBarBlock2,
     TimeSeriesByDateBlock,
     RatiosByEdition,
+    TwoSeriesScatterplot,
 
     MultiItemsExperienceBlock,
     MultiItemsRatiosBlock,

@@ -10,13 +10,13 @@ export const Axis = ({
     variant,
     ticks,
     question,
-    labelId,
+    label,
     formatValue
 }: {
     variant: 'top' | 'bottom'
     ticks: Tick[]
     question?: QuestionMetadata
-    labelId?: string
+    label?: string
     formatValue: FormatValueType
 }) => {
     const interval = getInterval(ticks.length)
@@ -44,11 +44,7 @@ export const Axis = ({
                         )
                     })}
                 </div>
-                {variant === 'bottom' && labelId && (
-                    <div className="chart-axis-label">
-                        <T k={labelId} />
-                    </div>
-                )}
+                {variant === 'bottom' && label && <div className="chart-axis-label">{label}</div>}
             </div>
         </div>
     )

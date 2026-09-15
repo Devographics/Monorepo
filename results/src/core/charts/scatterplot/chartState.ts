@@ -16,11 +16,13 @@ export type ScatterplotChartState = ChartStateWithHighlighted & {
     setZoomedQuadrantIndex: Dispatch<SetStateAction<number | null>>
 }
 
-export const useChartState = () => {
+export type UseChartStateProps = { defaultXMetric: string; defaultYMetric: string }
+
+export const useChartState = ({ defaultXMetric, defaultYMetric }: UseChartStateProps) => {
     const [highlighted, setHighlighted] = useState<string | null>(null)
 
-    const [xMetric, setXMetric] = useState<string>('count')
-    const [yMetric, setYMetric] = useState<string>('satisfaction')
+    const [xMetric, setXMetric] = useState<string>(defaultXMetric)
+    const [yMetric, setYMetric] = useState<string>(defaultYMetric)
     const [currentCategory, setCurrentCategory] = useState<string | null>(null)
     const [currentItem, setCurrentItem] = useState<string | null>(null)
     const [zoomedQuadrantIndex, setZoomedQuadrantIndex] = useState<number | null>(null)

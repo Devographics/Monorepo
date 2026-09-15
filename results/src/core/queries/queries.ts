@@ -89,7 +89,24 @@ export const getBlockQuery = ({
 
     const defaultSeries = { name: defaultSeriesName, queryArgs: defaultQueryArgs }
     let series: SeriesParams[]
-    if (hasFilters) {
+    if (block.series) {
+        // we have multiple series explicitly defined
+        // make them inherit main block properties
+        series = block.series.map((serie, serieIndex) => {
+            const queryArgs = {
+                fieldId: block.fieldId,
+                parameters: block.parameters,
+                queryOptions: block.queryOptions,
+                ...serie
+            }
+
+            return {
+                queryArgs,
+                name: `${seriesName}_${serieIndex + 1}`
+            }
+        })
+    } else if (hasFilters) {
+        // expand different filters into multiple series
         series = [
             ...(showDefaultSeries ? [defaultSeries] : []),
             ...filters.map((filter, filterIndex) => {

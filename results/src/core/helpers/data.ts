@@ -101,7 +101,21 @@ export const getBlockSeriesData = ({
     pageContext: PageContextValue
     filtersState?: CustomizationDefinition
 }): Array<DataSeries<any>> => {
-    if (filtersState?.filters) {
+    if (block.series) {
+        return block.series.map((serie, serieIndex) => {
+            const suffix = `_${serieIndex + 1}`
+            const dataPath = getBlockDataPath({
+                block,
+                pageContext,
+                suffix
+            })
+            return {
+                dataPath,
+                name: block.id + suffix,
+                data: get(pageContext.pageData, dataPath)
+            }
+        })
+    } else if (filtersState?.filters) {
         return filtersState.filters.map((filters, i) => {
             const suffix = `_${i + 1}`
             const dataPath = getBlockDataPath({

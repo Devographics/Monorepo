@@ -1,4 +1,3 @@
-import './Scatterplot.scss'
 import React from 'react'
 import { AllToolsData, SectionMetadata, StandardQuestionData } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
@@ -12,22 +11,16 @@ import {
     ScatterplotChartState,
     useChartState,
     ScatterplotChart,
-    ScatterplotChartValues
+    GetNodeProps
 } from '../scatterplot'
 import { NodeData } from '../scatterplot/types'
+import { formatNumber, formatPercentage } from '../common2/helpers/format'
 
-export type GetNodeProps = {
-    data: StandardQuestionData[]
-    chartState: ScatterplotChartState
-    chartValues: ScatterplotChartValues
-}
-const useNodes = ({ data, chartState, chartValues }: GetNodeProps) => {
+const useNodes = ({ block, data, chartState, axis1Formatter, axis2Formatter }: GetNodeProps) => {
     const { highlighted: currentCategory, currentItem } = chartState
 
     const toolSections = useToolSections()
     const theme = useTheme()
-
-    const { xScale, yScale } = chartValues
 
     const nodes: NodeData[] = data.map((item, index) => {
         const { id, entity, responses } = item
@@ -42,11 +35,11 @@ const useNodes = ({ data, chartState, chartValues }: GetNodeProps) => {
         const xValue = responses?.currentEdition?.buckets?.find(b => b.id === 'used')?.count || 0
         const yValue = responses?.currentEdition?.ratios?.['retention'] || 0
 
-        const formattedX = formatNumber(xValue)
-        const formattedY = formatPercentage(yValue * 100)
+        const formattedX = axis1Formatter(xValue)
+        const formattedY = axis2Formatter(yValue * 100)
 
-        const x = xScale(xValue)
-        const y = yScale(yValue * 100)
+        // const x = xScale(xValue)
+        // const y = yScale(yValue * 100)
 
         const category =
             toolSections.find(section => {
@@ -67,10 +60,8 @@ const useNodes = ({ data, chartState, chartValues }: GetNodeProps) => {
             serieId,
             categoryId,
             label: entity.nameClean || entity.name,
-            x,
             xValue,
             formattedX,
-            y,
             yValue,
             formattedY,
             color,
@@ -96,7 +87,7 @@ export const ToolsScatterplotBlock = (
     const theme = useTheme()
     const toolSections = useToolSections()
 
-    const chartState = useChartState()
+    const chartState = useChartState({ defaultXMetric: 'count', defaultYMetric: 'satisfaction' })
 
     const legendItems = toolSections.map((section: SectionMetadata) => ({
         id: section.id,
@@ -104,12 +95,25 @@ export const ToolsScatterplotBlock = (
         color: theme.colors.ranges.toolSections[section.id]
     }))
 
+    const axis1Label = getString(`charts.axis_legends.users_count`)?.t
+    const axis2Label = getString(`charts.axis_legends.satisfaction_percentage`)?.t
+
     return (
         <ChartWrapper {...props} chartState={chartState}>
             <>
                 <Legend<ScatterplotChartState> items={legendItems} chartState={chartState} />
 
-                <ScatterplotChart chartState={chartState} data={data} useNodes={useNodes} />
+                <ScatterplotChart
+                    chartState={chartState}
+                    data={data}
+                    useNodes={useNodes}
+                    block={block}
+                    question={question}
+                    axis1Formatter={formatNumber}
+                    axis2Formatter={formatPercentage}
+                    axis1Label={axis1Label}
+                    axis2Label={axis2Label}
+                />
 
                 <Note block={block} />
                 <ChartFooter

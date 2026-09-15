@@ -42,6 +42,7 @@
         position: absolute;
         top: 5px;
         color: var(--textAltColor);
+        white-space: nowrap;
         .chart-axis-top & {
             // top: -30px;
         }

@@ -25,13 +25,15 @@ export const getDatasetValues = ({
 }
 
 export const useXScale = ({
+    chartMin,
     chartMax,
     contentWidth
 }: {
+    chartMin: number
     chartMax: number
     contentWidth: number
 }) => {
-    return d3.scaleLinear().domain([0, chartMax]).range([0, contentWidth])
+    return d3.scaleLinear().domain([chartMin, chartMax]).range([0, contentWidth])
 }
 
 export const useYScale = ({

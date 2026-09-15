@@ -27,6 +27,18 @@ export const isYen = (question: QuestionMetadata) =>
 export const isPercentage = (question: QuestionMetadata) =>
     ['completion_stats'].includes(question.id) || ['slider'].includes(question.template)
 
+export const isYears = (question: QuestionMetadata) =>
+    ['years_of_experience', 'age'].includes(question.id)
+
+export const formatYears = (value: number) => {
+    const formatter = new Intl.NumberFormat(undefined, {
+        style: 'unit',
+        unit: 'year',
+        unitDisplay: 'short' // Options: "long", "short", "narrow"
+    })
+    return formatter.format(value)
+}
+
 // https://stackoverflow.com/a/9462382
 function largeNumberFormatter(num: number, digits = 1) {
     const lookup = [
@@ -92,6 +104,8 @@ export const formatQuestionValue = (value: number, question?: QuestionMetadata) 
         return `¥${largeNumberFormatter(value)}`
     } else if (isPercentage(question)) {
         return formatPercentage(value)
+    } else if (isYears(question)) {
+        return formatYears(value)
     } else {
         return formatNumber(value)
     }

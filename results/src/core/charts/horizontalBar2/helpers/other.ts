@@ -93,7 +93,6 @@ export const getChartBuckets = ({
                 sortableBuckets = sortBy(sortableBuckets, bucket => {
                     // find the facet bucket targeted by the sort
                     const relevantFacetBucket = bucket.facetBuckets.find(fb => fb.id == sort)
-                    console.log(relevantFacetBucket)
                     if (!relevantFacetBucket) {
                         return 0
                     } else {

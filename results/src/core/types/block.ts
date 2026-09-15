@@ -9,6 +9,7 @@ import { CustomizationDefinition } from 'core/filters/types'
 import { PageContextValue } from './context'
 import { CustomVariant } from 'core/filters/helpers'
 import { Views } from 'core/charts/horizontalBar2/types'
+import { SeriesParams } from 'core/queries/types'
 
 export type BlockUnits =
     | 'count'
@@ -63,6 +64,8 @@ export interface BlockVariantDefinition {
     takeaway?: string
     takeawayKey?: string
     noteKey?: string
+
+    series?: SeriesParams[]
 
     defaultUnits?: BucketUnits
     availableUnits?: Array<BucketUnits>
