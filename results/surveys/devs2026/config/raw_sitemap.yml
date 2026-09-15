@@ -572,6 +572,18 @@
                   facet:
                       sectionId: workplace
                       id: income_evolution
+            - id: company_size_vs_work_hours
+              template: vs_facet
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: work_hours_per_week
+            - id: company_size_vs_ai_generated_code_balance
+              template: vs_facet
+              filtersState:
+                  facet:
+                      sectionId: ai_usage
+                      id: ai_generated_code_balance
 
       - id: figure_job_title_income
         template: figure
@@ -654,19 +666,36 @@
                                   - director_of_engineering
                                   - fullstack_engineer
                                   - engineering_manager
+                                  - principal_engineer
+            - id: job_title_vs_years_of_experience_vs_yearly_salary
+              template: two_series_scatterplot
+              fieldId: job_title
+              parameters:
+                  limit: 20
+              series:
+                  - id: job_title_vs_years_of_experience
+                    facet:
+                        sectionId: career
+                        id: years_of_experience
+                  - id: job_title_vs_yearly_salary
+                    facet:
+                        sectionId: workplace
+                        id: yearly_salary
 
       - id: work_areas
-        template: multiple_options2
+        template: multiple_options2_combined
+        queryOptions:
+            addBucketsEntities: false
         variants:
             - template: vs_salary
               parameters:
                   limit: 20
-                  cutoff: 100
                   sort: { property: medianByFacet }
               chartOptions:
                   limit: 10
               queryOptions:
-                  subField: freeform
+                  subField: combined
+                  addBucketsEntities: false
               filtersState:
                   facet:
                       sectionId: workplace
@@ -674,12 +703,12 @@
             - template: vs_years_of_experience
               parameters:
                   limit: 20
-                  cutoff: 100
                   sort: { property: medianByFacet, order: asc }
               chartOptions:
                   limit: 10
               queryOptions:
-                  subField: freeform
+                  subField: combined
+                  addBucketsEntities: false
               filtersState:
                   facet:
                       sectionId: career
@@ -687,11 +716,11 @@
             - template: vs_gender
               parameters:
                   limit: 20
-                  cutoff: 100
               chartOptions:
                   limit: 10
               queryOptions:
-                  subField: freeform
+                  subField: combined
+                  addBucketsEntities: false
               filtersState:
                   options:
                       mode: facet
@@ -700,6 +729,20 @@
                   facet:
                       sectionId: user_info
                       id: gender
+            - id: work_areas_vs_years_of_experience_vs_yearly_salary
+              template: two_series_scatterplot
+              fieldId: work_areas
+              parameters:
+                  limit: 20
+              series:
+                  - id: work_areas_vs_years_of_experience
+                    facet:
+                        sectionId: career
+                        id: years_of_experience
+                  - id: work_areas_vs_yearly_salary
+                    facet:
+                        sectionId: workplace
+                        id: yearly_salary
 
       - id: frontend_masters_learning_path
         template: midpage_resource
