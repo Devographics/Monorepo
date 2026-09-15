@@ -1,8 +1,8 @@
 import React from 'react'
 import { NodeData } from './types'
 import { Node } from './Node'
-import { ScatterplotChartState } from './chartState'
-import { ScatterplotChartValues } from './chartValues'
+import { ScatterplotChartState } from '../scatterplot/chartState'
+import { ScatterplotChartValues } from '../scatterplot/chartValues'
 
 type NodesProps = {
     chartState: ScatterplotChartState

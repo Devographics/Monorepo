@@ -7,7 +7,7 @@ import styled, { useTheme } from 'styled-components'
 import { useSpring, animated, to } from '@react-spring/web'
 // import { useMotionConfig } from '@nivo/core'
 import { staticProps } from './config'
-import { ScatterplotChartState } from './chartState'
+import { ScatterplotChartState } from '../scatterplot/chartState'
 
 export const springConfig = { tension: 120, friction: 14 }
 

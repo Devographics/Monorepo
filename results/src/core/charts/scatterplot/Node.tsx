@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTheme } from 'styled-components'
 import { NodeData } from './types'
-import { ScatterplotChartState } from './chartState'
+import { ScatterplotChartState } from '../scatterplot/chartState'
 import { crosshairConfig } from './Crosshair'
 import './Node.scss'
 

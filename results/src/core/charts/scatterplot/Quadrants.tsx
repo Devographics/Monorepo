@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components'
 import { useI18n } from '@devographics/react-i18n'
 import { ChartLayerProps } from './types'
 import { Quadrant } from './Quadrant'
-import { ScatterplotChartState } from './chartState'
+import { ScatterplotChartState } from '../scatterplot/chartState'
 
 // todo: not using this anymore
 const totalCountRounded = 9999
