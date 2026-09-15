@@ -12,3 +12,5 @@ parameters:
     showNoAnswer: false
     cutoff: 20
     # sort: { property: medianByFacet }
+chartOptions:
+    showTrendLine: true

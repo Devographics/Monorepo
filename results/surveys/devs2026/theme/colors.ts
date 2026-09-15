@@ -129,10 +129,10 @@ const velocity = [
 const distinct = [
     colors.indigo,
     colors.teal,
-    colors.pink,
     colors.red,
     colors.green,
     colors.yellow,
+    colors.pink,
     colors.aqua,
     colors.orange,
     colors.olive,

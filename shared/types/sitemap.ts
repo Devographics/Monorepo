@@ -23,6 +23,8 @@ export interface ChartOptions {
     categories?: string[]
     defaultMarker?: 'average' | 'median'
     defaultView?: string
+    // scatterplot: draw a least-squares regression line (with R²) through the points
+    showTrendLine?: boolean
 }
 
 export interface BlockVariantDefinition {

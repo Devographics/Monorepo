@@ -3,22 +3,20 @@ import './Axis.scss'
 import React from 'react'
 import { FormatValueType, Tick } from './types'
 import { QuestionMetadata } from '@devographics/types'
+import Tooltip from 'core/components/Tooltip'
 
 export const getInterval = (tickCount: number) => 100 / (tickCount - 1)
 
-export const Axis = ({
-    variant,
-    ticks,
-    question,
-    label,
-    formatValue
-}: {
+export type AxisProps = {
     variant: 'top' | 'bottom'
     ticks: Tick[]
     question?: QuestionMetadata
     label?: string
     formatValue: FormatValueType
-}) => {
+    r2?: number
+}
+
+export const Axis = ({ variant, ticks, question, label, formatValue, r2 }: AxisProps) => {
     const interval = getInterval(ticks.length)
 
     return (
@@ -44,7 +42,30 @@ export const Axis = ({
                         )
                     })}
                 </div>
-                {variant === 'bottom' && label && <div className="chart-axis-label">{label}</div>}
+                {variant === 'bottom' && label && (
+                    <div className={`chart-axis-bottom chart-axis-bottom-${r2 && 'r2'}`}>
+                        {r2 && <span className="chart-axis-placeholder" />}
+                        <span className="chart-axis-label">{label}</span>
+                        {r2 && (
+                            <Tooltip
+                                contents={
+                                    <T
+                                        k="charts.axis_legends.r2.description"
+                                        values={{ r2: r2.toFixed(2) }}
+                                    />
+                                }
+                                trigger={
+                                    <span className="chart-axis-r2">
+                                        <T
+                                            k="charts.axis_legends.r2"
+                                            values={{ r2: r2.toFixed(2) }}
+                                        />
+                                    </span>
+                                }
+                            />
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     )

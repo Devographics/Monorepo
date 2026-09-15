@@ -5,6 +5,7 @@ import { useTheme } from 'styled-components'
 import { getItemLabel } from 'core/helpers/labels'
 import { ChartStateWithHighlighted, LegendItemType } from './types'
 import { getDistinctColor } from './helpers/colors'
+import T from 'core/i18n/T'
 
 export const Legend = <ChartStateType extends ChartStateWithHighlighted>({
     items,
@@ -18,21 +19,60 @@ export const Legend = <ChartStateType extends ChartStateWithHighlighted>({
     const { highlighted } = chartState
     const hasHighlight = highlighted !== null
 
+    const hasGroups = items.some(item => item.group)
+
+    // keep a stable, first-seen order for the groups, but always put the
+    // ungrouped ('') group last
+    const groups = hasGroups
+        ? items
+              .reduce<string[]>((acc, item) => {
+                  const group = item.group ?? ''
+                  return acc.includes(group) ? acc : [...acc, group]
+              }, [])
+              .sort((a, b) => Number(a === '') - Number(b === ''))
+        : []
+
     return (
         <div
             className={`chart-legend-2 chart-legend-${
                 hasHighlight ? 'hasHighlight' : 'noHighlight'
             }`}
         >
-            {items.map((item, i) => (
-                <LegendItem<ChartStateType>
-                    key={item.id}
-                    item={item}
-                    lineIndex={i}
-                    chartState={chartState}
-                    i18nNamespace={i18nNamespace}
-                />
-            ))}
+            {hasGroups
+                ? groups.map((groupId, groupIndex) => {
+                      const groupKey = groupId || 'other'
+                      return (
+                          <div key={groupKey} className="chart-legend-group">
+                              <h4 className="chart-legend-group-label">
+                                  <T k={`options.${i18nNamespace}.${groupKey}`} />
+                              </h4>
+
+                              <div className="chart-legend-group-items">
+                                  {items
+                                      .map((item, i) => ({ item, lineIndex: i }))
+                                      .filter(({ item }) => (item.group ?? '') === groupId)
+                                      .map(({ item, lineIndex }) => (
+                                          <LegendItem<ChartStateType>
+                                              key={item.id}
+                                              item={item}
+                                              lineIndex={lineIndex}
+                                              chartState={chartState}
+                                              i18nNamespace={i18nNamespace}
+                                          />
+                                      ))}
+                              </div>
+                          </div>
+                      )
+                  })
+                : items.map((item, i) => (
+                      <LegendItem<ChartStateType>
+                          key={item.id}
+                          item={item}
+                          lineIndex={i}
+                          chartState={chartState}
+                          i18nNamespace={i18nNamespace}
+                      />
+                  ))}
         </div>
     )
 }
@@ -63,6 +103,7 @@ const LegendItem = <ChartStateType extends ChartStateWithHighlighted>({
         label: label_,
         i18nNamespace
     })
+
     const label = labelObject?.shortLabel
 
     const style = {

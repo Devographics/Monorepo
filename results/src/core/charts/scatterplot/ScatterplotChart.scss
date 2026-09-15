@@ -45,3 +45,9 @@
         }
     }
 }
+
+.scatterplot-trendline-label {
+    fill: var(--textColor);
+    font-size: var(--fontSizeSmall);
+    font-variant-numeric: tabular-nums;
+}

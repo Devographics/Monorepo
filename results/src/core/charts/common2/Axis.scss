@@ -6,9 +6,9 @@
         border-bottom: 1px dotted var(--borderAltColor);
     }
 
-    .chart-axis-bottom & {
-        border-top: 1px dotted var(--borderAltColor);
-    }
+    // .chart-axis-bottom & {
+    //     border-top: 1px dotted var(--borderAltColor);
+    // }
 }
 
 .chart-axis-horizontal {
@@ -47,19 +47,26 @@
             // top: -30px;
         }
     }
-    .chart-axis-label {
+    .chart-axis-bottom {
         margin-top: var(--spacing);
         display: flex;
         justify-content: center;
     }
-}
-.chart-axis-bottom {
-    .chart-axis-tick {
-        &::before {
-            top: -5px;
-        }
+    .chart-axis-bottom-r2 {
+        display: grid;
+        grid-template-columns: min-content 1fr min-content;
+    }
+    .chart-axis-r2 {
+        white-space: nowrap;
     }
 }
+// .chart-axis-bottom {
+//     .chart-axis-tick {
+//         &::before {
+//             top: -5px;
+//         }
+//     }
+// }
 .chart-axis-top {
     .chart-axis-tick {
         &::before {

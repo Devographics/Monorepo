@@ -142,6 +142,7 @@ export type LegendItemType = {
     label?: string
     color?: string
     entity?: Entity
+    group?: string
 }
 
 export interface SeriesMetadata {

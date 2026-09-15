@@ -10,17 +10,20 @@ export type NodeData = {
     index: number
     serieIndex: number
     serieId: string
-    categoryId: string
-    x: number
     xValue: number
     formattedX: string
-    y: number
     yValue: number
     formattedY: string
     id: string
     label: string
     color: string
-    category: SectionMetadata
     isCurrentItem: boolean
     isHighlighted: boolean
+    categoryId?: string
+    category?: SectionMetadata
+}
+
+export type NodeDataWithCoordinates = NodeData & {
+    x: number
+    y: number
 }

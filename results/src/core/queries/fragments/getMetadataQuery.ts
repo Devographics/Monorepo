@@ -104,6 +104,7 @@ query {
                                 }
                                 options {
                                     ${getEntityFragment()}
+                                    group
                                     id
                                     average
                                     lowerBound

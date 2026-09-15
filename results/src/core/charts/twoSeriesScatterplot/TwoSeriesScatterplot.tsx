@@ -1,5 +1,5 @@
 import React from 'react'
-import { AllToolsData, StandardQuestionData } from '@devographics/types'
+import { AllToolsData, QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { useI18n } from '@devographics/react-i18n'
 import { useTheme } from 'styled-components'
@@ -13,8 +13,11 @@ import { formatQuestionValue } from '../common2/helpers/format'
 import { useQuestionById } from 'core/helpers/options'
 import { getItemLabel } from 'core/helpers/labels'
 import { getQuestionLabel } from '../common2/helpers/labels'
+import { getDistinctColor } from '../common2/helpers/colors'
+import uniq from 'lodash/uniq.js'
 
 const useNodes = ({
+    items,
     question,
     block,
     data,
@@ -30,12 +33,13 @@ const useNodes = ({
     const buckets1 = data[0].combined.allEditions?.[0].buckets
     const buckets2 = data[1].combined.allEditions?.[0].buckets
 
-    // use first series' buckets as canonical item ids
-    const itemIds = buckets1.map(b => b.id)
-
     const i18nNamespace = block.i18nNamespace || question.id
 
-    const nodes: NodeData[] = itemIds.map((id, index) => {
+    const groups = uniq(items.map(item => item.group))
+
+    console.log(groups)
+    const nodes: NodeData[] = items.map((item, index) => {
+        const { id, group, color } = item
         const isCurrentItem = currentItem === id
 
         const bucket1Item = buckets1.find(b => b.id === id)
@@ -57,18 +61,19 @@ const useNodes = ({
         const nodeData: NodeData = {
             index,
             id,
-            category: { id: 'foo' },
             serieIndex,
             serieId,
-            categoryId: 'foo',
             label: labelObject?.shortLabel,
             xValue,
             formattedX,
             yValue,
             formattedY,
-            color: '#fff',
+            color: color || '#ffffffaa',
             isCurrentItem,
             isHighlighted
+        }
+        if (group) {
+            nodeData.categoryId = group
         }
         return nodeData
     })
@@ -77,6 +82,7 @@ const useNodes = ({
 
 export const TwoSeriesScatterplot = (
     props: BlockComponentProps & {
+        question: QuestionMetadata
         data: AllToolsData
         series: DataSeries<StandardQuestionData>[]
         // used for the report, to control which category is highlighted
@@ -84,6 +90,7 @@ export const TwoSeriesScatterplot = (
 ) => {
     const { getString } = useI18n()
     const { block, series, question } = props
+    const { options } = question
     const data = series.map(serie => serie.data)
 
     const question1Id = block?.series?.[0]?.facet?.id
@@ -119,25 +126,41 @@ export const TwoSeriesScatterplot = (
     })
 
     // legend
+    const groups = options && uniq(options.map(option => option.group))
     const i18nNamespace = block.i18nNamespace || question.id
     const bucketIds = data[0].combined.allEditions?.[0].buckets.map(b => b.id)
-    const legendItems = bucketIds.map(id => {
+    const items = bucketIds.map((id, index) => {
         const labelObject = getItemLabel({ id, i18nNamespace, getString })
+        const option = options?.find(option => option.id === id)
+        let color
+        if (option && groups) {
+            const groupIndex = groups.findIndex(group => group === option.group)
+            const groupColor = getDistinctColor(theme.colors.distinct, groupIndex)
+            color = groupColor
+        } else {
+            color = getDistinctColor(theme.colors.distinct, index)
+        }
         return {
             id,
             label: labelObject?.shortLabel,
-            color: theme.colors.ranges.toolSections[id]
+            color,
+            group: option?.group
         }
     })
 
     return (
         <ChartWrapper {...props} chartState={chartState}>
             <>
-                <Legend<ScatterplotChartState> items={legendItems} chartState={chartState} />
+                <Legend<ScatterplotChartState>
+                    items={items}
+                    chartState={chartState}
+                    i18nNamespace={i18nNamespace}
+                />
 
                 <ScatterplotChart
                     block={block}
                     question={question}
+                    items={items}
                     chartState={chartState}
                     data={data}
                     useNodes={useNodes}

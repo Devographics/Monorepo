@@ -16,14 +16,21 @@ import {
 import { NodeData } from '../scatterplot/types'
 import { formatNumber, formatPercentage } from '../common2/helpers/format'
 
-const useNodes = ({ block, data, chartState, axis1Formatter, axis2Formatter }: GetNodeProps) => {
+const useNodes = ({
+    options,
+    block,
+    data,
+    chartState,
+    axis1Formatter,
+    axis2Formatter
+}: GetNodeProps) => {
     const { highlighted: currentCategory, currentItem } = chartState
 
     const toolSections = useToolSections()
     const theme = useTheme()
 
-    const nodes: NodeData[] = data.map((item, index) => {
-        const { id, entity, responses } = item
+    const nodes: NodeData[] = data.map((option, index) => {
+        const { id, entity } = option
 
         const isCurrentItem = currentItem === id
         const isHighlighted =
@@ -113,6 +120,7 @@ export const ToolsScatterplotBlock = (
                     axis2Formatter={formatPercentage}
                     axis1Label={axis1Label}
                     axis2Label={axis2Label}
+                    showTrendLine={block.chartOptions?.showTrendLine}
                 />
 
                 <Note block={block} />

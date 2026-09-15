@@ -122,6 +122,7 @@ export interface ChartOptions {
     categories?: string[]
     defaultMarker?: 'average' | 'median'
     defaultView?: string
+    showTrendLine?: boolean
 }
 
 export interface BlockWithAwards {
