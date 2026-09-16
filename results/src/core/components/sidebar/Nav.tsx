@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useMatch } from '@reach/router'
 import get from 'lodash/get'
 import styled, { css } from 'styled-components'
@@ -107,6 +107,56 @@ const excludedTemplatesAndIds = [
     'figure'
 ]
 
+/**
+ * Watch the block wrappers (rendered by BlockTabsWrapper with a
+ * `tabs-wrapper-${block.id}` class) and return the id of the block currently
+ * sitting near the top of the viewport, so the matching sidebar link can be
+ * highlighted as the user scrolls. Pass an empty array to disable observing.
+ */
+const useActiveBlockId = (blockIds: string[]): string | null => {
+    const [activeBlockId, setActiveBlockId] = useState<string | null>(null)
+    // stable dependency: re-run only when the set of block ids actually changes
+    const blockIdsKey = blockIds.join(',')
+
+    useEffect(() => {
+        if (typeof window === 'undefined' || blockIds.length === 0) return
+
+        const observed = blockIds
+            .map(id => {
+                const el = document.querySelector(`.tabs-wrapper-${CSS.escape(id)}`)
+                return el ? { id, el } : null
+            })
+            .filter((entry): entry is { id: string; el: Element } => entry !== null)
+
+        if (observed.length === 0) return
+
+        const intersecting = new Set<string>()
+        const observer = new IntersectionObserver(
+            entries => {
+                for (const entry of entries) {
+                    const match = observed.find(o => o.el === entry.target)
+                    if (!match) continue
+                    if (entry.isIntersecting) {
+                        intersecting.add(match.id)
+                    } else {
+                        intersecting.delete(match.id)
+                    }
+                }
+                // the active block is the first (in document order) crossing the band
+                const active = blockIds.find(id => intersecting.has(id))
+                if (active) setActiveBlockId(active)
+            },
+            // narrow horizontal band in the upper part of the viewport: whichever
+            // block crosses it is considered "in frame"
+            { rootMargin: '-25% 0px -65% 0px', threshold: 0 }
+        )
+        observed.forEach(({ el }) => observer.observe(el))
+        return () => observer.disconnect()
+    }, [blockIdsKey])
+
+    return activeBlockId
+}
+
 const NavItem = ({
     page,
     parentPage,
@@ -143,6 +193,9 @@ const NavItem = ({
                 )
         )
 
+    // only the matched page renders its internal block links, so only observe then
+    const activeBlockId = useActiveBlockId(match ? currentPageBlocks.map(b => b.id) : [])
+
     const { key, label } = getPageLabel({ pageContext: page, getString })
     const imageUrl = page?.variables?.imageUrl
     return (
@@ -173,6 +226,7 @@ const NavItem = ({
                             block={block}
                             page={page}
                             closeSidebar={closeSidebar}
+                            isActive={block.id === activeBlockId}
                         />
                     ))}
                 </InternalLinks_>
@@ -196,7 +250,7 @@ const NavItem = ({
     )
 }
 
-const BlockItem = ({ block, closeSidebar, page }) => {
+const BlockItem = ({ block, closeSidebar, page, isActive = false }) => {
     const pageContext = usePageContext()
     const { getString, getFallbacks } = useI18n()
     const entities = useEntities()
@@ -215,7 +269,7 @@ const BlockItem = ({ block, closeSidebar, page }) => {
     return (
         <InternalLinkWrapper_>
             <InternalLink_
-                className="nav-link InternalLink"
+                className={`nav-link InternalLink${isActive ? ' _is-active' : ''}`}
                 href={`#${block.id}`}
                 onClick={closeSidebar}
                 page={page}
@@ -260,6 +314,14 @@ const InternalLink_ = styled.a`
         color: ${({ theme }) => theme.colors.text};
     }
     font-size: 0.9rem;
+    &._is-active {
+        &,
+        &:link,
+        &:visited {
+            color: ${({ theme }) => theme.colors.text};
+        }
+        font-weight: ${fontWeight('bold')};
+    }
 `
 
 export const Nav = ({ closeSidebar }: { closeSidebar: () => void }) => {
