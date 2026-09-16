@@ -102,11 +102,7 @@ export const ScatterplotChart = ({
                     {showTrendLine && (
                         <TrendLine chartValues={chartValues} nodes={nodesWithPositions} />
                     )}
-                    <Nodes
-                        chartState={chartState}
-                        chartValues={chartValues}
-                        nodes={nodesWithPositions}
-                    />
+                    <Nodes chartState={chartState} nodes={nodesWithPositions} />
                     <Crosshair
                         chartState={chartState}
                         chartValues={chartValues}
