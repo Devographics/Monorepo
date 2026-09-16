@@ -1,6 +1,12 @@
 import React from 'react'
 import { PageContextValue } from 'core/types'
-import { OrderOptions, QuestionMetadata, StandardQuestionData } from '@devographics/types'
+import {
+    BucketUnits,
+    OrderOptions,
+    QuestionMetadata,
+    sortProperties,
+    StandardQuestionData
+} from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { getBlockAllFacetBucketIds } from './helpers/other'
 import { useEntities } from 'core/helpers/entities'
@@ -11,9 +17,10 @@ import { HorizontalBarChartState, HorizontalBarViews } from './types'
 import { CommonProps } from '../common2/types'
 import Legend from './Legend'
 import { getViewDefinition } from './helpers/views'
-import { Toggle } from '../common2'
+import { Toggle, ToggleValueType } from '../common2'
 import { useI18n } from '@devographics/react-i18n'
 import './FacetHeading.scss'
+import { BoxplotAverage, BoxplotMedian } from './views'
 
 export const FacetHeading = (
     props: CommonProps<HorizontalBarChartState> & {
@@ -27,8 +34,6 @@ export const FacetHeading = (
     const { view } = chartState
     const viewDefinition = getViewDefinition(view)
     const entities = useEntities()
-
-    // const controls = getControls({ chartState, chartValues })
 
     const facetBucketIds = getBlockAllFacetBucketIds({ series, block, chartState })
 
@@ -51,9 +56,10 @@ export const FacetHeading = (
     const usedOptions = allGroupsOrOptions.filter(optionOrGroup =>
         allFacetBucketIds.includes(String(optionOrGroup.id))
     )
-    const showToggle = [HorizontalBarViews.AVERAGE, HorizontalBarViews.BOXPLOT].includes(view)
+    const isBoxPlot = [HorizontalBarViews.AVERAGE, HorizontalBarViews.BOXPLOT].includes(view)
+
     return (
-        <div className={`chart-heading chart-heading-${showToggle ? 'withToggle' : ''}`}>
+        <div className={`chart-heading chart-heading-${isBoxPlot ? 'withToggle' : ''}`}>
             <FacetTitle
                 block={block}
                 facetQuestion={facetQuestion}
@@ -62,10 +68,9 @@ export const FacetHeading = (
                 question={question}
                 chartState={chartState}
             />
-            {showToggle && (
+            {isBoxPlot && (
                 <div className="chart-heading-toggles">
-                    <ViewToggle chartState={chartState} />
-                    <OrderToggle chartState={chartState} />
+                    <BoxplotToggle question={question} chartState={chartState} />
                 </div>
             )}
             {viewDefinition.showLegend && facetQuestion && colorScale && (
@@ -80,49 +85,63 @@ export const FacetHeading = (
     )
 }
 
-const ViewToggle = ({ chartState }: { chartState: HorizontalBarChartState }) => {
+const BoxplotToggle = ({
+    question,
+    chartState
+}: {
+    question: QuestionMetadata
+    chartState: HorizontalBarChartState
+}) => {
     const { getString } = useI18n()
-    const { view, setView } = chartState
-    const items = [HorizontalBarViews.BOXPLOT, HorizontalBarViews.AVERAGE].map(id => {
-        const labelKey = `chart_units.${id}`
-        return {
-            labelKey,
-            id,
-            isEnabled: view === id,
-            label: getString(labelKey)?.t
-        }
-    })
-    return (
-        <Toggle
-            labelId="charts.toggle_view"
-            handleSelect={id => {
-                setView(id as HorizontalBarViews)
-            }}
-            items={items}
-        />
-    )
-}
+    const { view, setView, order, setOrder, defaultSort, sort, setSort } = chartState
+    const viewDefinitions = [BoxplotMedian, BoxplotAverage]
 
-const OrderToggle = ({ chartState }: { chartState: HorizontalBarChartState }) => {
-    const { getString } = useI18n()
-    const { order, setOrder } = chartState
-    const items = [OrderOptions.DESC, OrderOptions.ASC].map(id => {
-        const labelKey = `charts.order.${id}`
+    const items = viewDefinitions.map(viewDefinition => {
+        const { id: viewId, defaultUnits } = viewDefinition
+        const labelKey = `chart_units.${defaultUnits}`
         return {
             labelKey,
-            id,
-            isEnabled: order === id,
+            id: defaultUnits,
+            viewId,
+            isEnabled: sort === defaultUnits,
             label: getString(labelKey)?.t
         }
     })
+
+    const handleSelect = (itemId: ToggleValueType | null) => {
+        const selectedItem = items.find(item => item.id === itemId)
+        if (!selectedItem) {
+            return
+        }
+        const { id, viewId } = selectedItem
+
+        if (defaultSort === sortProperties.OPTIONS) {
+            // scenario 1: question is sorted by options,
+            // only change view
+            setView(viewId as HorizontalBarViews)
+        } else {
+            // scenario 2: change both view and sort, and optionally
+            // sort order too
+            setView(viewId as HorizontalBarViews)
+            setSort(id as string)
+            if (order === OrderOptions.ASC) {
+                setOrder(OrderOptions.DESC)
+            } else {
+                setOrder(OrderOptions.ASC)
+            }
+        }
+    }
+
     return (
-        <Toggle
-            labelId="charts.order"
-            handleSelect={id => {
-                setOrder(id as OrderOptions)
-            }}
-            items={items}
-        />
+        <>
+            <Toggle
+                // labelId="charts.toggle_view"
+                handleSelect={handleSelect}
+                sortId={sort}
+                sortOrder={order}
+                items={items}
+            />
+        </>
     )
 }
 

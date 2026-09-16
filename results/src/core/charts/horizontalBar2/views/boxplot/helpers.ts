@@ -25,11 +25,11 @@ export const getDatasetValues = ({
 }
 
 export const useXScale = ({
-    chartMin,
+    chartMin = 0,
     chartMax,
     contentWidth
 }: {
-    chartMin: number
+    chartMin?: number
     chartMax: number
     contentWidth: number
 }) => {

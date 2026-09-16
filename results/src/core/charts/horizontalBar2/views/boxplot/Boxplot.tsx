@@ -21,6 +21,7 @@ import { formatQuestionValue } from 'core/charts/common2/helpers/format'
 import { getViewDefinition } from '../../helpers/views'
 import { AverageBox } from './Average'
 import { BoxProps, PercentilesBox } from './Percentiles'
+import { BucketUnits } from '@devographics/types'
 
 const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     const { chartState, chartValues, seriesMetadata } = viewProps
@@ -178,10 +179,21 @@ const BoxplotRow = (props: BoxplotRowProps) => {
     )
 }
 
-export const Boxplot: HorizontalBarViewDefinition<HorizontalBarChartState> = {
+export const BoxplotMedian: HorizontalBarViewDefinition<HorizontalBarChartState> = {
+    id: HorizontalBarViews.BOXPLOT,
+    defaultUnits: BucketUnits.MEDIAN,
     component: BoxplotView,
     // this is used to calculate max values, so use p90 and not p50
     getValue: b => b.percentilesByFacet?.p90 || 0,
+    formatValue: formatQuestionValue,
+    dataFilters: [removeNoAnswer]
+}
+
+export const BoxplotAverage: HorizontalBarViewDefinition<HorizontalBarChartState> = {
+    id: HorizontalBarViews.AVERAGE,
+    defaultUnits: BucketUnits.AVERAGE,
+    component: BoxplotView,
+    getValue: b => b.averageByFacet || 0,
     formatValue: formatQuestionValue,
     dataFilters: [removeNoAnswer]
 }

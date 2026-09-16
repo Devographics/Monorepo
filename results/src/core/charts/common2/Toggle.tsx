@@ -44,8 +44,8 @@ export enum ToggleMode {
 type ToggleProps = {
     labelId?: string
     items: ToggleItemType[]
-    handleSelect?: (id: ToggleValueType | null) => void
-    handleHover?: (id: ToggleValueType | null) => void
+    handleSelect?: (id: ToggleValueType | null | undefined) => void
+    handleHover?: (id: ToggleValueType | null | undefined) => void
     hasDefault?: boolean
     // id of the currently active sort
     sortId?: string | null

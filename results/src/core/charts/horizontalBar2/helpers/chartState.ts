@@ -34,6 +34,7 @@ export const getDefaultState = ({
     const sort = block?.filtersState?.options?.sort || _metadata?.axis1Sort?.property
     if (sort) {
         defaultState.sort = sort
+        defaultState.defaultSort = sort
     }
     const order = block?.filtersState?.options?.order || _metadata?.axis1Sort?.order
     if (order) {
@@ -74,6 +75,7 @@ export const useChartState = (defaultState: {
     const viewDefinition = getViewDefinition(view)
 
     const chartState: HorizontalBarChartState = {
+        ...defaultState,
         facet: defaultState.facet,
         sort,
         setSort,

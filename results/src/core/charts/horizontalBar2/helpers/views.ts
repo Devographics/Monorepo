@@ -8,12 +8,13 @@ import {
 import { Bars, FacetBars, Boxplot as BoxplotIcon, FacetCountsBars } from '@devographics/icons'
 import {
     Average,
-    Boxplot,
+    BoxplotMedian,
     Count,
     PercentageBucket,
     PercentageQuestion,
     FacetCounts,
-    PercentageSurvey
+    PercentageSurvey,
+    BoxplotAverage
 } from '../views'
 import { QuestionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
@@ -27,39 +28,6 @@ const controlIcons = {
     [HorizontalBarViews.PERCENTAGE_QUESTION]: Bars
 }
 
-// TODO: put this together with view definition
-export const getControls = ({
-    chartState,
-    chartValues
-}: {
-    chartState: HorizontalBarChartState
-    chartValues: HorizontalBarChartValues
-}) => {
-    const { view, setView } = chartState
-    const { facetQuestion } = chartValues
-    const views = facetQuestion
-        ? facetQuestion.optionsAreSequential
-            ? [
-                  HorizontalBarViews.BOXPLOT,
-                  HorizontalBarViews.AVERAGE,
-                  HorizontalBarViews.PERCENTAGE_BUCKET,
-                  HorizontalBarViews.FACET_COUNTS
-              ]
-            : [HorizontalBarViews.PERCENTAGE_BUCKET, HorizontalBarViews.FACET_COUNTS]
-        : []
-    const controls: Control[] = views.map(id => ({
-        id,
-        labelId: `chart_units.${id}`,
-        isChecked: view === id,
-        icon: controlIcons[id],
-        onClick: e => {
-            e.preventDefault()
-            setView(id)
-        }
-    }))
-    return controls
-}
-
 export const viewDefinitions: { [key: string]: HorizontalBarViewDefinition } = {
     // regular views
     [HorizontalBarViews.PERCENTAGE_QUESTION]: PercentageQuestion,
@@ -67,8 +35,8 @@ export const viewDefinitions: { [key: string]: HorizontalBarViewDefinition } = {
     [HorizontalBarViews.COUNT]: Count,
     // faceted views
     // note: we use the boxplot component for the average view as well
-    [HorizontalBarViews.AVERAGE]: Boxplot,
-    [HorizontalBarViews.BOXPLOT]: Boxplot,
+    [HorizontalBarViews.AVERAGE]: BoxplotAverage,
+    [HorizontalBarViews.BOXPLOT]: BoxplotMedian,
     [HorizontalBarViews.FACET_COUNTS]: FacetCounts,
     [HorizontalBarViews.PERCENTAGE_BUCKET]: PercentageBucket
 }

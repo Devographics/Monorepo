@@ -6,7 +6,8 @@ import {
     ResponseEditionMetadata,
     YearCompletion,
     OrderOptions,
-    BucketUnits
+    BucketUnits,
+    sortProperties
 } from '@devographics/types'
 import { MultiItemsChartValues } from '../multiItemsExperience/types'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
@@ -46,8 +47,9 @@ export interface ChartStateWithView<ViewType> extends ChartStateWithHighlightedR
 }
 
 export interface ChartStateWithSort extends ChartStateWithHighlightedRow {
-    sort: BucketUnits | undefined
-    setSort: Dispatch<SetStateAction<string | undefined>>
+    sort: BucketUnits | undefined | null
+    defaultSort: sortProperties | undefined | null
+    setSort: Dispatch<SetStateAction<string | undefined | null>>
     order: OrderOptions
     setOrder: Dispatch<SetStateAction<OrderOptions>>
 }
@@ -84,6 +86,8 @@ export type GetTicksType = ({
 }) => Tick[]
 
 export type ViewDefinition<ChartStateType> = {
+    id: string
+    defaultUnits?: BucketUnits
     formatValue: FormatValueType<ChartStateType>
     getTicks?: GetTicksType
     showLegend?: boolean
