@@ -99,7 +99,8 @@ export enum EntityType {
     PEOPLE = 'people',
     FEATURE = 'feature',
     LIBRARY = 'library',
-    DEFAULT = 'default'
+    DEFAULT = 'default',
+    TOKEN = 'token'
 }
 
 export interface Avatar {

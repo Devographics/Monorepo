@@ -50,3 +50,12 @@ export const isAbsoluteUrl = (url?: string) => {
     if (!url) return false
     return url.indexOf('//') !== -1
 }
+
+export function removeNull(obj: any): any {
+    const clean = Object.fromEntries(
+        Object.entries(obj)
+            .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
+            .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
+    )
+    return Array.isArray(obj) ? Object.values(clean) : clean
+}
