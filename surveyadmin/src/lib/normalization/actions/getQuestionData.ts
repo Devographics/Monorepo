@@ -6,7 +6,7 @@ export interface GetQuestionDataArgs {
   editionId: string;
   sectionId: string;
   questionId: string;
-  shouldGetFromCache: boolean;
+  shouldGetFromCache?: boolean;
 }
 
 export const getQuestionData = async ({
@@ -23,7 +23,9 @@ export const getQuestionData = async ({
     questionId,
     subField: ResultsSubFieldEnum.FREEFORM,
   };
-  const queryArgs = { parameters: { enableCache: shouldGetFromCache } };
+  const queryArgs = {
+    parameters: { enableCache: shouldGetFromCache, enableBucketNesting: false },
+  };
   const data = await fetchQuestionData({
     shouldGetFromCache,
     getQuery: getQuestionDataQuery,

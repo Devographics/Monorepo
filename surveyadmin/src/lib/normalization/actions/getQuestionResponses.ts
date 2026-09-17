@@ -7,6 +7,7 @@ import { getAllResponses } from "../helpers/getAllResponses";
 import { ResultsSubFieldEnum } from "@devographics/types";
 import pick from "lodash/pick";
 import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
+import { getQuestionData } from "./getQuestionData";
 
 const foo = 123;
 
@@ -41,21 +42,16 @@ export const getQuestionResponses = async ({
 
   const responsesCount = allResponses?.length;
 
-  const queryOptions = {
-    surveyId,
-    editionId,
-    sectionId: question.section.id,
-    questionId,
-    subField: ResultsSubFieldEnum.FREEFORM,
-  };
-  const queryArgs = { parameters: { enableCache: shouldGetFromCache } };
-  const questionDataPayload = await fetchQuestionData({
-    shouldGetFromCache,
-    ...queryOptions,
-    queryArgs,
-  });
+  const sectionId = question.section.id;
 
-  const questionDataQuery = getQuestionDataQuery({ queryOptions, queryArgs });
+  const { data: questionDataPayload, query: questionDataQuery } =
+    await getQuestionData({
+      surveyId,
+      editionId,
+      sectionId,
+      questionId,
+      shouldGetFromCache,
+    });
 
   const fetchQuestionDataDuration = questionDataPayload.duration;
 
@@ -66,8 +62,8 @@ export const getQuestionResponses = async ({
   const entities = allEntities
     .filter((e) =>
       e.tags?.some((tag) =>
-        [question.id, ...(question?.matchTags || [])]?.includes(tag)
-      )
+        [question.id, ...(question?.matchTags || [])]?.includes(tag),
+      ),
     )
     .map((e) =>
       pick(e, [
@@ -77,7 +73,7 @@ export const getQuestionResponses = async ({
         "tags",
         "nameClean",
         "descriptionClean",
-      ])
+      ]),
     );
 
   const result = {

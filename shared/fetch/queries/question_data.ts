@@ -126,7 +126,7 @@ export const getQuestionDataQuery = ({
 
     const questionIdString = fieldId ? `${questionId}: ${fieldId}` : questionId
 
-    return `
+    const query = `
 query QuestionData {
     surveys {
     ${surveyId} {
@@ -191,4 +191,5 @@ query QuestionData {
     }
 }
 `
+    return query
 }
