@@ -94,6 +94,7 @@ const BoxplotToggle = ({
 }) => {
     const { getString } = useI18n()
     const { view, setView, order, setOrder, defaultSort, sort, setSort } = chartState
+
     const viewDefinitions = [BoxplotMedian, BoxplotAverage]
 
     const items = viewDefinitions.map(viewDefinition => {
@@ -101,9 +102,9 @@ const BoxplotToggle = ({
         const labelKey = `chart_units.${defaultUnits}`
         return {
             labelKey,
-            id: defaultUnits,
-            viewId,
-            isEnabled: sort === defaultUnits,
+            id: viewId,
+            sortId: defaultUnits,
+            isEnabled: sort === viewId,
             label: getString(labelKey)?.t
         }
     })
@@ -113,7 +114,7 @@ const BoxplotToggle = ({
         if (!selectedItem) {
             return
         }
-        const { id, viewId } = selectedItem
+        const { id: viewId, sortId } = selectedItem
 
         if (defaultSort === sortProperties.OPTIONS) {
             // scenario 1: question is sorted by options,
@@ -123,25 +124,28 @@ const BoxplotToggle = ({
             // scenario 2: change both view and sort, and optionally
             // sort order too
             setView(viewId as HorizontalBarViews)
-            setSort(id as string)
-            if (order === OrderOptions.ASC) {
-                setOrder(OrderOptions.DESC)
+            if (sort !== sortId) {
+                // if sort has changed, change it but don't change order
+                setSort(sortId as string)
             } else {
-                setOrder(OrderOptions.ASC)
+                // only change order if sort hasn't changed
+                if (order === OrderOptions.ASC) {
+                    setOrder(OrderOptions.DESC)
+                } else {
+                    setOrder(OrderOptions.ASC)
+                }
             }
         }
     }
 
     return (
-        <>
-            <Toggle
-                // labelId="charts.toggle_view"
-                handleSelect={handleSelect}
-                sortId={sort}
-                sortOrder={order}
-                items={items}
-            />
-        </>
+        <Toggle
+            // labelId="charts.toggle_view"
+            handleSelect={handleSelect}
+            sortId={view}
+            sortOrder={order}
+            items={items}
+        />
     )
 }
 

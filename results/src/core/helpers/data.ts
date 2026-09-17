@@ -151,6 +151,7 @@ export const getBlockData = ({
 }
 
 import { QueryData } from '@devographics/types'
+import { removeNull } from '@devographics/helpers'
 
 export const getAxisString = (section: string, field: string) => `${section}__${field}`
 
@@ -196,7 +197,7 @@ export const runQuery = async <T>(
             )}kb) | ${url}`
         )
         console.log(json)
-        return { result: json.data }
+        return { result: removeNull(json.data) }
     } catch (error) {
         return { error }
         // console.log(`// runQuery error (GATSBY_API_URL: ${url})`)

@@ -71,18 +71,6 @@ export const FacetTitle = ({
                 }
                 contents={facetQuestionLabel}
             />
-            {view === HorizontalBarViews.AVERAGE && (
-                <>
-                    {' '}
-                    <T k="charts.facet_average" />
-                </>
-            )}
-            {view === HorizontalBarViews.BOXPLOT && (
-                <>
-                    {' '}
-                    <T k="charts.facet_median" />
-                </>
-            )}
         </div>
     )
 }
