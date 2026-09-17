@@ -1,4 +1,5 @@
 import {
+    asWholeQuestionVariable,
     applyCorrelationRules,
     computePairStats,
     encodeCardinality,
@@ -197,6 +198,55 @@ describe('encodeQuestion', () => {
         })
         const docs = makeDocs(['band_0', 'band_1', 'band_2'])
         expect(encodeQuestion(question, docs, 3)).toBeNull()
+    })
+})
+
+describe('asWholeQuestionVariable', () => {
+    // salary-style scale with `na` declared last, as in yearly_salary_v2
+    const salary = makeQuestion({
+        options: [{ id: 'low' }, { id: 'mid' }, { id: 'high' }, { id: 'na' }],
+        optionsAreSequential: true
+    })
+
+    test('na is unanswered on the scale, but keeps its own answer variable', () => {
+        const docs = makeDocs(['low', 'mid', 'high', 'na', 'high'])
+        const encoded = encodeQuestion(salary, docs)!
+        const whole = asWholeQuestionVariable(encoded)!
+        expect(Array.from(whole.codes)).toEqual([0, 1, 2, -1, 2])
+        // the original encoding is untouched, so expansion still sees na
+        expect(Array.from(encoded.codes)).toEqual([0, 1, 2, 3, 2])
+        const na = expandOptions(encoded, 1).find(e => e.optionId === 'na')!
+        expect(Array.from(na.codes)).toEqual([0, 0, 0, 1, 0])
+    })
+
+    test('declining to answer no longer ranks above the top band', () => {
+        // a perfect trend among real answers, plus two people who declined to
+        // give their salary and sit at the bottom of the other scale
+        const docs = makeDocs(['low', 'low', 'mid', 'mid', 'high', 'high', 'na', 'na'])
+        const other = [0, 0, 1, 1, 2, 2, 0, 0]
+        const correlate = (e: ReturnType<typeof encodeQuestion>) => {
+            const table = new Int32Array(e!.cardinality * 3)
+            e!.codes.forEach((code, i) => code >= 0 && table[code * 3 + other[i]]++)
+            return computePairStats(table, e!.cardinality, 3).correlation
+        }
+        const encoded = encodeQuestion(salary, docs)!
+        expect(correlate(asWholeQuestionVariable(encoded))).toBeCloseTo(1)
+        // what the bug produced: na read as the highest band
+        expect(correlate(encoded)).toBeLessThan(0.5)
+    })
+
+    test('questions without na pass through unchanged', () => {
+        const scale = makeQuestion({
+            options: [{ id: 'low' }, { id: 'high' }],
+            optionsAreSequential: true
+        })
+        const encoded = encodeQuestion(scale, makeDocs(['low', 'high']))!
+        expect(asWholeQuestionVariable(encoded)).toBe(encoded)
+    })
+
+    test('dropped when na leaves fewer than two values on the scale', () => {
+        const encoded = encodeQuestion(salary, makeDocs(['low', 'na', 'na']))!
+        expect(asWholeQuestionVariable(encoded)).toBeNull()
     })
 })
 

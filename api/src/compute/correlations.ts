@@ -5,6 +5,7 @@ import { useCache, computeKey } from '../helpers/caching'
 import {
     CorrelationItem,
     ComputedCorrelations,
+    asWholeQuestionVariable,
     OptionCorrelations,
     EncodedQuestion,
     computePairStats,
@@ -91,7 +92,9 @@ export async function computeEditionCorrelations(
         .map(question => encodeQuestion(question, docs))
         .filter((e): e is EncodedQuestion => e !== null)
     const encodedQuestions = [
-        ...singleEncoded,
+        ...singleEncoded
+            .map(encoded => asWholeQuestionVariable(encoded))
+            .filter((e): e is EncodedQuestion => e !== null),
         // one-vs-rest binary variable for each option of every single-answer
         // question, ordinal ones included (they also stay whole, above)
         ...singleEncoded.flatMap(encoded => expandOptions(encoded)),

@@ -490,6 +490,38 @@ involving them get a signed Spearman coefficient indicating direction.
 */
 /*
 
+The question as a whole, as a variable to pair. For an ordinal question that
+means a scale, and a declared `na` ("prefer not to say", "not applicable") is an
+answer but not a point on that scale. Because rank order comes from the declared
+option list, and `na` is usually declared last, it would otherwise rank above
+every real band: `yearly_salary` counted everyone who declined to say as earning
+more than $200k, which pulled every salary trend correlation down.
+
+So `na` is treated as unanswered here, and only here: `expandOptions` works from
+the full encoding, so "picked na or not" still takes part as its own variable,
+which is what surfaces findings like who declines to give their salary.
+
+Codes are cleared rather than the values renumbered: ranks come from cumulative
+counts per category, so an empty category has no effect on them.
+
+*/
+export const asWholeQuestionVariable = (encoded: EncodedQuestion): EncodedQuestion | null => {
+    const naIndex = encoded.values.indexOf(OPTION_NA)
+    if (naIndex === -1) {
+        return encoded
+    }
+    const codes = encoded.codes.map(code => (code === naIndex ? -1 : code))
+    // what is left must still have two distinct values to correlate
+    const seen = new Set(codes)
+    seen.delete(-1)
+    if (seen.size < 2) {
+        return null
+    }
+    return { ...encoded, codes }
+}
+
+/*
+
 Read each respondent's answers to a multi-value question, across every
 normalized path the question uses. Shared by the two encoders that read
 multi-value data, so they cannot drift on what counts as an answer.
