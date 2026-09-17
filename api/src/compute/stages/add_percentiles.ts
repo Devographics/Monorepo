@@ -138,7 +138,7 @@ function calculatePercentile(datapoints: number[], percentile: number): number {
 }
 
 // v2: expanding buckets into individual datapoints
-function calculatePercentiles2({
+export function calculatePercentiles2({
     buckets,
     axis
 }: {

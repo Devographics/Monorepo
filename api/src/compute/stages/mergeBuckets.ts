@@ -7,8 +7,8 @@ import { NO_ANSWER } from '@devographics/constants'
 import uniq from 'lodash/uniq.js'
 import compact from 'lodash/compact.js'
 import { sortBuckets } from './sort_data'
-import { PercentileData, Percentiles } from '@devographics/types'
-import isNil from 'lodash/isNil.js'
+import { calculatePercentiles2, zeroPercentiles } from './add_percentiles'
+import { calculateAverage } from './add_averages'
 
 export function mergeBuckets<T extends Bucket | FacetBucket>({
     buckets,
@@ -40,21 +40,15 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
         ...mergedProps
     } as T
 
-    const mergedAverage = mergeAverages(buckets)
-    if (mergedAverage) {
-        mergedBucket[BucketUnits.AVERAGE] = mergedAverage
+    if (buckets.every(b => !!b.hasInsufficientData)) {
+        // if every bucket we merge has insufficient data, consider
+        // then the merged bucket also has insufficient data
+        mergedBucket.hasInsufficientData = true
     }
 
-    const mergedPercentiles = mergePercentiles(buckets)
-    if (mergedPercentiles) {
-        // make sure merged buckets actually have percentiles
-        mergedBucket[BucketUnits.PERCENTILES] = mergedPercentiles
-        mergedBucket[BucketUnits.MEDIAN] = mergedPercentiles.p50
-    }
-
-    // if these are top-level buckets we also combine all *their* facet buckets
-    // with one another to generate a new merged facetBuckets array
     if (secondaryAxis && !isFacetBuckets) {
+        // if these are top-level buckets we also combine all *their* facet buckets
+        // with one another to generate a new merged facetBuckets array
         const mergedBucket_ = mergedBucket as Bucket
         mergedBucket_.facetBuckets =
             combineFacetBuckets({
@@ -62,12 +56,49 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
                 axis: secondaryAxis,
                 mergedBucket: mergedBucket_
             }) ?? []
-    }
 
-    if (buckets.every(b => !!b.hasInsufficientData)) {
-        // if every bucket we merge has insufficient data, consider
-        // then the merged bucket also has insufficient data
-        mergedBucket.hasInsufficientData = true
+        /*
+
+        Average and percentiles are recomputed from the combined facet buckets
+        rather than derived from the sub-buckets' own values. A percentile of a
+        union is not a function of the percentiles of its parts (no weighting
+        fixes that), and the sub-bucket averages left out `na`/`no_answer`
+        respondents while their counts did not, so weighting them by count
+        skewed the result.
+
+        Only done when the sub-buckets carried these values, i.e. when the facet
+        axis is a range or numeric question (see addAverages/addPercentiles).
+
+        */
+        const hasFacetStats = buckets.some(
+            b => b[BucketUnits.AVERAGE] !== undefined || b[BucketUnits.PERCENTILES] !== undefined
+        )
+        if (hasFacetStats && mergedBucket_.facetBuckets.length > 0) {
+            if (mergedBucket.hasInsufficientData) {
+                mergedBucket[BucketUnits.AVERAGE] = 0
+                mergedBucket[BucketUnits.PERCENTILES] = zeroPercentiles
+                mergedBucket[BucketUnits.MEDIAN] = 0
+            } else {
+                mergedBucket[BucketUnits.AVERAGE] = calculateAverage({
+                    buckets: mergedBucket_.facetBuckets,
+                    axis: secondaryAxis
+                })
+                const percentiles = calculatePercentiles2({
+                    buckets: mergedBucket_.facetBuckets,
+                    axis: secondaryAxis
+                })
+                mergedBucket[BucketUnits.PERCENTILES] = percentiles
+                mergedBucket[BucketUnits.MEDIAN] = percentiles.p50
+            }
+        }
+    } else {
+        // no facet buckets to recompute from: buckets with a hardcoded option
+        // average (a range question queried without a facet) can still be
+        // combined, weighted by count
+        const mergedAverage = mergeAverages(buckets)
+        if (mergedAverage) {
+            mergedBucket[BucketUnits.AVERAGE] = mergedAverage
+        }
     }
 
     return mergedBucket
@@ -84,20 +115,6 @@ function mergeAverages(buckets: Bucket[] | FacetBucket[]) {
             2
         )
     }
-}
-
-function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
-    const percentileKeys = ['p0', 'p10', 'p25', 'p50', 'p75', 'p90', 'p100'] as Percentiles[]
-    const percentiles = {} as PercentileData
-    for (const key of percentileKeys) {
-        const values = buckets.map(b => b?.[BucketUnits.PERCENTILES]?.[key]).filter(v => !isNil(v))
-        if (values.length === 0) {
-            // if one or more percentile doesn't exist in any of the buckets, abort
-            return null
-        }
-        percentiles[key] = round(sum(values) / buckets.length, 2)
-    }
-    return percentiles
 }
 
 /*
