@@ -129,13 +129,19 @@ const getQuestionSort = ({
         defaultOrder: SortOrder = 'desc'
     if (enableBucketGroups && question.groups) {
         // if we're grouping, use group order
+        // assume options are organized in ascending order,
+        // i.e. from low to high age, salary, etc.
         defaultSort = 'options'
+        defaultOrder = 'asc'
     } else if (question.defaultSort) {
         // if question has a default sort, use it
         defaultSort = question.defaultSort
     } else if (question.optionsAreSequential) {
         if (question.options) {
+            // assume options are organized in ascending order,
+            // i.e. from low to high age, salary, etc.
             defaultSort = 'options'
+            defaultOrder = 'asc'
         } else {
             // values are numeric but no options are specified, in this case
             // sort by id to get a nice curve of successive number
