@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { mergeBuckets } from './mergeBuckets'
 import { zeroPercentiles } from './add_percentiles'
 import { BucketUnits } from '@devographics/types'
@@ -18,11 +19,7 @@ const salaryAxis = {
     order: 1,
     cutoff: 0,
     limit: 100,
-    options: [
-        { id: 'low', average: 10000 },
-        { id: 'high', average: 200000 },
-        { id: 'na' }
-    ]
+    options: [{ id: 'low', average: 10000 }, { id: 'high', average: 200000 }, { id: 'na' }]
 } as unknown as ComputeAxisParameters
 
 // raw hour values, as the main axis
@@ -142,6 +139,58 @@ describe('mergeBuckets', () => {
         })
         expect(zeroCount[BucketUnits.AVERAGE]).toBe(0)
         expect(zeroCount.facetBuckets[0][BucketUnits.PERCENTAGE_BUCKET]).toBe(0)
+    })
+
+    /*
+
+    Slider questions store integers (0 to 8) but each one stands in for a `value`
+    (0 to 100) defined in options.yml. Option ids are numbers there, while
+    combineFacetBuckets turns merged facet bucket ids into strings; percentiles
+    must still use `value`, not the raw id.
+
+    */
+    test('merged percentiles use option values when option ids are numbers and facet ids strings', () => {
+        const sliderAxis = {
+            question: { id: 'ai_sentiment', optionsAreNumeric: true },
+            sort: 'options',
+            order: 1,
+            cutoff: 0,
+            limit: 100,
+            options: [0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100].map((value, id) => ({
+                id,
+                value
+            }))
+        } as unknown as ComputeAxisParameters
+        const slider = (id: string) => {
+            const counts = [1, 1, 1, 1, 1, 1, 1, 1, 1]
+            return {
+                id,
+                count: counts.length,
+                // facet bucket ids as returned by Mongo, i.e. numbers
+                facetBuckets: counts.map((count, i) => ({ id: i, count, index: 0 })),
+                [BucketUnits.AVERAGE]: 50,
+                [BucketUnits.PERCENTILES]: zeroPercentiles
+            } as unknown as Bucket
+        }
+        const merged = mergeBuckets<Bucket>({
+            buckets: [slider('a'), slider('b')],
+            mergedProps: { id: 'group' },
+            primaryAxis: hoursAxis,
+            secondaryAxis: sliderAxis
+        })
+        expect(merged.facetBuckets.map(f => f.id)).toEqual([
+            '0',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8'
+        ])
+        expect(merged[BucketUnits.AVERAGE]).toBe(50)
+        expect(merged[BucketUnits.PERCENTILES]).toMatchObject({ p0: 0, p50: 50, p100: 100 })
     })
 
     test('buckets without facet stats get none', () => {

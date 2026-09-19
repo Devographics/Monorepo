@@ -1,3 +1,4 @@
+import { test } from 'vitest'
 import supertest from "supertest"
 
 test("server is running", async () => {

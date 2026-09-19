@@ -1,4 +1,9 @@
+import { describe, expect, test, vi } from 'vitest'
 import { buildCardinalities } from './question_cardinalities'
+
+// generate/helpers.ts imports `missingTemplates` from server.ts, which starts the
+// server (and requires env variables) as soon as it's imported
+vi.mock('../server', () => ({ missingTemplates: [] }))
 
 describe('buildCardinalities', () => {
     test('empty input yields an empty distribution', () => {
