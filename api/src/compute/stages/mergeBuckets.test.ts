@@ -117,6 +117,33 @@ describe('mergeBuckets', () => {
         expect(merged[BucketUnits.AVERAGE]).toBe(0)
     })
 
+    test('nothing to average (facets all na/no_answer or zero-count) gives 0, not NaN', () => {
+        const withStats = { [BucketUnits.AVERAGE]: 0, [BucketUnits.PERCENTILES]: zeroPercentiles }
+        const merged = mergeBuckets<Bucket>({
+            buckets: [
+                bucket('overlimit_answers', [['na', 2]], withStats),
+                bucket('cutoff_answers', [['na', 1]], withStats)
+            ],
+            mergedProps: { id: 'other_answers' },
+            primaryAxis: hoursAxis,
+            secondaryAxis: salaryAxis
+        })
+        expect(merged[BucketUnits.AVERAGE]).toBe(0)
+        expect(merged[BucketUnits.MEDIAN]).toBe(0)
+
+        const zeroCount = mergeBuckets<Bucket>({
+            buckets: [
+                bucket('overlimit_answers', [['low', 0]], withStats),
+                bucket('cutoff_answers', [['low', 0]], withStats)
+            ],
+            mergedProps: { id: 'other_answers' },
+            primaryAxis: hoursAxis,
+            secondaryAxis: salaryAxis
+        })
+        expect(zeroCount[BucketUnits.AVERAGE]).toBe(0)
+        expect(zeroCount.facetBuckets[0][BucketUnits.PERCENTAGE_BUCKET]).toBe(0)
+    })
+
     test('buckets without facet stats get none', () => {
         const merged = mergeBuckets<Bucket>({
             buckets: [bucket('60', [['high', 3]]), bucket('168', [['low', 1]])],

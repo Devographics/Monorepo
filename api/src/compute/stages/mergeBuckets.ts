@@ -79,10 +79,13 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
                 mergedBucket[BucketUnits.PERCENTILES] = zeroPercentiles
                 mergedBucket[BucketUnits.MEDIAN] = 0
             } else {
-                mergedBucket[BucketUnits.AVERAGE] = calculateAverage({
+                const average = calculateAverage({
                     buckets: mergedBucket_.facetBuckets,
                     axis: secondaryAxis
                 })
+                // average is NaN when there's nothing to average (e.g. the facet
+                // buckets are all `no_answer`/`na`), same as for percentiles use 0
+                mergedBucket[BucketUnits.AVERAGE] = Number.isNaN(average) ? 0 : average
                 const percentiles = calculatePercentiles2({
                     buckets: mergedBucket_.facetBuckets,
                     axis: secondaryAxis
@@ -160,10 +163,9 @@ export const combineFacetBuckets = ({
                 id: String(id),
                 label,
                 [BucketUnits.COUNT]: countSum,
-                [BucketUnits.PERCENTAGE_BUCKET]: round(
-                    (countSum * 100) / mergedBucket[BucketUnits.COUNT]!,
-                    2
-                )
+                [BucketUnits.PERCENTAGE_BUCKET]: mergedBucket[BucketUnits.COUNT]
+                    ? round((countSum * 100) / mergedBucket[BucketUnits.COUNT]!, 2)
+                    : 0
             }
             // let combinedFacetBucket = mergeBuckets(sameFacetBuckets, { id, label }, true)
             // if the facets we're grouping all have groups, also combine the groups
