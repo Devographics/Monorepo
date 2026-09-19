@@ -1,8 +1,9 @@
 import { Filter, Filters, FiltersQuery, QuestionApiObject } from './types'
-import { MongoCondition, OptionGroup } from '@devographics/types'
+import { MongoCondition, OptionGroup, QuestionMetadata } from '@devographics/types'
 import range from 'lodash/range.js'
 import { getMainSubfieldPath } from './helpers/surveys'
 import clone from 'lodash/clone.js'
+import { convertNumericOption } from './generate/helpers'
 
 /**
  * Map natural operators (exposed by the API), to MongoDB operators.
@@ -24,17 +25,26 @@ import clone from 'lodash/clone.js'
 
 type FilterValue<T> = T | null | '' | [] | {}
 
-const mapFilter = <T>(filter: Filter<T>) => {
+// convert `value_3` to `3` if needed
+const processFilterValue = <T>(value: T, filterField: QuestionApiObject) => {
+    if (filterField.optionsAreNumeric) {
+        return convertNumericOption(value as string)
+    } else {
+        return value
+    }
+}
+
+const mapFilter = <T>(filter: Filter<T>, filterField: QuestionApiObject) => {
     const { eq, /* in, */ nin, lt, gt } = filter
     const conditions: Array<MongoCondition<FilterValue<T>>> = []
     if (eq !== undefined) {
-        conditions.push({ $eq: eq })
+        conditions.push({ $eq: processFilterValue(eq, filterField) })
     }
     if (filter.in !== undefined) {
         if (!Array.isArray(filter.in)) {
             throw new Error(`'in' operator only supports arrays`)
         }
-        conditions.push({ $in: filter.in })
+        conditions.push({ $in: filter.in.map(v => processFilterValue(v, filterField)) })
     }
     if (nin !== undefined) {
         if (!Array.isArray(nin)) {
@@ -48,13 +58,15 @@ const mapFilter = <T>(filter: Filter<T>) => {
         which is probably not what we want. 
 
         */
-        conditions.push({ $nin: [...nin, null, '', [], {}] })
+        conditions.push({
+            $nin: [...nin.map(v => processFilterValue(v, filterField)), null, '', [], {}]
+        })
     }
     if (lt !== undefined) {
-        conditions.push({ $lt: lt })
+        conditions.push({ $lt: processFilterValue(lt, filterField) })
     }
     if (gt !== undefined) {
-        conditions.push({ $gt: gt })
+        conditions.push({ $gt: processFilterValue(gt, filterField) })
     }
     return conditions
 }
@@ -242,7 +254,7 @@ export const generateFiltersQuery = ({
             const subFieldPath = getMainSubfieldPath(filterField)
             if (subFieldPath) {
                 const expandedFilters = expandFilter(filter, filterField.groups)
-                const conditions = mapFilter<string | number>(expandedFilters)
+                const conditions = mapFilter<string | number>(expandedFilters, filterField)
                 match.$and.push({ $or: conditions.map(c => ({ [subFieldPath]: c })) })
             }
         }
