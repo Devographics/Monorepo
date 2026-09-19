@@ -306,6 +306,10 @@ type OptionMetadata {
     average: Float
     entity: Entity
     group: String
+    """
+    Arbitrary tags used to categorize options (e.g. "negative", "positive")
+    """
+    tags: [String]
 }
 
 type GroupsMetadata {
@@ -668,6 +672,10 @@ type FacetBucket {
     """
     count: Int
     """
+    Numerical value associated with this bucket
+    """
+    value: Float
+    """
     Percentage relative to question respondents
     """
     percentageQuestion: Float
@@ -709,6 +717,10 @@ type GroupedFacetBucket {
     Respondent count
     """
     count: Int
+    """
+    Numerical value associated with this bucket
+    """
+    value: Float
     """
     Percentage relative to question respondents
     """
