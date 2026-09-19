@@ -8,6 +8,24 @@ import round from 'lodash/round.js'
 
 /*
 
+Find the option corresponding to a bucket.
+
+Compare ids as strings: option ids and bucket ids don't always have the same type.
+For numeric questions (e.g. `slider`), option ids come from YAML as numbers (`id: 0`)
+and raw buckets from Mongo also have number ids, but `combineFacetBuckets` (used by
+`mergeBuckets`) rebuilds facet buckets with `String(id)`. A strict `===` would then
+fail on merged buckets (`0 !== "0"`), and callers would silently lose the option's
+`value`/`average` and fall back to using the bucket id itself as its value
+(i.e. slider percentiles going from 0 to 8 instead of 0 to 100).
+
+*/
+export const findBucketOption = <T extends { id: string | number }>(
+    options: T[] | undefined,
+    bucket: { id: string | number }
+) => options?.find(o => String(o.id) === String(bucket.id))
+
+/*
+
 Note: we shouldn't have to use this, instead we drill down and get the average
 of the items *within* the group
 
@@ -44,7 +62,7 @@ export const getBucketAverage = (
                   groupedBuckets.length
         return average
     } else {
-        const bucketOption = axis?.options?.find(o => o.id === bucket.id)
+        const bucketOption = findBucketOption(axis?.options, bucket)
         let average
         if (bucketOption?.average !== undefined) {
             // bucket is a range, use its specified average value
@@ -54,6 +72,9 @@ export const getBucketAverage = (
             return bucketOption?.value
         } else if (axis?.question?.optionsAreNumeric) {
             // bucket has numeric options; use number version of id
+            // note: this is only a fallback for options *without* a value; if a question's
+            // options do define `value` (e.g. slider) and we end up here, the option lookup
+            // above failed (see findBucketOption) and the result will be on the wrong scale
             return Number(bucket.id)
         }
         if (typeof average === 'undefined') {
@@ -120,7 +141,7 @@ export async function addAverages(
                 if (bucket.hasInsufficientData) {
                     bucket[BucketUnits.AVERAGE] = 0
                 } else {
-                    const option = axis1?.options?.find(o => o.id === bucket.id)
+                    const option = findBucketOption(axis1?.options, bucket)
                     if (bucket.facetBuckets && calculateAxis2Average) {
                         const average = calculateAverage({
                             buckets: bucket.facetBuckets,
