@@ -35,6 +35,7 @@ import { generateTypeObjects, getQuestionObjects } from './generate/generate'
 import { generateResolvers } from './generate/resolvers'
 
 import { watchFiles } from './helpers/watch'
+import { errorQueriesPlugin } from './helpers/error_queries'
 
 import { initRedis } from '@devographics/redis'
 import { getPublicDb } from '@devographics/mongo'
@@ -203,24 +204,7 @@ const start = async () => {
         // playground: false,
         plugins: [
             responseCachePlugin(),
-            {
-                // TODO: update to Apollo 4 to make this work
-                async willSendResponse(requestContext) {
-                    console.log('requestDidStart')
-                    const query = requestContext?.request?.query
-                    const errors = requestContext?.errors
-                    if (query) {
-                        const match = query.match(/query (\w+)/)
-                        const queryName = match ? match[1] : `query`
-                        const fileName = `${new Date().getTime()}__${queryName}`
-                        const dirName = errors ? 'errorQueries' : 'queries'
-                        await logToFile(`${dirName}/${fileName}.graphql`, query)
-                        if (errors) {
-                            await logToFile(`errors/${fileName}`, JSON.stringify(errors, null, 2))
-                        }
-                    }
-                }
-            }
+            errorQueriesPlugin
         ],
         // engine: {
         //     debugPrintReports: true
