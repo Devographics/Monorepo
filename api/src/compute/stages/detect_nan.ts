@@ -46,14 +46,11 @@ export async function detectNaN(
     isDebug: boolean = false,
     logPath: string
 ) {
-    traverse(resultsByEdition, async ({ value, path }) => {
+    await traverse(resultsByEdition, async ({ value, path }) => {
         if (Number.isNaN(value)) {
-            console.log({ path, value })
-            if (isDebug) {
-                // console.log('// results final')
-                // console.log(JSON.stringify(results, undefined, 2))
-                await logToFile(`${logPath}/results_error.yml`, resultsByEdition)
-            }
+            // console.log('// results final')
+            // console.log(JSON.stringify(results, undefined, 2))
+            await logToFile(`${logPath}/results_error.yml`, resultsByEdition)
 
             throw new Error(
                 `detectNaN: Detected NaN value in path ${path} of object: ${JSON.stringify(
