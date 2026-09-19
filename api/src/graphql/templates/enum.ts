@@ -45,14 +45,16 @@ export const generateEnumType = ({
     })
     /*
 
-    We artificially always add limitations/interop_issues/etc. as enum values so that queries that try to filter by them don't trigger errors, even if the item wouldn't otherwise be part of the dynamic enum.
+    We artificially always add limitations/interop_issues/etc. as enum values for pain points so that queries that try to filter by them don't trigger errors, even if the item wouldn't otherwise be part of the dynamic enum.
 
     */
     const formattedOptionsIds = formattedOptions.map(o => o.id)
     const alwayAdd = ['limitations', 'interop_issues']
-    for (const tokenId of alwayAdd) {
-        if (!formattedOptionsIds.includes(tokenId)) {
-            formattedOptionsIds.push(tokenId)
+    if (question.id.includes('pain_points')) {
+        for (const tokenId of alwayAdd) {
+            if (!formattedOptionsIds.includes(tokenId)) {
+                formattedOptionsIds.push(tokenId)
+            }
         }
     }
 
