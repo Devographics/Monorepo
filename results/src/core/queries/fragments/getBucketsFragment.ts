@@ -24,8 +24,8 @@ export const getBucketsFragment = (options: {
     } = options
     const { facet } = queryArgs
     return `${fieldName} {
-                    count
                     id
+                    count
                     value
                     index
                     percentageQuestion

@@ -106,6 +106,7 @@ query {
                                     ${getEntityFragment()}
                                     group
                                     id
+                                    value
                                     average
                                     lowerBound
                                     upperBound
