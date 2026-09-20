@@ -67,9 +67,11 @@ export const ChartItem = ({
         values: serieMetadata
     })
 
+    const className = getItemClassName({ entity })
+
     if (!entity) {
         return (
-            <Wrapper type="noEntity">
+            <Wrapper type="noEntity" className={className}>
                 <Label label={labelObject} id={id} />
             </Wrapper>
         )
@@ -81,13 +83,13 @@ export const ChartItem = ({
         const linkUrl = entity?.homepage?.url
         if (linkUrl) {
             return (
-                <Wrapper type="default">
+                <Wrapper type="default" className={className}>
                     <Label label={labelObject} href={linkUrl} id={id} />
                 </Wrapper>
             )
         } else {
             return (
-                <Wrapper type="default">
+                <Wrapper type="default" className={className}>
                     <Label label={labelObject} id={id} />
                 </Wrapper>
             )
@@ -117,9 +119,23 @@ export const ChartItem = ({
     }
 }
 
-const Wrapper = ({ children, type }: { children: ReactNode; type: string }) => (
-    <span className={`chart-item chart-item-${type}`}>{children}</span>
-)
+const getItemClassName = ({ entity }: { entity?: Entity }) => {
+    let items: string[] = []
+    if (entity?.tags) {
+        items = [...items, ...entity.tags]
+    }
+    return items.map(item => `chart-item-${item}`).join(' ')
+}
+
+const Wrapper = ({
+    children,
+    type,
+    className
+}: {
+    children: ReactNode
+    type: string
+    className?: string
+}) => <span className={`chart-item chart-item-${type} ${className}`}>{children}</span>
 
 const Label = ({ label: label_, href, id }: { label: LabelObject; href?: string; id: string }) => {
     const { label, description, shortLabel, key } = label_
