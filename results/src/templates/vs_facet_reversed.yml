@@ -1,0 +1,18 @@
+fieldId: ${mainBlockId}
+blockType: HorizontalBarBlock2
+hasData: true
+queryOptions:
+    editionsCount: 1
+    addCorrelations: false
+parameters:
+    showNoAnswer: true
+    cutoff: 20
+    # sort: { property: medianByFacet }
+filtersState:
+    options:
+        mode: facet
+        sort: female
+        order: desc
+    facet:
+        sectionId: ${sectionId}
+        id: ${mainBlockId}
