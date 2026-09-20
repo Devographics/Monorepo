@@ -10,6 +10,7 @@ export const getEntityFragment = () => `entity {
     id
     parentId
     entityType
+    tags
     example {
       label
       language
