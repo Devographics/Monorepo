@@ -198,10 +198,8 @@
 .correlation-item-subheading {
     display: flex;
     font-weight: normal;
-    text-transform: uppercase;
     font-size: var(--fontSizeSmall);
-    color: var(--textAltColor);
-    margin-bottom: var(--quarterSpacing);
+    margin-bottom: 0;
     @include breakpoints.small {
         flex-direction: column;
         gap: var(--halfSpacing);
@@ -210,12 +208,15 @@
         align-items: center;
         justify-content: space-between;
     }
-    .correlation-item-breadcrumbs {
-        font-weight: var(--fontLight);
-    }
 }
 .correlation-item-breadcrumbs {
     margin: 0;
+    font-weight: var(--fontLight);
+    font-size: var(--fontSizeLarge);
+    // text-transform: uppercase;
+}
+.correlation-item-n {
+    color: var(--textAltColor);
 }
 .correlation-item-n {
     display: flex;
@@ -225,6 +226,18 @@
 
 .correlations-note {
     font-size: var(--fontSizeSmallish);
+}
+.correlation-item-contents {
+    font-size: var(--fontSizeSmallish);
+    // color: var(--textColor);
+    // color: hsl(from var(--textColor) h s calc(l * 1.2));
+    strong {
+        // background: rgba(255, 255, 255, 0.1);
+        // padding: 3px;
+        // font-weight: var(--fontLight);
+
+        // color: var(--textColor);
+    }
 }
 
 .correlations-exclusions {

@@ -381,6 +381,7 @@ const CorrelationItemComponent = ({
                     index={index}
                 />
                 <div
+                    className="correlation-item-contents"
                     data-questionKey={questionLabelObject?.key}
                     data-questionName={questionName}
                     data-questionLabel={questionLabel}
