@@ -65,16 +65,26 @@ export const GridItemHeading = <SerieType extends DataSeries<any>>({
         )
     } else {
         const labelSegments = useFiltersLabel(filters)
-        const headingContents = labelSegments.map((segment, i) => (
-            <Fragment key={i}>
-                <span>
-                    <strong>{segment.questionLabel}</strong>{' '}
-                    <span className="operator">{segment.operatorLabel}</span>{' '}
-                    <strong>{segment.valueLabel}</strong>
-                </span>
-                {i + 1 < labelSegments.length && <span>, </span>}
-            </Fragment>
-        ))
+        const headingContents = labelSegments.map((segment, i) => {
+            const { questionKey, questionLabel, operatorKey, operatorLabel, valueLabels } = segment
+            return (
+                <Fragment key={i}>
+                    <span>
+                        <strong data-key={questionKey}>{questionLabel}</strong>{' '}
+                        <span data-key={operatorKey} className="operator">
+                            {operatorLabel}
+                        </span>{' '}
+                        {valueLabels.map(({ valueKey, valueLabel }, index) => (
+                            <span key={valueKey}>
+                                {index > 0 && ', '}
+                                <strong data-key={valueKey}>{valueLabel}</strong>
+                            </span>
+                        ))}
+                    </span>
+                    {i + 1 < labelSegments.length && <span>, </span>}
+                </Fragment>
+            )
+        })
 
         return (
             <Tooltip

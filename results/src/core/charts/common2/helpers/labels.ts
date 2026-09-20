@@ -66,8 +66,14 @@ export const useFiltersLabel = (filters: CustomizationFiltersSeries) => {
 }
 
 type FilterLabelObject = {
+    questionKey: string
     questionLabel: string
+    operatorKey: string
     operatorLabel: string
+    valueLabels: FilterValueLabelObject[]
+}
+type FilterValueLabelObject = {
+    valueKey: string
     valueLabel: string
 }
 
@@ -84,6 +90,7 @@ export const getFiltersLabel = ({
     entities: Entity[]
     allQuestions: QuestionMetadata[]
 }) => {
+    const valueLabels: FilterValueLabelObject[] = []
     const labelSegments = filters.conditions.map(({ fieldId, operator, value }) => {
         const question = allQuestions.find(q => q.id === fieldId) as FilterItem
         // todo: find a way to get i18nNamespace that does not require hardcoding a
@@ -94,26 +101,31 @@ export const getFiltersLabel = ({
             (['toolv3', 'featurev3'].includes(question.template) && 'experience') ||
             question.id
 
-        const { key, label: questionLabel } = getQuestionLabel({
+        const { key: questionKey, label: questionLabel } = getQuestionLabel({
             getString,
             question,
             i18nNamespace: question.i18nNamespace || question.sectionId
         })
-        const operatorLabel = getString(`filters.operators.${operator}`, {}, operator)?.t
+        const operatorKey = `filters.operators.${operator}`
+        const operatorLabel = getString(operatorKey, {}, operator)?.t
         const valueArray = Array.isArray(value) ? value : [value]
-        const valueLabel = valueArray
-            .map(valueString => {
-                const labelObject = getItemLabel({
-                    id: valueString,
-                    getString,
-                    entity: entities.find(e => e.id === valueString),
-                    i18nNamespace: optionI18nNamespace
-                })
-                const { key, label, shortLabel } = labelObject
-                return shortLabel
+        const valueLabels = valueArray.map(valueString => {
+            const labelObject = getItemLabel({
+                id: valueString.replace('value_', ''),
+                getString,
+                entity: entities.find(e => e.id === valueString),
+                i18nNamespace: optionI18nNamespace
             })
-            .join(', ')
-        return { questionLabel, operatorLabel, valueLabel } as FilterLabelObject
+            const { key: valueKey, shortLabel: valueLabel } = labelObject
+            return { valueKey, valueLabel }
+        })
+        return {
+            questionKey,
+            operatorKey,
+            questionLabel,
+            operatorLabel,
+            valueLabels
+        } as FilterLabelObject
     })
     return labelSegments
 }
