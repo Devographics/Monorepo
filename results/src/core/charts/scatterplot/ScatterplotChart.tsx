@@ -27,6 +27,8 @@ export type GetNodeProps = {
 type ScatterplotChartProps = {
     block: BlockVariantDefinition
     question: QuestionMetadata
+    axis1: QuestionMetadata
+    axis2: QuestionMetadata
     items: LegendItemType[]
     chartState: ScatterplotChartState
     data: StandardQuestionData[]
@@ -40,6 +42,8 @@ type ScatterplotChartProps = {
 export const ScatterplotChart = ({
     block,
     question,
+    axis1,
+    axis2,
     items,
     chartState,
     data,
@@ -68,7 +72,15 @@ export const ScatterplotChart = ({
         axis2Formatter
     })
 
-    const chartValues = useChartValues({ chartState, nodes, contentWidth, contentHeight })
+    const chartValues = useChartValues({
+        question,
+        axis1,
+        axis2,
+        chartState,
+        nodes,
+        contentWidth,
+        contentHeight
+    })
 
     const { xTicks, yTicks, xScale, yScale } = chartValues
 

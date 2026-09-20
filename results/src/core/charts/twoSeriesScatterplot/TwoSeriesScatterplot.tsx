@@ -37,7 +37,6 @@ const useNodes = ({
 
     const groups = uniq(items.map(item => item.group))
 
-    console.log(groups)
     const nodes: NodeData[] = items.map((item, index) => {
         const { id, group, color } = item
         const isCurrentItem = currentItem === id
@@ -160,6 +159,8 @@ export const TwoSeriesScatterplot = (
                 <ScatterplotChart
                     block={block}
                     question={question}
+                    axis1={question1}
+                    axis2={question2}
                     items={items}
                     chartState={chartState}
                     data={data}
