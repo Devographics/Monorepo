@@ -2,7 +2,12 @@ import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import styled from 'styled-components'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { getFieldLabel, getOrderedSections, getSectionLabel } from '../helpers'
+import {
+    getFieldLabel,
+    getFormattedOptionValue,
+    getOrderedSections,
+    getSectionLabel
+} from '../helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useEntities } from 'core/helpers/entities'
 import { PanelState, FilterItem, CustomizationDefinition } from '../types'
@@ -42,8 +47,11 @@ export const FieldSegment = ({
                         condition.sectionId = sectionId
                         // if we're changing the field, also change the value
                         const field = allFilters.find(f => f.id === fieldId)
+                        if (!field) {
+                            throw new Error(`Could not find field "fieldId"`)
+                        }
                         const optionsOrGroups = field?.groups || field?.options || []
-                        const newValue = optionsOrGroups[0]?.id
+                        const newValue = getFormattedOptionValue(optionsOrGroups[0]?.id, field)
                         if (newValue) {
                             // if current value is an array, make sure new value is an array too
                             condition.value = Array.isArray(condition.value) ? [newValue] : newValue

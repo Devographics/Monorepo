@@ -45,7 +45,8 @@ import {
     Bucket,
     OptionMetadata,
     CombinedBucketData,
-    FacetBucket
+    FacetBucket,
+    QuestionMetadata
 } from '@devographics/types'
 import { runQuery } from 'core/helpers/data'
 // import { spacing, mq, fontSize } from 'core/theme'
@@ -58,6 +59,16 @@ import { getItemLabel } from 'core/helpers/labels'
 import merge from 'lodash/merge'
 import { isFeatureTemplate, isToolTemplate } from '@devographics/helpers'
 import { disallowedQuestions } from './condition/FieldSegment'
+
+/*
+
+Convert id: 2 in id: value_2 to make the GraphQL queries work
+properly
+
+*/
+export const getFormattedOptionValue = (id: string | number, question: QuestionMetadata) => {
+    return question.optionsAreNumeric ? `value_${id}` : id
+}
 
 export const getNewCondition = ({
     filter,
@@ -75,7 +86,7 @@ export const getNewCondition = ({
         value = null
     } else {
         const option = providedOption || optionsOrGroups?.[0]
-        value = option?.id
+        value = getFormattedOptionValue(option?.id, field)
     }
     return {
         fieldId,

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import cloneDeep from 'lodash/cloneDeep.js'
-import { getValueLabel } from '../helpers'
+import { getFormattedOptionValue, getValueLabel } from '../helpers'
 import {
     PanelState,
     FilterValue,
@@ -14,15 +14,16 @@ import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import { DeleteIcon, PlusIcon } from '@devographics/icons'
 import { Input_, Label_, Select_ } from './FieldSegment'
-import { OptionGroup, OptionMetadata } from '@devographics/types'
+import { OptionGroup, OptionMetadata, QuestionMetadata } from '@devographics/types'
 import Button from 'core/components/Button'
+import './ValueSegment.scss'
 
 interface ValueSegmentProps<T> {
     seriesIndex: number
     conditionIndex: number
     stateStuff: PanelState
     options: OptionMetadata[]
-    field: FilterItem
+    field: QuestionMetadata
     allFilters: FilterItem[]
     operator: OptionsOperatorEnum
     value: T
@@ -89,8 +90,9 @@ const ValueSegmentField = ({
                             entity: optionOrGroup?.entity,
                             label: optionLabel
                         })
+                        const formattedId = getFormattedOptionValue(id, field)
                         return (
-                            <option key={id} value={id} data-key={key}>
+                            <option key={id} value={formattedId} data-key={key}>
                                 {label}
                             </option>
                         )
@@ -142,12 +144,23 @@ const ValueSegmentArray = ({
         setFiltersState(fState => {
             const newState = cloneDeep(fState)
             const currentValue = newState.filters[seriesIndex].conditions[conditionIndex].value
-            const newValue = groupsOrOptions.find(({ id }) => !value.includes(id))
-                ?.id as FilterValueString
+
+            const newOption = groupsOrOptions.find(
+                ({ id }) => !value.includes(getFormattedOptionValue(id, field))
+            )
+
+            const newValue = getFormattedOptionValue(newOption?.id, field) as FilterValueString
+
+            console.log('//')
+            console.log({ value })
+            console.log({ newOption })
+            console.log({ newValue })
+
             newState.filters[seriesIndex].conditions[conditionIndex].value = [
                 ...currentValue,
                 newValue
             ]
+
             return newState
         })
     }
@@ -177,7 +190,8 @@ const ValueSegmentArray = ({
                             <option value="" disabled>
                                 {getString && getString('explorer.select_item')?.t}
                             </option>
-                            {groupsOrOptions.map(({ id, entity, label }) => {
+                            {groupsOrOptions.map(optionOrGroup => {
+                                const { id, entity, label } = optionOrGroup
                                 const labelObject = getValueLabel({
                                     getString,
                                     field,
@@ -186,8 +200,9 @@ const ValueSegmentArray = ({
                                     entity,
                                     label
                                 })
+                                const formattedId = getFormattedOptionValue(id, field)
                                 return (
-                                    <option key={id} value={id} data-key={labelObject.key}>
+                                    <option key={id} value={formattedId} data-key={labelObject.key}>
                                         {labelObject.label}
                                     </option>
                                 )
@@ -196,21 +211,25 @@ const ValueSegmentArray = ({
                     </Label_>
 
                     {canDeleteValue && (
-                        <DeleteValue_
+                        <Button
+                            className="value-segment-button value-segment-button-delete"
                             onClick={() => {
                                 handleDeleteValue(valueIndex)
                             }}
                         >
                             <DeleteIcon labelId="filters.value.delete" />
-                        </DeleteValue_>
+                        </Button>
                     )}
                 </Value_>
             ))}
             {canAddNewValue && (
                 <AddValueWrapper_>
-                    <AddValue_ onClick={handleAddValue}>
+                    <Button
+                        className="value-segment-button value-segment-button-add"
+                        onClick={handleAddValue}
+                    >
                         <PlusIcon labelId="filters.value.add" />
-                    </AddValue_>
+                    </Button>
                 </AddValueWrapper_>
             )}
         </Values_>
@@ -230,23 +249,3 @@ const Value_ = styled.div`
 `
 
 const AddValueWrapper_ = styled.div``
-
-const AddDeleteValue_ = styled(Button)`
-    background: none;
-    border-color: ${({ theme }) => theme.colors.borderAlt};
-    border-radius: 100%;
-    aspect-ratio: 1/1;
-    display: grid;
-    place-items: center;
-    height: 24px;
-    width: 24px;
-    padding: 0;
-    .icon-wrapper,
-    svg {
-        height: 18px;
-        width: 18px;
-    }
-`
-
-const AddValue_ = styled(AddDeleteValue_)``
-const DeleteValue_ = styled(AddDeleteValue_)``

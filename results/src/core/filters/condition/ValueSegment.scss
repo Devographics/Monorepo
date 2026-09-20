@@ -1,0 +1,16 @@
+.value-segment-button {
+    background: none;
+    border-color: var(--borderColor);
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    display: grid;
+    place-items: center;
+    height: 24px;
+    width: 24px;
+    padding: 0;
+    .icon-wrapper,
+    svg {
+        height: 16px !important;
+        width: 16px !important;
+    }
+}
