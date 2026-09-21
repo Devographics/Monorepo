@@ -2,6 +2,10 @@
   path: /
   showTitle: false
   blocks:
+      - id: survey_stats
+        blockType: SurveyStatsBlock
+        disableExport: true
+        wrapBlock: false
       # - id: survey_livestream
       #   blockType: LivestreamBlock
       #   disableExport: true
@@ -536,17 +540,6 @@
                       sectionId: career
                       id: career_security
 
-# - id: lola_odelola
-#   path: /lola-odelola
-#   variables:
-#       imageUrl: https://assets.devographics.com/avatars/lola_odelola.jpg
-#   blocks:
-#       - id: conclusion_lola
-#         template: conclusion
-#         variables:
-#             author: lola_odelola
-#             entities: '"lola_odelola"'
-
 - id: workplace
   path: /workplace
   blocks:
@@ -1047,17 +1040,6 @@
 
       - id: ai_outlook
         template: multiple_options2_freeform
-
-# - id: declan_chidlow
-#   path: /declan-chidlow
-#   variables:
-#       imageUrl: https://assets.devographics.com/avatars/declan_chidlow.jpg
-#   blocks:
-#       - id: conclusion_declan
-#         template: conclusion
-#         variables:
-#             author: declan_chidlow
-#             entities: '"declan_chidlow"'
 
 - id: health
   path: /health
@@ -1564,17 +1546,6 @@
                       sectionId: worldview
                       id: overall_happiness
 
-# - id: josh_comeau
-#   path: /josh-comeau
-#   variables:
-#       imageUrl: https://assets.devographics.com/avatars/josh_comeau.jpg
-#   blocks:
-#       - id: conclusion_josh
-#         template: conclusion
-#         variables:
-#             author: josh_comeau
-#             entities: '"josh_comeau"'
-
 - id: hobbies
   path: /hobbies
   blocks:
@@ -1732,6 +1703,20 @@
                       sectionId: hobbies
                       id: video_game_platforms
 
+- id: conclusion
+  path: /conclusion
+  blocks:
+      - id: conclusion
+        template: conclusion
+        variables:
+            author: miranda_heath
+            entities: '"miranda_heath"'
+
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
+
 # note: other pages need to be included in the sitemap too so they can get the proper
 # locale passed to them
 
@@ -1859,17 +1844,6 @@
         template: single_option2
         queryOptions:
             sectionId: user_info
-
-# - id: anjana_vakil
-#   path: /anjana-vakil
-#   variables:
-#       imageUrl: https://assets.devographics.com/avatars/anjana_vakil.jpg
-#   blocks:
-#       - id: conclusion_anjana
-#         template: conclusion
-#         variables:
-#             author: anjana_vakil
-#             entities: '"anjana_vakil"'
 
 - id: about
   path: /about

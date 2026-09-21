@@ -1,6 +1,6 @@
-@use "to-remove/colors";
-@use "to-remove/typography";
-@use "to-remove/variables";
+@use 'to-remove/colors';
+@use 'to-remove/typography';
+@use 'to-remove/variables';
 
 .conclusion__byline {
     text-align: right;
@@ -207,4 +207,10 @@ Capture
 input {
     // background: var(--backgroundColor);
     // border: 1px solid var(--borderColor);
+}
+
+hr {
+    border: 1px dashed var(--borderColor);
+    opacity: 0.5;
+    margin: var(--spacing) 0;
 }
