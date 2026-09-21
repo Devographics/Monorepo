@@ -141,7 +141,13 @@ const BoxplotRow = (props: BoxplotRowProps) => {
         console.log(`BoxplotRow: could not find data for bucket ${bucket.id}`)
         console.log(bucket)
         console.log(boxData)
-        return null
+        return (
+            <div className="chart-row chart-subgrid">
+                <div className="chart-row-error">
+                    No data found for bucket <code>{bucket.id}</code>.
+                </div>
+            </div>
+        )
     }
 
     const boxProps: BoxProps = {

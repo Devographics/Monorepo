@@ -10,4 +10,10 @@
 
 .nav-link-label {
     white-space: normal;
+
+    // non-breaking space glues the indicator to the label's last word, so when the
+    // label wraps the indicator moves down with that word instead of sitting alone
+    .question-label-new::before {
+        content: '\00a0';
+    }
 }

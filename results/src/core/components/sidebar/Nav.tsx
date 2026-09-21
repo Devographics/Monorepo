@@ -280,8 +280,10 @@ const BlockItem = ({ block, closeSidebar, page, isActive = false }) => {
                         <T k={emojiKey} />{' '}
                     </span>
                 )}
-                <span className="nav-link-label">{label}</span>{' '}
-                <NewQuestionIndicator question={question} />
+                <span className="nav-link-label">
+                    {label}
+                    <NewQuestionIndicator question={question} />
+                </span>
             </InternalLink_>
         </InternalLinkWrapper_>
     )
