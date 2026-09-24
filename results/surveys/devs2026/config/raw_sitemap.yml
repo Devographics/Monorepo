@@ -28,10 +28,10 @@
         wrapBlock: false
         showInNav: false
 
-      - id: career_issues
+      - id: career_security
         template: multiple_options2_combined
-        titleKey: career.career_issues
-        questionKey: career.career_issues.question
+        titleKey: career.career_security
+        questionKey: career.career_security.question
         queryOptions:
             sectionId: career
         disableExport: true
@@ -108,6 +108,19 @@
         wrapBlock: false
         showInNav: false
 
+      - id: ai_outlook
+        template: multiple_options2_freeform
+        titleKey: ai_usage.ai_outlook
+        questionKey: ai_usage.ai_outlook.question
+        disableExport: true
+        showInNav: false
+        queryOptions:
+            sectionId: ai_usage
+            addBucketsEntities: true
+            addGroupedBuckets: false
+            addNestedBuckets: true
+        hideOtherAnswersBucket: true
+
       - id: overview.devs2026.8
         blockType: TextBlock
         disableExport: true
@@ -115,11 +128,12 @@
         showInNav: false
 
       - id: discrimination_issues
-        template: multiple_options2_combined
+        template: men_vs_non_men
         titleKey: career.discrimination_issues
         questionKey: career.discrimination_issues.question
         queryOptions:
             sectionId: career
+            addCardinalities: true
         disableExport: true
         showInNav: false
 
@@ -567,7 +581,7 @@
       - id: figure_discrimination_therapy
         template: figure
         variables:
-            value: 20
+            value: 16
             unit: percentage
 
       - id: discrimination_issues
@@ -694,7 +708,7 @@
       - id: figure_yearly_salary_usa_world
         template: figure
         variables:
-            value: 70332
+            value: 105000
             unit: usd
 
       - id: yearly_salary
@@ -755,7 +769,7 @@
       - id: figure_company_size_income_evolution
         template: figure
         variables:
-            value: 66
+            value: 62
             unit: percentage
 
       - id: company_size
@@ -788,7 +802,7 @@
       - id: figure_job_title_income
         template: figure
         variables:
-            value: 44939
+            value: 65000
             unit: usd
 
       - id: job_title
