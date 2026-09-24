@@ -23,6 +23,7 @@ export const createPages = createPagesSingleLoop
 export const onCreateWebpackConfig = ({ stage, actions, plugins }: CreateWebpackConfigArgs) => {
     console.log('THEME', path.resolve(__dirname, `surveys/${process.env.EDITIONID}/theme`))
     actions.setWebpackConfig({
+        watchOptions: { poll: 1000, aggregateTimeout: 300, ignored: /node_modules/ },
         resolve: {
             alias: {
                 // The webpack config is tweaked based en env variable
