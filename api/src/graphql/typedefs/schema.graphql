@@ -27,6 +27,9 @@ type SurveyMetadata {
     responsesCollectionName: String
     normalizedCollectionName: String
 
+    # freeform context for LLM analysis of this survey's answers
+    instructions: String
+
     emailOctopus: EmailOctopusData
 
     partners: [SponsorItem]
@@ -213,6 +216,8 @@ type QuestionMetadata {
     one of the two questions.
     """
     doNotCorrelateWith: [String]
+    # freeform guidance for LLM coding of this question's answers
+    instructions: String
     # whether a question only exists in the API and not the ouline
     apiOnly: Boolean
     # whether a question should be hidden in the survey form

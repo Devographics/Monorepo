@@ -17,6 +17,12 @@ export interface SurveyConfig {
     responsesCollectionName?: string
     normalizedCollectionName?: string
 
+    /**
+     * Freeform context for LLM analysis of this survey's answers (audience,
+     * domain, purpose). Mirrors the entity `instructions` field.
+     */
+    instructions?: string
+
     emailOctopus: EmailOctopusData
 
     partners: [SponsorItem]
@@ -245,6 +251,11 @@ export type Question = {
      * declared on one of the two questions.
      */
     doNotCorrelateWith?: string[]
+    /**
+     * Freeform guidance for LLM coding of this question's answers (e.g. how to
+     * apply its codebook). Mirrors the entity `instructions` field.
+     */
+    instructions?: string
     /**
      * For single and multiple question
      * "multipleWithOther" is a shortcut to "multiple" + allowOther=true
