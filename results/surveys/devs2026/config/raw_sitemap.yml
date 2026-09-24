@@ -1186,6 +1186,11 @@
 
       - id: ai_outlook
         template: multiple_options2_freeform
+        queryOptions:
+            addBucketsEntities: true
+            addGroupedBuckets: false
+            addNestedBuckets: true
+        hideOtherAnswersBucket: true
 
 - id: health
   path: /health
