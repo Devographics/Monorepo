@@ -35,12 +35,12 @@ import {
 import { getSectionResolver, sectionMetadataResolverMap } from './resolvers/sections'
 import {
     editionMetadataResolverMap,
-    getEditionCodebookResolver,
     getEditionCorrelationsResolver,
     getEditionMetadataResolver,
     getEditionResolver,
     getEditionStatsResolver
 } from './resolvers/editions'
+import { getEditionCodebookResolver } from './resolvers/codebook'
 import { getSurveyMetadataResolver, getSurveyResolver } from './resolvers/surveys'
 import { commentsResolverMap } from './resolvers/comments'
 import { creditResolverMap } from './resolvers/credits'

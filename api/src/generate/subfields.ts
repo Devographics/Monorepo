@@ -68,7 +68,7 @@ export const subFields: Array<SubField> = [
         addIf: ({ normPaths }) => !!normPaths?.other,
         resolverFunction: async ({ question }) => {
             console.log('// question codebook resolver')
-            const matchTags = question?.matchTags
+            const matchTags = [...(question?.matchTags || []), question.id]
             const allEntities = await getEntities({ includeNormalizationEntities: true })
             const entities = allEntities.filter(e => intersection(e.tags, matchTags).length > 0)
             return { entities, entitiesCount: entities.length }
