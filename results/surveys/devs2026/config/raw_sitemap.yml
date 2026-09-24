@@ -1,4 +1,4 @@
-- id: introduction
+- id: overview
   path: /
   showTitle: false
   blocks:
@@ -6,14 +6,160 @@
         blockType: SurveyStatsBlock
         disableExport: true
         wrapBlock: false
-      # - id: survey_livestream
-      #   blockType: LivestreamBlock
-      #   disableExport: true
-      #   wrapBlock: false
+        showInNav: false
+
       - id: survey_intro
         blockType: SurveyIntroBlock
         disableExport: true
         wrapBlock: false
+        showInNav: false
+        variables:
+            showButton: false
+
+      - id: overview.devs2026.0
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: overview.devs2026.1
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: career_issues
+        template: multiple_options2_combined
+        titleKey: career.career_issues
+        questionKey: career.career_issues.question
+        queryOptions:
+            sectionId: career
+        disableExport: true
+        showInNav: false
+
+      - id: overview.devs2026.2
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: workplace_burnout
+        template: multiple_options2_combined
+        titleKey: workplace.workplace_burnout
+        questionKey: workplace.workplace_burnout.question
+        queryOptions:
+            sectionId: workplace
+        disableExport: true
+        showInNav: false
+
+      - id: overview.devs2026.3
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: career_issues
+        template: multiple_options2_combined
+        titleKey: career.career_issues
+        questionKey: career.career_issues.question
+        queryOptions:
+            sectionId: career
+        disableExport: true
+        showInNav: false
+
+      - id: overview.devs2026.4
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: overview.devs2026.5
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: ai_sentiment
+        template: single_option2
+        titleKey: ai_usage.ai_sentiment
+        questionKey: ai_usage.ai_sentiment.question
+        queryOptions:
+            sectionId: ai_usage
+        disableExport: true
+
+      - id: overview.devs2026.6
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: ai_mental_state
+        template: opinion2
+        titleKey: ai_usage.ai_mental_state
+        questionKey: ai_usage.ai_mental_state.question
+        queryOptions:
+            sectionId: ai_usage
+        disableExport: true
+        showInNav: false
+
+      - id: overview.devs2026.7
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: overview.devs2026.8
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: discrimination_issues
+        template: multiple_options2_combined
+        titleKey: career.discrimination_issues
+        questionKey: career.discrimination_issues.question
+        queryOptions:
+            sectionId: career
+        disableExport: true
+        showInNav: false
+
+      - id: overview.devs2026.9
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: tech_industry_emotion
+        template: multiple_options2_combined
+        titleKey: worldview.tech_industry_emotion
+        questionKey: worldview.tech_industry_emotion.question
+        queryOptions:
+            sectionId: worldview
+        disableExport: true
+        showInNav: false
+
+      - id: overview.devs2026.10
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: conclusion
+        template: conclusion
+        showInNav: false
+        variables:
+            author: miranda_heath
+            entities: '"miranda_heath"'
+            showConclusion: false
+
+      - id: full_survey_cta
+        blockType: CTABlock
+        wrapBlock: false
+        showInNav: false
+        variables:
+            ctaKey: general.view_full_results
+            ctaLink: /demographics/
+
       - id: survey_credits
         template: credits
       - id: survey_newsletter
@@ -1703,19 +1849,19 @@
                       sectionId: hobbies
                       id: video_game_platforms
 
-- id: conclusion
-  path: /conclusion
-  blocks:
-      - id: conclusion
-        template: conclusion
-        variables:
-            author: miranda_heath
-            entities: '"miranda_heath"'
+# - id: conclusion
+#   path: /conclusion
+#   blocks:
+#       - id: conclusion
+#         template: conclusion
+#         variables:
+#             author: miranda_heath
+#             entities: '"miranda_heath"'
 
-      - id: conclusion_newsletter
-        blockType: NewsletterBlock
-        wrapBlock: false
-        disableExport: true
+#       - id: conclusion_newsletter
+#         blockType: NewsletterBlock
+#         wrapBlock: false
+#         disableExport: true
 
 # note: other pages need to be included in the sitemap too so they can get the proper
 # locale passed to them
