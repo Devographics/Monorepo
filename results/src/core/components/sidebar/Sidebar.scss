@@ -1,0 +1,32 @@
+@use '../../../stylesheets/_breakpoints.scss';
+
+.sidebar-header {
+    display: grid;
+    grid-template-columns: 0 1fr 0;
+    grid-template-areas: 'left logo right';
+    border-bottom: 1px dashed var(--borderColor);
+    @include breakpoints.small-medium {
+        grid-template-columns: 50px 1fr 50px;
+    }
+}
+
+.sidebar-logo-container {
+    //     display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // height: 67px;
+    flex-shrink: 1;
+    grid-area: logo;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar-logo-svg {
+    max-height: 36px;
+    width: 75%;
+    height: 100%;
+    display: block;
+    color: var(--textColor);
+    // max-height: 30px;
+}

@@ -1,9 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
 import Link from 'core/components/LocaleLink'
-import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
+import './SponsorsBlock.scss'
 
 const SponsorsBlock = () => {
     const context = usePageContext()
@@ -12,98 +11,32 @@ const SponsorsBlock = () => {
     const sponsors = currentEdition?.sponsors
     return sponsors && sponsors.length > 0 ? (
         <>
-            <Container>
-                <Header>
+            <div className="sponsors-block">
+                <h3>
                     <T k="sponsors.our_partners" />
-                </Header>
-                <SponsorList className="Sponsor__list">
+                </h3>
+                <div className="sponsors-list">
                     {sponsors.map(({ name, imageUrl, url, id }) => (
-                        <Sponsor className={`Sponsor Sponsor--${id}`} key={name}>
-                            <SponsorLogo>
+                        <div className={`sponsors-item sponsors-item-${id}`} key={name}>
+                            <div className="sponsors-logo">
                                 <a href={url} title={name}>
                                     <img src={imageUrl} alt={name} />
                                 </a>
-                            </SponsorLogo>
-                            <SponsorDescription>
+                            </div>
+                            <div className="sponsors-description">
                                 <T k={`sponsors.${id}.description`} />
-                            </SponsorDescription>
-                        </Sponsor>
+                            </div>
+                        </div>
                     ))}
-                </SponsorList>
-            </Container>
-            <Support className="Sponsors__Support">
+                </div>
+            </div>
+            <div className="sponsors-support">
                 <Link to="/support">
                     <T k="sponsors.become_partner" />
                 </Link>
-            </Support>
+            </div>
         </>
     ) : null
 }
-
-const Container = styled.div`
-    background: ${props => props.theme.colors.backgroundAlt};
-    padding: ${spacing(2)};
-    margin-top: ${spacing(2)};
-`
-
-const Header = styled.h3`
-    text-align: center;
-    margin-bottom: var(--spacing);
-`
-
-const SponsorList = styled.div`
-    @media ${mq.large} {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        column-gap: var(--quadrupleSpacing);
-        row-gap: var(--quadrupleSpacing);
-    }
-`
-
-const Sponsor = styled.div`
-    @media ${mq.smallMedium} {
-        margin-bottom: var(--spacing);
-        &:last-child {
-            margin: 0;
-        }
-    }
-    @media ${mq.large} {
-    }
-`
-
-const SponsorLogo = styled.div`
-    a {
-        height: 100px;
-        display: grid;
-        place-items: center;
-    }
-    img,
-    svg {
-        display: block;
-        max-height: 100px;
-        max-width: 200px;
-        width: 100%;
-    }
-
-    margin-bottom: var(--spacing);
-
-    &:last-child {
-        margin: 0;
-    }
-
-    &--designcode {
-        width: 50px;
-    }
-`
-
-const SponsorDescription = styled.div`
-    text-align: center;
-`
-const Support = styled.div`
-    text-align: center;
-    margin-top: var(--halfSpacing);
-    margin-bottom: ${spacing(2)};
-    font-size: var(--fontSizeSmallish);
-`
 
 export default SponsorsBlock

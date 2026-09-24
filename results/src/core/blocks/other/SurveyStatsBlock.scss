@@ -9,7 +9,6 @@
     display: flex;
     justify-content: center;
     align-items: stretch;
-    margin-bottom: var(--spacing);
     @include breakpoints.small {
         flex-direction: column;
     }

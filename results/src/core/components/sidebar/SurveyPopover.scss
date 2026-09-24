@@ -1,4 +1,6 @@
 .survey-popover-trigger {
+    background: none;
+    border: none;
     display: flex;
     height: 67px;
     align-items: center;
@@ -13,10 +15,6 @@
     .popover-indicator {
         fill: var(--textColor);
         width: 12px;
-    }
-    svg {
-        height: 100%;
-        // max-height: 30px;
     }
 }
 

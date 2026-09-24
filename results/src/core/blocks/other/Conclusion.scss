@@ -1,0 +1,14 @@
+@use '../../../stylesheets/_breakpoints.scss';
+
+.conclusion-block {
+    @include breakpoints.large {
+        max-width: 700px;
+        margin: 0 auto;
+        font-size: 1.1rem;
+    }
+    .first-line {
+        @include breakpoints.medium-large {
+            font-size: var(--fontSizeLargest);
+        }
+    }
+}

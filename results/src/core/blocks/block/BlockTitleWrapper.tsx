@@ -6,7 +6,7 @@ import BlockTitle from 'core/blocks/block/BlockTitle'
 import get from 'lodash/get'
 
 export const TitleWrapper = ({ block, pageData, blockIndex }) => (
-    <BlockWrapper className="empty-wrapper">
+    <BlockWrapper data-blockId={block.id} className="block-wrapper empty-wrapper">
         {block.variants.map((block, variantIndex) => (
             <TitleBlock
                 key={block.id}

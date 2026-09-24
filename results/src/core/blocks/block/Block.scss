@@ -1,0 +1,5 @@
+.block-wrapper {
+    &:empty {
+        display: none;
+    }
+}

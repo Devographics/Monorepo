@@ -28,16 +28,20 @@ export const ChartWrapper = (
     ]
     const { descriptionId } = block
 
+    const showHeading = descriptionId || hasNestedData
+
     return (
         <div className="chart-wrapper-outer">
-            <div className="chart-wrapper-heading">
-                {descriptionId && (
-                    <div className="chart-description">
-                        <T k={descriptionId} />
-                    </div>
-                )}
-                {hasNestedData && <ChartNestedToggle {...props} />}
-            </div>
+            {showHeading && (
+                <div className="chart-wrapper-heading">
+                    {descriptionId && (
+                        <div className="chart-description">
+                            <T k={descriptionId} />
+                        </div>
+                    )}
+                    {hasNestedData && <ChartNestedToggle {...props} />}
+                </div>
+            )}
             <div className={classes.join(' ')} ref={parent} style={style}>
                 {children}
             </div>

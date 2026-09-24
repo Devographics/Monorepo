@@ -1,0 +1,64 @@
+@use '../../../stylesheets/_breakpoints.scss';
+
+.sponsors-block {
+    background: var(--backgroundAltColor);
+    padding: var(--doubleSpacing);
+    h3 {
+        text-align: center;
+        margin-bottom: var(--spacing);
+    }
+}
+
+.sponsors-list {
+    @include breakpoints.large {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        column-gap: var(--quadrupleSpacing);
+        row-gap: var(--quadrupleSpacing);
+    }
+}
+
+.sponsors-item {
+    @include breakpoints.small-medium {
+        margin-bottom: var(--spacing);
+        &:last-child {
+            margin: 0;
+        }
+    }
+}
+
+.sponsors-logo {
+    a {
+        height: 100px;
+        display: grid;
+        place-items: center;
+    }
+    img,
+    svg {
+        display: block;
+        max-height: 100px;
+        max-width: 200px;
+        width: 100%;
+    }
+
+    margin-bottom: var(--spacing);
+
+    &:last-child {
+        margin: 0;
+    }
+
+    &--designcode {
+        width: 50px;
+    }
+}
+
+.sponsors-description {
+    text-align: center;
+}
+
+.sponsors-support {
+    text-align: center;
+    margin-top: var(--halfSpacing);
+    margin-bottom: var(--doubleSpacing);
+    font-size: var(--fontSizeSmallish);
+}

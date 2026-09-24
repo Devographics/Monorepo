@@ -3,6 +3,7 @@ import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import styled, { css } from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import { BlockVariantDefinition } from 'core/types'
+import './Block.scss'
 
 export const EmptyWrapper = ({
     block,
@@ -13,7 +14,7 @@ export const EmptyWrapper = ({
     pageData?: any
     blockIndex?: number
 }) => (
-    <Wrapper className="empty-wrapper">
+    <Wrapper data-blockId={block.id} className="block-wrapper empty-wrapper">
         {block.variants.map((block, variantIndex) => (
             <BlockSwitcher
                 key={block.id + variantIndex}

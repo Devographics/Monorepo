@@ -35,7 +35,6 @@ const TranslatorsBlock = () => {
 }
 
 const Container = styled.div`
-    margin-top: ${spacing(2)};
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;

@@ -40,11 +40,11 @@ export const SurveyPopover = () => {
         <Popover
             onOpenChange={setIsOpened}
             trigger={
-                <Button className="survey-popover-trigger">
+                <button className="survey-popover-trigger">
                     <SidebarLogo />
                     <PopoverIndicator isOpened={isOpened} />
                     <ScreenReadersHint>{translate('general.back_to_intro')}</ScreenReadersHint>
-                </Button>
+                </button>
             }
         >
             <Contents />

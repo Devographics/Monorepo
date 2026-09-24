@@ -9,6 +9,7 @@ import { Nav } from './Nav'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getSiteTitle } from 'core/helpers/pageHelpers'
 import SurveyPopover from './SurveyPopover'
+import './Sidebar.scss'
 
 const CloseIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -36,10 +37,10 @@ export const Sidebar = ({
                     {getSiteTitle({ pageContext })}
                 </SidebarScreenReadersTitle>
 
-                <SidebarHeader>
-                    <SidebarLogoContainer>
+                <div className="sidebar-header">
+                    <div className="sidebar-logo-container">
                         <SurveyPopover />
-                    </SidebarLogoContainer>
+                    </div>
                     {/* <SidebarLogoLink to="/">
                         <SidebarLogo />
                         <ScreenReadersHint>{translate('general.back_to_intro')}</ScreenReadersHint>
@@ -52,7 +53,7 @@ export const Sidebar = ({
                         <CloseIcon />
                         <ScreenReadersHint>{translate('general.close_nav')}</ScreenReadersHint>
                     </SidebarCloseButton>
-                </SidebarHeader>
+                </div>
                 <Nav closeSidebar={closeSidebar} />
                 <ShareSite />
             </SidebarContainer>
@@ -94,29 +95,6 @@ const SidebarScreenReadersTitle = styled.h1`
 
 const ScreenReadersHint = styled.span`
     ${screenReadersOnlyMixin}
-`
-
-const SidebarHeader = styled.div`
-    display: grid;
-    grid-template-columns: 0 1fr 0;
-    grid-template-areas: 'left logo right';
-    border-bottom: ${props => props.theme.separationBorder};
-
-    @media ${mq.smallMedium} {
-        grid-template-columns: 50px 1fr 50px;
-    }
-`
-
-const SidebarLogoContainer = styled.div`
-    grid-area: logo;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    svg {
-        max-height: 36px;
-        width: 75%;
-    }
 `
 
 const SidebarCloseButton = styled.button`

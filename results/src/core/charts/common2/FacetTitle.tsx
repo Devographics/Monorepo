@@ -25,7 +25,11 @@ export const FacetTitle = ({
 }) => {
     const { getString } = useI18n()
 
-    const { key: questionLabelKey, label: questionLabel } = getQuestionLabel({
+    const {
+        key: questionLabelKey,
+        label: questionLabel,
+        question: questionQuestionLabel
+    } = getQuestionLabel({
         getString,
         block,
         question: {
@@ -52,12 +56,18 @@ export const FacetTitle = ({
     const { view } = chartState
     return (
         <div className="chart-facet-title">
-            <span
-                data-key={questionLabelKey}
-                className="chart-facet-title-item chart-facet-question"
-            >
-                {questionLabel}
-            </span>{' '}
+            <Tooltip
+                trigger={
+                    <span
+                        data-key={questionLabelKey}
+                        className="chart-facet-title-item chart-facet-question"
+                    >
+                        {questionLabel}
+                        <QuestionIcon size="petite" />
+                    </span>
+                }
+                contents={questionQuestionLabel}
+            />{' '}
             <T k="charts.vs" />
             <Tooltip
                 trigger={
