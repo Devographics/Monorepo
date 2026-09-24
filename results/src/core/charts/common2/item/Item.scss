@@ -42,8 +42,11 @@
         margin-left: 100%;
         transition: 1s linear;
     }
-    .chart-item-tech_industry_emotion & {
-        &::before {
+    .chart-item-tech_industry_emotion &,
+    .chart-item-ai_outlook &,
+    .chart-item-ai_risks &,
+    .chart-item-ai_uses & {
+        .chart-row-depth-0 &::before {
             display: inline-block;
             content: ' ';
             height: 12px;
@@ -53,19 +56,30 @@
             margin-right: 5px;
         }
     }
-    .chart-item-negative_sentiment & {
-        &::before {
+    .chart-item-negative_sentiment &,
+    .chart-item-anti_ai_sentiment &,
+    .chart-item-ai_risks & {
+        .chart-row-depth-0 &::before {
             background-color: var(--sentimentNegativeColor);
         }
         // color: var(--sentimentNegativeColor);
     }
-    .chart-item-positive_sentiment & {
-        &::before {
+
+    .chart-item-positive_sentiment &,
+    .chart-item-pro_ai_sentiment &,
+    .chart-item-ai_uses & {
+        .chart-row-depth-0 &::before {
             background-color: var(--sentimentPositiveColor);
         }
         // color: var(--sentimentPositiveColor);
     }
+    .chart-item-neutral_ai_sentiment & {
+        .chart-row-depth-0 &::before {
+            background-color: var(--sentimentNeutralColor);
+        }
+    }
 }
+
 .chart-item-entity {
     .tooltip-trigger {
         border-bottom: none;
@@ -151,3 +165,42 @@ button.chart-item {
 //         border-color: rgb(79, 162, 81);
 //     }
 // }
+
+.chart-ai_outlook-disabled {
+    .chart-row-depth-0 {
+        .chart-item {
+            &::after {
+                display: inline-block;
+                font-size: 0.6rem;
+                padding: 0px 4px;
+                // color: var(--textColorInverted);
+                text-shadow: 1px 1px rgba(0, 0, 0, 0.85);
+                border: 1px solid var(--borderColor);
+            }
+        }
+        .chart-item-ai_risks::after {
+            content: 'AI RISK';
+            border-color: var(--sentimentNegativeColor);
+        }
+
+        .chart-item-ai_uses::after {
+            content: 'AI USE';
+            border-color: var(--sentimentPositiveColor);
+        }
+
+        .chart-item-pro_ai_sentiment::after {
+            content: 'PRO-AI';
+            border-color: var(--sentimentPositiveColor);
+        }
+
+        .chart-item-anti_ai_sentiment::after {
+            content: 'ANTI-AI';
+            border-color: var(--sentimentNegativeColor);
+        }
+
+        .chart-item-neutral_ai_sentiment::after {
+            content: 'NEUTRAL';
+            border-color: var(--sentimentNeutralColor);
+        }
+    }
+}
