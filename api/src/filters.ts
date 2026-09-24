@@ -26,8 +26,9 @@ import { convertNumericOption } from './generate/helpers'
 type FilterValue<T> = T | null | '' | [] | {}
 
 // convert `value_3` to `3` if needed
+// note: values coming from an expanded option group (e.g. `range_10_14`) are already numbers
 const processFilterValue = <T>(value: T, filterField: QuestionApiObject) => {
-    if (filterField.optionsAreNumeric) {
+    if (filterField.optionsAreNumeric && typeof value === 'string') {
         return convertNumericOption(value as string)
     } else {
         return value

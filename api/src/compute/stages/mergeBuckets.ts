@@ -66,13 +66,14 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
         respondents while their counts did not, so weighting them by count
         skewed the result.
 
-        Only done when the sub-buckets carried these values, i.e. when the facet
-        axis is a range or numeric question (see addAverages/addPercentiles).
+        Only done when the facet axis is a range or numeric question (same check
+        as addAverages/addPercentiles). Don't infer it from the sub-buckets' values:
+        addAverages sets `averageByFacet: 0` on every insufficient-data bucket
+        whatever the facet, which would then try to average e.g. gender buckets.
 
         */
-        const hasFacetStats = buckets.some(
-            b => b[BucketUnits.AVERAGE] !== undefined || b[BucketUnits.PERCENTILES] !== undefined
-        )
+        const hasFacetStats =
+            secondaryAxis.question.optionsAreRange || secondaryAxis.question.optionsAreNumeric
         if (hasFacetStats && mergedBucket_.facetBuckets.length > 0) {
             if (mergedBucket.hasInsufficientData) {
                 mergedBucket[BucketUnits.AVERAGE] = 0
