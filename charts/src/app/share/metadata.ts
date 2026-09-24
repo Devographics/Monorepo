@@ -1,10 +1,15 @@
 import { getBlockMeta } from '@/block/metadata'
-import { fetchEditionSitemap, fetchAllLocalesIds } from '@devographics/fetch'
+import { fetchEditionSitemap } from '@devographics/fetch'
 import { getLocaleDict } from '@devographics/i18n/server'
 import { ChartParams } from './typings'
 import { getBlock } from '@/lib/helpers'
 import { getStringTranslator } from '@/lib/i18n'
 import { EditionMetadata, Locale } from '@devographics/types'
+
+/**
+ * Always use en-US (images, titles, descriptions, links), whatever locale is requested
+ */
+const LOCALE_OVERRIDE = 'en-US'
 
 function devographicsUrl({
     editionId,
@@ -28,7 +33,8 @@ function devographicsUrl({
     return `${capturesUrl}/${localeId}/${blockId}.png`
 }
 
-export async function getEditionOrBlock(chartParams: ChartParams) {
+export async function getEditionOrBlock(chartParams_: ChartParams) {
+    const chartParams = { ...chartParams_, localeId: LOCALE_OVERRIDE }
     let imgUrl, link, blockDefinition, blockMeta, title, description
 
     const { surveyId, editionId } = chartParams
@@ -85,7 +91,7 @@ export async function getBlockMetaFromParams(chartParams: ChartParams, edition: 
         sectionId,
         subSectionId,
         blockId,
-        localeId: localeId_,
+        localeId,
         params
     } = chartParams
 
@@ -109,21 +115,6 @@ export async function getBlockMetaFromParams(chartParams: ChartParams, edition: 
 
     if (!blockDefinition) {
         return
-    }
-    const { data: possibleLocales, error: possibleLocalesError } = await fetchAllLocalesIds({
-        calledFrom: 'charts'
-    })
-    if (possibleLocalesError) {
-        throw new Error(
-            `Cannot list possible locales (${JSON.stringify(
-                chartParams
-            )}). Error: ${possibleLocalesError}`
-        )
-    }
-    let localeId = localeId_
-    if (!possibleLocales.includes(localeId)) {
-        console.warn(`Locale ${localeId} unknown, fallback to en-US for block metadata`)
-        localeId = 'en-US'
     }
     const result = await getLocaleDict({
         localeId,
