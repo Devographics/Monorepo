@@ -15,6 +15,9 @@ import { getItemLabel } from 'core/helpers/labels'
 import { getQuestionLabel } from '../common2/helpers/labels'
 import { getDistinctColor } from '../common2/helpers/colors'
 import uniq from 'lodash/uniq.js'
+import Help from 'core/components/Help'
+import FacetHeading from '../horizontalBar2/FacetHeading'
+import { FacetTitle } from '../common2/FacetTitle'
 
 const useNodes = ({
     items,
@@ -150,6 +153,8 @@ export const TwoSeriesScatterplot = (
     return (
         <ChartWrapper {...props} chartState={chartState}>
             <>
+                <Help id="two_series_scatterplot" />
+                <FacetTitle question={question1} facetQuestion={question2} />
                 <Legend<ScatterplotChartState>
                     items={items}
                     chartState={chartState}

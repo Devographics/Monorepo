@@ -22,6 +22,7 @@ import { getViewDefinition } from '../../helpers/views'
 import { AverageBox } from './Average'
 import { BoxProps, PercentilesBox } from './Percentiles'
 import { BucketUnits } from '@devographics/types'
+import Help from 'core/components/Help'
 
 const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     const { chartState, chartValues, seriesMetadata } = viewProps
@@ -77,6 +78,8 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
 
     return (
         <div className="chart-boxplot-view">
+            <Help id="boxplot" />
+
             <Rows {...viewProps} hasZebra={true}>
                 <>
                     <div className="chart-row chart-subgrid chart-boxplot-placeholder">

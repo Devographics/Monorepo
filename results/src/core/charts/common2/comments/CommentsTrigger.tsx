@@ -43,7 +43,7 @@ export const CommentsTrigger = ({
         <ModalTrigger
             size="l"
             trigger={
-                <div className="chart-comments-wrapper">
+                <div className="chart-comments-trigger-wrapper">
                     <Tooltip
                         trigger={
                             <Button className="button-round chart-comments">

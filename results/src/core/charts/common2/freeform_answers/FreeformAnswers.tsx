@@ -22,6 +22,7 @@ import { FilterTokens } from '../comments/filters/FilterTokens'
 import Button from 'core/components/Button'
 import { getDownloadHandler } from '../comments/download'
 import Help from 'core/components/Help'
+import { FilterSection } from '../comments/CommentsFilters'
 
 export const FreeformAnswers = ({
     answers,
@@ -103,15 +104,6 @@ export const FreeformAnswers = ({
                             <span className="comments-count-current">{filteredAnswers.length}</span>
                             /<span className="comments-count-all">{answers.length}</span>
                         </div>
-                        <Button
-                            size="small"
-                            onClick={getDownloadHandler<RawDataAnswer>(
-                                answers,
-                                `${question.id}_answers`
-                            )}
-                        >
-                            <T k="answers.download" />
-                        </Button>
                     </div>
                 </div>
                 <BlockQuestion block={block} question={question} />
@@ -136,6 +128,18 @@ export const FreeformAnswers = ({
                                 question={question}
                             />
                         )}
+
+                        <FilterSection headingId="download">
+                            <Button
+                                size="small"
+                                onClick={getDownloadHandler<RawDataAnswer>(
+                                    answers,
+                                    `${question.id}_answers`
+                                )}
+                            >
+                                <T k="answers.download" />
+                            </Button>
+                        </FilterSection>
                     </div>
                 </div>
 

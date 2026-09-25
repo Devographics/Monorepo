@@ -10,6 +10,8 @@ import BlockQuestion from 'core/blocks/block/BlockQuestion'
 import T from 'core/i18n/T'
 import { getQuestionLabel } from '../helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
+import Button from 'core/components/Button'
+import { getDownloadHandler } from './download'
 
 export const filterCommentsByValue = (comments: Comment[], value: string | number | null) =>
     value === ''

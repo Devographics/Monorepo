@@ -8,6 +8,7 @@ import { FilterSearch } from './filters/FilterSearch'
 import { FilterOptions } from './filters/FilterOptions'
 import { FilterExperience } from './filters/FilterExperience'
 import { FilterSentiment } from './filters/FilterSentiment'
+import { CommentsDownload } from './CommentsDownload'
 
 export const CommentsFilters = ({
     comments,
@@ -61,6 +62,8 @@ export const CommentsFilters = ({
                 {stats?.length > 0 && (
                     <FilterKeywords stateStuff={stateStuff} stats={stats} question={question} />
                 )}
+
+                <CommentsDownload comments={comments} question={question} />
             </div>
             <Button
                 onClick={(e: any) => {
@@ -83,8 +86,8 @@ export const FilterSection = ({
     children
 }: {
     headingId: string
-    showClear: boolean
-    onClear: () => void
+    showClear?: boolean
+    onClear?: () => void
     children: JSX.Element
 }) => {
     return (
@@ -98,7 +101,7 @@ export const FilterSection = ({
                         size="small"
                         onClick={(e: any) => {
                             e.preventDefault()
-                            onClear()
+                            onClear && onClear()
                         }}
                     >
                         <T k="comments.filter.clear" />

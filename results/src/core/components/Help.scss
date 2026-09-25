@@ -36,3 +36,9 @@
     top: -10px;
     right: -10px;
 }
+
+.helpnote-boxplot,
+.helpnote-scatterplot,
+.helpnote-stacked_bar {
+    margin-bottom: var(--spacing);
+}
