@@ -329,7 +329,7 @@ export const getEntity = async ({
 
     entity.entityType = getEntityType(entity)
 
-    if (entity.hasAvatar || [EntityType.PEOPLE].includes(entity.entityType)) {
+    if ([EntityType.PEOPLE].includes(entity.entityType)) {
         // version 1: async version that checks if image actually exists
         // const avatarCacheKey = `avatar__${entity.id}`
         // const avatar = await useCache({

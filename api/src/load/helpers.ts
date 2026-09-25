@@ -145,14 +145,14 @@ export const getAvatarAlways = ({ entity }: { entity: Entity }) => {
 }
 
 export const getEntityType = (entity: Entity) => {
-    if (entity?.tags?.includes('tokens')) {
-        return EntityType.TOKEN
-    } else if (entity?.tags?.includes('people')) {
+    if (entity?.tags?.includes('people')) {
         return EntityType.PEOPLE
     } else if (entity?.tags?.includes('features')) {
         return EntityType.FEATURE
     } else if (entity?.tags?.includes('libraries') || entity?.tags?.includes('languages')) {
         return EntityType.LIBRARY
+    } else if (entity?.tags?.includes('tokens')) {
+        return EntityType.TOKEN
     } else {
         return EntityType.DEFAULT
     }
