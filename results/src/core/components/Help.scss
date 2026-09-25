@@ -7,6 +7,14 @@
     gap: var(--spacing);
     border-radius: 10px;
     // margin-bottom: var(--spacing);
+    a,
+    a:link,
+    a:hover,
+    a:visited,
+    a:active {
+        color: var(--textColorInverted);
+        text-decoration: underline;
+    }
 }
 .helpnote-heading {
     display: flex;
