@@ -1,9 +1,16 @@
+@use '../../stylesheets/_breakpoints.scss';
+
 .helpnote {
     background: var(--linkColor);
     padding: var(--spacing);
     color: var(--textColorInverted);
     display: grid;
-    grid-template-columns: 80px 1fr;
+    @include breakpoints.small {
+        grid-template-columns: 40px 1fr;
+    }
+    @include breakpoints.medium-large {
+        grid-template-columns: 80px 1fr;
+    }
     gap: var(--spacing);
     border-radius: 10px;
     // margin-bottom: var(--spacing);
