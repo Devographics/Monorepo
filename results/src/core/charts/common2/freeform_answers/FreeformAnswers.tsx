@@ -19,6 +19,9 @@ import T from 'core/i18n/T'
 import { CommentsCommonProps } from '../comments/types'
 import { matchWordStart } from '../comments/Comments'
 import { FilterTokens } from '../comments/filters/FilterTokens'
+import Button from 'core/components/Button'
+import { getDownloadHandler } from '../comments/download'
+import Help from 'core/components/Help'
 
 export const FreeformAnswers = ({
     answers,
@@ -95,9 +98,20 @@ export const FreeformAnswers = ({
                     <h3>
                         <T k="answers.answers_for" values={{ name: tokenLabel }} md={true} />
                     </h3>
-                    <div className="comments-count">
-                        <span className="comments-count-current">{filteredAnswers.length}</span>/
-                        <span className="comments-count-all">{answers.length}</span>
+                    <div className="comments-heading-right">
+                        <div className="comments-count">
+                            <span className="comments-count-current">{filteredAnswers.length}</span>
+                            /<span className="comments-count-all">{answers.length}</span>
+                        </div>
+                        <Button
+                            size="small"
+                            onClick={getDownloadHandler<RawDataAnswer>(
+                                answers,
+                                `${question.id}_answers`
+                            )}
+                        >
+                            <T k="answers.download" />
+                        </Button>
                     </div>
                 </div>
                 <BlockQuestion block={block} question={question} />

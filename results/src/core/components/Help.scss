@@ -1,0 +1,38 @@
+.helpnote {
+    background: var(--linkColor);
+    padding: var(--spacing);
+    color: var(--textColorInverted);
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: var(--spacing);
+    border-radius: 10px;
+    // margin-bottom: var(--spacing);
+}
+.helpnote-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    h3 {
+        margin: 0;
+    }
+}
+.helpnote-image {
+    .icon-wrapper,
+    svg {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+.helpnote-contents {
+}
+.helpnote-dismiss {
+    background: none;
+    border: none;
+    color: var(--textColorInverted);
+    font-size: 2rem;
+    line-height: 1;
+    position: relative;
+    top: -10px;
+    right: -10px;
+}

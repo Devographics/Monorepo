@@ -4,8 +4,6 @@ import ModalTrigger from 'core/components/ModalTrigger'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
 import {
-    CardinalityIcon,
-    CorrelationsIcon,
     CorrelationOptionIcon,
     CorrelationTrendIcon,
     UserIcon,
@@ -19,7 +17,6 @@ import {
     CorrelationItem,
     CorrelationVariableKind,
     CorrelationStrength,
-    EditionMetadata,
     QuestionMetadataWithSection
 } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
@@ -28,6 +25,7 @@ import { getQuestionLabel } from './helpers/labels'
 import { getQuestionById } from 'core/helpers/options'
 import { formatNumber } from './helpers/format'
 import { StringTranslator } from '@devographics/i18n'
+import Help from 'core/components/Help'
 
 export const CorrelationsTrigger = ({
     question,
@@ -186,25 +184,35 @@ export const CorrelationsList = ({
     return (
         <div className={`correlations-wrapper correlation-positive`}>
             <div className="correlations-heading-wrapper">
-                <h3 className="correlations-heading">
-                    <T
-                        k={headingKey}
-                        values={{ count, directionLabel, questionLabel, optionLabel }}
-                        md={true}
-                    />
-                </h3>
-            </div>
-            <div className="correlations-content">
-                <CorrelationsExclusions question={question} block={block} />
-                {/* <CorrelationsDirections /> */}
-
-                <div className="correlation-items">
-                    {correlations.map((c, i) => (
-                        <CorrelationItemComponent index={i} key={i} correlation={c} block={block} />
-                    ))}
+                <div className="correlations-heading-help">
+                    <Help id="correlations" />
                 </div>
-                <div className="correlations-note">
-                    <T k="correlations.note" md={true} html={true} />
+                <div className="correlations-heading-wrapper2">
+                    <h3 className="correlations-heading">
+                        <T
+                            k={headingKey}
+                            values={{ count, directionLabel, questionLabel, optionLabel }}
+                            md={true}
+                        />
+                    </h3>
+                </div>
+                <div className="correlations-content">
+                    <CorrelationsExclusions question={question} block={block} />
+                    {/* <CorrelationsDirections /> */}
+
+                    <div className="correlation-items">
+                        {correlations.map((c, i) => (
+                            <CorrelationItemComponent
+                                index={i}
+                                key={i}
+                                correlation={c}
+                                block={block}
+                            />
+                        ))}
+                    </div>
+                    <div className="correlations-note">
+                        <T k="correlations.note" md={true} html={true} />
+                    </div>
                 </div>
             </div>
         </div>

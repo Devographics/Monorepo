@@ -10,6 +10,7 @@ export const getTooltipContent = element => styled(element)`
     padding: ${spacing(0.3)} ${spacing(0.6)};
     border: 1px solid ${props => props.theme.colors.border};
     z-index: 10000;
+    pointer-events: none;
     p:last-child {
         margin: 0;
     }

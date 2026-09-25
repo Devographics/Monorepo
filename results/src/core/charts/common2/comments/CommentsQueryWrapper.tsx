@@ -7,6 +7,8 @@ import { CommentsCommonProps, CommentsData } from './types'
 import { getQuestionLabel } from '../helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import BlockQuestion from 'core/blocks/block/BlockQuestion'
+import Button from 'core/components/Button'
+import Help from 'core/components/Help'
 
 type GetQueryProps = {
     surveyId: string
@@ -95,11 +97,15 @@ export const CommentsQueryWrapper = ({
 
         getData()
     }, [])
+
     return (
         <div className="comments-wrapper">
-            <div className="comments-wrapper-note">
-                <T k="comments.description" />
+            <div className="comments-help">
+                <Help id="comments" />
             </div>
+            {/* <div className="comments-wrapper-note">
+                <T k="comments.description" />
+            </div> */}
 
             <div className="comments-main">
                 {isLoading ? (

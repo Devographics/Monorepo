@@ -1,5 +1,6 @@
 import Button from 'core/components/Button'
 import './ChartFooter.scss'
+import './ChartData.scss'
 import React from 'react'
 import ModalTrigger from 'core/components/ModalTrigger'
 import { FiltersExport, GraphQLExport, JSONExport, DebugExport } from 'core/blocks/block/BlockData'
@@ -9,6 +10,7 @@ import { TabsList } from 'core/blocks/block/BlockTabsWrapper'
 import { Tab_, TabsTrigger_ } from 'core/filters/FiltersPanel'
 import * as Tabs from '@radix-ui/react-tabs'
 import T from 'core/i18n/T'
+import Help from 'core/components/Help'
 
 export const ChartData = <ChartStateType,>({
     block,
@@ -36,6 +38,9 @@ export const ChartData = <ChartStateType,>({
             }
         >
             <div className="chart-data-modal">
+                <div className="export-help">
+                    <Help id="export_data" />
+                </div>
                 <Tabs.Root defaultValue="tab-data" orientation="horizontal">
                     <TabsList aria-label="tabs example">
                         <TabsTrigger_ value="tab-data">

@@ -32,6 +32,7 @@ import { Details } from 'core/components/Details'
 import { AdvancedOptions } from './AdvancedOptions'
 import { getBlockQuery } from 'core/queries/queries'
 import * as Tabs from '@radix-ui/react-tabs'
+import Help from 'core/components/Help'
 
 export type FiltersPanelPropsType = {
     block: BlockVariantDefinition
@@ -133,6 +134,9 @@ const FiltersPanel = ({
     const hasFilters = filtersState.filters && filtersState.filters.length > 0
     return (
         <div className="filters">
+            <div className="filters-help">
+                <Help id="query_builder" />
+            </div>
             <div className="filters-top">
                 <h3 className="filters-heading">
                     <span className="filters-heading-title">{chartName}</span>

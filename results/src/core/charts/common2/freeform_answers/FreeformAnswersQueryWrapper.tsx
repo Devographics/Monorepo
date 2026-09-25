@@ -6,6 +6,7 @@ import { FreeformAnswers } from './FreeformAnswers'
 import { CommentsCommonProps } from '../comments/types'
 import { getEntityFragmentContents } from 'core/queries'
 import { RawDataQueryOptions } from './FreeformAnswersTrigger'
+import Help from 'core/components/Help'
 
 type GetQueryNameProps = {
     editionId: string
@@ -125,9 +126,12 @@ export const FreeformAnswersQueryWrapper = ({
 
     return (
         <div className="comments-wrapper">
-            <div className="comments-wrapper-note">
-                <T k="answers.description" values={{ name: tokenLabel }} md={true} />
+            <div className="comments-help">
+                <Help id="freeform_answers" values={{ topic: tokenLabel }} />
             </div>
+            {/* <div className="comments-wrapper-note">
+                <T k="answers.description" values={{ name: tokenLabel }} md={true} />
+            </div> */}
             <div>
                 {isLoading ? (
                     <div>Loading…</div>
