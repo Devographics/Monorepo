@@ -24,11 +24,13 @@ const ConclusionBlock = ({ block, data: author }) => {
                 />
             </div>
             {showConclusion && (
-                <T
-                    k={`conclusion.${currentEdition.id}.${author.id}`}
-                    md={true}
-                    fallback={variables.contents}
-                />
+                <div className="conclusion-contents">
+                    <T
+                        k={`conclusion.${currentEdition.id}.${author.id}`}
+                        md={true}
+                        fallback={variables.contents}
+                    />
+                </div>
             )}
         </div>
     )

@@ -12,3 +12,7 @@
         }
     }
 }
+
+.conclusion-heading + .conclusion-contents {
+    margin-top: var(--spacing);
+}
