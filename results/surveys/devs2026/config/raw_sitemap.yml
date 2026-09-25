@@ -963,7 +963,7 @@
             labelId: frontendmasters.learning_path
             imageUrl: https://assets.devographics.com/sponsors/fem-background-intermediate.jpg
             logoUrl: https://assets.devographics.com/sponsors/frontend-masters-dark.png
-            link: https://frontendmasters.com/learn/professional/?utm_source=stateofdevs&utm_medium=website&utm_campaign=devs2025
+            link: https://frontendmasters.com/learn/professional/?utm_source=state_of_devs&utm_medium=website&utm_campaign=devs2026
 
       - id: figure_job_finding_application_count
         template: figure
@@ -1004,11 +1004,11 @@
                       sectionId: workplace
                       id: job_finding_application_count
 
-      - id: figure_remote_work_policy_happiness
-        template: figure
-        variables:
-            value: 0.7
-            unit: count
+      # - id: figure_remote_work_policy_happiness
+      #   template: figure
+      #   variables:
+      #       value: 0.7
+      #       unit: count
 
       - id: remote_work_policy
         template: single_option2
@@ -1360,7 +1360,7 @@
       - id: figure_global_issues
         template: figure
         variables:
-            value: 71
+            value: 73
             unit: percentage
 
       - id: global_issues
@@ -1646,7 +1646,7 @@
       - id: figure_relocation_japan
         template: figure
         variables:
-            value: 1270
+            value: 672
             unit: count
 
       - id: relocation
@@ -1671,7 +1671,7 @@
         variables:
             id: tokyodev-relocation
             labelId: tokyodev.relocation
-            imageUrl: https://www.tokyodev.com/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MjAwMDcsInB1ciI6ImJsb2JfaWQifX0=--177331b3dc5df5ead454d72fe206b048717f7427/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJ3ZWJwIiwic2F2ZXIiOnsic3Vic2FtcGxlX21vZGUiOiJvbiIsInN0cmlwIjp0cnVlLCJpbnRlcmxhY2UiOnRydWUsImxvc3NsZXNzIjpmYWxzZSwicXVhbGl0eSI6ODB9LCJyZXNpemVfdG9fZmlsbCI6WzE0NzIsODE4XX0sInB1ciI6InZhcmlhdGlvbiJ9fQ==--0d1259653ca4f333f4533b6b41c26abc946afb0c/c7pirdpgqmcchwzsdoib2tvr8l35-3.jpg
+            imageUrl: https://assets.devographics.com/other/tokyodev-image.png
             logoUrl: https://assets.devographics.com/sponsors/tokyodev.png
             link: https://www.tokyodev.com/articles/a-developer-s-crash-course-in-coming-to-japan/?utm_source=stateofdevs&utm_medium=website&utm_campaign=devs2025
 
@@ -1868,19 +1868,19 @@
                       sectionId: hobbies
                       id: video_game_platforms
 
-# - id: conclusion
-#   path: /conclusion
-#   blocks:
-#       - id: conclusion
-#         template: conclusion
-#         variables:
-#             author: miranda_heath
-#             entities: '"miranda_heath"'
+- id: conclusion
+  path: /conclusion
+  blocks:
+      - id: conclusion
+        template: conclusion
+        variables:
+            author: sacha_greif
+            entities: '"sacha_greif"'
 
-#       - id: conclusion_newsletter
-#         blockType: NewsletterBlock
-#         wrapBlock: false
-#         disableExport: true
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
 
 # note: other pages need to be included in the sitemap too so they can get the proper
 # locale passed to them
