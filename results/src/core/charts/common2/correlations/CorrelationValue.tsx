@@ -32,23 +32,24 @@ export const CorrelationValue = ({
     }
     const IconComponent2 = shapeIcons[shape]
     return (
-        <div className="correlation-item-value">
-            <IconComponent2 />
-            <Tooltip
-                contents={<T k={`correlations.direction.${direction}.description`} md={true} />}
-                showBorder={false}
-                trigger={
-                    <span className="correlation-item-value-figure">
-                        {formatCorrelation(value)}
-                    </span>
-                }
-            />
-            {/* <IconComponent /> */}
+        <div className="correlation-item-value-wrapper">
+            <div className="correlation-item-value">
+                <IconComponent2 />
+                <Tooltip
+                    contents={<T k={`correlations.direction.${direction}.description`} md={true} />}
+                    showBorder={false}
+                    trigger={
+                        <span className="correlation-item-value-figure">
+                            {formatCorrelation(value)}
+                        </span>
+                    }
+                />
+            </div>
         </div>
     )
 }
 
-const PositiveCorrelation = () => (
+export const PositiveCorrelation = () => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 48">
         <path
             stroke="currentColor"
@@ -60,7 +61,7 @@ const PositiveCorrelation = () => (
     </svg>
 )
 
-const NegativeCorrelation = () => (
+export const NegativeCorrelation = () => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 48">
         <path
             stroke="currentColor"

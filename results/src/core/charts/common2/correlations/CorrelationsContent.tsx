@@ -37,6 +37,9 @@ export const CorrelationsContent = (props: CorrelationProps) => {
     const directionLabel = getString(directionKey)?.t
 
     const headingKey = getMainHeadingKey({ question, type })
+
+    const negativeCorrelations = correlations.filter(c => c.correlation < 0)
+    const positiveCorrelations = correlations.filter(c => c.correlation > 0)
     return (
         <div className={`correlations-wrapper correlation-positive`}>
             <div className="correlations-heading-wrapper">
@@ -57,8 +60,17 @@ export const CorrelationsContent = (props: CorrelationProps) => {
                     {/* <CorrelationsDirections /> */}
 
                     <div className="correlation-lists">
-                        <CorrelationsList {...props} />
-                        <CorrelationsList {...props} />
+                        <CorrelationsList
+                            {...props}
+                            correlations={negativeCorrelations}
+                            direction="negative"
+                        />
+                        <div className="correlation-lists-separator" />
+                        <CorrelationsList
+                            {...props}
+                            correlations={positiveCorrelations}
+                            direction="positive"
+                        />
                     </div>
                     <div className="correlations-note">
                         <T k="correlations.note" md={true} html={true} />
