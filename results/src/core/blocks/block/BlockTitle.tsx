@@ -15,7 +15,7 @@ import { CommentsTrigger } from 'core/charts/common2/comments/CommentsTrigger'
 import T from 'core/i18n/T'
 import { NewQuestionIndicator } from './NewQuestionIndicator'
 import { QuestionMetadata } from '@devographics/types'
-import { CorrelationsTrigger } from 'core/charts/common2/Correlations'
+import { CorrelationsTrigger } from 'core/charts/common2/correlations/CorrelationsTrigger'
 
 const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
     const { getString } = useI18n()

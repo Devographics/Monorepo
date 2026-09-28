@@ -9,7 +9,7 @@ import { CUTOFF_ANSWERS, OVERLIMIT_ANSWERS } from '@devographics/constants'
 import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataIndicator'
 import { ResultsSubFieldEnum } from '@devographics/types'
 import { getTopBound } from '../views'
-import { CorrelationsTrigger } from 'core/charts/common2/Correlations'
+import { CorrelationsTrigger } from 'core/charts/common2/correlations/CorrelationsTrigger'
 
 export const RowSingle = (props: RowComponentProps) => {
     const theme = useTheme()
