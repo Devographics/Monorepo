@@ -613,7 +613,7 @@
             - template: men_vs_non_men
               queryOptions:
                   addCardinalities: true
-            - template: white_vs_non_white
+            # - template: white_vs_non_white
             # - id: negative_impacts_overall_by_gender
             #   fieldId: negative_impacts
             #   blockType: HorizontalBarBlock2
