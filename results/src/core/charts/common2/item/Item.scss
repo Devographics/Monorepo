@@ -27,59 +27,61 @@
         }
     }
 }
-.chart-item-label {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    margin-left: 0%;
-    display: flex;
-    align-items: center;
-    gap: var(--quarterSpacing);
-    .chart-item-label-wrapper:hover & {
-        text-overflow: initial;
-        overflow: visible;
-        translate: -100%;
-        margin-left: 100%;
-        transition: 1s linear;
-    }
-    .chart-item-tech_industry_emotion &,
-    .chart-item-ai_outlook &,
-    .chart-item-ai_risks &,
-    .chart-item-ai_uses & {
-        .chart-row-depth-0 &::before {
-            display: inline-block;
-            content: ' ';
-            height: 12px;
-            width: 12px;
-            border-radius: 50px;
-            background: #ffffffaa;
-            margin-right: 5px;
+.tabs-wrapper-ai_outlook,
+.tabs-wrapper-tech_industry_emotion {
+    .chart-item-label {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin-left: 0%;
+        display: flex;
+        align-items: center;
+        gap: var(--quarterSpacing);
+        .chart-item-label-wrapper:hover & {
+            text-overflow: initial;
+            overflow: visible;
+            translate: -100%;
+            margin-left: 100%;
+            transition: 1s linear;
         }
-    }
-    .chart-item-negative_sentiment &,
-    .chart-item-anti_ai_sentiment &,
-    .chart-item-ai_risks & {
-        .chart-row-depth-0 &::before {
-            background-color: var(--sentimentNegativeColor);
+        .chart-item-tech_industry_emotion &,
+        .chart-item-ai_outlook &,
+        .chart-item-ai_risks &,
+        .chart-item-ai_uses & {
+            .chart-row-depth-0 &::before {
+                display: inline-block;
+                content: ' ';
+                height: 12px;
+                width: 12px;
+                border-radius: 50px;
+                background: #ffffffaa;
+                margin-right: 5px;
+            }
         }
-        // color: var(--sentimentNegativeColor);
-    }
+        .chart-item-negative_sentiment &,
+        .chart-item-anti_ai_sentiment &,
+        .chart-item-ai_risks & {
+            .chart-row-depth-0 &::before {
+                background-color: var(--sentimentNegativeColor);
+            }
+            // color: var(--sentimentNegativeColor);
+        }
 
-    .chart-item-positive_sentiment &,
-    .chart-item-pro_ai_sentiment &,
-    .chart-item-ai_uses & {
-        .chart-row-depth-0 &::before {
-            background-color: var(--sentimentPositiveColor);
+        .chart-item-positive_sentiment &,
+        .chart-item-pro_ai_sentiment &,
+        .chart-item-ai_uses & {
+            .chart-row-depth-0 &::before {
+                background-color: var(--sentimentPositiveColor);
+            }
+            // color: var(--sentimentPositiveColor);
         }
-        // color: var(--sentimentPositiveColor);
-    }
-    .chart-item-neutral_ai_sentiment & {
-        .chart-row-depth-0 &::before {
-            background-color: var(--sentimentNeutralColor);
+        .chart-item-neutral_ai_sentiment & {
+            .chart-row-depth-0 &::before {
+                background-color: var(--sentimentNeutralColor);
+            }
         }
     }
 }
-
 .chart-item-entity {
     .tooltip-trigger {
         border-bottom: none;
