@@ -12,6 +12,7 @@ import { getCorrelationShape, getHighlight } from './helpers'
 import { CorrelationHighlightProps } from './types'
 import { CorrelationSubheading } from './CorrelationSubheading'
 import { CorrelationValue } from './CorrelationValue'
+import { CorrelationCount } from './CorrelationCount'
 
 export const CorrelationItemComponent = ({
     correlation,
@@ -92,8 +93,6 @@ export const CorrelationItemComponent = ({
             }`}
             {...handlers}
         >
-            <CorrelationValue value={correlationValue} direction={direction} shape={shape} />
-
             <div className="correlation-item-description">
                 {/* <div>{shape}</div> */}
                 <CorrelationSubheading
@@ -124,6 +123,10 @@ export const CorrelationItemComponent = ({
                     />
                 </div>
             </div>
+
+            <CorrelationValue value={correlationValue} direction={direction} shape={shape} />
+
+            <CorrelationCount n={n} />
         </div>
     )
 }
