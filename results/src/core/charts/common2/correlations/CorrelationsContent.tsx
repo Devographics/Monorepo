@@ -58,16 +58,18 @@ export const CorrelationsContent = (props: CorrelationProps) => {
                     <Help id="correlations" />
                 </div>
                 <div className="correlations-heading-wrapper2">
-                    <h3 className="correlations-heading">
-                        <T
-                            k={headingKey}
-                            values={{ count, directionLabel, questionLabel, optionLabel }}
-                            md={true}
-                        />
-                    </h3>
+                    <div className="correlations-heading-wrapper3">
+                        <h3 className="correlations-heading">
+                            <T
+                                k={headingKey}
+                                values={{ count, directionLabel, questionLabel, optionLabel }}
+                                md={true}
+                            />
+                        </h3>
+                        <CorrelationsExclusions question={question} block={block} />
+                    </div>
                 </div>
                 <div className="correlations-content">
-                    <CorrelationsExclusions question={question} block={block} />
                     {/* <CorrelationsDirections /> */}
 
                     {/* <div className="correlation-lists-headings">

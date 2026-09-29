@@ -104,15 +104,17 @@ export const getXPosition = (value: number, extent: number) =>
 
 Which bin a correlation falls in. Bins are measured out from 0 on both sides,
 so a value and its opposite always land in mirror-image bins. A value sitting
-exactly on an edge belongs to the bin nearer 0: with a step of 0.05, both 0.64
-and 0.65 fall in (0.60, 0.65] and are drawn at 0.625, and -0.65 mirrors that at
--0.625. The ratio is rounded before rounding up so that floating point noise
-can't push an exact edge into the next bin (0.65 / 0.05 = 13.000000000000002).
+exactly on an edge belongs to the bin further from 0, the same convention as the
+strength bands (exactly 0.25 is "strong"), so a group never sits in a band below
+its correlations' labels: with a step of 0.05, 0.64 falls in [0.60, 0.65) and is
+drawn at 0.625, while 0.65 falls in [0.65, 0.70) and is drawn at 0.675. The ratio
+is rounded before flooring so that floating point noise can't push an exact edge
+into the bin below (0.3 / 0.05 = 5.999999999999999).
 
 */
 export const getBin = (value: number, step: number) => {
     const ratio = Math.round((Math.abs(value) / step) * 1e6) / 1e6
-    const magnitude = Math.max(0, Math.ceil(ratio) - 1)
+    const magnitude = Math.floor(ratio)
     // negative bins are numbered so that `(bin + 0.5) * step` is still their middle
     return value < 0 ? -(magnitude + 1) : magnitude
 }

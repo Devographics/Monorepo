@@ -27,31 +27,33 @@ export const CorrelationsExclusions = ({
         <div className="correlations-exclusions">
             <Tooltip
                 trigger={
-                    <h4>
-                        <T k="correlations.exclusions" />
-                    </h4>
+                    <span>
+                        <T k="correlations.exclusions" />{' '}
+                        {doNotCorrelateWith.map((excludedId, index) => {
+                            // the question the main variable is correlated to
+                            const question = getQuestionById(currentEdition, excludedId)
+
+                            if (!question) {
+                                return null
+                            }
+                            const questionLabelObject = getQuestionLabel({
+                                getString,
+                                question,
+                                block
+                            })
+                            const questionName = questionLabelObject.questionName
+
+                            return (
+                                <>
+                                    {index > 0 && ', '}
+                                    <strong key={excludedId}>{questionName}</strong>
+                                </>
+                            )
+                        })}
+                    </span>
                 }
                 contents={<T k="correlations.exclusions.description" />}
             />
-
-            <ul>
-                {doNotCorrelateWith.map(excludedId => {
-                    // the question the main variable is correlated to
-                    const question = getQuestionById(currentEdition, excludedId)
-
-                    if (!question) {
-                        return null
-                    }
-                    const questionLabelObject = getQuestionLabel({
-                        getString,
-                        question,
-                        block
-                    })
-                    const questionName = questionLabelObject.questionName
-
-                    return <li key={excludedId}>{questionName}</li>
-                })}
-            </ul>
         </div>
     )
 }

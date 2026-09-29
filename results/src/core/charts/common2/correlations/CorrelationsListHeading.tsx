@@ -1,6 +1,7 @@
 import React from 'react'
 import T from 'core/i18n/T'
 import { NegativeCorrelation, PositiveCorrelation } from './CorrelationValue'
+import Tooltip from 'core/components/Tooltip'
 
 export const CorrelationsListHeading = (props: { direction: string }) => {
     const { direction } = props
@@ -9,16 +10,20 @@ export const CorrelationsListHeading = (props: { direction: string }) => {
     return (
         <div className="correlation-list-heading">
             <div className="correlation-list-heading-contents">
-                <h3>
-                    <T k={`correlations.direction.${direction}.title`} />
-                </h3>
-                <p>
-                    <T
-                        k={`correlations.direction.${direction}.description`}
-                        html={true}
-                        md={true}
-                    />
-                </p>
+                <Tooltip
+                    trigger={
+                        <h3>
+                            <T k={`correlations.direction.${direction}.title`} />
+                        </h3>
+                    }
+                    contents={
+                        <T
+                            k={`correlations.direction.${direction}.description`}
+                            html={true}
+                            md={true}
+                        />
+                    }
+                />
             </div>
             {/* <div className="correlation-list-heading-image">
                 <IconComponent />
