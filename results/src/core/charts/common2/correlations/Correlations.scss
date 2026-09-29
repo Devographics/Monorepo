@@ -5,7 +5,14 @@
         padding: 0;
     }
 }
-.correlation-lists {
+.correlations {
+    --veryStrongColor: rgb(255, 77, 65);
+    --strongColor: rgb(238, 134, 15);
+    --moderateColor: rgb(252, 243, 69);
+    --weakColor: #cccccc;
+}
+.correlation-lists,
+.correlation-lists-headings {
     @include breakpoints.small {
         display: flex;
         flex-direction: column;
@@ -27,12 +34,13 @@
 }
 .correlation-list-heading {
     margin-bottom: var(--spacing);
-    display: grid;
-    grid-template-columns: 1fr 20px;
-    gap: var(--spacing);
-    border: 1px solid var(--borderAltColor);
-    border-radius: 10px;
-    padding: var(--spacing);
+    // display: grid;
+    // grid-template-columns: 1fr 20px;
+    // gap: var(--spacing);
+    text-align: center;
+    // border: 1px solid var(--borderAltColor);
+    // border-radius: 10px;
+    // padding: var(--spacing);
     h3,
     p {
         margin-bottom: 0;
@@ -73,6 +81,7 @@
     margin: 0;
     font-weight: var(--fontLight);
     background-color: var(--backgroundAltColor);
+    font-size: var(--fontSizeLarge);
     padding: var(--doubleSpacing) var(--doubleSpacing) var(--spacing) var(--doubleSpacing);
 
     @include breakpoints.small {
@@ -209,13 +218,13 @@
 .correlation-item-value,
 .correlation-item-content-strength {
     .correlation-item-very_strong & {
-        color: rgb(255, 77, 65);
+        color: var(--veryStrongColor);
     }
     .correlation-item-strong & {
-        color: rgb(238, 134, 15);
+        color: var(--strongColor);
     }
     .correlation-item-moderate & {
-        color: rgb(252, 243, 69);
+        color: var(--moderateColor);
     }
     .correlation-item-weak & {
     }
@@ -336,3 +345,194 @@
 .correlation-item-index {
     display: none;
 }
+
+/* correlations spectrum */
+
+.correlations-spectrum {
+    --axisHeight: 10px;
+    --axisPadding: 10px;
+    margin-top: var(--doubleSpacing);
+    margin-bottom: var(--doubleSpacing);
+    position: relative;
+    padding: 0 var(--spacing);
+    height: var(--axisHeight);
+    &::before,
+    &::after {
+        height: 100%;
+        width: var(--spacing);
+        position: absolute;
+        content: ' ';
+        display: block;
+        top: 0;
+        background-color: var(--veryStrongColor);
+    }
+    &::before {
+        left: 0;
+        border-radius: 20px 0 0 20px;
+    }
+    &::after {
+        right: 0;
+        border-radius: 0 20px 20px 0;
+    }
+}
+/* axis */
+.correlations-spectrum-inner {
+    position: relative;
+
+    height: 100%;
+}
+.correlations-spectrum-axis {
+    // how far each color blends into the next on either side of a band boundary;
+    // 0% gives hard edges that line up exactly with the legend bands
+    --gradientBlend: 1.5%;
+    // band boundaries (--moderatePositive etc.) are set inline from
+    // CORRELATION_STRENGTH_BANDS, in 0-100 units: very strong on the far left,
+    // weak around 0, very strong again on the far right
+    background: linear-gradient(
+        to right,
+        var(--veryStrongColor) calc(var(--veryStrongNegative) * 1% - var(--gradientBlend)),
+        var(--strongColor) calc(var(--veryStrongNegative) * 1% + var(--gradientBlend)),
+        var(--strongColor) calc(var(--strongNegative) * 1% - var(--gradientBlend)),
+        var(--moderateColor) calc(var(--strongNegative) * 1% + var(--gradientBlend)),
+        var(--moderateColor) calc(var(--moderateNegative) * 1% - var(--gradientBlend)),
+        var(--weakColor) calc(var(--moderateNegative) * 1% + var(--gradientBlend)),
+        var(--weakColor) calc(var(--moderatePositive) * 1% - var(--gradientBlend)),
+        var(--moderateColor) calc(var(--moderatePositive) * 1% + var(--gradientBlend)),
+        var(--moderateColor) calc(var(--strongPositive) * 1% - var(--gradientBlend)),
+        var(--strongColor) calc(var(--strongPositive) * 1% + var(--gradientBlend)),
+        var(--strongColor) calc(var(--veryStrongPositive) * 1% - var(--gradientBlend)),
+        var(--veryStrongColor) calc(var(--veryStrongPositive) * 1% + var(--gradientBlend))
+    );
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+/* legend */
+.correlations-spectrum-legend {
+}
+
+.correlations-spectrum-band {
+    bottom: calc(100% + var(--axisPadding));
+    position: absolute;
+    left: calc(var(--start) * 1%);
+    width: calc(var(--width) * 1%);
+    // right: calc(var(--end) * 1%);
+    white-space: nowrap;
+    text-align: center;
+    &::before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 2px;
+        right: 2px;
+        height: 4px;
+        bottom: -4px;
+        border-top: 1px solid var(--textAltColor);
+        border-left: 1px solid var(--textAltColor);
+        border-right: 1px solid var(--textAltColor);
+    }
+}
+.correlations-spectrum-band-label {
+    font-size: var(--fontSizeSmall);
+    text-transform: uppercase;
+    color: var(--textAltColor);
+}
+
+/* ticks */
+
+.correlations-spectrum-tick {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--xPosition) * 1%);
+    &::after {
+        content: ' ';
+        display: block;
+        position: absolute;
+        width: 1px;
+        background-color: #ffffff99;
+        top: 0;
+        bottom: 0;
+        left: 0;
+    }
+}
+.correlations-spectrum-tick-label {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    line-height: 1;
+    top: calc(100% + var(--axisPadding));
+    color: var(--textColor);
+    text-transform: uppercase;
+    font-size: var(--fontSizeSmall);
+}
+
+/* node groups */
+.correlations-spectrum-nodes {
+}
+.correlations-spectrum-nodegroup {
+    position: absolute;
+    left: calc(var(--xPosition) * 1%);
+    top: 0;
+    bottom: 0;
+}
+.correlations-spectrum-nodegroup-marker {
+    position: absolute;
+    border-radius: 100%;
+    height: 24px;
+    width: 24px;
+    font-size: var(--fontSizeSmall);
+    border: none;
+    background: #ffffffdd;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: var(--backgroundColor);
+    border: 1px solid var(--borderColor);
+    display: grid;
+    place-items: center;
+}
+.correlations-spectrum-nodegroup-count {
+    line-height: 1;
+}
+.correlations-spectrum-nodegroup-nodes {
+    display: none;
+}
+/**/
+// .correlations-spectrum-track {
+// }
+// .correlations-spectrum-nodes {
+//     position: absolute;
+//     left: 0px;
+//     right: 0px;
+//     top: 0px;
+//     right: 0px;
+// }
+// .correlations-spectrum-node {
+//     position: absolute;
+//     top: 50%;
+//     left: calc(var(--xPosition) * 1%);
+// }
+// .correlations-spectrum-node-marker {
+//     border-radius: 100%;
+//     border: 2px solid var(--textColor);
+//     padding: 4px;
+//     background-color: rgba(0, 0, 0, 0.2);
+//     &::after {
+//         content: ' ';
+//         display: block;
+//         background-color: var(--textColor);
+//         height: 8px;
+//         width: 8px;
+//         border-radius: 100%;
+//     }
+// }
+// .correlations-spectrum-node-label {
+//     transform: rotate(-45deg);
+//     position: absolute;
+//     top: -220%;
+//     left: 0%;
+//     display: none;
+// }

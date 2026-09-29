@@ -8,19 +8,22 @@ import { BlockVariantDefinition } from 'core/types'
 import React from 'react'
 import { getQuestionLabel } from '../helpers/labels'
 import { getTrendDirectionKey } from './helpers'
-import { getCorrelationShape } from './helpers'
+import { getCorrelationShape, getHighlight } from './helpers'
+import { CorrelationHighlightProps } from './types'
 import { CorrelationSubheading } from './CorrelationSubheading'
 import { CorrelationValue } from './CorrelationValue'
 
 export const CorrelationItemComponent = ({
     correlation,
     block,
-    index
+    index,
+    activeKey,
+    setActive
 }: {
     correlation: CorrelationItem
     block: BlockVariantDefinition
     index: number
-}) => {
+} & CorrelationHighlightProps) => {
     let optionLabelObject, optionLabel
 
     const pageContext = usePageContext()
@@ -80,8 +83,15 @@ export const CorrelationItemComponent = ({
 
     const takeawayKey = `correlations.takeaway.${shape}`
 
+    const { isActive, handlers } = getHighlight(correlation, { activeKey, setActive })
+
     return (
-        <div className={`correlation-item correlation-item-${strength} correlation-${direction}`}>
+        <div
+            className={`correlation-item correlation-item-${strength} correlation-${direction} ${
+                isActive ? 'correlation-item-active' : ''
+            }`}
+            {...handlers}
+        >
             <CorrelationValue value={correlationValue} direction={direction} shape={shape} />
 
             <div className="correlation-item-description">

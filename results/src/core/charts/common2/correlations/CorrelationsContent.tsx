@@ -4,12 +4,14 @@ import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { getOptionsNamespace, getItemLabel } from 'core/helpers/labels'
 import { usePageContext } from 'core/helpers/pageContext'
 import T from 'core/i18n/T'
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { CorrelationProps } from './types'
 import { getTrendDirectionKey } from './helpers'
 import { CorrelationsExclusions } from './CorrelationsExclusions'
 import { getMainHeadingKey } from './helpers'
 import { CorrelationsList } from './CorrelationsList'
+import { CorrelationsSpectrum } from './CorrelationsSpectrum'
+import { CorrelationsListHeading } from './CorrelationsListHeading'
 
 export const CorrelationsContent = (props: CorrelationProps) => {
     const { question, block, optionId, correlations, type } = props
@@ -38,10 +40,19 @@ export const CorrelationsContent = (props: CorrelationProps) => {
 
     const headingKey = getMainHeadingKey({ question, type })
 
+    // the correlation hovered in either the spectrum or the lists
+    const [activeKey, setActiveKey] = useState<string | null>(null)
+    const setActive = useCallback((key: string, isActive: boolean) => {
+        // only clear the key it set, so that leaving one element after entering
+        // another can't wipe the newer one
+        setActiveKey(current => (isActive ? key : current === key ? null : current))
+    }, [])
+    const highlightProps = { activeKey, setActive }
+
     const negativeCorrelations = correlations.filter(c => c.correlation < 0)
     const positiveCorrelations = correlations.filter(c => c.correlation > 0)
     return (
-        <div className={`correlations-wrapper correlation-positive`}>
+        <div className={`correlations correlations-wrapper correlation-positive`}>
             <div className="correlations-heading-wrapper">
                 <div className="correlations-heading-help">
                     <Help id="correlations" />
@@ -59,15 +70,25 @@ export const CorrelationsContent = (props: CorrelationProps) => {
                     <CorrelationsExclusions question={question} block={block} />
                     {/* <CorrelationsDirections /> */}
 
+                    {/* <div className="correlation-lists-headings">
+                        <CorrelationsListHeading direction={'negative'} />
+                        <div className="correlation-lists-separator" />
+                        <CorrelationsListHeading direction={'positive'} />
+                    </div> */}
+
+                    <CorrelationsSpectrum {...props} {...highlightProps} />
+
                     <div className="correlation-lists">
                         <CorrelationsList
                             {...props}
+                            {...highlightProps}
                             correlations={negativeCorrelations}
                             direction="negative"
                         />
                         <div className="correlation-lists-separator" />
                         <CorrelationsList
                             {...props}
+                            {...highlightProps}
                             correlations={positiveCorrelations}
                             direction="positive"
                         />

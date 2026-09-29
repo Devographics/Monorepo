@@ -1,4 +1,8 @@
-import { CorrelationItem, CorrelationVariableKind, QuestionMetadataWithSection } from '@devographics/types'
+import {
+    CorrelationItem,
+    CorrelationVariableKind,
+    QuestionMetadataWithSection
+} from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 
 export type CorrelationShape =
@@ -23,7 +27,9 @@ are kept as they are even though they no longer read as a sequence.
 
 */
 
-export type CorrelationShapeKey = `${CorrelationVariableKind}_${CorrelationVariableKind}`export type CorrelationProps = {
+export type CorrelationShapeKey = `${CorrelationVariableKind}_${CorrelationVariableKind}`
+
+export type CorrelationProps = {
     question: QuestionMetadataWithSection
     optionId?: string
     correlations: CorrelationItem[]
@@ -31,3 +37,15 @@ export type CorrelationShapeKey = `${CorrelationVariableKind}_${CorrelationVaria
     type: 'question' | 'option'
 }
 
+/*
+
+Links a correlation's spectrum marker and its card: hovering either one marks
+both as active. Optional, so components used on their own (e.g. a card inside
+a tooltip) simply don't take part.
+
+*/
+export type CorrelationHighlightProps = {
+    // key of the correlation currently hovered (see getCorrelationKey), if any
+    activeKey?: string | null
+    setActive?: (key: string, isActive: boolean) => void
+}

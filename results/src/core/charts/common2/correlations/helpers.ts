@@ -3,7 +3,7 @@ import {
     CorrelationStrength,
     QuestionMetadataWithSection
 } from '@devographics/types'
-import { CorrelationProps } from './types'
+import { CorrelationHighlightProps, CorrelationProps } from './types'
 import { StringTranslator } from '@devographics/i18n'
 
 export const correlationColors: Record<CorrelationStrength | 'empty', string> = {
@@ -39,6 +39,36 @@ export const getMainHeadingKey = ({
         suffix = 'option'
     }
     return `correlations.heading.${suffix}`
+}
+
+// identifies a correlation within one question's list: what side 2 is
+export const getCorrelationKey = ({ kind2, questionId2, optionId2 }: CorrelationItem) =>
+    [kind2, questionId2, optionId2].filter(Boolean).join('__')
+
+/*
+
+Everything an element needs to take part in marker/card highlighting: whether
+it's the active one, and the handlers that make it so. Focus events count as
+hovering, so keyboard users get the same link between marker and card.
+
+*/
+export const getHighlight = (
+    correlation: CorrelationItem,
+    { activeKey, setActive }: CorrelationHighlightProps
+) => {
+    const key = getCorrelationKey(correlation)
+    if (!setActive) {
+        return { isActive: false, handlers: {} }
+    }
+    return {
+        isActive: activeKey === key,
+        handlers: {
+            onMouseEnter: () => setActive(key, true),
+            onMouseLeave: () => setActive(key, false),
+            onFocus: () => setActive(key, true),
+            onBlur: () => setActive(key, false)
+        }
+    }
 }
 
 export const getCorrelationShape = ({ kind1, kind2 }: CorrelationItem): CorrelationShape =>

@@ -1,35 +1,27 @@
 import React from 'react'
-import { CorrelationProps } from './types'
+import { CorrelationHighlightProps, CorrelationProps } from './types'
+import { getCorrelationKey } from './helpers'
 import { CorrelationItemComponent } from './CorrelationItemComponent'
-import T from 'core/i18n/T'
-import { NegativeCorrelation, PositiveCorrelation } from './CorrelationValue'
+import { CorrelationsListHeading } from './CorrelationsListHeading'
 
-export const CorrelationsList = (props: CorrelationProps & { direction: string }) => {
-    const { correlations, block, direction } = props
+export const CorrelationsList = (
+    props: CorrelationProps & CorrelationHighlightProps & { direction: string }
+) => {
+    const { correlations, block, direction, activeKey, setActive } = props
 
-    const IconComponent = direction === 'positive' ? PositiveCorrelation : NegativeCorrelation
     return (
         <div className="correlation-list">
-            <div className="correlation-list-heading">
-                <div className="correlation-list-heading-contents">
-                    <h3>
-                        <T k={`correlations.direction.${direction}.title`} />
-                    </h3>
-                    <p>
-                        <T
-                            k={`correlations.direction.${direction}.description`}
-                            html={true}
-                            md={true}
-                        />
-                    </p>
-                </div>
-                <div className="correlation-list-heading-image">
-                    <IconComponent />
-                </div>
-            </div>
+            <CorrelationsListHeading direction={direction} />
             <div className=" correlation-items">
                 {correlations.map((c, i) => (
-                    <CorrelationItemComponent index={i} key={i} correlation={c} block={block} />
+                    <CorrelationItemComponent
+                        index={i}
+                        key={getCorrelationKey(c)}
+                        correlation={c}
+                        block={block}
+                        activeKey={activeKey}
+                        setActive={setActive}
+                    />
                 ))}
             </div>
         </div>

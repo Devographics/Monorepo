@@ -88,3 +88,20 @@ export const DEFAULT_API_URL = 'https://api.devographics.com'
 export const INVALID = 'invalid'
 export const NO_PAIN_POINT = 'no_pain_point'
 export const INVALID_VALUES = [INVALID, NO_PAIN_POINT]
+
+/*
+
+Correlation strength bands: the lowest |correlation| that earns each label,
+strongest first; anything below the last one is "weak". Shared so that the API
+(which labels every correlation) and the results spectrum legend (which draws
+the bands) can't drift apart.
+
+Changing these changes computed results: bump CACHE_VERSION in
+api/src/compute/correlations_constants.ts at the same time.
+
+*/
+export const CORRELATION_STRENGTH_BANDS = [
+    ['very_strong', 0.4],
+    ['strong', 0.25],
+    ['moderate', 0.15]
+] as const
