@@ -92,6 +92,8 @@ import CTABlock from 'core/blocks/other/CTABlock'
 
 import SurveyStatsBlock from 'core/blocks/other/SurveyStatsBlock'
 
+import CorrelationsExplorer from 'core/correlations/CorrelationsExplorer'
+
 const otherBlocks = {
     PageIntroductionBlock,
     TextBlock,
@@ -120,7 +122,8 @@ const otherBlocks = {
     HighlightBlock,
     FigureBlock,
     MidpageResourceBlock,
-    SurveyStatsBlock
+    SurveyStatsBlock,
+    CorrelationsExplorer
 }
 
 export default { ...chartBlocks, ...otherBlocks }
