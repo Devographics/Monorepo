@@ -517,6 +517,7 @@
     display: grid;
     place-items: center;
     transition: all 200ms ease-out;
+    &:hover,
     .correlations-spectrum-nodegroup-active &,
     .correlations-spectrum-nodegroup-expanded & {
         // border: 2px solid var(--borderColor);
