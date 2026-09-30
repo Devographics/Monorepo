@@ -19,7 +19,7 @@ export const CorrelationItemComponent = ({
     block,
     index,
     activeKey,
-    setActive
+    setActiveKey
 }: {
     correlation: CorrelationItem
     block: BlockVariantDefinition
@@ -84,7 +84,7 @@ export const CorrelationItemComponent = ({
 
     const takeawayKey = `correlations.takeaway.${shape}`
 
-    const { isActive, handlers } = getHighlight(correlation, { activeKey, setActive })
+    const { isActive, handlers } = getHighlight(correlation, { activeKey, setActiveKey })
 
     return (
         <div

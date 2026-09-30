@@ -179,6 +179,9 @@
     &:hover {
         background-color: rgba(0, 0, 0, 0.2);
     }
+    &-active {
+        border: 1px solid var(--borderColor);
+    }
 }
 .correlation-item-value-wrapper {
     display: grid;
@@ -485,11 +488,18 @@
     background: #ffffffdd;
     left: 50%;
     top: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    background-color: var(--backgroundColor);
+    translate: -50% -50%;
+    background-color: var(--backgroundAltColor);
     border: 1px solid var(--borderColor);
     display: grid;
     place-items: center;
+    transition: all 200ms ease-out;
+    .correlations-spectrum-nodegroup-active &,
+    .correlations-spectrum-nodegroup-expanded & {
+        // border: 2px solid var(--borderColor);
+        transform: scale(1.4);
+        background: var(--backgroundColor);
+    }
 }
 .correlations-spectrum-nodegroup-count {
     line-height: 1;
@@ -499,13 +509,52 @@
     top: 50%;
     transform: translateY(-50%);
     position: absolute;
-    display: flex;
+    display: none;
+    // collapsed state, so that collapsing has something to fade back to
+    opacity: 0;
+
     flex-direction: column;
     z-index: 30;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.35);
     border: 1px solid var(--borderColor);
     border-radius: 10px;
     background: var(--backgroundColor);
+    // allow-discrete has to be on `display`, the property that flips between
+    // none and flex, not on opacity
+    transition: right 200ms ease-out, left 200ms ease-out, opacity 200ms ease-out,
+        display 200ms allow-discrete;
+
+    &-positive {
+        right: 0px;
+    }
+    &-negative {
+        left: 0px;
+    }
+    .correlations-spectrum-nodegroup-expanded & {
+        display: flex;
+        opacity: 1;
+
+        // must live in the rule that sets the final value: starting styles are
+        // resolved with the normal cascade, so a lower-specificity @starting-style
+        // would lose to `opacity: 1` above and nothing would animate
+        @starting-style {
+            opacity: 0;
+        }
+
+        &-positive {
+            right: 30px;
+            @starting-style {
+                right: 0;
+            }
+        }
+        &-negative {
+            left: 30px;
+            @starting-style {
+                left: 0;
+            }
+        }
+    }
+
     &::after,
     &::before {
         top: 50%;
@@ -527,7 +576,6 @@
         margin-top: -11px;
     }
     &-positive {
-        right: 25px;
         &::after,
         &::before {
             left: 100%;
@@ -540,7 +588,6 @@
         }
     }
     &-negative {
-        left: 25px;
         &::after,
         &::before {
             right: 100%;

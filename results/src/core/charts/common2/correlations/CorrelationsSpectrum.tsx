@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { CORRELATION_STRENGTH_BANDS } from '@devographics/constants'
 import { CorrelationItem, CorrelationStrength } from '@devographics/types'
@@ -204,8 +204,8 @@ const getTicks = (extent: number) => {
 export const CorrelationsSpectrum = (
     props: CorrelationProps & CorrelationHighlightProps & { groupStep?: number }
 ) => {
-    const { correlations, block, activeKey, setActive, groupStep = DEFAULT_GROUP_STEP } = props
-    const [expanded, setExpanded] = useState(false)
+    const { correlations, block, activeKey, setActiveKey, groupStep = DEFAULT_GROUP_STEP } = props
+    const [expanded, setExpanded] = useState<string | null>(null)
 
     if (correlations.length === 0) {
         return null
@@ -224,7 +224,7 @@ export const CorrelationsSpectrum = (
                     groupStep={groupStep}
                     block={block}
                     activeKey={activeKey}
-                    setActive={setActive}
+                    setActiveKey={setActiveKey}
                     expanded={expanded}
                     setExpanded={setExpanded}
                 />
@@ -296,7 +296,7 @@ const CorrelationsSpectrumNodeGroup = ({
     groupStep,
     block,
     activeKey,
-    setActive,
+    setActiveKey,
     expanded,
     setExpanded
 }: {
@@ -319,13 +319,35 @@ const CorrelationsSpectrumNodeGroup = ({
     const handleClick = () => {
         setExpanded(isExpanded ? null : id)
     }
+
+    // collapse when the user presses anywhere outside this group. Uses pointerdown
+    // rather than click so that clicking another group's marker collapses this one
+    // first and that group's own click handler then expands it (with click, the
+    // document listener would run after it and immediately collapse it again).
+    // The listener only exists while this group is expanded.
+    const groupRef = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        if (!isExpanded) {
+            return
+        }
+        const handlePointerDown = (event: PointerEvent) => {
+            if (!groupRef.current?.contains(event.target as Node)) {
+                setExpanded(null)
+            }
+        }
+        document.addEventListener('pointerdown', handlePointerDown)
+        return () => document.removeEventListener('pointerdown', handlePointerDown)
+    }, [isExpanded, setExpanded])
+
     return (
         <div
+            ref={groupRef}
             data-id={id}
             className={[
                 'correlations-spectrum-nodegroup',
                 `correlations-spectrum-nodegroup-${direction}`,
                 nodes.length === 1 && 'correlations-spectrum-nodegroup-single',
+                isExpanded && 'correlations-spectrum-nodegroup-expanded',
                 isActive && 'correlations-spectrum-nodegroup-active'
             ]
                 .filter(Boolean)
@@ -336,21 +358,20 @@ const CorrelationsSpectrumNodeGroup = ({
                 <span className="correlations-spectrum-nodegroup-count">{nodes.length}</span>
                 <span className="sr-only">{range}</span>
             </button>
-            {isExpanded && (
-                <div
-                    className={`correlations-spectrum-nodegroup-nodes correlations-spectrum-nodegroup-nodes-${direction}`}
-                >
-                    {nodes.map(node => (
-                        <CorrelationsSpectrumNode
-                            key={getCorrelationKey(node.correlation)}
-                            node={node}
-                            block={block}
-                            activeKey={activeKey}
-                            setActive={setActive}
-                        />
-                    ))}
-                </div>
-            )}
+
+            <div
+                className={`correlations-spectrum-nodegroup-nodes correlations-spectrum-nodegroup-nodes-${direction}`}
+            >
+                {nodes.map(node => (
+                    <CorrelationsSpectrumNode
+                        key={getCorrelationKey(node.correlation)}
+                        node={node}
+                        block={block}
+                        activeKey={activeKey}
+                        setActiveKey={setActiveKey}
+                    />
+                ))}
+            </div>
         </div>
     )
 }
@@ -440,13 +461,13 @@ const CorrelationsSpectrumNode = ({
     node,
     block,
     activeKey,
-    setActive
+    setActiveKey
 }: {
     node: SpectrumNode
     block: BlockVariantDefinition
 } & CorrelationHighlightProps) => {
     const { correlation, xPosition } = node
-    const { isActive, handlers } = getHighlight(correlation, { activeKey, setActive })
+    const { isActive, handlers } = getHighlight(correlation, { activeKey, setActiveKey })
     const { direction, strength, kind2 } = correlation
     const style: SpectrumStyle = {
         '--xPosition': xPosition,

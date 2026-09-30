@@ -7,7 +7,7 @@ import { CorrelationsListHeading } from './CorrelationsListHeading'
 export const CorrelationsList = (
     props: CorrelationProps & CorrelationHighlightProps & { direction: string }
 ) => {
-    const { correlations, block, direction, activeKey, setActive } = props
+    const { correlations, block, direction, activeKey, setActiveKey } = props
 
     return (
         <div className="correlation-list">
@@ -20,7 +20,7 @@ export const CorrelationsList = (
                         correlation={c}
                         block={block}
                         activeKey={activeKey}
-                        setActive={setActive}
+                        setActiveKey={setActiveKey}
                     />
                 ))}
             </div>

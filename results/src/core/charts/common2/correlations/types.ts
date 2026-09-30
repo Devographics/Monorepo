@@ -48,7 +48,7 @@ a tooltip) simply don't take part.
 export type CorrelationHighlightProps = {
     // key of the correlation currently hovered (see getCorrelationKey), if any
     activeKey: string | null
-    setActive: (key: string, isActive: boolean) => void
+    setActiveKey: (key: string, isActive: boolean) => void
 }
 
 export type CorrelationExpandedProps = CorrelationHighlightProps & {

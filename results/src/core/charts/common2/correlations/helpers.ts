@@ -54,19 +54,19 @@ hovering, so keyboard users get the same link between marker and card.
 */
 export const getHighlight = (
     correlation: CorrelationItem,
-    { activeKey, setActive }: CorrelationHighlightProps
+    { activeKey, setActiveKey }: CorrelationHighlightProps
 ) => {
     const key = getCorrelationKey(correlation)
-    if (!setActive) {
+    if (!setActiveKey) {
         return { isActive: false, handlers: {} }
     }
     return {
         isActive: activeKey === key,
         handlers: {
-            onMouseEnter: () => setActive(key, true),
-            onMouseLeave: () => setActive(key, false),
-            onFocus: () => setActive(key, true),
-            onBlur: () => setActive(key, false)
+            onMouseEnter: () => setActiveKey(key, true),
+            onMouseLeave: () => setActiveKey(key, false),
+            onFocus: () => setActiveKey(key, true),
+            onBlur: () => setActiveKey(key, false)
         }
     }
 }

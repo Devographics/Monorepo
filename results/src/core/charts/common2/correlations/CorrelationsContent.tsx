@@ -41,13 +41,13 @@ export const CorrelationsContent = (props: CorrelationProps) => {
     const headingKey = getMainHeadingKey({ question, type })
 
     // the correlation hovered in either the spectrum or the lists
-    const [activeKey, setActiveKey] = useState<string | null>(null)
-    const setActive = useCallback((key: string, isActive: boolean) => {
+    const [activeKey, setKey] = useState<string | null>(null)
+    const setActiveKey = useCallback((key: string, isActive: boolean) => {
         // only clear the key it set, so that leaving one element after entering
         // another can't wipe the newer one
-        setActiveKey(current => (isActive ? key : current === key ? null : current))
+        setKey(current => (isActive ? key : current === key ? null : current))
     }, [])
-    const highlightProps = { activeKey, setActive }
+    const highlightProps = { activeKey, setActiveKey }
 
     const negativeCorrelations = correlations.filter(c => c.correlation < 0)
     const positiveCorrelations = correlations.filter(c => c.correlation > 0)
