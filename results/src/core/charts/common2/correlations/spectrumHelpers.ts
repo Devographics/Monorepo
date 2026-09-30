@@ -1,17 +1,52 @@
 import { CORRELATION_STRENGTH_BANDS } from '@devographics/constants'
-import {
-    TICK_STEP,
-    LABEL_STEP,
-    SpectrumBand,
-    DEFAULT_GROUP_STEP,
-    SpectrumGroup,
-    SpectrumNode,
-    EXTENT_STEP,
-    MIN_EXTENT,
-    SpectrumStyle
-} from './CorrelationsSpectrum'
-import { CorrelationItem } from '@devographics/types'
+import type React from 'react'
+import { CorrelationItem, CorrelationStrength } from '@devographics/types'
 import { getCorrelationKey } from './helpers'
+
+// the axis always extends to at least ±0.5, and to the next multiple of this step beyond
+export const EXTENT_STEP = 0.25
+
+// a tick every TICK_STEP, labelled every LABEL_STEP (a multiple of TICK_STEP)
+export const TICK_STEP = 0.05
+export const LABEL_STEP = 0.25
+export const MIN_EXTENT = 0.5
+
+/*
+
+Width of the bins nodes are grouped into, in correlation points. Bins start and
+end on ticks and groups are drawn in the middle of their bin, so a group only
+sits between two ticks if the step is an odd multiple of TICK_STEP (0.05, 0.15,
+0.25…); an even multiple (0.1, 0.2…) puts every group on a tick.
+
+*/
+export const DEFAULT_GROUP_STEP = TICK_STEP
+
+export type SpectrumNode = {
+    correlation: CorrelationItem
+    xPosition: number
+}
+
+export type SpectrumGroup = {
+    id: string
+    // bin number: the group covers [bin * step, (bin + 1) * step)
+    bin: number
+    // middle of the bin, where the group is drawn
+    center: number
+    xPosition: number
+    // strongest first
+    nodes: SpectrumNode[]
+}
+
+export type SpectrumBand = {
+    strength: CorrelationStrength
+    // "neutral" is the weak band straddling 0
+    direction: 'negative' | 'neutral' | 'positive'
+    // correlation values, start < end
+    start: number
+    end: number
+}
+
+export type SpectrumStyle = React.CSSProperties & Record<`--${string}`, number>
 
 /*
 
