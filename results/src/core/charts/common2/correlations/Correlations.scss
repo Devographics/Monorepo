@@ -38,7 +38,11 @@
     justify-content: center;
     h3 {
         margin: 0;
-        font-size: var(--fontSizeSmall);
+    }
+    @include breakpoints.medium-large {
+        h3 {
+            font-size: var(--fontSizeSmall);
+        }
     }
 }
 .correlation-list-heading-image {
@@ -61,14 +65,15 @@
     position: relative;
 }
 .correlations-heading-wrapper2 {
-    container-type: scroll-state;
-    position: sticky;
-    top: -20px;
-    z-index: 1;
+    @include breakpoints.medium-large {
+        container-type: scroll-state;
+        position: sticky;
+        top: -20px;
+        z-index: 1;
+    }
 }
 .correlations-heading-wrapper3 {
     transition: box-shadow 0.3s ease;
-    padding: var(--doubleSpacing) var(--doubleSpacing) var(--spacing) var(--doubleSpacing);
     background-color: var(--backgroundAltColor);
     display: flex;
 
@@ -77,20 +82,29 @@
     @container scroll-state(stuck: top) {
         box-shadow: 0px 10px 5px rgba(0, 0, 0, 0.35);
     }
+    @include breakpoints.small {
+        padding: var(--spacing);
+    }
+    @include breakpoints.medium-large {
+        padding: var(--doubleSpacing) var(--doubleSpacing) var(--spacing) var(--doubleSpacing);
+    }
 }
 .correlations-heading-wrapper4 {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include breakpoints.small {
+        flex-direction: column;
+        gap: var(--spacing);
+    }
+    @include breakpoints.medium-large {
+        justify-content: space-between;
+        align-items: center;
+    }
 }
 .correlations-heading {
     margin: 0;
     font-weight: var(--fontLight);
     font-size: var(--fontSizeLarge);
 
-    @include breakpoints.small {
-        padding: var(--spacing) var(--spacing) var(--halfSpacing) var(--spacing);
-    }
     strong {
         // font-style: italic;
     }
@@ -353,6 +367,9 @@
 /* correlations spectrum */
 
 .correlations-spectrum {
+    @include breakpoints.small {
+        display: none;
+    }
     --axisHeight: 10px;
     --axisPadding: 12px;
     margin: calc(var(--spacing) * 2) 0 calc(var(--spacing) * 1.5) 0;
