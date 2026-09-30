@@ -1,6 +1,6 @@
 import { useI18n } from '@devographics/react-i18n'
 import { CorrelationItem } from '@devographics/types'
-import { getItemLabel } from 'core/helpers/labels'
+import { getItemLabel, LabelObject } from 'core/helpers/labels'
 import { getQuestionById } from 'core/helpers/options'
 import { usePageContext } from 'core/helpers/pageContext'
 import T from 'core/i18n/T'
@@ -13,6 +13,7 @@ import { CorrelationSubheading } from './CorrelationSubheading'
 import { CorrelationValue } from './CorrelationValue'
 import { CorrelationCount } from './CorrelationCount'
 import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
+import { useEntities } from 'core/helpers/entities'
 
 export const CorrelationItemComponent = ({
     correlation,
@@ -28,8 +29,8 @@ export const CorrelationItemComponent = ({
     index: number
 } & CorrelationHighlightProps &
     CorrelationSwapProps) => {
-    let optionLabelObject, optionLabel
-
+    let optionLabelObject: LabelObject, optionLabel, optionEntity
+    const allEntities = useEntities()
     const pageContext = usePageContext()
     const { currentEdition } = pageContext
     const { getString } = useI18n()
@@ -77,9 +78,11 @@ export const CorrelationItemComponent = ({
     const questionName = questionLabelObject.questionName
 
     if (optionId2) {
+        optionEntity = allEntities.find(e => e.id === optionId2)
         optionLabelObject = getItemLabel({
             id: optionId2,
             getString,
+            entity: optionEntity,
             i18nNamespace: questionId2
         })
         optionLabel = optionLabelObject?.shortLabel
@@ -119,9 +122,8 @@ export const CorrelationItemComponent = ({
             <div className="correlation-item-description">
                 {/* <div>{shape}</div> */}
                 <CorrelationSubheading
-                    questionName={questionName}
-                    n={n}
-                    optionLabel={optionLabel}
+                    questionLabelObject={questionLabelObject}
+                    optionLabelObject={optionLabelObject}
                     index={index}
                 />
                 <div

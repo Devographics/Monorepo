@@ -2023,6 +2023,16 @@
         wrapBlock: false
         disableExport: true
 
+- id: correlations
+  is_hidden: true
+  titleId: sections.correlations.title
+  path: /correlations
+  blocks:
+      - template: page_introduction
+
+      - id: correlations
+        blockType: CorrelationsExplorer
+
 - id: support
   path: /support
   is_hidden: true

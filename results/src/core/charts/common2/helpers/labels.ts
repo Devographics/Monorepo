@@ -11,6 +11,12 @@ import { useAllQuestionsMetadata } from '../../horizontalBar2/helpers/other'
 import { isFeatureTemplate, isToolTemplate } from '@devographics/helpers'
 import { BlockVariantDefinition } from 'core/types'
 
+export type QuestionLabelObject = {
+    key: string
+    label: string
+    question: string
+    questionName: string
+}
 export const getQuestionLabel = ({
     getString,
     question,
@@ -21,12 +27,13 @@ export const getQuestionLabel = ({
     question: QuestionMetadataWithSection
     i18nNamespace?: string
     block?: BlockVariantDefinition
-}) => {
+}): QuestionLabelObject => {
     let key, label, i18nNamespace_, questionLabel, questionName
     const { template, entity, id } = question
     const sectionId = question.sectionId || question?.section?.id
     const entityName = entity && getEntityName(entity)
     if (entityName) {
+        key = 'entity'
         label = entityName
         questionName = entityName
     } else {
