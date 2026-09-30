@@ -524,7 +524,7 @@
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.35);
     border: 1px solid var(--borderColor);
     border-radius: 10px;
-    background: var(--backgroundColor);
+    background: var(--backgroundAltColor);
     // allow-discrete has to be on `display`, the property that flips between
     // none and flex, not on opacity
     transition: right 200ms ease-out, left 200ms ease-out, opacity 200ms ease-out,
@@ -587,7 +587,7 @@
             left: 100%;
         }
         &::after {
-            border-left-color: var(--backgroundColor);
+            border-left-color: var(--backgroundAltColor);
         }
         &::before {
             border-left-color: var(--borderColor);
@@ -599,7 +599,7 @@
             right: 100%;
         }
         &::after {
-            border-right-color: var(--backgroundColor);
+            border-right-color: var(--backgroundAltColor);
         }
         &::before {
             border-right-color: var(--borderColor);
@@ -629,7 +629,7 @@
         border-radius: 10px;
     }
     &:hover {
-        background: var(--backgroundAltColor);
+        background: var(--backgroundColor);
     }
 }
 .correlations-spectrum-node-value {

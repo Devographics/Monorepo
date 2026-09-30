@@ -7,7 +7,12 @@ import { usePageContext } from 'core/helpers/pageContext'
 import T from 'core/i18n/T'
 import { BlockVariantDefinition } from 'core/types'
 import { getQuestionLabel } from '../helpers/labels'
-import { formatCorrelation, getCorrelationKey, getHighlight } from './helpers'
+import {
+    formatCorrelation,
+    getCorrelationKey,
+    getHighlight,
+    scrollToCorrelationItem
+} from './helpers'
 import { CorrelationExpandedProps, CorrelationHighlightProps, CorrelationProps } from './types'
 import {
     getBandBoundaries,
@@ -335,6 +340,9 @@ const CorrelationsSpectrumNode = ({
                 isActive ? 'correlations-spectrum-node-active' : ''
             }`}
             style={style}
+            onClick={event =>
+                scrollToCorrelationItem(event.currentTarget, getCorrelationKey(correlation))
+            }
             {...handlers}
         >
             <CorrelationsSpectrumNodeLabel correlation={correlation} block={block} />
@@ -367,12 +375,12 @@ const CorrelationsSpectrumNodeLabel = ({
     let primaryLabel: string | undefined
     let secondaryLabel: string | undefined
     if (kind2 === 'option' && optionId2) {
-        primaryLabel = getItemLabel({
+        primaryLabel = questionName
+        secondaryLabel = getItemLabel({
             id: optionId2,
             getString,
             i18nNamespace: questionId2
         })?.shortLabel
-        secondaryLabel = questionName
     } else {
         primaryLabel = questionName
         secondaryLabel = getString(

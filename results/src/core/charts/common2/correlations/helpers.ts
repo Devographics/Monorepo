@@ -71,6 +71,51 @@ export const getHighlight = (
     }
 }
 
+/*
+
+Scroll the modal so that a correlation's card is in view. The card is looked up
+by its key inside the same `.correlations` block as `from` (the clicked element),
+so several blocks on a page can't interfere with each other, and only the
+modal's own scroll container is moved, never the page behind it.
+
+The modal's header (heading + spectrum) is sticky, so the top of the scroll
+container is not the top of what the user can see: whatever sits under the
+header counts as hidden. Does nothing if the card is already fully visible.
+
+*/
+const SCROLL_MARGIN = 16
+
+export const scrollToCorrelationItem = (from: HTMLElement, key: string) => {
+    const block = from.closest('.correlations')
+    const item = block?.querySelector<HTMLElement>(
+        `[data-correlation-key="${CSS.escape(key)}"]`
+    )
+    const container = item?.closest<HTMLElement>('.modal-inner')
+    if (!block || !item || !container) {
+        return
+    }
+    const itemBox = item.getBoundingClientRect()
+    const containerBox = container.getBoundingClientRect()
+    const headerBottom =
+        block.querySelector('.correlations-heading-wrapper2')?.getBoundingClientRect().bottom ??
+        containerBox.top
+
+    // the part of the scroll container that isn't covered by the sticky header
+    const visibleTop = Math.max(containerBox.top, headerBottom) + SCROLL_MARGIN
+    const visibleBottom = containerBox.bottom - SCROLL_MARGIN
+    if (itemBox.top >= visibleTop && itemBox.bottom <= visibleBottom) {
+        return
+    }
+    // centre the card in the visible part
+    const visibleCentre = (visibleTop + visibleBottom) / 2
+    const offset = itemBox.top + itemBox.height / 2 - visibleCentre
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    container.scrollTo({
+        top: container.scrollTop + offset,
+        behavior: reduceMotion ? 'auto' : 'smooth'
+    })
+}
+
 export const getCorrelationShape = ({ kind1, kind2 }: CorrelationItem): CorrelationShape =>
     CORRELATION_SHAPES[`${kind1}_${kind2}`]
 

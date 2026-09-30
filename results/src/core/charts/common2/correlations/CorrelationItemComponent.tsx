@@ -8,7 +8,7 @@ import { BlockVariantDefinition } from 'core/types'
 import React from 'react'
 import { getQuestionLabel } from '../helpers/labels'
 import { getTrendDirectionKey } from './helpers'
-import { getCorrelationShape, getHighlight } from './helpers'
+import { getCorrelationKey, getCorrelationShape, getHighlight } from './helpers'
 import { CorrelationHighlightProps } from './types'
 import { CorrelationSubheading } from './CorrelationSubheading'
 import { CorrelationValue } from './CorrelationValue'
@@ -91,6 +91,7 @@ export const CorrelationItemComponent = ({
             className={`correlation-item correlation-item-${strength} correlation-${direction} ${
                 isActive ? 'correlation-item-active' : ''
             }`}
+            data-correlation-key={getCorrelationKey(correlation)}
             {...handlers}
         >
             <div className="correlation-item-description">
