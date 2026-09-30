@@ -6,25 +6,28 @@ import { usePageContext } from 'core/helpers/pageContext'
 import T from 'core/i18n/T'
 import { BlockVariantDefinition } from 'core/types'
 import React from 'react'
-import { getQuestionLabel } from '../helpers/labels'
 import { getTrendDirectionKey } from './helpers'
 import { getCorrelationKey, getCorrelationShape, getHighlight } from './helpers'
-import { CorrelationHighlightProps } from './types'
+import { CorrelationHighlightProps, CorrelationSwapProps } from './types'
 import { CorrelationSubheading } from './CorrelationSubheading'
 import { CorrelationValue } from './CorrelationValue'
 import { CorrelationCount } from './CorrelationCount'
+import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
 
 export const CorrelationItemComponent = ({
     correlation,
     block,
     index,
     activeKey,
-    setActiveKey
+    setActiveKey,
+    enableSwap = false,
+    onSwap
 }: {
     correlation: CorrelationItem
     block: BlockVariantDefinition
     index: number
-} & CorrelationHighlightProps) => {
+} & CorrelationHighlightProps &
+    CorrelationSwapProps) => {
     let optionLabelObject, optionLabel
 
     const pageContext = usePageContext()
@@ -86,13 +89,32 @@ export const CorrelationItemComponent = ({
 
     const { isActive, handlers } = getHighlight(correlation, { activeKey, setActiveKey })
 
+    // when swapping is enabled the whole card acts as a button that makes the
+    // correlated question the new base question
+    const swap = () => onSwap?.(correlation)
+    const swapProps =
+        enableSwap && onSwap
+            ? {
+                  role: 'button',
+                  tabIndex: 0,
+                  onClick: swap,
+                  onKeyDown: (event: React.KeyboardEvent) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault()
+                          swap()
+                      }
+                  }
+              }
+            : {}
+
     return (
         <div
             className={`correlation-item correlation-item-${strength} correlation-${direction} ${
                 isActive ? 'correlation-item-active' : ''
-            }`}
+            } ${enableSwap ? 'correlation-item-swappable' : ''}`}
             data-correlation-key={getCorrelationKey(correlation)}
             {...handlers}
+            {...swapProps}
         >
             <div className="correlation-item-description">
                 {/* <div>{shape}</div> */}

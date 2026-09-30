@@ -6,7 +6,6 @@ import { getQuestionById } from 'core/helpers/options'
 import { usePageContext } from 'core/helpers/pageContext'
 import T from 'core/i18n/T'
 import { BlockVariantDefinition } from 'core/types'
-import { getQuestionLabel } from '../helpers/labels'
 import {
     formatCorrelation,
     getCorrelationKey,
@@ -27,6 +26,7 @@ import {
     getTicks,
     getXPosition
 } from './spectrumHelpers'
+import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
 
 /*
 

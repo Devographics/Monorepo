@@ -1,8 +1,8 @@
 import { UserIcon } from '@devographics/icons'
+import { formatNumber } from 'core/charts/common2/helpers/format'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
 import React from 'react'
-import { formatNumber } from '../helpers/format'
 
 export const CorrelationCount = ({ n }: { n: number }) => {
     const respondentCount = formatNumber(n)

@@ -1,8 +1,13 @@
+import get from 'lodash/get.js'
 import {
     CorrelationItem,
     CorrelationStrength,
+    Correlations,
     QuestionMetadataWithSection
 } from '@devographics/types'
+import { PageContextValue } from 'core/types/context'
+import { runQuery } from 'core/helpers/data'
+import { getCorrelationsFragment } from 'core/queries/fragments/getCorrelationsFragment'
 import { CorrelationHighlightProps, CorrelationProps } from './types'
 import { StringTranslator } from '@devographics/i18n'
 
@@ -87,9 +92,7 @@ const SCROLL_MARGIN = 16
 
 export const scrollToCorrelationItem = (from: HTMLElement, key: string) => {
     const block = from.closest('.correlations')
-    const item = block?.querySelector<HTMLElement>(
-        `[data-correlation-key="${CSS.escape(key)}"]`
-    )
+    const item = block?.querySelector<HTMLElement>(`[data-correlation-key="${CSS.escape(key)}"]`)
     const container = item?.closest<HTMLElement>('.modal-inner')
     if (!block || !item || !container) {
         return
@@ -114,6 +117,92 @@ export const scrollToCorrelationItem = (from: HTMLElement, key: string) => {
         top: container.scrollTop + offset,
         behavior: reduceMotion ? 'auto' : 'smooth'
     })
+}
+
+/*
+
+Correlations of a question, read from the page data that is already loaded (the
+same place a block's title reads them from), so browsing correlations never needs
+another query. Returns undefined when nothing was loaded for that question on
+this page.
+
+The question's data normally sits at surveys.<survey>.<edition>.<section>.<id>,
+but a block can alias it under another name (`workers_union_vs_country: country`),
+so if the direct path has nothing, every entry of the edition is searched for one
+with the question's id and correlations.
+
+*/
+export const getLoadedCorrelations = ({
+    pageContext,
+    question
+}: {
+    pageContext: PageContextValue
+    question: QuestionMetadataWithSection
+}): Correlations | undefined => {
+    const { pageData, currentSurvey, currentEdition } = pageContext
+    const editionData = get(pageData, `dataAPI.surveys.${currentSurvey.id}.${currentEdition.id}`)
+    if (!editionData) {
+        return undefined
+    }
+    const sectionId = question.sectionId || question.section?.id
+    const direct = editionData[sectionId]?.[question.id]
+    if (direct?._correlations) {
+        return direct._correlations
+    }
+    for (const section of Object.values<any>(editionData)) {
+        const match = Object.values<any>(section ?? {}).find(
+            entry => entry?.id === question.id && entry?._correlations
+        )
+        if (match) {
+            return match._correlations
+        }
+    }
+    return undefined
+}
+
+/*
+
+Fetch the correlations of one question from the API, for when they weren't loaded
+with the page. The query asks for nothing but `_correlations`, so the response
+is a few KB rather than a block's worth of buckets, entities and comments.
+
+*/
+export const fetchCorrelations = async ({
+    pageContext,
+    question
+}: {
+    pageContext: PageContextValue
+    question: QuestionMetadataWithSection
+}): Promise<{ correlations?: Correlations; error?: any }> => {
+    const { currentSurvey, currentEdition } = pageContext
+    const url = process.env.GATSBY_API_URL
+    if (!url) {
+        return { error: new Error('GATSBY_API_URL env variable is not set') }
+    }
+    const sectionId = question.sectionId || question.section?.id
+    const query = `query {
+    surveys {
+        ${currentSurvey.id} {
+            ${currentEdition.id} {
+                ${sectionId} {
+                    ${question.id} {
+                        id
+                        ${getCorrelationsFragment()}
+                    }
+                }
+            }
+        }
+    }
+}`
+    const { result, error } = await runQuery<any>(url, query, `${question.id}CorrelationsQuery`)
+    if (error) {
+        return { error }
+    }
+    const data = get(
+        result,
+        `surveys.${currentSurvey.id}.${currentEdition.id}.${sectionId}.${question.id}`
+    )
+    return { correlations: data?._correlations }
 }
 
 export const getCorrelationShape = ({ kind1, kind2 }: CorrelationItem): CorrelationShape =>

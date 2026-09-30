@@ -1,12 +1,12 @@
 import { useI18n } from '@devographics/react-i18n'
 import { QuestionMetadataWithSection } from '@devographics/types'
+import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
 import Tooltip from 'core/components/Tooltip'
 import { getQuestionById } from 'core/helpers/options'
 import { usePageContext } from 'core/helpers/pageContext'
 import T from 'core/i18n/T'
 import { BlockVariantDefinition } from 'core/types'
 import React from 'react'
-import { getQuestionLabel } from '../helpers/labels'
 
 export const CorrelationsExclusions = ({
     question,

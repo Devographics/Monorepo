@@ -30,13 +30,25 @@ are kept as they are even though they no longer read as a sequence.
 
 export type CorrelationShapeKey = `${CorrelationVariableKind}_${CorrelationVariableKind}`
 
+/*
+
+Makes correlation cards clickable so that the question (or answer) they point to
+becomes the one being looked at. Only the correlations explorer turns this on;
+everywhere else cards are plain and `enableSwap` stays false.
+
+*/
+export type CorrelationSwapProps = {
+    enableSwap?: boolean
+    onSwap?: (correlation: CorrelationItem) => void
+}
+
 export type CorrelationProps = {
     question: QuestionMetadataWithSection
     optionId?: string
     correlations: CorrelationItem[]
     block: BlockVariantDefinition
     type: 'question' | 'option'
-}
+} & CorrelationSwapProps
 
 /*
 
