@@ -4,6 +4,7 @@ import {
     QuestionMetadataWithSection
 } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
+import { Dispatch, SetStateAction } from 'react'
 
 export type CorrelationShape =
     | 'shape1'
@@ -46,6 +47,12 @@ a tooltip) simply don't take part.
 */
 export type CorrelationHighlightProps = {
     // key of the correlation currently hovered (see getCorrelationKey), if any
-    activeKey?: string | null
-    setActive?: (key: string, isActive: boolean) => void
+    activeKey: string | null
+    setActive: (key: string, isActive: boolean) => void
+}
+
+export type CorrelationExpandedProps = CorrelationHighlightProps & {
+    // key of the correlation currently hovered (see getCorrelationKey), if any
+    expanded: string | null
+    setExpanded: Dispatch<SetStateAction<string | null>>
 }

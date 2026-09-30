@@ -350,6 +350,7 @@
     position: relative;
     padding: 0 var(--spacing);
     height: var(--axisHeight);
+    z-index: 20;
     &::before,
     &::after {
         height: 100%;
@@ -493,9 +494,109 @@
 .correlations-spectrum-nodegroup-count {
     line-height: 1;
 }
+/* nodes */
 .correlations-spectrum-nodegroup-nodes {
-    display: none;
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    z-index: 30;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--borderColor);
+    border-radius: 10px;
+    background: var(--backgroundColor);
+    &::after,
+    &::before {
+        top: 50%;
+        border: solid transparent;
+        content: '';
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    &::after {
+        border-color: #00000000;
+        border-width: 10px;
+        margin-top: -10px;
+    }
+    &::before {
+        border-color: #00000000;
+        border-width: 11px;
+        margin-top: -11px;
+    }
+    &-positive {
+        right: 25px;
+        &::after,
+        &::before {
+            left: 100%;
+        }
+        &::after {
+            border-left-color: var(--backgroundColor);
+        }
+        &::before {
+            border-left-color: var(--borderColor);
+        }
+    }
+    &-negative {
+        left: 25px;
+        &::after,
+        &::before {
+            right: 100%;
+        }
+        &::after {
+            border-right-color: var(--backgroundColor);
+        }
+        &::before {
+            border-right-color: var(--borderColor);
+        }
+    }
 }
+.correlations-spectrum-node {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing);
+    border-bottom: 1px solid var(--borderAltColor);
+    border-top: none;
+    padding: 5px 10px;
+    z-index: 30;
+    white-space: nowrap;
+    font-size: var(--fontSizeSmallish);
+    &:last-child {
+        border: none;
+    }
+}
+.correlations-spectrum-node-value {
+    font-weight: var(--fontBold);
+
+    .correlations-spectrum-node-very_strong & {
+        color: var(--veryStrongColor);
+    }
+    .correlations-spectrum-node-strong & {
+        color: var(--strongColor);
+    }
+    .correlations-spectrum-node-moderate & {
+        color: var(--moderateColor);
+    }
+}
+// .correlations-spectrum-node-label {
+//     grid-column-start: 1;
+//     grid-column-end: -1;
+//     & > span {
+//         grid-row: 1;
+//     }
+// }
+// .correlations-spectrum-node-label-description {
+//     grid-column-start: 1;
+//     grid-column-end: 2;
+// }
+// .correlations-spectrum-node-label-value {
+//     grid-column-start: 2;
+//     grid-column-end: 3;
+// }
 /**/
 // .correlations-spectrum-track {
 // }

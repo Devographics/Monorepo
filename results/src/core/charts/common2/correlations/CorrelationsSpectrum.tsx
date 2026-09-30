@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { CORRELATION_STRENGTH_BANDS } from '@devographics/constants'
 import { CorrelationItem, CorrelationStrength } from '@devographics/types'
@@ -11,7 +11,7 @@ import { BlockVariantDefinition } from 'core/types'
 import { getQuestionLabel } from '../helpers/labels'
 import { CorrelationItemComponent } from './CorrelationItemComponent'
 import { formatCorrelation, getCorrelationKey, getHighlight } from './helpers'
-import { CorrelationHighlightProps, CorrelationProps } from './types'
+import { CorrelationExpandedProps, CorrelationHighlightProps, CorrelationProps } from './types'
 
 /*
 
@@ -65,6 +65,7 @@ type SpectrumNode = {
 }
 
 type SpectrumGroup = {
+    id: string
     // bin number: the group covers [bin * step, (bin + 1) * step)
     bin: number
     // middle of the bin, where the group is drawn
@@ -134,7 +135,9 @@ export const getSpectrumGroups = (
         .sort(([a], [b]) => a - b)
         .map(([bin, nodes]) => {
             const center = Math.round((bin + 0.5) * step * 1000) / 1000
+            const id = nodes.map(n => getCorrelationKey(n.correlation)).join('_____')
             return {
+                id,
                 bin,
                 center,
                 xPosition: getXPosition(center, extent),
@@ -202,6 +205,8 @@ export const CorrelationsSpectrum = (
     props: CorrelationProps & CorrelationHighlightProps & { groupStep?: number }
 ) => {
     const { correlations, block, activeKey, setActive, groupStep = DEFAULT_GROUP_STEP } = props
+    const [expanded, setExpanded] = useState(false)
+
     if (correlations.length === 0) {
         return null
     }
@@ -220,6 +225,8 @@ export const CorrelationsSpectrum = (
                     block={block}
                     activeKey={activeKey}
                     setActive={setActive}
+                    expanded={expanded}
+                    setExpanded={setExpanded}
                 />
                 <CorrelationsSpectrumLegend extent={extent} />
             </div>
@@ -227,30 +234,22 @@ export const CorrelationsSpectrum = (
     )
 }
 
-const CorrelationsSpectrumNodes = ({
-    groups,
-    groupStep,
-    block,
-    activeKey,
-    setActive
-}: {
-    groups: SpectrumGroup[]
-    groupStep: number
-    block: BlockVariantDefinition
-} & CorrelationHighlightProps) => (
-    <div className="correlations-spectrum-nodes">
-        {groups.map(group => (
-            <CorrelationsSpectrumNodeGroup
-                key={group.bin}
-                group={group}
-                groupStep={groupStep}
-                block={block}
-                activeKey={activeKey}
-                setActive={setActive}
-            />
-        ))}
-    </div>
-)
+const CorrelationsSpectrumNodes = (
+    props: {
+        groups: SpectrumGroup[]
+        groupStep: number
+        block: BlockVariantDefinition
+    } & CorrelationExpandedProps
+) => {
+    const { groups } = props
+    return (
+        <div className="correlations-spectrum-nodes">
+            {groups.map(group => (
+                <CorrelationsSpectrumNodeGroup key={group.bin} group={group} {...props} />
+            ))}
+        </div>
+    )
+}
 
 const CorrelationsSpectrumLegend = ({ extent }: { extent: number }) => (
     <div className="correlations-spectrum-legend">
@@ -297,13 +296,15 @@ const CorrelationsSpectrumNodeGroup = ({
     groupStep,
     block,
     activeKey,
-    setActive
+    setActive,
+    expanded,
+    setExpanded
 }: {
     group: SpectrumGroup
     groupStep: number
     block: BlockVariantDefinition
-} & CorrelationHighlightProps) => {
-    const { bin, center, xPosition, nodes } = group
+} & CorrelationExpandedProps) => {
+    const { bin, center, xPosition, nodes, id } = group
     const isActive = nodes.some(node => getCorrelationKey(node.correlation) === activeKey)
     const direction = center < 0 ? 'negative' : 'positive'
     const style: SpectrumStyle = {
@@ -314,8 +315,13 @@ const CorrelationsSpectrumNodeGroup = ({
     const range = `${formatCorrelation(bin * groupStep)} – ${formatCorrelation(
         (bin + 1) * groupStep
     )}`
+    const isExpanded = expanded === id
+    const handleClick = () => {
+        setExpanded(isExpanded ? null : id)
+    }
     return (
         <div
+            data-id={id}
             className={[
                 'correlations-spectrum-nodegroup',
                 `correlations-spectrum-nodegroup-${direction}`,
@@ -326,21 +332,25 @@ const CorrelationsSpectrumNodeGroup = ({
                 .join(' ')}
             style={style}
         >
-            <button className="correlations-spectrum-nodegroup-marker">
+            <button onClick={handleClick} className="correlations-spectrum-nodegroup-marker">
                 <span className="correlations-spectrum-nodegroup-count">{nodes.length}</span>
                 <span className="sr-only">{range}</span>
             </button>
-            <div className="correlations-spectrum-nodegroup-nodes">
-                {nodes.map(node => (
-                    <CorrelationsSpectrumNode
-                        key={getCorrelationKey(node.correlation)}
-                        node={node}
-                        block={block}
-                        activeKey={activeKey}
-                        setActive={setActive}
-                    />
-                ))}
-            </div>
+            {isExpanded && (
+                <div
+                    className={`correlations-spectrum-nodegroup-nodes correlations-spectrum-nodegroup-nodes-${direction}`}
+                >
+                    {nodes.map(node => (
+                        <CorrelationsSpectrumNode
+                            key={getCorrelationKey(node.correlation)}
+                            node={node}
+                            block={block}
+                            activeKey={activeKey}
+                            setActive={setActive}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
@@ -450,25 +460,6 @@ const CorrelationsSpectrumNode = ({
             style={style}
             {...handlers}
         >
-            <Tooltip
-                showBorder={false}
-                trigger={
-                    <button className="correlations-spectrum-node-marker">
-                        <span className="sr-only">
-                            {formatCorrelation(correlation.correlation)}
-                        </span>
-                    </button>
-                }
-                contents={
-                    <div className="correlations-spectrum-node-tooltip">
-                        <CorrelationItemComponent
-                            correlation={correlation}
-                            block={block}
-                            index={0}
-                        />
-                    </div>
-                }
-            />
             <CorrelationsSpectrumNodeLabel correlation={correlation} block={block} />
         </div>
     )
@@ -515,14 +506,19 @@ const CorrelationsSpectrumNodeLabel = ({
     }
 
     return (
-        <div className="correlations-spectrum-node-label">
-            <span className="correlations-spectrum-node-label-value">
+        <>
+            <span className="correlations-spectrum-node-label">
+                <span className="correlations-spectrum-node-label-primary">{primaryLabel}</span>{' '}
+                <span>&gt;</span>{' '}
+                {secondaryLabel && (
+                    <span className="correlations-spectrum-node-label-secondary">
+                        {secondaryLabel}
+                    </span>
+                )}
+            </span>
+            <span className="correlations-spectrum-node-value">
                 {formatCorrelation(correlation.correlation)}
             </span>
-            <span className="correlations-spectrum-node-label-primary">{primaryLabel}</span>
-            {secondaryLabel && (
-                <span className="correlations-spectrum-node-label-secondary">{secondaryLabel}</span>
-            )}
-        </div>
+        </>
     )
 }
