@@ -1,4 +1,5 @@
 import type { CorrelationStrength } from '@devographics/types'
+import { CORRELATION_STRENGTH_BANDS as SHARED_STRENGTH_BANDS } from '@devographics/constants'
 
 /*
 
@@ -10,7 +11,7 @@ the same time or existing editions will keep serving their cached output.
 */
 
 // bump to invalidate cached results when the algorithm or any knob below changes
-export const CACHE_VERSION = 27
+export const CACHE_VERSION = 29
 
 /*
 
@@ -47,7 +48,9 @@ export const EDITION_CORRELATIONS_LIMIT = 1000
 
 /*
 
-Strength bands (lower bound of |correlation| for each label).
+Strength bands (lower bound of |correlation| for each label). The values live in
+@devographics/constants, since the results spectrum legend draws them too; edit
+them there.
 
 One scale is used for every kind of correlation. Binary "picked it or not"
 variables do have a mechanical ceiling below 1, which once justified scoring
@@ -56,11 +59,8 @@ answer is, so a single fixed discount corrected nothing while making labels
 inconsistent wherever the two kinds appear in the same list.
 
 */
-export const CORRELATION_STRENGTH_BANDS: [CorrelationStrength, number][] = [
-    ['very_strong', 0.4],
-    ['strong', 0.25],
-    ['moderate', 0.15]
-]
+export const CORRELATION_STRENGTH_BANDS: [CorrelationStrength, number][] =
+    SHARED_STRENGTH_BANDS.map(([strength, lowerBound]) => [strength, lowerBound])
 
 /*
 

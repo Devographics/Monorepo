@@ -135,7 +135,7 @@ importers:
         version: 3.8.1(esbuild@0.16.17)(graphql-tag@2.12.7(graphql@16.9.0))(graphql@16.9.0)
       '@modyfi/vite-plugin-yaml':
         specifier: ^1.1.1
-        version: 1.1.1(rollup@4.62.2)(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))
+        version: 1.1.1(rollup@4.62.2)(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0))
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.25
@@ -186,7 +186,7 @@ importers:
         version: 4.9.5
       vitest:
         specifier: ^5.0.1
-        version: 5.0.1(@opentelemetry/api@1.9.1)(@types/node@16.18.126)(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))
+        version: 5.0.1(@opentelemetry/api@1.9.1)(@types/node@16.18.126)(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0))
     optionalDependencies:
       '@types/supertest':
         specifier: ^2.0.15
@@ -316,7 +316,7 @@ importers:
     dependencies:
       '@astrojs/react':
         specifier: ^7.0.0
-        version: 7.0.0(@types/node@25.9.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(esbuild@0.28.1)(jiti@2.7.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
+        version: 7.0.0(@types/node@25.9.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(esbuild@0.28.1)(jiti@2.7.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)
       '@devographics/fetch':
         specifier: workspace:1.0.0
         version: link:../shared/fetch
@@ -328,7 +328,7 @@ importers:
         version: link:../shared/types
       astro:
         specifier: ^7.3.5
-        version: 7.3.5(@types/node@25.9.4)(@upstash/redis@1.38.0)(ioredis@5.11.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
+        version: 7.3.5(@types/node@25.9.4)(@upstash/redis@1.38.0)(ioredis@5.11.1)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)
       react:
         specifier: ^19.3.0
         version: 19.3.0
@@ -345,6 +345,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.3.0
         version: 19.3.0(@types/react@19.3.0)
+      sass:
+        specifier: ^1.105.1
+        version: 1.105.1
 
   graphiql:
     dependencies:
@@ -15535,6 +15538,11 @@ packages:
     engines: {node: '>=20.19.0'}
     hasBin: true
 
+  sass@1.105.1:
+    resolution: {integrity: sha512-1CnAWPyrrnVQzXGB/DUep1vYCKCm1CIBr+YxjjiW6wk9qtzemnGP4qicH56T2F9S4Hjtv/Ne3jDz8JqfdDU4oA==}
+    engines: {node: '>=20.19.0'}
+    hasBin: true
+
   satteri@0.10.5:
     resolution: {integrity: sha512-Ao1LKpAEa9Wdg0otgbVKViZHEq9ebdXe4DMrp3s9vQAU0HNIuHnFEuMuOcm0ZIXyV0Yzxj91NvhLpvXZJO/5ZQ==}
 
@@ -18095,17 +18103,17 @@ snapshots:
       - tsx
       - yaml
 
-  '@astrojs/react@7.0.0(@types/node@25.9.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(esbuild@0.28.1)(jiti@2.7.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)':
+  '@astrojs/react@7.0.0(@types/node@25.9.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(esbuild@0.28.1)(jiti@2.7.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)':
     dependencies:
       '@astrojs/internal-helpers': 0.11.0
       '@types/react': 19.3.0
       '@types/react-dom': 19.3.0(@types/react@19.3.0)
-      '@vitejs/plugin-react': 6.1.1(vite@8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))
+      '@vitejs/plugin-react': 6.1.1(vite@8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0))
       devalue: 5.9.4
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
       ultrahtml: 1.7.0
-      vite: 8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
+      vite: 8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)
     transitivePeerDependencies:
       - '@rolldown/plugin-babel'
       - '@types/node'
@@ -21068,12 +21076,12 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  '@modyfi/vite-plugin-yaml@1.1.1(rollup@4.62.2)(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))':
+  '@modyfi/vite-plugin-yaml@1.1.1(rollup@4.62.2)(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0))':
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.62.2)
       js-yaml: 4.1.0
       tosource: 2.0.0-alpha.3
-      vite: 8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
+      vite: 8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)
     transitivePeerDependencies:
       - rollup
 
@@ -25112,10 +25120,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-react@6.1.1(vite@8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))':
+  '@vitejs/plugin-react@6.1.1(vite@8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
+      vite: 8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)
 
   '@vitejs/plugin-rsc@0.5.27(react-dom@19.2.0(react@19.2.0))(react-server-dom-webpack@0.0.0-experimental-c8b778b7f-20220825(react@19.2.0)(webpack@5.88.2(esbuild@0.25.12)(lightningcss@1.33.0)))(react@19.2.0)(vite@7.3.6(@types/node@25.9.4)(jiti@2.7.0)(lightningcss@1.33.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))':
     dependencies:
@@ -25140,14 +25148,14 @@ snapshots:
       chai: 5.3.3
       tinyrainbow: 1.2.0
 
-  '@vitest/mocker@5.0.1(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))':
+  '@vitest/mocker@5.0.1(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0))':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       '@vitest/spy': 5.0.1
       estree-walker: 3.0.3
       magic-string: 1.4.1
     optionalDependencies:
-      vite: 8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
+      vite: 8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)
 
   '@vitest/pretty-format@2.0.5':
     dependencies:
@@ -25786,7 +25794,7 @@ snapshots:
       - uploadthing
       - yaml
 
-  astro@7.3.5(@types/node@25.9.4)(@upstash/redis@1.38.0)(ioredis@5.11.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0):
+  astro@7.3.5(@types/node@25.9.4)(@upstash/redis@1.38.0)(ioredis@5.11.1)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0):
     dependencies:
       '@astrojs/compiler-rs': 0.5.1
       '@astrojs/internal-helpers': 0.11.0
@@ -25836,8 +25844,8 @@ snapshots:
       unifont: 0.7.5
       unstorage: 1.17.5(@upstash/redis@1.38.0)(ioredis@5.11.1)
       verkit: 0.4.1
-      vite: 8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
-      vitefu: 1.1.3(vite@8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))
+      vite: 8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)
+      vitefu: 1.1.3(vite@8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0))
       xxhash-wasm: 1.1.0
       yargs-parser: 22.0.0
       zod: 4.6.5
@@ -27461,10 +27469,6 @@ snapshots:
   debug@4.3.4:
     dependencies:
       ms: 2.1.2
-
-  debug@4.4.3:
-    dependencies:
-      ms: 2.1.3
 
   debug@4.4.3(supports-color@5.5.0):
     dependencies:
@@ -30970,7 +30974,7 @@ snapshots:
     dependencies:
       '@ioredis/commands': 1.10.0
       cluster-key-slot: 1.1.1
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@5.5.0)
       denque: 2.1.0
       redis-errors: 1.2.0
       redis-parser: 3.0.0
@@ -35728,6 +35732,14 @@ snapshots:
     optionalDependencies:
       '@parcel/watcher': 2.5.6
 
+  sass@1.105.1:
+    dependencies:
+      chokidar: 5.0.0
+      immutable: 5.1.9
+      source-map-js: 1.2.1
+    optionalDependencies:
+      '@parcel/watcher': 2.5.6
+
   satteri@0.10.5:
     dependencies:
       '@types/estree-jsx': 1.0.5
@@ -37859,7 +37871,7 @@ snapshots:
       terser: 5.48.0
       yaml: 2.9.0
 
-  vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0):
+  vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -37871,11 +37883,11 @@ snapshots:
       esbuild: 0.16.17
       fsevents: 2.3.3
       jiti: 2.7.0
-      sass: 1.101.0
+      sass: 1.105.1
       terser: 5.48.0
       yaml: 2.9.0
 
-  vite@8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0):
+  vite@8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -37887,7 +37899,7 @@ snapshots:
       esbuild: 0.28.1
       fsevents: 2.3.3
       jiti: 2.7.0
-      sass: 1.101.0
+      sass: 1.105.1
       terser: 5.48.0
       yaml: 2.9.0
 
@@ -37899,14 +37911,14 @@ snapshots:
     optionalDependencies:
       vite: 7.3.6(@types/node@25.9.4)(jiti@2.7.0)(lightningcss@1.33.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
 
-  vitefu@1.1.3(vite@8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)):
+  vitefu@1.1.3(vite@8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)):
     optionalDependencies:
-      vite: 8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
+      vite: 8.3.1(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)
 
-  vitest@5.0.1(@opentelemetry/api@1.9.1)(@types/node@16.18.126)(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)):
+  vitest@5.0.1(@opentelemetry/api@1.9.1)(@types/node@16.18.126)(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.0.1(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))
+      '@vitest/mocker': 5.0.1(vite@8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0))
       chai: 6.2.2
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -37917,7 +37929,7 @@ snapshots:
       tinybench: 6.1.4
       tinyexec: 1.3.0
       tinyglobby: 0.2.17
-      vite: 8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
+      vite: 8.3.1(@types/node@16.18.126)(esbuild@0.16.17)(jiti@2.7.0)(sass@1.105.1)(terser@5.48.0)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@opentelemetry/api': 1.9.1

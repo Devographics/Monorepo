@@ -11,7 +11,8 @@ export interface SurveyConfig {
 
     homepageUrl?: string
     isDemo?: boolean
-    isDisabled?: boolean
+    /** whether the survey is listed publicly (homepages, survey switchers…) */
+    status?: SurveyPublishingStatusEnum
     imageUrl?: string
 
     responsesCollectionName?: string
@@ -104,6 +105,13 @@ export enum ResultsStatusEnum {
     HIDDEN = 1,
     PREVIEW = 2,
     PUBLISHED = 3
+}
+
+/** Survey-level status (edition-level status is SurveyStatusEnum) */
+export enum SurveyPublishingStatusEnum {
+    PUBLISHED = 1,
+    ARCHIVED = 2,
+    HIDDEN = 3
 }
 
 export type Colors = {

@@ -4,13 +4,20 @@ Unless specified, these queries are designed to be used by surveyform
 
 */
 
-export const getSurveysQuery = ({ addCredits = true }) => `
+export const getSurveysQuery = ({
+    addCredits = true,
+    addSponsors = false
+}: {
+    addCredits?: boolean
+    addSponsors?: boolean
+}) => `
 query SurveysMetadataQuery {
   _metadata {
     surveys {
       id
       name
       isDemo
+      status
       responsesCollectionName
       normalizedCollectionName
       domain
@@ -64,6 +71,16 @@ query SurveysMetadataQuery {
               }
             }
           }
+        }`
+                : ''
+        }
+        ${
+            addSponsors
+                ? `sponsors {
+          id
+          name
+          imageUrl
+          url
         }`
                 : ''
         }
