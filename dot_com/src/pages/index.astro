@@ -1,11 +1,12 @@
 ---
-import '../styles/global.css'
+import '../styles/global.scss'
 import SurveyCard from '../components/SurveyCard.astro'
 import SurveyLogo from '../components/SurveyLogo.astro'
+import Sponsors from '../components/Sponsors.astro'
 import { getData } from '../lib/data'
-import { formatDates, getAccentStyle, getEditionLink, statusLabels } from '../lib/format'
+import { formatDates, getEditionLink, statusLabels } from '../lib/format'
 
-const { surveys, editions, openEditions, firstYear } = await getData()
+const { surveys, editions, sponsors, openEditions, firstYear } = await getData()
 
 const title = 'Devographics'
 const description =
@@ -43,6 +44,7 @@ const links = {
                 <a class="wordmark" href="/">Devographics</a>
                 <nav aria-label="Main">
                     <a href="#surveys">Surveys</a>
+                    <a href="#sponsors">Sponsors</a>
                     <a href="#archive">Archive</a>
                     <a href="#about">About</a>
                     <a href={links.github}>GitHub</a>
@@ -52,11 +54,17 @@ const links = {
 
         <main>
             <section class="hero container">
-                <h1>Devographics</h1>
+                <h1>
+                    <img
+                        src="/devographics-logo.svg"
+                        alt="Devographics"
+                        width="1315"
+                        height="182"
+                    />
+                </h1>
                 <p class="lede">
-                    Independent developer surveys. Every year we ask tens of thousands of
-                    developers which tools, features and practices they use, then publish
-                    the results openly, for free.
+                    We run surveys to ask thousands of developers which tools, features and
+                    practices they use, then publish the results openly for free.
                 </p>
                 <dl class="stats">
                     <div>
@@ -77,7 +85,7 @@ const links = {
                             {
                                 openEditions.length > 0 ? (
                                     openEditions.map(e => (
-                                        <a href={e.questionsUrl} style={getAccentStyle(e)}>
+                                        <a href={e.questionsUrl}>
                                             {e.surveyName} {e.year} →
                                         </a>
                                     ))
@@ -92,7 +100,7 @@ const links = {
 
             {
                 openEditions.map(edition => (
-                    <section class="open container" style={getAccentStyle(edition)}>
+                    <section class="open container">
                         <div class="open-logo">
                             <SurveyLogo surveyId={edition.surveyId} name={edition.surveyName} />
                         </div>
@@ -117,6 +125,8 @@ const links = {
                 </div>
             </section>
 
+            {sponsors.length > 0 && <Sponsors sponsors={sponsors} />}
+
             <section id="archive" class="section container">
                 <h2 class="section-title">Archive</h2>
                 <div class="table-wrapper">
@@ -134,19 +144,25 @@ const links = {
                                 editions.map(edition => {
                                     const link = getEditionLink(edition)
                                     return (
-                                        <tr style={getAccentStyle(edition)}>
+                                        <tr>
                                             <td>
-                                                <span class="swatch" aria-hidden="true" />
                                                 {edition.surveyName} {edition.year}
                                             </td>
                                             <td class="muted">{formatDates(edition)}</td>
                                             <td>
-                                                <span class:list={['badge', `badge-${edition.status}`]}>
+                                                <span
+                                                    class:list={[
+                                                        'badge',
+                                                        `badge-${edition.status}`
+                                                    ]}
+                                                >
                                                     {statusLabels[edition.status]}
                                                 </span>
                                             </td>
                                             <td class="link-cell">
-                                                {link.href && <a href={link.href}>{link.label} →</a>}
+                                                {link.href && (
+                                                    <a href={link.href}>{link.label} →</a>
+                                                )}
                                             </td>
                                         </tr>
                                     )
@@ -162,14 +178,14 @@ const links = {
                 <div class="about-body">
                     <p>
                         It started in 2016 with the State of JavaScript, a survey meant to make
-                        sense of an ecosystem that was changing faster than anyone could keep
-                        up with. The State of CSS, HTML, React, AI and Devs followed.
+                        sense of an ecosystem that was changing faster than anyone could keep up
+                        with. The State of CSS, HTML, React, AI and Devs followed.
                     </p>
                     <p>
-                        Devographics is the small collective behind these surveys: maintainers,
-                        designers, and hundreds of volunteer translators. Survey results help
-                        developers pick their tools, and help browser vendors and library
-                        authors decide what to work on next.
+                        Devographics is a project by me, <a
+                            href="https://bsky.app/profile/sachagreif.com">Sacha Greif</a
+                        >, with help from a collective of volunteer open-source contributors,
+                        writers, translators, and more.
                     </p>
                     <p>
                         Everything is <a href={links.github}>open source</a>. Come say hi on <a
@@ -193,7 +209,7 @@ const links = {
     </body>
 </html>
 
-<style>
+<style lang="scss">
     .muted {
         color: var(--muted);
     }
@@ -236,10 +252,13 @@ const links = {
         padding-bottom: var(--space-5);
     }
     h1 {
-        margin: 0 0 var(--space-3);
-        font-size: var(--text-xl);
-        line-height: 1;
-        letter-spacing: -0.03em;
+        margin: 0 0 var(--space-4);
+    }
+    h1 img {
+        display: block;
+        width: 100%;
+        max-width: 720px;
+        height: auto;
     }
     .lede {
         max-width: 42em;
@@ -321,13 +340,6 @@ const links = {
     }
     tbody tr:hover {
         background: var(--surface);
-    }
-    .swatch {
-        display: inline-block;
-        width: 0.6em;
-        height: 0.6em;
-        margin-right: var(--space-2);
-        background: var(--accent);
     }
     .link-cell {
         text-align: right;

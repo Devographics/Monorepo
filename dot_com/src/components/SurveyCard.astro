@@ -1,6 +1,6 @@
 ---
 import type { Survey } from '../lib/data'
-import { getAccentStyle, getEditionLink, statusLabels } from '../lib/format'
+import { getEditionLink, statusLabels } from '../lib/format'
 import SurveyLogo from './SurveyLogo.astro'
 
 interface Props {
@@ -11,7 +11,7 @@ const { latest } = survey
 const link = getEditionLink(latest)
 ---
 
-<article class="card" style={getAccentStyle(latest)}>
+<article class="card">
     <a class="card-logo" href={`https://${survey.domain}`} tabindex="-1" aria-hidden="true">
         <SurveyLogo surveyId={survey.id} name={survey.name} />
     </a>
@@ -41,7 +41,7 @@ const link = getEditionLink(latest)
     </div>
 </article>
 
-<style>
+<style lang="scss">
     .card {
         display: grid;
         grid-template-rows: auto 1fr;

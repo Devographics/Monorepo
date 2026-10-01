@@ -1,0 +1,59 @@
+---
+import type { SponsorItem } from '@devographics/types'
+
+interface Props {
+    sponsors: SponsorItem[]
+}
+const { sponsors } = Astro.props
+---
+
+<section id="sponsors" class="section container">
+    <h2 class="section-title">Sponsors</h2>
+    <p class="intro">Thanks to the sponsors of our latest surveys for helping keep them free and independent.</p>
+    <ul class="sponsors">
+        {
+            sponsors.map(sponsor => (
+                <li>
+                    <a href={sponsor.url} title={sponsor.name}>
+                        <img src={sponsor.imageUrl} alt={sponsor.name} loading="lazy" />
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</section>
+
+<style lang="scss">
+    .intro {
+        max-width: 42em;
+        margin: 0 0 var(--space-4);
+        color: var(--muted);
+    }
+    .sponsors {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: var(--space-3);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    a {
+        display: grid;
+        place-items: center;
+        height: 96px;
+        padding: var(--space-3) var(--space-4);
+        border: var(--border);
+        background: var(--surface);
+        transition: border-color 150ms;
+
+        &:hover {
+            border-color: var(--accent);
+        }
+    }
+    img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+</style>

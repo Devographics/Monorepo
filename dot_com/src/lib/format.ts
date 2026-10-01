@@ -28,7 +28,3 @@ export const getEditionLink = (edition: Edition) => {
     }
     return { href: edition.questionsUrl, label: 'View questions' }
 }
-
-/** Survey colors are used as local accents only, the page itself stays neutral */
-export const getAccentStyle = (edition: Edition) =>
-    edition.colors?.primary ? `--accent: ${edition.colors.primary}` : undefined

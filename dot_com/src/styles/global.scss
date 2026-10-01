@@ -1,6 +1,5 @@
 /*
  * Neutral version of the survey sites' look (dark, monospace, thin borders).
- * Each survey's own color only shows up locally, via --accent.
  */
 :root {
     color-scheme: dark;
@@ -10,7 +9,7 @@
     --line: #333;
     --text: #ece8e1;
     --muted: #9a968f;
-    --accent: var(--text);
+    --accent: #8ecdf5;
     --border: 1px solid var(--line);
 
     --font: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -18,7 +17,6 @@
     --text-sm: 0.875rem;
     --text-md: 1rem;
     --text-lg: 1.25rem;
-    --text-xl: clamp(2.25rem, 7vw, 4.5rem);
 
     --space-1: 0.25rem;
     --space-2: 0.5rem;

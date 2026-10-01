@@ -8,7 +8,9 @@ import { getLocaleQuery, getSurveysQuery, graphqlFetcher } from '@devographics/f
 import {
     type EditionMetadata,
     ResultsStatusEnum,
+    type SponsorItem,
     type SurveyMetadata,
+    SurveyPublishingStatusEnum,
     SurveyStatusEnum
 } from '@devographics/types'
 
@@ -27,7 +29,7 @@ export type EditionStatus = 'open' | 'preview' | 'results' | 'closed'
 export interface Edition
     extends Pick<
         EditionMetadata,
-        'id' | 'year' | 'questionsUrl' | 'resultsUrl' | 'startedAt' | 'endedAt' | 'colors'
+        'id' | 'year' | 'questionsUrl' | 'resultsUrl' | 'startedAt' | 'endedAt' | 'sponsors'
     > {
     status: EditionStatus
     surveyId: string
@@ -51,9 +53,11 @@ const time = (date?: string) => (date ? new Date(date).getTime() : 0)
 
 export const getData = async () => {
     const { _metadata } = await query<{ _metadata: { surveys: SurveyMetadata[] } }>(
-        getSurveysQuery({ addCredits: false })
+        getSurveysQuery({ addCredits: false, addSponsors: true })
     )
-    const allSurveys = _metadata.surveys.filter(s => !s.isDemo)
+    const allSurveys = _metadata.surveys.filter(
+        s => s.status === SurveyPublishingStatusEnum.PUBLISHED
+    )
 
     // survey descriptions ("general.state_of_js.description") live in the locale strings
     const { locale } = await query<{
@@ -72,7 +76,7 @@ export const getData = async () => {
                     resultsUrl: e.resultsUrl,
                     startedAt: e.startedAt,
                     endedAt: e.endedAt,
-                    colors: e.colors,
+                    sponsors: e.sponsors,
                     status: getEditionStatus(e),
                     surveyId: survey.id,
                     surveyName: survey.name
@@ -95,9 +99,21 @@ export const getData = async () => {
         .flatMap(s => s.editions)
         .sort((a, b) => time(b.startedAt) - time(a.startedAt))
 
+    // sponsors of each survey's latest edition, deduplicated by id. The same sponsor
+    // can have a different name/logo/link per survey, so the most recent edition wins
+    const sponsorsById = new Map<string, SponsorItem>()
+    for (const { latest } of [...surveys].sort(
+        (a, b) => time(b.latest.startedAt) - time(a.latest.startedAt)
+    )) {
+        for (const sponsor of latest.sponsors || []) {
+            if (!sponsorsById.has(sponsor.id)) sponsorsById.set(sponsor.id, sponsor)
+        }
+    }
+
     return {
         surveys,
         editions,
+        sponsors: [...sponsorsById.values()],
         openEditions: editions.filter(e => e.status === 'open'),
         firstYear: Math.min(...editions.map(e => e.year))
     }
