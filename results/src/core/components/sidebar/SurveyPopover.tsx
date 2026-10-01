@@ -13,7 +13,11 @@ import SidebarLogo from 'Logo/SidebarLogo'
 import { screenReadersOnlyMixin } from 'core/theme'
 
 import React, { useState } from 'react'
-import { SurveyMetadata, EditionMetadata } from '@devographics/types'
+import {
+    SurveyMetadata,
+    EditionMetadata,
+    SurveyPublishingStatusEnum
+} from '@devographics/types'
 import PopoverIndicator from '../PopoverIndicator'
 import { useI18n } from '@devographics/react-i18n'
 
@@ -65,7 +69,7 @@ const Contents = () => {
         .filter(e => e.resultsUrl)
         .sort((a, b) => b.year - a.year)
     const otherSurveys = allSurveys
-        .filter(s => !s.isDisabled)
+        .filter(s => s.status === SurveyPublishingStatusEnum.PUBLISHED)
         .filter(s => s.id !== currentSurvey.id)
     return (
         <div className="survey-popover">

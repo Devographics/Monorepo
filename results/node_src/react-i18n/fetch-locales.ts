@@ -61,6 +61,8 @@ export const getLocaleContextGraphQL = async ({ localeId, context, graphql, key 
     const localesQuery = getLocaleContextQuery(localeId, context)
     logToFile(`locales/${key}.graphql`, localesQuery)
 
+    logToFile(`locales/${key}.graphql`, localesQuery)
+
     const localesResults = removeNull(
         await graphql(
             `

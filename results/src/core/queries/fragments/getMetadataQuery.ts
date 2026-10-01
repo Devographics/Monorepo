@@ -15,7 +15,7 @@ query {
                 id
                 name
                 homepageUrl
-                isDisabled
+                status
                 imageUrl
             }
         }
