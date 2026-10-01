@@ -1,0 +1,101 @@
+---
+import type { Survey } from '../lib/data'
+import { getAccentStyle, getEditionLink, statusLabels } from '../lib/format'
+import SurveyLogo from './SurveyLogo.astro'
+
+interface Props {
+    survey: Survey
+}
+const { survey } = Astro.props
+const { latest } = survey
+const link = getEditionLink(latest)
+---
+
+<article class="card" style={getAccentStyle(latest)}>
+    <a class="card-logo" href={`https://${survey.domain}`} tabindex="-1" aria-hidden="true">
+        <SurveyLogo surveyId={survey.id} name={survey.name} />
+    </a>
+    <div class="card-body">
+        <h3>
+            <a href={`https://${survey.domain}`}>{survey.name}</a>
+        </h3>
+        {survey.description && <p class="card-description">{survey.description}</p>}
+        <p class="card-latest">
+            <span class:list={['badge', `badge-${latest.status}`]}>{statusLabels[latest.status]}</span>
+            {link.href && <a href={link.href}>{link.label} {latest.year} →</a>}
+        </p>
+        <ul class="card-years" aria-label={`${survey.name} editions`}>
+            {
+                survey.editions.map(edition => {
+                    const { href } = getEditionLink(edition)
+                    return (
+                        <li>
+                            <a class="pill" href={href}>
+                                {edition.year}
+                            </a>
+                        </li>
+                    )
+                })
+            }
+        </ul>
+    </div>
+</article>
+
+<style>
+    .card {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        border: var(--border);
+        background: var(--surface);
+        transition: border-color 150ms;
+    }
+    .card:hover {
+        border-color: var(--accent);
+    }
+    .card-logo {
+        display: block;
+        aspect-ratio: 2 / 1;
+        padding: var(--space-4) var(--space-5);
+        border-bottom: var(--border);
+        text-decoration: none;
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+        padding: var(--space-3) var(--space-4) var(--space-4);
+    }
+    h3 {
+        margin: 0;
+        font-size: var(--text-md);
+    }
+    h3 a {
+        color: inherit;
+        text-decoration: none;
+    }
+    h3 a:hover {
+        color: var(--accent);
+    }
+    .card-description {
+        margin: 0;
+        color: var(--muted);
+        font-size: var(--text-sm);
+        flex: 1;
+    }
+    .card-latest {
+        margin: var(--space-2) 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--space-2);
+        font-size: var(--text-sm);
+    }
+    .card-years {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-1);
+        margin: var(--space-1) 0 0;
+        padding: 0;
+        list-style: none;
+    }
+</style>

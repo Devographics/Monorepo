@@ -1,50 +1,389 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import '../styles/global.css'
+import SurveyCard from '../components/SurveyCard.astro'
+import SurveyLogo from '../components/SurveyLogo.astro'
+import { getData } from '../lib/data'
+import { formatDates, getAccentStyle, getEditionLink, statusLabels } from '../lib/format'
+
+const { surveys, editions, openEditions, firstYear } = await getData()
+
+const title = 'Devographics'
+const description =
+    'Independent, open developer surveys: State of JS, State of CSS, State of HTML, and more.'
+
+const links = {
+    github: 'https://github.com/Devographics/Monorepo',
+    discord: 'https://discord.gg/zRDb35jfrt'
+}
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={Astro.site} />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={Astro.site} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <header class="topbar">
+            <div class="container topbar-inner">
+                <a class="wordmark" href="/">Devographics</a>
+                <nav aria-label="Main">
+                    <a href="#surveys">Surveys</a>
+                    <a href="#archive">Archive</a>
+                    <a href="#about">About</a>
+                    <a href={links.github}>GitHub</a>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero container">
+                <h1>Devographics</h1>
+                <p class="lede">
+                    Independent developer surveys. Every year we ask tens of thousands of
+                    developers which tools, features and practices they use, then publish
+                    the results openly, for free.
+                </p>
+                <dl class="stats">
+                    <div>
+                        <dt class="label">Surveys</dt>
+                        <dd>{surveys.length}</dd>
+                    </div>
+                    <div>
+                        <dt class="label">Editions</dt>
+                        <dd>{editions.length}</dd>
+                    </div>
+                    <div>
+                        <dt class="label">Since</dt>
+                        <dd>{firstYear}</dd>
+                    </div>
+                    <div>
+                        <dt class="label">Open now</dt>
+                        <dd>
+                            {
+                                openEditions.length > 0 ? (
+                                    openEditions.map(e => (
+                                        <a href={e.questionsUrl} style={getAccentStyle(e)}>
+                                            {e.surveyName} {e.year} →
+                                        </a>
+                                    ))
+                                ) : (
+                                    <span class="muted">None right now</span>
+                                )
+                            }
+                        </dd>
+                    </div>
+                </dl>
+            </section>
+
+            {
+                openEditions.map(edition => (
+                    <section class="open container" style={getAccentStyle(edition)}>
+                        <div class="open-logo">
+                            <SurveyLogo surveyId={edition.surveyId} name={edition.surveyName} />
+                        </div>
+                        <div class="open-body">
+                            <span class="badge badge-open">{statusLabels.open}</span>
+                            <h2>
+                                {edition.surveyName} {edition.year}
+                            </h2>
+                            <p class="muted">{formatDates(edition)}</p>
+                            <a class="button" href={edition.questionsUrl}>
+                                Take the survey →
+                            </a>
+                        </div>
+                    </section>
+                ))
+            }
+
+            <section id="surveys" class="section container">
+                <h2 class="section-title">Surveys</h2>
+                <div class="grid">
+                    {surveys.map(survey => <SurveyCard survey={survey} />)}
+                </div>
+            </section>
+
+            <section id="archive" class="section container">
+                <h2 class="section-title">Archive</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="label">Edition</th>
+                                <th class="label">Dates</th>
+                                <th class="label">Status</th>
+                                <th><span class="sr-only">Link</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                editions.map(edition => {
+                                    const link = getEditionLink(edition)
+                                    return (
+                                        <tr style={getAccentStyle(edition)}>
+                                            <td>
+                                                <span class="swatch" aria-hidden="true" />
+                                                {edition.surveyName} {edition.year}
+                                            </td>
+                                            <td class="muted">{formatDates(edition)}</td>
+                                            <td>
+                                                <span class:list={['badge', `badge-${edition.status}`]}>
+                                                    {statusLabels[edition.status]}
+                                                </span>
+                                            </td>
+                                            <td class="link-cell">
+                                                {link.href && <a href={link.href}>{link.label} →</a>}
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="about" class="section container about">
+                <h2 class="section-title">About</h2>
+                <div class="about-body">
+                    <p>
+                        It started in 2016 with the State of JavaScript, a survey meant to make
+                        sense of an ecosystem that was changing faster than anyone could keep
+                        up with. The State of CSS, HTML, React, AI and Devs followed.
+                    </p>
+                    <p>
+                        Devographics is the small collective behind these surveys: maintainers,
+                        designers, and hundreds of volunteer translators. Survey results help
+                        developers pick their tools, and help browser vendors and library
+                        authors decide what to work on next.
+                    </p>
+                    <p>
+                        Everything is <a href={links.github}>open source</a>. Come say hi on <a
+                            href={links.discord}>Discord</a
+                        >.
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container footer-inner">
+                <span class="muted">© {new Date().getFullYear()} Devographics</span>
+                <nav aria-label="Footer">
+                    <a href={links.github}>GitHub</a>
+                    <a href={links.discord}>Discord</a>
+                    <a href={`${links.github}/issues`}>Report an issue</a>
+                </nav>
+            </div>
+        </footer>
+    </body>
 </html>
+
+<style>
+    .muted {
+        color: var(--muted);
+    }
+
+    /* top bar */
+    .topbar {
+        border-bottom: var(--border);
+    }
+    .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-3);
+        min-height: 56px;
+    }
+    .wordmark {
+        color: var(--text);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+    }
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-1) var(--space-3);
+        font-size: var(--text-sm);
+    }
+    nav a {
+        color: var(--muted);
+        text-decoration: none;
+    }
+    nav a:hover {
+        color: var(--text);
+    }
+
+    /* hero */
+    .hero {
+        padding-top: var(--space-6);
+        padding-bottom: var(--space-5);
+    }
+    h1 {
+        margin: 0 0 var(--space-3);
+        font-size: var(--text-xl);
+        line-height: 1;
+        letter-spacing: -0.03em;
+    }
+    .lede {
+        max-width: 42em;
+        margin: 0 0 var(--space-5);
+        color: var(--muted);
+        font-size: var(--text-lg);
+    }
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 2fr);
+        margin: 0;
+        border: var(--border);
+    }
+    .stats > div {
+        padding: var(--space-3);
+        border-left: var(--border);
+    }
+    .stats > div:first-child {
+        border-left: 0;
+    }
+    .stats dd {
+        margin: var(--space-1) 0 0;
+        font-size: var(--text-lg);
+        font-weight: 700;
+    }
+    .stats dd a {
+        display: block;
+        font-size: var(--text-md);
+    }
+
+    /* open survey banner */
+    .open {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center;
+        gap: var(--space-5);
+        margin-bottom: var(--space-5);
+    }
+    .open-logo {
+        aspect-ratio: 2 / 1;
+        padding: var(--space-4);
+        border: 1px solid var(--accent);
+        background: var(--surface);
+    }
+    .open-body h2 {
+        margin: var(--space-2) 0 0;
+        font-size: var(--text-lg);
+    }
+    .open-body p {
+        margin: 0 0 var(--space-3);
+    }
+
+    /* surveys */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: var(--space-3);
+    }
+
+    /* archive */
+    .table-wrapper {
+        overflow-x: auto;
+        border: var(--border);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: var(--text-sm);
+    }
+    th,
+    td {
+        padding: var(--space-2) var(--space-3);
+        text-align: left;
+        white-space: nowrap;
+        border-bottom: var(--border);
+    }
+    tbody tr:last-child td {
+        border-bottom: 0;
+    }
+    tbody tr:hover {
+        background: var(--surface);
+    }
+    .swatch {
+        display: inline-block;
+        width: 0.6em;
+        height: 0.6em;
+        margin-right: var(--space-2);
+        background: var(--accent);
+    }
+    .link-cell {
+        text-align: right;
+    }
+
+    /* about */
+    .about-body {
+        max-width: 42em;
+    }
+    .about-body p {
+        margin: 0 0 var(--space-3);
+    }
+
+    /* footer */
+    .footer {
+        border-top: var(--border);
+        font-size: var(--text-sm);
+    }
+    .footer-inner {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: var(--space-3);
+        padding-top: var(--space-4);
+        padding-bottom: var(--space-4);
+    }
+
+    @media (max-width: 720px) {
+        .stats {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        .stats > div:last-child {
+            grid-column: 1 / -1;
+            border-left: 0;
+            border-top: var(--border);
+        }
+        .open {
+            grid-template-columns: 1fr;
+            gap: var(--space-3);
+        }
+        .topbar nav a[href^='http'] {
+            display: none;
+        }
+        /* dates and status are also shown on the survey cards */
+        th:nth-child(2),
+        td:nth-child(2),
+        th:nth-child(3),
+        td:nth-child(3) {
+            display: none;
+        }
+        th,
+        td {
+            padding: var(--space-2);
+        }
+        td:first-child {
+            white-space: normal;
+        }
+    }
+</style>

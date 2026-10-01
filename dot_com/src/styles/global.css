@@ -1,154 +1,143 @@
 /*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
+ * Neutral version of the survey sites' look (dark, monospace, thin borders).
+ * Each survey's own color only shows up locally, via --accent.
  */
-
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+    color-scheme: dark;
+
+    --bg: #161616;
+    --surface: #1c1c1c;
+    --line: #333;
+    --text: #ece8e1;
+    --muted: #9a968f;
+    --accent: var(--text);
+    --border: 1px solid var(--line);
+
+    --font: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-md: 1rem;
+    --text-lg: 1.25rem;
+    --text-xl: clamp(2.25rem, 7vw, 4.5rem);
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 1rem;
+    --space-4: 1.5rem;
+    --space-5: 3rem;
+    --space-6: 5rem;
+
+    --max-width: 1120px;
+    --gutter: 16px;
 }
-@font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-regular.woff') format('woff');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
-@font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-bold.woff') format('woff');
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
+
+html {
+    scroll-behavior: smooth;
 }
+
 body {
-	font-family: 'Atkinson', sans-serif;
-	margin: 0;
-	padding: 0;
-	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
-	font-size: 20px;
-	line-height: 1.7;
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: var(--text-md);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
-main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
-	line-height: 1.2;
-}
-h1 {
-	font-size: 3.052em;
-}
-h2 {
-	font-size: 2.441em;
-}
-h3 {
-	font-size: 1.953em;
-}
-h4 {
-	font-size: 1.563em;
-}
-h5 {
-	font-size: 1.25em;
-}
-strong,
-b {
-	font-weight: 700;
-}
+
 a {
-	color: var(--accent);
+    color: var(--accent);
+    text-underline-offset: 3px;
 }
 a:hover {
-	color: var(--accent);
+    text-decoration-thickness: 2px;
 }
-p {
-	margin-bottom: 1em;
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
-.prose p {
-	margin-bottom: 2em;
+
+.container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
 }
-textarea {
-	width: 100%;
-	font-size: 16px;
+
+/* small uppercase labels, as in the survey sites' stat boxes */
+.label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
 }
-input {
-	font-size: 16px;
+
+.section {
+    padding-block: var(--space-5);
+    border-top: var(--border);
 }
-table {
-	width: 100%;
+.section-title {
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-lg);
 }
-img {
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
+.section-title::before {
+    content: '> ';
+    color: var(--muted);
 }
-code {
-	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
+
+.badge {
+    display: inline-block;
+    padding: 0 var(--space-2);
+    border: 1px solid currentColor;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
 }
-pre {
-	padding: 1.5em;
-	border-radius: 8px;
+.badge-open,
+.badge-preview {
+    color: var(--bg);
+    background: var(--accent);
+    border-color: var(--accent);
 }
-pre > code {
-	all: unset;
+
+.pill {
+    display: inline-block;
+    padding: 0 var(--space-2);
+    border: var(--border);
+    color: var(--muted);
+    font-size: var(--text-sm);
+    text-decoration: none;
 }
-blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
+.pill:hover {
+    color: var(--accent);
+    border-color: var(--accent);
 }
-hr {
-	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
+
+.button {
+    display: inline-block;
+    padding: var(--space-2) var(--space-3);
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+    text-decoration: none;
 }
-@media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
-	main {
-		padding: 1em;
-	}
+.button:hover {
+    filter: brightness(1.1);
 }
 
 .sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
-	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
-	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
-	white-space: nowrap;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
 }

@@ -1,0 +1,27 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dot_com",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "dot_com",
+        "dev"
+      ],
+      "port": 3600
+    },
+    {
+      "name": "dot_com-preview",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "dot_com",
+        "preview",
+        "--port",
+        "3601"
+      ],
+      "port": 3601
+    }
+  ]
+}
