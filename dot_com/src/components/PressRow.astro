@@ -1,0 +1,69 @@
+---
+import type { PressMention } from '../lib/data'
+
+interface Props {
+    item: PressMention
+}
+const { item } = Astro.props
+const { edition } = item
+
+// ISO dates are parsed as UTC, so format them in UTC too to avoid off-by-one days
+const dateFormat = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC'
+})
+---
+
+<li class="row">
+    <span class="date">
+        {item.publishedAt && <time datetime={item.publishedAt}>{dateFormat.format(new Date(item.publishedAt))}</time>}
+    </span>
+    <span class="source">{item.source}</span>
+    <span class="edition">
+        {edition.resultsUrl ? <a href={edition.resultsUrl}>{edition.surveyName} {edition.year}</a> : `${edition.surveyName} ${edition.year}`}
+    </span>
+    <a class="title" href={item.url}>{item.title} →</a>
+</li>
+
+<style lang="scss">
+    .row {
+        display: grid;
+        grid-template-columns: 7.5rem 11rem 13rem minmax(0, 1fr);
+        gap: var(--space-3);
+        align-items: baseline;
+        padding: var(--space-2) var(--space-3);
+        border-bottom: var(--border);
+        font-size: var(--text-sm);
+
+        &:hover {
+            background: var(--surface);
+        }
+
+        @media (max-width: 720px) {
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 0 var(--space-2);
+        }
+    }
+    .date,
+    .edition,
+    .edition a {
+        color: var(--muted);
+    }
+    .source {
+        font-weight: 700;
+    }
+    .title {
+        @media (max-width: 720px) {
+            grid-column: 1 / -1;
+        }
+    }
+    .edition {
+        @media (max-width: 720px) {
+            grid-column: 1 / -1;
+            order: -1;
+            font-size: var(--text-xs);
+        }
+    }
+</style>

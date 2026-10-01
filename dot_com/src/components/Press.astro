@@ -1,0 +1,71 @@
+---
+import type { PressMention } from '../lib/data'
+import PressRow from './PressRow.astro'
+
+interface Props {
+    press: PressMention[]
+}
+const { press } = Astro.props
+
+const INITIAL_COUNT = 20
+const shown = press.slice(0, INITIAL_COUNT)
+const rest = press.slice(INITIAL_COUNT)
+---
+
+<section id="press" class="section container">
+    <h2 class="section-title">Press</h2>
+    <p class="intro">Articles, newsletters and videos that covered our survey results.</p>
+    <div class="list">
+        <ol>
+            {shown.map(item => <PressRow item={item} />)}
+        </ol>
+        {
+            rest.length > 0 && (
+                <details>
+                    <summary>
+                        <span class="closed-label">Show all {press.length} mentions</span>
+                        <span class="open-label">Show fewer</span>
+                    </summary>
+                    <ol>
+                        {rest.map(item => <PressRow item={item} />)}
+                    </ol>
+                </details>
+            )
+        }
+    </div>
+</section>
+
+<style lang="scss">
+    .intro {
+        max-width: 42em;
+        margin: 0 0 var(--space-4);
+        color: var(--muted);
+    }
+    .list {
+        border: var(--border);
+        border-bottom: 0;
+    }
+    ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    summary {
+        padding: var(--space-2) var(--space-3);
+        border-bottom: var(--border);
+        color: var(--accent);
+        font-size: var(--text-sm);
+        cursor: pointer;
+
+        &:hover {
+            background: var(--surface);
+        }
+    }
+    .open-label,
+    details[open] .closed-label {
+        display: none;
+    }
+    details[open] .open-label {
+        display: inline;
+    }
+</style>

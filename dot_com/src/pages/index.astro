@@ -3,10 +3,11 @@ import '../styles/global.scss'
 import SurveyCard from '../components/SurveyCard.astro'
 import SurveyLogo from '../components/SurveyLogo.astro'
 import Sponsors from '../components/Sponsors.astro'
+import Press from '../components/Press.astro'
 import { getData } from '../lib/data'
 import { formatDates, getEditionLink, statusLabels } from '../lib/format'
 
-const { surveys, editions, sponsors, openEditions, firstYear } = await getData()
+const { surveys, editions, sponsors, press, openEditions, firstYear } = await getData()
 
 const title = 'Devographics'
 const description =
@@ -44,6 +45,7 @@ const links = {
                 <a class="wordmark" href="/">Devographics</a>
                 <nav aria-label="Main">
                     <a href="#surveys">Surveys</a>
+                    <a href="#press">Press</a>
                     <a href="#sponsors">Sponsors</a>
                     <a href="#archive">Archive</a>
                     <a href="#about">About</a>
@@ -124,6 +126,8 @@ const links = {
                     {surveys.map(survey => <SurveyCard survey={survey} />)}
                 </div>
             </section>
+
+            {press.length > 0 && <Press press={press} />}
 
             {sponsors.length > 0 && <Sponsors sponsors={sponsors} />}
 
@@ -382,6 +386,18 @@ const links = {
         }
         .topbar nav a[href^='http'] {
             display: none;
+        }
+        /* nav gets its own row below the wordmark, scrollable if it overflows */
+        .topbar-inner {
+            flex-wrap: wrap;
+            row-gap: 0;
+            padding-block: var(--space-2);
+        }
+        .topbar nav {
+            flex-wrap: nowrap;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
         }
         /* dates and status are also shown on the survey cards */
         th:nth-child(2),

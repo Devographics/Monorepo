@@ -7,6 +7,7 @@
 import { getLocaleQuery, getSurveysQuery, graphqlFetcher } from '@devographics/fetch'
 import {
     type EditionMetadata,
+    type PressItem,
     ResultsStatusEnum,
     type SponsorItem,
     type SurveyMetadata,
@@ -29,11 +30,22 @@ export type EditionStatus = 'open' | 'preview' | 'results' | 'closed'
 export interface Edition
     extends Pick<
         EditionMetadata,
-        'id' | 'year' | 'questionsUrl' | 'resultsUrl' | 'startedAt' | 'endedAt' | 'sponsors'
+        | 'id'
+        | 'year'
+        | 'questionsUrl'
+        | 'resultsUrl'
+        | 'startedAt'
+        | 'endedAt'
+        | 'sponsors'
+        | 'press'
     > {
     status: EditionStatus
     surveyId: string
     surveyName: string
+}
+
+export interface PressMention extends PressItem {
+    edition: Edition
 }
 
 export interface Survey extends Pick<SurveyMetadata, 'id' | 'name' | 'domain'> {
@@ -53,7 +65,7 @@ const time = (date?: string) => (date ? new Date(date).getTime() : 0)
 
 export const getData = async () => {
     const { _metadata } = await query<{ _metadata: { surveys: SurveyMetadata[] } }>(
-        getSurveysQuery({ addCredits: false, addSponsors: true })
+        getSurveysQuery({ addCredits: false, addSponsors: true, addPress: true })
     )
     const allSurveys = _metadata.surveys.filter(
         s => s.status === SurveyPublishingStatusEnum.PUBLISHED
@@ -77,6 +89,7 @@ export const getData = async () => {
                     startedAt: e.startedAt,
                     endedAt: e.endedAt,
                     sponsors: e.sponsors,
+                    press: e.press,
                     status: getEditionStatus(e),
                     surveyId: survey.id,
                     surveyName: survey.name
@@ -110,10 +123,16 @@ export const getData = async () => {
         }
     }
 
+    // press mentions across all editions, newest first
+    const press: PressMention[] = editions
+        .flatMap(edition => (edition.press || []).map(item => ({ ...item, edition })))
+        .sort((a, b) => time(b.publishedAt) - time(a.publishedAt))
+
     return {
         surveys,
         editions,
         sponsors: [...sponsorsById.values()],
+        press,
         openEditions: editions.filter(e => e.status === 'open'),
         firstYear: Math.min(...editions.map(e => e.year))
     }
