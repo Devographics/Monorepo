@@ -41,6 +41,13 @@ export interface SponsorItem {
     imageUrl: string
 }
 
+export interface PressItem {
+    /** name of the outlet, e.g. "The Register" */
+    source: string
+    title: string
+    url: string
+}
+
 export interface Survey extends SurveyConfig {
     editions: Edition[]
 }
@@ -71,6 +78,8 @@ export type Edition = {
     tshirt: Tshirt
     colors: Colors
     sponsors?: SponsorItem[]
+    /** press outlets that mentioned or quoted this edition */
+    press?: PressItem[]
     enableReadingList?: boolean
     enableChartSponsorships?: boolean
     enableSkip?: boolean
