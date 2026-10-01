@@ -4,7 +4,8 @@
     "description": "",
     "type": "module",
     "exports": {
-        ".": "./index.ts"
+        ".": "./index.ts",
+        "./surveys": "./surveys.ts"
     },
     "types": "./index.ts",
     "scripts": {
