@@ -7,9 +7,11 @@ import T from 'core/i18n/T'
 import { formatNumber } from 'core/charts/common2/helpers/format'
 import Link from 'core/components/LocaleLink'
 
-const SurveyStatsBlock = (props: { block: BlockVariantDefinition }) => {
+const SurveyStatsBlock = ({ block }: { block: BlockVariantDefinition }) => {
     const { currentEdition, currentEditionStats } = usePageContext()
     const { startedAt, endedAt, questionsUrl } = currentEdition
+    const { variables } = block
+    const { enableDownload = true } = variables
     return (
         <div className="survey-stats">
             <div>
@@ -40,16 +42,18 @@ const SurveyStatsBlock = (props: { block: BlockVariantDefinition }) => {
                     </a>
                 </p>
             </div>
-            <div>
-                <h4>
-                    <T k="general.get_data" />
-                </h4>
-                <p>
-                    <Link to="/download">
-                        <T k="general.download_data" /> →
-                    </Link>
-                </p>
-            </div>
+            {enableDownload && (
+                <div>
+                    <h4>
+                        <T k="general.get_data" />
+                    </h4>
+                    <p>
+                        <Link to="/download">
+                            <T k="general.download_data" /> →
+                        </Link>
+                    </p>
+                </div>
+            )}
         </div>
     )
 }

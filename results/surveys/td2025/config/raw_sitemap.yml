@@ -2,6 +2,14 @@
   path: /
   showTitle: false
   blocks:
+      - id: survey_stats
+        blockType: SurveyStatsBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+        variables:
+            enableDownload: false
+
       - id: survey_intro
         blockType: SurveyIntroBlock
         disableExport: true
