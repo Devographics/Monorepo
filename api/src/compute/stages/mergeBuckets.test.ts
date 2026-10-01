@@ -193,6 +193,78 @@ describe('mergeBuckets', () => {
         expect(merged[BucketUnits.PERCENTILES]).toMatchObject({ p0: 0, p50: 50, p100: 100 })
     })
 
+    /*
+
+    After the groupBuckets stage, generic.ts swaps `axis.options` for the question's
+    groups. Buckets merged after that (limitData, groupOtherBuckets) have grouped
+    facet buckets whose children still use the original option ids, so their
+    averages must be looked up in the question's options, not in `axis.options`.
+
+    */
+    test('merging grouped facet buckets after axis options are swapped for groups', () => {
+        const options = [
+            { id: 'low_a', average: 10000 },
+            { id: 'low_b', average: 20000 },
+            { id: 'high_a', average: 200000 }
+        ]
+        const groups = [
+            { id: 'range_low', items: ['low_a', 'low_b'] },
+            { id: 'range_high', items: ['high_a'] }
+        ]
+        const groupedSalaryAxis = {
+            question: { id: 'yearly_salary', optionsAreRange: true, options, groups },
+            enableBucketGroups: true,
+            sort: 'options',
+            order: 1,
+            cutoff: 0,
+            limit: 100,
+            // what generic.ts sets after the groupBuckets stage
+            options: groups
+        } as unknown as ComputeAxisParameters
+        const group = (id: string, children: Array<[string, number]>) => {
+            const groupedBuckets = children.map(([childId, count]) => facet(childId, count))
+            return {
+                id,
+                count: children.reduce((sum, [, count]) => sum + count, 0),
+                groupedBuckets,
+                groupedBucketIds: groupedBuckets.map(b => b.id)
+            }
+        }
+        const withStats = { [BucketUnits.AVERAGE]: 0, [BucketUnits.PERCENTILES]: zeroPercentiles }
+        const merged = mergeBuckets<Bucket>({
+            buckets: [
+                {
+                    id: 'cutoff_answers',
+                    count: 3,
+                    facetBuckets: [
+                        group('range_low', [
+                            ['low_a', 1],
+                            ['low_b', 1]
+                        ]),
+                        group('range_high', [['high_a', 1]])
+                    ],
+                    ...withStats
+                } as unknown as Bucket,
+                {
+                    id: 'overlimit_answers',
+                    count: 1,
+                    facetBuckets: [group('range_high', [['high_a', 1]])],
+                    ...withStats
+                } as unknown as Bucket
+            ],
+            mergedProps: { id: 'other_answers' },
+            primaryAxis: hoursAxis,
+            secondaryAxis: groupedSalaryAxis
+        })
+        expect(merged.facetBuckets.map(f => [f.id, f.count])).toEqual([
+            ['range_low', 2],
+            ['range_high', 2]
+        ])
+        // range_low averages its children: (10k + 20k) / 2 = 15k
+        // (2 × 15k + 2 × 200k) / 4
+        expect(merged[BucketUnits.AVERAGE]).toBe(107500)
+    })
+
     test('buckets without facet stats get none', () => {
         const merged = mergeBuckets<Bucket>({
             buckets: [bucket('60', [['high', 3]]), bucket('168', [['low', 1]])],
