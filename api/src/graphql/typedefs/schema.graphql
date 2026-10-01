@@ -70,6 +70,7 @@ type EditionMetadata {
     sections(include: IncludeEnum): [SectionMetadata]
 
     sponsors: [SponsorItem]
+    press: [PressItem]
 
     credits: [CreditItem]
 
@@ -127,6 +128,14 @@ type SponsorItem {
     name: String
     url: String
     imageUrl: String
+}
+
+type PressItem {
+    source: String
+    title: String
+    url: String
+    # ISO date (YYYY-MM-DD)
+    publishedAt: String
 }
 
 type CreditItem {

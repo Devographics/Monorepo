@@ -6,10 +6,12 @@ Unless specified, these queries are designed to be used by surveyform
 
 export const getSurveysQuery = ({
     addCredits = true,
-    addSponsors = false
+    addSponsors = false,
+    addPress = false
 }: {
     addCredits?: boolean
     addSponsors?: boolean
+    addPress?: boolean
 }) => `
 query SurveysMetadataQuery {
   _metadata {
@@ -81,6 +83,16 @@ query SurveysMetadataQuery {
           name
           imageUrl
           url
+        }`
+                : ''
+        }
+        ${
+            addPress
+                ? `press {
+          source
+          title
+          url
+          publishedAt
         }`
                 : ''
         }

@@ -46,6 +46,8 @@ export interface PressItem {
     source: string
     title: string
     url: string
+    /** ISO date (YYYY-MM-DD) */
+    publishedAt?: string
 }
 
 export interface Survey extends SurveyConfig {
