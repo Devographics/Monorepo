@@ -1,5 +1,5 @@
 import { ComputeAxisParameters, SortOrderNumeric } from '../../types'
-import { ResponseEditionData, Bucket, FacetBucket, Option, SortProperty } from '@devographics/types'
+import { ResponseEditionData, Bucket, FacetBucket, SortProperty } from '@devographics/types'
 import sortBy from 'lodash/sortBy.js'
 import isEmpty from 'lodash/isEmpty.js'
 import {
@@ -11,6 +11,18 @@ import {
     OTHER_ANSWERS
 } from '@devographics/constants'
 
+/*
+
+Get the axis's groups when bucket grouping is enabled, or its options otherwise.
+
+Use this for anything that runs on buckets *after* the groupBuckets stage. Note that
+group buckets keep their children (`groupedBuckets`) which still use option ids, so
+anything looking up a single option (e.g. its average) should keep using `axis.options`.
+
+*/
+export const getAxisOptionsOrGroups = (axis?: ComputeAxisParameters) =>
+    axis?.enableBucketGroups && axis?.question.groups ? axis.question.groups : axis?.options
+
 export function sortBuckets<T extends Bucket | FacetBucket>(
     buckets: T[],
     axis: ComputeAxisParameters
@@ -18,9 +30,13 @@ export function sortBuckets<T extends Bucket | FacetBucket>(
     const { sort, order, options } = axis
     let sortedBuckets = [...buckets]
     if (sort === 'options') {
-        if (options && !isEmpty(options)) {
+        // buckets can be groups (after the groupBuckets stage), options (the children
+        // of a group, or buckets that didn't match any group), or a mix of both
+        const groups = axis.enableBucketGroups ? axis.question.groups : undefined
+        const sortOrder = [...(groups ?? []), ...(options ?? [])]
+        if (!isEmpty(sortOrder)) {
             // if values are specified, sort by values
-            sortedBuckets = sortByOptions(sortedBuckets, options)
+            sortedBuckets = sortByOptions(sortedBuckets, sortOrder)
         }
     } else {
         sortedBuckets = sortByProperty(sortedBuckets, sort, order)
@@ -35,7 +51,10 @@ export function sortBuckets<T extends Bucket | FacetBucket>(
     return sortedBuckets
 }
 
-export function sortByOptions<T extends Bucket | FacetBucket>(buckets: T[], options: Option[]) {
+export function sortByOptions<T extends Bucket | FacetBucket>(
+    buckets: T[],
+    options: Array<{ id: string | number }>
+) {
     return [...buckets].sort((a, b) => {
         // make sure everything is a string to avoid type mismatches
         const stringValues = options.map(o => o.id.toString())

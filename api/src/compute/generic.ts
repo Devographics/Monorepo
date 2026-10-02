@@ -582,14 +582,6 @@ export async function genericComputeFunction(
             // bucket nesting
             await runStage(nestBuckets, [context, results, axis2, axis1])
 
-            // for all following steps, use groups as options
-            if (axis1.enableBucketGroups && axis1.question.groups) {
-                axis1.options = axis1.question.groups
-            }
-            if (axis2.enableBucketGroups && axis2.question.groups) {
-                axis2.options = axis2.question.groups
-            }
-
             await runStage(sortData, [results, axis2, axis1])
 
             await runStage(limitData, [results, axis2, axis1])
@@ -645,11 +637,6 @@ export async function genericComputeFunction(
             // note: unlike bucket grouping, bucket nesting does not change bucket counts
             // so we can run it after cutoff steps
             await runStage(nestBuckets, [context, results, axis1])
-
-            // for all following steps, use groups as options
-            if (axis1.enableBucketGroups && axis1.question.groups) {
-                axis1.options = axis1.question.groups
-            }
 
             await runStage(sortData, [results, axis1])
             await runStage(limitData, [results, axis1])

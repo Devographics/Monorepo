@@ -62,10 +62,7 @@ export const getBucketAverage = (
                   groupedBuckets.length
         return average
     } else {
-        // note: use question.options rather than axis.options, which gets swapped for
-        // groups after the groupBuckets stage (see generic.ts) while the child buckets
-        // of a group (and any bucket merged later on) still use the original option ids
-        const bucketOption = findBucketOption(axis?.question?.options ?? axis?.options, bucket)
+        const bucketOption = findBucketOption(axis?.options, bucket)
         let average
         if (bucketOption?.average !== undefined) {
             // bucket is a range, use its specified average value

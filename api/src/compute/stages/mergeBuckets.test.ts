@@ -195,13 +195,13 @@ describe('mergeBuckets', () => {
 
     /*
 
-    After the groupBuckets stage, generic.ts swaps `axis.options` for the question's
-    groups. Buckets merged after that (limitData, groupOtherBuckets) have grouped
-    facet buckets whose children still use the original option ids, so their
-    averages must be looked up in the question's options, not in `axis.options`.
+    Buckets merged after the groupBuckets stage (cutoffData, limitData,
+    groupOtherBuckets) have grouped facet buckets: they are combined along the
+    question's groups, while their children still use the original option ids
+    and get their averages from the axis options.
 
     */
-    test('merging grouped facet buckets after axis options are swapped for groups', () => {
+    test('merging buckets whose facet buckets are already grouped', () => {
         const options = [
             { id: 'low_a', average: 10000 },
             { id: 'low_b', average: 20000 },
@@ -218,8 +218,7 @@ describe('mergeBuckets', () => {
             order: 1,
             cutoff: 0,
             limit: 100,
-            // what generic.ts sets after the groupBuckets stage
-            options: groups
+            options
         } as unknown as ComputeAxisParameters
         const group = (id: string, children: Array<[string, number]>) => {
             const groupedBuckets = children.map(([childId, count]) => facet(childId, count))

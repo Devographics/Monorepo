@@ -6,7 +6,7 @@ import { BucketData, BucketUnits } from '@devographics/types'
 import { NO_ANSWER } from '@devographics/constants'
 import uniq from 'lodash/uniq.js'
 import compact from 'lodash/compact.js'
-import { sortBuckets } from './sort_data'
+import { getAxisOptionsOrGroups, sortBuckets } from './sort_data'
 import { calculatePercentiles2, zeroPercentiles } from './add_percentiles'
 import { calculateAverage } from './add_averages'
 
@@ -137,8 +137,7 @@ export const combineFacetBuckets = ({
     axis: ComputeAxisParameters
     mergedBucket: Bucket
 }): FacetBucket[] => {
-    const optionsOrGroups =
-        axis?.enableBucketGroups && axis?.question.groups ? axis.question.groups : axis?.options
+    const optionsOrGroups = getAxisOptionsOrGroups(axis)
     if (!optionsOrGroups) {
         return []
     }
