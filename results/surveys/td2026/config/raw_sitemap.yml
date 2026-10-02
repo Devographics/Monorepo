@@ -1461,3 +1461,13 @@
       - id: notfound
         blockType: NotFoundBlock
         wrapBlock: false
+
+- id: correlations
+  is_hidden: true
+  titleId: sections.correlations.title
+  path: /correlations
+  blocks:
+      - template: page_introduction
+
+      - id: correlations
+        blockType: CorrelationsExplorer
