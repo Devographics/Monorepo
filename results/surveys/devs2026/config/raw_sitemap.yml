@@ -28,7 +28,9 @@
         wrapBlock: false
         showInNav: false
 
-      - id: career_security
+      - id: overview_career_security
+        extends: career_security # doesn't work yet
+        fieldId: career_security
         template: multiple_options2_combined
         titleKey: career.career_security
         questionKey: career.career_security.question
@@ -43,7 +45,9 @@
         wrapBlock: false
         showInNav: false
 
-      - id: workplace_burnout
+      - id: overview_workplace_burnout
+        extends: workplace_burnout
+        fieldId: workplace_burnout
         template: multiple_options2_combined
         titleKey: workplace.workplace_burnout
         questionKey: workplace.workplace_burnout.question
@@ -58,7 +62,9 @@
         wrapBlock: false
         showInNav: false
 
-      - id: career_issues
+      - id: overview_career_issues
+        extends: career_issues
+        fieldId: career_issues
         template: multiple_options2_combined
         titleKey: career.career_issues
         questionKey: career.career_issues.question
@@ -79,7 +85,9 @@
         wrapBlock: false
         showInNav: false
 
-      - id: ai_sentiment
+      - id: overview_ai_sentiment
+        extends: ai_sentiment
+        fieldId: ai_sentiment
         template: single_option2
         titleKey: ai_usage.ai_sentiment
         questionKey: ai_usage.ai_sentiment.question
@@ -93,7 +101,9 @@
         wrapBlock: false
         showInNav: false
 
-      - id: ai_mental_state
+      - id: overview_ai_mental_state
+        extends: ai_mental_state
+        fieldId: ai_mental_state
         template: opinion2
         titleKey: ai_usage.ai_mental_state
         questionKey: ai_usage.ai_mental_state.question
@@ -108,7 +118,9 @@
         wrapBlock: false
         showInNav: false
 
-      - id: ai_outlook
+      - id: overview_ai_outlook
+        extends: ai_outlook
+        fieldId: ai_outlook
         template: multiple_options2_freeform
         titleKey: ai_usage.ai_outlook
         questionKey: ai_usage.ai_outlook.question
@@ -127,7 +139,9 @@
         wrapBlock: false
         showInNav: false
 
-      - id: discrimination_issues
+      - id: overview_discrimination_issues
+        extends: discrimination_issues
+        fieldId: discrimination_issues
         template: men_vs_non_men
         titleKey: career.discrimination_issues
         questionKey: career.discrimination_issues.question
@@ -143,7 +157,9 @@
         wrapBlock: false
         showInNav: false
 
-      - id: tech_industry_emotion
+      - id: overview_tech_industry_emotion
+        extends: tech_industry_emotion # doesn't work yet
+        fieldId: tech_industry_emotion
         template: multiple_options2_combined
         titleKey: worldview.tech_industry_emotion
         questionKey: worldview.tech_industry_emotion.question
@@ -158,7 +174,7 @@
         wrapBlock: false
         showInNav: false
 
-      - id: conclusion
+      - id: overview_conclusion
         template: conclusion
         showInNav: false
         variables:
@@ -206,6 +222,8 @@
             addBucketsEntities: false
         variants:
             - template: vs_salary
+              variables:
+                  showHelp: true
               parameters:
                   cutoff: 20
                   sort: { property: medianByFacet, order: desc }

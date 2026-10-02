@@ -137,6 +137,7 @@
         "serve": "gatsby serve",
         "deploy": "yarn run build && gh-pages -d public",
         "dev": "gatsby develop --port 8001",
+        "tokyodev": "ENV_FILE=.env.tokyodev.local gatsby develop --port 9001",
         "tdev": "ENV_FILE=.env.tokyodev.local gatsby develop --port 9001",
         "tdev:build": "ENV_FILE=.env.tokyodev.local gatsby build",
         "tdev:serve": "ENV_FILE=.env.tokyodev.local gatsby serve",
