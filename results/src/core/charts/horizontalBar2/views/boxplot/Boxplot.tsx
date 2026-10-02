@@ -25,7 +25,8 @@ import { BucketUnits } from '@devographics/types'
 import Help from 'core/components/Help'
 
 const BoxplotView = (viewProps: HorizontalBarViewProps) => {
-    const { chartState, chartValues, seriesMetadata } = viewProps
+    const { block, chartState, chartValues, seriesMetadata } = viewProps
+    const { variables } = block
     const { facetQuestion } = chartValues
     const theme = useTheme()
     const { buckets, isReversed } = viewProps
@@ -78,7 +79,7 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
 
     return (
         <div className="chart-boxplot-view">
-            <Help id="boxplot" />
+            {variables?.showHelp && <Help id="boxplot" />}
 
             <Rows {...viewProps} hasZebra={true}>
                 <>

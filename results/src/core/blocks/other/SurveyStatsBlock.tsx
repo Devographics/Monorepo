@@ -10,7 +10,7 @@ import Link from 'core/components/LocaleLink'
 const SurveyStatsBlock = ({ block }: { block: BlockVariantDefinition }) => {
     const { currentEdition, currentEditionStats } = usePageContext()
     const { startedAt, endedAt, questionsUrl } = currentEdition
-    const { variables } = block
+    const { variables = {} } = block
     const { enableDownload = true } = variables
     return (
         <div className="survey-stats">
