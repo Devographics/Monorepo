@@ -349,13 +349,13 @@
         wrapBlock: false
         showInNav: false
 
-      - id: ai_uses
+      - id: ai_tools
         disableExport: true
         wrapBlock: false
         showInNav: false
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
-        i18nNamespace: ai_uses
+        i18nNamespace: ai_tools
         queryOptions:
             sectionId: ai_usage
             addCorrelations: false
@@ -593,6 +593,10 @@
       - id: years_in_japan
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
+        # TODO 2027: get rid of editionsCount
+        # it's only there until next year because options changed between 2025 and 2026 so we can't compare both datasets
+        queryOptions:
+            editionsCount: 1
         variants:
             - template: tokyodev_vs_salary
               parameters:
