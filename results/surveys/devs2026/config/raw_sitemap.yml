@@ -739,8 +739,10 @@
                   sectionId: user_info
               tabId: tabs.by_country
               parameters:
+                  cutoff: 20
+                  sort: { property: medianByFacet, order: desc }
+              chartOptions:
                   limit: 20
-                  sort: { property: medianByFacet }
               filtersState:
                   facet:
                       sectionId: workplace
@@ -2066,3 +2068,10 @@
       - id: notfound
         blockType: NotFoundBlock
         wrapBlock: false
+
+- id: download
+  path: /download
+  is_hidden: true
+  blocks:
+      - id: download
+        template: page_introduction
