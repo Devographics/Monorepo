@@ -13,16 +13,22 @@ import {
     getCorrelationStrength,
     isBlockedPair,
     isNonAnswerPair,
+    isSameItemPair,
     isNormalizationArtifact,
     putQuestionFirst,
     splitEditionCorrelations,
     splitQuestionCorrelations
 } from './correlations_calculations'
 import { CORRELATION_STRENGTHS } from './correlations_calculations'
-import type { CorrelationItem, CorrelationStrength } from './correlations_calculations'
+import type {
+    CorrelationItem,
+    CorrelationStrength,
+    EncodedQuestion
+} from './correlations_calculations'
 import {
     CORRELATION_STRENGTH_BANDS,
-    OPTION_CORRELATIONS_LIMIT
+    OPTION_CORRELATIONS_LIMIT,
+    SAME_ID_EXEMPT_OPTION_IDS
 } from './correlations_constants'
 import type { EditionApiObject, QuestionApiObject } from '../types/surveys'
 
@@ -100,8 +106,7 @@ const makeQuestion = (fields: any): QuestionApiObject =>
         ...fields
     } as QuestionApiObject)
 
-const makeDocs = (values: any[]) =>
-    values.map(value => ({ section: { q1: { choices: value } } }))
+const makeDocs = (values: any[]) => values.map(value => ({ section: { q1: { choices: value } } }))
 
 describe('encodeQuestion', () => {
     test('encodes option values by option order and skips invalid values', () => {
@@ -266,12 +271,7 @@ describe('encodeMultiValueQuestion', () => {
         const encoded = encodeMultiValueQuestion(question, docs, 1)
         // answers come from the data, most common first — so an "other…" answer
         // like unknown_game takes part alongside the predefined ones
-        expect(encoded.map(e => e.optionId)).toEqual([
-            'zelda',
-            'doom',
-            'mario',
-            'unknown_game'
-        ])
+        expect(encoded.map(e => e.optionId)).toEqual(['zelda', 'doom', 'mario', 'unknown_game'])
         const byOption = Object.fromEntries(encoded.map(e => [e.optionId, Array.from(e.codes)]))
         expect(byOption.zelda).toEqual([1, 0, -1, 1])
         expect(byOption.mario).toEqual([0, 1, -1, 0])
@@ -311,10 +311,7 @@ describe('encodeMultiValueQuestion', () => {
     test('works with no declared options at all', () => {
         const question = makeQuestion({ allowMultiple: true })
         const docs = makeDocs([['a'], ['b']])
-        expect(encodeMultiValueQuestion(question, docs, 1).map(e => e.optionId)).toEqual([
-            'a',
-            'b'
-        ])
+        expect(encodeMultiValueQuestion(question, docs, 1).map(e => e.optionId)).toEqual(['a', 'b'])
     })
 
     test('returns nothing when the question has no normalized paths', () => {
@@ -376,7 +373,10 @@ describe('encodeCardinality', () => {
     })
 
     test('na alongside real answers does not inflate the count', () => {
-        const docs = makeDocs([['na', 'burnout'], ['burnout', 'ageism']])
+        const docs = makeDocs([
+            ['na', 'burnout'],
+            ['burnout', 'ageism']
+        ])
         const encoded = encodeCardinality(question, docs)!
         expect(encoded.values).toEqual(['1', '2'])
     })
@@ -429,11 +429,7 @@ describe('expandOptions with groups', () => {
         const docs = makeDocs([2, 7, 30, 4, null])
         const encoded = encodeQuestion(question(), docs)!
         const expanded = expandOptions(encoded, 1)
-        expect(expanded.map(e => e.optionId)).toEqual([
-            'range_0_4',
-            'range_5_9',
-            'range_over_10'
-        ])
+        expect(expanded.map(e => e.optionId)).toEqual(['range_0_4', 'range_5_9', 'range_over_10'])
         const byId = Object.fromEntries(expanded.map(e => [e.optionId, Array.from(e.codes)]))
         // bounds are inclusive-lower, exclusive-upper: 4 lands in range_0_4
         expect(byId.range_0_4).toEqual([1, 0, 0, 1, -1])
@@ -835,9 +831,7 @@ describe('getCorrelationStrength', () => {
         // one scale for every kind of correlation: the old two-table scheme
         // could label 0.27 "moderate" while labelling 0.25 "strong"
         const values = [0.02, 0.09, 0.14, 0.2, 0.26, 0.33, 0.45, 0.8]
-        const ranks = values.map(v =>
-            CORRELATION_STRENGTHS.indexOf(getCorrelationStrength(v))
-        )
+        const ranks = values.map(v => CORRELATION_STRENGTHS.indexOf(getCorrelationStrength(v)))
         expect(ranks).toEqual([...ranks].sort((a, b) => a - b))
     })
 })
@@ -870,12 +864,7 @@ describe('isNormalizationArtifact', () => {
 
     test('an unmatched free-form answer is dropped from a multi-value question', () => {
         const question = makeQuestion({ allowMultiple: true })
-        const docs = makeDocs([
-            ['padel', 'no_match'],
-            ['no_match'],
-            ['padel'],
-            ['running']
-        ])
+        const docs = makeDocs([['padel', 'no_match'], ['no_match'], ['padel'], ['running']])
         const encoded = encodeMultiValueQuestion(question, docs, 1)
         expect(encoded.map(e => e.optionId)).not.toContain('no_match')
         expect(encoded.map(e => e.optionId)).toEqual(['padel', 'running'])
@@ -895,6 +884,59 @@ describe('isNonAnswerPair', () => {
         // whole-question sides have no option id at all
         expect(isNonAnswerPair('na', undefined)).toBe(false)
         expect(isNonAnswerPair(undefined, undefined)).toBe(false)
+    })
+})
+
+describe('isSameItemPair', () => {
+    const option = (questionId: string, optionId: string): EncodedQuestion => ({
+        question: makeQuestion({ id: questionId, allowMultiple: true }),
+        kind: 'option',
+        optionId,
+        isOrdinal: true,
+        values: ['0', '1'],
+        cardinality: 2,
+        codes: new Int16Array(0)
+    })
+    const pair = (id1: string, id2: string = id1) =>
+        isSameItemPair(option('question1', id1), option('question2', id2))
+
+    test('drops the same item answered in two questions', () => {
+        expect(pair('midudev')).toBe(true)
+        expect(pair('USA')).toBe(true)
+    })
+
+    test('keeps different items', () => {
+        expect(pair('midudev', 'fireship')).toBe(false)
+    })
+
+    test('keeps numeric ids and range ids: they are positions on a scale', () => {
+        expect(pair('4')).toBe(false)
+        expect(pair('0')).toBe(false)
+        expect(pair('2.5')).toBe(false)
+        expect(pair('range_1')).toBe(false)
+        expect(pair('range_50_100')).toBe(false)
+    })
+
+    test('keeps the ids listed as meaning different things in different questions', () => {
+        for (const id of SAME_ID_EXEMPT_OPTION_IDS) {
+            expect(pair(id)).toBe(false)
+        }
+        expect(SAME_ID_EXEMPT_OPTION_IDS).toContain('mobile')
+    })
+
+    test('only compares answers: whole questions and answer counts have none', () => {
+        const wholeQuestion = {
+            ...option('age', 'x'),
+            kind: 'question' as const,
+            optionId: undefined
+        }
+        const count = {
+            ...option('creators', 'x'),
+            kind: 'cardinality' as const,
+            optionId: undefined
+        }
+        expect(isSameItemPair(wholeQuestion, wholeQuestion)).toBe(false)
+        expect(isSameItemPair(count, count)).toBe(false)
     })
 })
 

@@ -16,7 +16,8 @@ import {
     MAX_CARDINALITY,
     MIN_OPTION_SELECTIONS,
     OPTION_CORRELATIONS_LIMIT,
-    QUESTION_CORRELATIONS_LIMIT
+    QUESTION_CORRELATIONS_LIMIT,
+    SAME_ID_EXEMPT_OPTION_IDS
 } from './correlations_constants'
 
 // the tuning knobs live in their own module; re-exported so importers of this
@@ -210,14 +211,13 @@ export const splitQuestionCorrelations = (
         : (question.groups ?? []).map(group => String(group.id))
     const declaredOrder = declaredIds.filter(id => itemsByOption.has(id))
     const remaining = [...itemsByOption.keys()].filter(id => !declaredOrder.includes(id))
-    const optionCorrelations: OptionCorrelations[] = [...declaredOrder, ...remaining]
-        .map(id => ({
-            id,
-            correlations: applyCorrelationRules(itemsByOption.get(id)!).slice(
-                0,
-                OPTION_CORRELATIONS_LIMIT
-            )
-        }))
+    const optionCorrelations: OptionCorrelations[] = [...declaredOrder, ...remaining].map(id => ({
+        id,
+        correlations: applyCorrelationRules(itemsByOption.get(id)!).slice(
+            0,
+            OPTION_CORRELATIONS_LIMIT
+        )
+    }))
 
     return { questionCorrelations, optionCorrelations }
 }
@@ -264,8 +264,7 @@ export const getCorrelationQuestions = ({
 }: {
     questionObjects: QuestionApiObject[]
     edition: EditionApiObject
-}) =>
-    questionObjects.filter(q => isSingleAnswerQuestion(q) && isEligibleQuestion(q, edition))
+}) => questionObjects.filter(q => isSingleAnswerQuestion(q) && isEligibleQuestion(q, edition))
 
 /*
 
@@ -341,6 +340,29 @@ export const isNormalizationArtifact = (value: string) => value === NO_MATCH
 
 export const isNonAnswerPair = (optionId1?: string, optionId2?: string) =>
     optionId1 === OPTION_NA && optionId2 === OPTION_NA
+
+/*
+
+The same item answered in two different questions (an entity that is both a
+newsletter and a video creator, a country that is both where someone lives and
+where they'd like to go) correlates strongly because it is the same thing, and
+says nothing about respondents. Pairs of answers sharing an id are dropped.
+
+Two kinds of id are exempt, because sharing one doesn't mean being the same item:
+numeric ids and `range_*` ids, which name a position on a scale (`0` on one slider
+and `0` on another; their correlation is a real finding), and the ids listed in
+SAME_ID_EXEMPT_OPTION_IDS, which mean different things in different questions.
+
+*/
+const isScalePositionId = (id: string) => /^-?\d+(\.\d+)?$/.test(id) || id.startsWith('range_')
+
+export const isSameItemPair = (eq1: EncodedQuestion, eq2: EncodedQuestion) =>
+    eq1.kind === 'option' &&
+    eq2.kind === 'option' &&
+    eq1.optionId !== undefined &&
+    eq1.optionId === eq2.optionId &&
+    !isScalePositionId(eq1.optionId) &&
+    !SAME_ID_EXEMPT_OPTION_IDS.includes(eq1.optionId)
 
 /*
 
@@ -649,9 +671,7 @@ export const encodeCardinality = (
     // the same answer can arrive from both the predefined and the free-form
     // path, so count distinct answers rather than occurrences
     const answerCounts = answersPerDoc.map(answers =>
-        answers.length === 0
-            ? -1
-            : new Set(answers.filter(answer => answer !== OPTION_NA)).size
+        answers.length === 0 ? -1 : new Set(answers.filter(answer => answer !== OPTION_NA)).size
     )
 
     const counts = new Map<number, number>()

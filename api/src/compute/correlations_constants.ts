@@ -11,7 +11,7 @@ the same time or existing editions will keep serving their cached output.
 */
 
 // bump to invalidate cached results when the algorithm or any knob below changes
-export const CACHE_VERSION = 29
+export const CACHE_VERSION = 30
 
 /*
 
@@ -61,6 +61,28 @@ inconsistent wherever the two kinds appear in the same list.
 */
 export const CORRELATION_STRENGTH_BANDS: [CorrelationStrength, number][] =
     SHARED_STRENGTH_BANDS.map(([strength, lowerBound]) => [strength, lowerBound])
+
+/*
+
+Answer ids that stay eligible for correlation even when two different questions
+have an answer with that id, because the id doesn't name the same thing in both
+(`mobile` is a kind of device in one question and a kind of development in
+another). Everything else sharing an id across questions is treated as the same
+item and left out; see isSameItemPair. Numeric ids and `range_*` ids never count
+as shared (they are positions on a scale) so they don't need listing here.
+
+`na` is not listed: two `na` answers are already dropped as non-answers.
+
+*/
+export const SAME_ID_EXEMPT_OPTION_IDS = [
+    'desktop',
+    'mobile',
+    // generic answers, not items; none shares an id across questions today
+    'yes',
+    'no',
+    'other',
+    'none'
+]
 
 /*
 

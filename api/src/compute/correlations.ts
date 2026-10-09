@@ -21,6 +21,7 @@ import {
     getSectionId,
     isBlockedPair,
     isNonAnswerPair,
+    isSameItemPair,
     putQuestionFirst,
     round,
     splitQuestionCorrelations
@@ -119,6 +120,8 @@ export async function computeEditionCorrelations(
             // (they compete for the same selections), skip them
             if (eq1.question.id === eq2.question.id) continue
             if (isNonAnswerPair(eq1.optionId, eq2.optionId)) continue
+            // the same item showing up in two questions
+            if (isSameItemPair(eq1, eq2)) continue
             // pairs the survey outline has opted out of
             if (isBlockedPair(eq1.question, eq2.question)) continue
             const rows = eq1.cardinality
