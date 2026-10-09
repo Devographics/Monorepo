@@ -27,6 +27,12 @@
         }
     }
 }
+.chart-item-label {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 3px;
+}
 .tabs-wrapper-ai_outlook,
 .tabs-wrapper-tech_industry_emotion {
     .chart-item-label {
