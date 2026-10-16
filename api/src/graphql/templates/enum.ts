@@ -50,7 +50,7 @@ export const generateEnumType = ({
     */
     const formattedOptionsIds = formattedOptions.map(o => o.id)
     const alwayAdd = ['limitations', 'interop_issues']
-    if (question.id.includes('pain_points')) {
+    if (question.id.includes('pain_points') || question.id === 'css_missing_features') {
         for (const tokenId of alwayAdd) {
             if (!formattedOptionsIds.includes(tokenId)) {
                 formattedOptionsIds.push(tokenId)

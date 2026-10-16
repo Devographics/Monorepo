@@ -79,8 +79,7 @@ export const resolveAliases = ({
     (but only if the current stringFile doesn't specify anything for that key). 
     
     e.g. if `foo.bar` is an alias for `foo.baz` in english, then
-    `foo.bar` should also be an alias for `foo.baz` in Japanese without having to
-    redefined the alias
+    `foo.bar` should also be an alias for `foo.baz` in Japanese without having to redefine the alias
     
     */
     if (enStringFile) {
@@ -241,6 +240,9 @@ export const computeUntranslatedStrings = (
     return untranslatedStrings
 }
 
+// if locale strings contains these strings, don't include them in the duplicate report to avoid flooding it with unactionable items
+const duplicateExceptions = ['picks.', 'award.']
+
 export const checkForDuplicates = (
     locale: RawLocale,
     strings: TranslationStringObject[],
@@ -250,8 +252,13 @@ export const checkForDuplicates = (
     const allKeys = strings.filter(s => !s.aliasFor).map(s => s.key)
     const duplicateKeys = findDuplicates(allKeys)
     if (report) {
-        for (const { duplicateKey /*, count*/ } of duplicateKeys) {
-            report.duplicates.push({ context, duplicateKey /*, count */ })
+        for (const { duplicateKey, count } of duplicateKeys) {
+            const shouldReport = !duplicateExceptions.some(exception =>
+                duplicateKey.includes(exception)
+            )
+            if (shouldReport) {
+                report.duplicates.push({ context, duplicateKey, count })
+            }
         }
     }
     return duplicateKeys

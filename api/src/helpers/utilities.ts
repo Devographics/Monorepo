@@ -11,9 +11,9 @@ export const findDuplicates = (arr: string[]) => {
         if (sorted_arr[i + 1] === sorted_arr[i]) {
             const duplicateKey = sorted_arr[i]
             // optionally also count how many duplicates there are
-            // const count = sorted_arr.filter(s => s === duplicateKey).length
+            const count = sorted_arr.filter(s => s === duplicateKey).length
             if (duplicateKey) {
-                results.push({ duplicateKey /*, count*/ })
+                results.push({ duplicateKey, count })
             }
         }
     }

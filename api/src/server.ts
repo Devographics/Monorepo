@@ -202,10 +202,7 @@ const start = async () => {
         // cacheControl: true,
         introspection: true,
         // playground: false,
-        plugins: [
-            responseCachePlugin(),
-            errorQueriesPlugin
-        ],
+        plugins: [responseCachePlugin(), errorQueriesPlugin],
         // engine: {
         //     debugPrintReports: true
         // },
@@ -218,7 +215,8 @@ const start = async () => {
             const isDebug =
                 expressContext?.req?.rawHeaders?.includes('http://localhost:4030') ||
                 expressContext?.req?.rawHeaders?.includes('http://localhost:5030') ||
-                expressContext?.req?.rawHeaders?.includes('http://localhost:5173')
+                expressContext?.req?.rawHeaders?.includes('http://localhost:5173') ||
+                expressContext?.req?.rawHeaders?.includes('http://localhost:5174')
 
             // add a way to disable cache through headers, so we don't need to modify
             // the actual GraphQL query
