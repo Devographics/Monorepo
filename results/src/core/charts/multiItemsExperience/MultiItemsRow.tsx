@@ -54,17 +54,20 @@ export const MultiItemsRow = (props: MultiItemsRowProps) => {
             {...props}
             bucket={bucket}
             chartState={chartState}
-            rowMetadata={
-                <>
-                    <RespondentCount count={bucket.count} />
-                    <CommentsTrigger
-                        block={block}
-                        questionId={item.id}
-                        entity={item.entity}
-                        commentsCount={item.commentsCount}
-                    />
-                </>
-            }
+            metadataItems={[
+                { id: 'respondentCount', component: <RespondentCount count={bucket.count} /> },
+                {
+                    id: 'comments',
+                    component: (
+                        <CommentsTrigger
+                            block={block}
+                            questionId={item.id}
+                            entity={item.entity}
+                            commentsCount={item.commentsCount}
+                        />
+                    )
+                }
+            ]}
         >
             <>
                 <MultiItemsCells {...cellsProps} />

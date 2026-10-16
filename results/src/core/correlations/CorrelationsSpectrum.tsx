@@ -27,6 +27,7 @@ import {
     getXPosition
 } from './spectrumHelpers'
 import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
+import { useEntities, useEntity } from 'core/helpers/entities'
 
 /*
 
@@ -325,37 +326,53 @@ const CorrelationsSpectrumNodeLabel = ({
     const { currentEdition } = usePageContext()
     const { getString } = useI18n()
     const { kind2, questionId2, optionId2 } = correlation
-
+    const entities = useEntities()
     const question = getQuestionById(currentEdition, questionId2)
-    const questionName = question
-        ? getQuestionLabel({ getString, question, block }).questionName
-        : questionId2
+    let questionName, questionKey: string | undefined
+    if (question) {
+        const questionObject = getQuestionLabel({ getString, question, block })
+        questionName = questionObject.questionName
+        questionKey = questionObject.key
+    } else {
+        questionName = questionId2
+    }
 
-    let primaryLabel: string | undefined
+    let secondaryKey: string | undefined
     let secondaryLabel: string | undefined
+
+    const primaryLabel = questionName
+    const primaryKey = questionKey
+
     if (kind2 === 'option' && optionId2) {
-        primaryLabel = questionName
-        secondaryLabel = getItemLabel({
+        const entity = entities.find(e => e.id === optionId2)
+        const secondaryObject = getItemLabel({
             id: optionId2,
+            entity,
             getString,
             i18nNamespace: questionId2
-        })?.shortLabel
+        })
+        secondaryLabel = secondaryObject.shortLabel
+        secondaryKey = secondaryObject.key
     } else {
-        primaryLabel = questionName
-        secondaryLabel = getString(
+        secondaryKey =
             kind2 === 'cardinality'
                 ? 'correlations.cardinality.subheading'
                 : 'correlations.trend.subheading'
-        )?.t
+        secondaryLabel = getString(secondaryKey)?.t
     }
 
     return (
         <>
             <span className="correlations-spectrum-node-label">
-                <span className="correlations-spectrum-node-label-primary">{primaryLabel}</span>{' '}
+                <span className="correlations-spectrum-node-label-primary" data-key={primaryKey}>
+                    {primaryLabel}
+                </span>{' '}
                 <span>&gt;</span>{' '}
                 {secondaryLabel && (
-                    <span className="correlations-spectrum-node-label-secondary">
+                    <span
+                        className="correlations-spectrum-node-label-secondary"
+                        data-key={secondaryKey}
+                    >
                         {secondaryLabel}
                     </span>
                 )}
