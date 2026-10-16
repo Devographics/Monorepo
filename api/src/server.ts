@@ -45,6 +45,7 @@ import { getEntitiesLoadMethod, loadOrGetEntities } from './load/entities'
 import { getLocaleIds, getLocalesLoadMethod } from './load/locales/locales'
 import { getLikeHandler } from './routes/like'
 import { getLikesHandler } from './routes/likes'
+import { loadOrGetConfigs } from './load/configs'
 
 setEnvVar(EnvVar.APP_NAME, AppName.API)
 
@@ -155,6 +156,8 @@ const start = async () => {
     const context: RequestContext = { db, redisClient, entities }
 
     const { surveys } = await loadOrGetSurveys({ context })
+    const { configs } = await loadOrGetConfigs({ context })
+
     const questionObjects = getQuestionObjects({ surveys })
 
     // const missingTemplates = questionObjects.filter(q => q.templateMissing)

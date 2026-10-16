@@ -5,6 +5,7 @@ import path from 'path'
 import { getRepoSHA, listGitHubFiles } from '../external_apis'
 
 import { getGitHubYamlFile, getSurveysLoadMethod, LoadOrGetSurveysOptions } from './surveys'
+import { SponsorItem } from '@devographics/types'
 
 export let allConfigs: any
 export let allConfigsHash: string
@@ -123,10 +124,16 @@ export const loadConfigs = async () => {
 export const loadOrGetConfigs = async (options: LoadOrGetSurveysOptions = {}) => {
     const { forceReload, context } = options
 
-    if (context && forceReload) {
+    if (context && (forceReload || typeof allConfigs === 'undefined')) {
         const { configs, sha } = await loadConfigs()
         allConfigs = configs
         allConfigsHash = sha
     }
     return { configs: allConfigs, sha: allConfigsHash }
+}
+
+export const loadOrGetSponsors = async (options: LoadOrGetSurveysOptions = {}) => {
+    const { configs } = await loadOrGetConfigs(options)
+    const allSponsors: SponsorItem[] = configs.sponsors
+    return allSponsors
 }

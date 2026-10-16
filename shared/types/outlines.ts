@@ -80,6 +80,7 @@ export type Edition = {
     tshirt: Tshirt
     colors: Colors
     sponsors?: SponsorItem[]
+    sponsorsIds?: string[]
     /** press outlets that mentioned or quoted this edition */
     press?: PressItem[]
     enableReadingList?: boolean

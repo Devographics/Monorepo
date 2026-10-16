@@ -17,6 +17,7 @@ import { getEditionById } from '../helpers'
 import { EditionSectionMetadataArgs, filterItems } from '../resolvers'
 import { getCollection } from '../../helpers/db'
 import { Filters } from '@devographics/types'
+import { loadOrGetConfigs, loadOrGetSponsors } from '../../load/configs'
 /*
 
 Responses
@@ -189,6 +190,15 @@ export const editionMetadataResolverMap = {
         context: RequestContext
     ) => {
         return filterItems(parent.sections, args.include).map(s => ({ ...s, ...args }))
+    },
+    sponsors: async (parent: EditionApiObject, args: any, context: RequestContext) => {
+        const { sponsors, sponsorsIds } = parent
+        if (sponsorsIds) {
+            const allSponsors = await loadOrGetSponsors()
+            return sponsorsIds.map(id => allSponsors.find(sponsor => sponsor.id === id))
+        } else {
+            return sponsors
+        }
     }
 }
 
