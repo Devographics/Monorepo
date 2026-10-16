@@ -30,7 +30,7 @@ const makeAPIOnly = (sections: Section[]) =>
         questions: s.questions.map(q => ({ ...q, apiOnly: true }))
     }))
 
-interface LoadOrGetSurveysOptions {
+export interface LoadOrGetSurveysOptions {
     forceReload?: boolean
     context?: RequestContext
 }
@@ -67,7 +67,7 @@ export const loadOrGetSurveys = async (options: LoadOrGetSurveysOptions = {}) =>
     return { surveys: allSurveys, sha: surveysHash }
 }
 
-const getGitHubYamlFile = async (url: string) => {
+export const getGitHubYamlFile = async (url: string) => {
     const response = await fetch(url)
     const contents = await response.text()
     try {
