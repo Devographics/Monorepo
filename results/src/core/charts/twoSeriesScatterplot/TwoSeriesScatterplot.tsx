@@ -36,7 +36,7 @@ const useNodes = ({
     const buckets1 = data[0].combined.allEditions?.[0].buckets
     const buckets2 = data[1].combined.allEditions?.[0].buckets
 
-    const i18nNamespace = block.i18nNamespace || question.id
+    const i18nNamespace = block.i18nNamespace || question?.id
 
     const groups = uniq(items.map(item => item.group))
 

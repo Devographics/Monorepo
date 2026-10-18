@@ -17,7 +17,7 @@ import { LegendItemType } from '../common2/types'
 export type GetNodeProps = {
     items: LegendItemType[]
     data: StandardQuestionData[]
-    question: QuestionMetadata
+    question?: QuestionMetadata
     chartState: ScatterplotChartState
     block: BlockVariantDefinition
     axis1Formatter: (v: number) => string
@@ -26,9 +26,9 @@ export type GetNodeProps = {
 
 type ScatterplotChartProps = {
     block: BlockVariantDefinition
-    question: QuestionMetadata
-    axis1: QuestionMetadata
-    axis2: QuestionMetadata
+    question?: QuestionMetadata
+    axis1?: QuestionMetadata
+    axis2?: QuestionMetadata
     items: LegendItemType[]
     chartState: ScatterplotChartState
     data: StandardQuestionData[]
@@ -73,7 +73,6 @@ export const ScatterplotChart = ({
     })
 
     const chartValues = useChartValues({
-        question,
         axis1,
         axis2,
         chartState,

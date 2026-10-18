@@ -17,7 +17,8 @@ import { NodeData } from '../scatterplot/types'
 import { formatNumber, formatPercentage } from '../common2/helpers/format'
 
 const useNodes = ({
-    options,
+    items,
+    question,
     block,
     data,
     chartState,
@@ -29,8 +30,8 @@ const useNodes = ({
     const toolSections = useToolSections()
     const theme = useTheme()
 
-    const nodes: NodeData[] = data.map((option, index) => {
-        const { id, entity } = option
+    const nodes: NodeData[] = items.map((item, index) => {
+        const { id, entity, responses } = item
 
         const isCurrentItem = currentItem === id
         const isHighlighted =
@@ -66,7 +67,7 @@ const useNodes = ({
             serieIndex,
             serieId,
             categoryId,
-            label: entity.nameClean || entity.name,
+            label: entity?.nameClean || entity?.name,
             xValue,
             formattedX,
             yValue,
@@ -111,16 +112,15 @@ export const ToolsScatterplotBlock = (
                 <Legend<ScatterplotChartState> items={legendItems} chartState={chartState} />
 
                 <ScatterplotChart
+                    block={block}
+                    items={data}
                     chartState={chartState}
                     data={data}
                     useNodes={useNodes}
-                    block={block}
-                    question={question}
                     axis1Formatter={formatNumber}
                     axis2Formatter={formatPercentage}
                     axis1Label={axis1Label}
                     axis2Label={axis2Label}
-                    showTrendLine={block.chartOptions?.showTrendLine}
                 />
 
                 <Note block={block} />

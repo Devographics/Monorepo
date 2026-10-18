@@ -24,7 +24,6 @@ export type ScatterplotChartValues = {
     yScale: ScaleLinear
 }
 export const useChartValues = ({
-    question,
     axis1,
     axis2,
     chartState,
@@ -32,9 +31,8 @@ export const useChartValues = ({
     contentWidth,
     contentHeight
 }: {
-    question: QuestionMetadata
-    axis1: QuestionMetadata
-    axis2: QuestionMetadata
+    axis1?: QuestionMetadata
+    axis2?: QuestionMetadata
     chartState: ScatterplotChartState
     nodes: NodeData[]
     contentWidth: number
@@ -50,13 +48,13 @@ export const useChartValues = ({
     const xMinValue = minBy(nodes, n => n.xValue)?.xValue || 0
     const xMaxValue = maxBy(nodes, n => n.xValue)?.xValue || 0
 
-    if (axis1.optionsAreNumeric && axis1.options) {
+    if (axis1 && axis1.optionsAreNumeric && axis1.options) {
         const minXOption = minBy(axis1.options, o => o.value || o.id)
         const maxXOption = maxBy(axis1.options, o => o.value || o.id)
 
         xMinBound = Number(minXOption?.value || minXOption?.id)
         xMaxBound = Number(maxXOption?.value || maxXOption?.id)
-    } else if (isPercentage(axis1)) {
+    } else if (axis1 && isPercentage(axis1)) {
         xMinBound = 0
         xMaxBound = 100
     } else {
@@ -67,13 +65,13 @@ export const useChartValues = ({
     const yMinValue = minBy(nodes, n => n.yValue)?.yValue || 0
     const yMaxValue = maxBy(nodes, n => n.yValue)?.yValue || 0
 
-    if (axis2.optionsAreNumeric && axis2.options) {
+    if (axis2 && axis2.optionsAreNumeric && axis2.options) {
         const minYOption = minBy(axis2.options, o => o.value || o.id)
         const maxYOption = maxBy(axis2.options, o => o.value || o.id)
 
         yMinBound = Number(minYOption?.value || minYOption?.id)
         yMaxBound = Number(maxYOption?.value || maxYOption?.id)
-    } else if (isPercentage(axis2)) {
+    } else if (axis2 && isPercentage(axis2)) {
         yMinBound = 0
         yMaxBound = 100
     } else {
