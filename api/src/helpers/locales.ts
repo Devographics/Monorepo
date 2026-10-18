@@ -6,13 +6,16 @@ import { logToFile } from '@devographics/debug'
 import { findDuplicates } from './utilities'
 import sortBy from 'lodash/sortBy.js'
 import { cleanHtmlString, sanitizeHtmlString } from './strings'
+import uniq from 'lodash/uniq.js'
 
 export const filterContexts = ({ locale, contexts }: { locale: Locale; contexts: string[] }) => {
     return {
         ...locale,
-        strings: locale.strings.filter(s => contexts.includes(s.context)),
-        untranslatedStrings: (locale.untranslatedStrings || []).filter(s =>
-            contexts.includes(s.context)
+        strings: locale.strings.filter(
+            s => [...new Set(contexts).intersection(new Set(s.contexts))].length > 0
+        ),
+        untranslatedStrings: (locale.untranslatedStrings || []).filter(
+            s => [...new Set(contexts).intersection(new Set(s.contexts))].length > 0
         )
     }
 }
@@ -189,20 +192,13 @@ export const addFallbacks = (
 Flatten an array of stringfiles into a single array of strings with context
 
 */
-export const flattenStringFiles = (
-    stringFiles: StringFile[],
-    addContext: boolean = false
-): TranslationStringObject[] => {
+export const flattenStringFiles = (stringFiles: StringFile[]): TranslationStringObject[] => {
     // flatten all stringFiles together
     const stringObjects = stringFiles
         .map((sf: StringFile) => {
-            let { strings, context } = sf
+            let { strings } = sf
             if (strings === null) {
                 return []
-            }
-            if (addContext) {
-                // add context to all strings
-                strings = strings.map((s: TranslationStringObject) => ({ ...s, context }))
             }
             return strings
         })
@@ -264,6 +260,15 @@ export const checkForDuplicates = (
     return duplicateKeys
 }
 
+export const addContext = (stringObject: TranslationStringObject, context: string) => {
+    const contexts = stringObject.contexts ? uniq([...stringObject.contexts, context]) : [context]
+
+    return {
+        ...stringObject,
+        contexts
+    }
+}
+
 /*
 
 Take a single string file (e.g. the contents of common.yml) and process it
@@ -286,10 +291,9 @@ export const processStringFile = ({
         processedStringFile = addFallbacks(processedStringFile, locale, enStringFile)
     }
     // add stringFile's context to every one of its strings
-    processedStringFile.strings = processedStringFile.strings.map(s => ({
-        ...s,
-        context: stringFile.context
-    }))
+    processedStringFile.strings = processedStringFile.strings.map(s =>
+        addContext(s, stringFile.context)
+    )
 
     checkForDuplicates(locale, processedStringFile.strings, stringFile.context, report)
 
@@ -340,11 +344,9 @@ export const processLocale = (
             report.missingContexts.push(enStringFile.context)
             stringFile = {
                 context: enStringFile.context,
-                strings: enStringFile.strings.map((s: TranslationStringObject) => ({
-                    ...s,
-                    context: enStringFile.context,
-                    isFallback: true
-                }))
+                strings: enStringFile.strings.map(s =>
+                    addContext({ ...s, isFallback: true }, enStringFile.context)
+                )
             }
         } else {
             // this context does exist, go through parsing process
