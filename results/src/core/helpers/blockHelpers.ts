@@ -128,7 +128,7 @@ export const getBlockTitleKeys = (options: {
         block: { ...block, i18nNamespace: block.sectionId, id: block.fieldId || block.id }
     })
 
-    const keys: MultiStringKeys = [block.titleKey, block.titleId, blockKey_, block.tabId, fieldKey]
+    const keys: MultiStringKeys = [block.titleKey, block.titleId, blockKey_, fieldKey]
 
     const entity = entities?.find(e => e.id === block.id)
     if (entity?.name) {

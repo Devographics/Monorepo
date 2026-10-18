@@ -8,7 +8,7 @@ query: >
     surveys {
       ${surveyId} {
         ${editionId} {
-          ${sectionId} {
+          _all_libraries {
             ${questionId}: _items {
               id
               entity {

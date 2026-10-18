@@ -366,11 +366,11 @@
         i18nNamespace: features
 
       - id: language_pain_points
-        template: multiple_options2_freeform
+        template: nested_pain_points
         i18nNamespace: features
 
       - id: browser_apis_pain_points
-        template: multiple_options2_freeform
+        template: nested_pain_points
         i18nNamespace: features
 
       - id: ankita_kulkarni
@@ -516,7 +516,7 @@
             #   parameters: { limit: 10 }
 
             - id: front_end_frameworks_pain_points
-              template: multiple_options2_freeform
+              template: nested_pain_points
               i18nNamespace: tools
 
             - id: front_end_frameworks_resources
@@ -556,7 +556,7 @@
             #   parameters: { limit: 10 }
 
             - id: meta_frameworks_pain_points
-              template: multiple_options2_freeform
+              template: nested_pain_points
               i18nNamespace: tools
 
             - id: meta_frameworks_resources
@@ -596,7 +596,7 @@
             #   parameters: { limit: 10 }
 
             - id: back_end_frameworks_pain_points
-              template: multiple_options2_freeform
+              template: nested_pain_points
               i18nNamespace: tools
 
             - id: back_end_frameworks_resources
@@ -636,7 +636,7 @@
             #   parameters: { limit: 10 }
 
             - id: testing_pain_points
-              template: multiple_options2_freeform
+              template: nested_pain_points
               i18nNamespace: tools
 
             - id: testing_resources
@@ -710,7 +710,7 @@
             #   parameters: { limit: 10 }
 
             - id: build_tools_pain_points
-              template: multiple_options2_freeform
+              template: nested_pain_points
               i18nNamespace: tools
 
             - id: build_tools_resources
