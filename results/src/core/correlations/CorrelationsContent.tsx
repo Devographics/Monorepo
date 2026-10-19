@@ -12,9 +12,11 @@ import { getMainHeadingKey } from './helpers'
 import { CorrelationsList } from './CorrelationsList'
 import { CorrelationsSpectrum } from './CorrelationsSpectrum'
 import { CorrelationsListHeading } from './CorrelationsListHeading'
+import { useEntities } from 'core/helpers/entities'
 
 export const CorrelationsContent = (props: CorrelationProps) => {
     const { question, block, optionId, correlations, type } = props
+    const entities = useEntities()
     const { doNotCorrelateWith } = question
     const { getString, getFallbacks } = useI18n()
     const pageContext = usePageContext()
@@ -22,17 +24,24 @@ export const CorrelationsContent = (props: CorrelationProps) => {
 
     const count = correlations.length
 
-    const { tClean: questionLabel } = getBlockTitle({ block, pageContext, getFallbacks })
+    const { key: questionKey, tClean: questionLabel } = getBlockTitle({
+        block,
+        pageContext,
+        getFallbacks
+    })
 
     // for shape2 and shape3
-    let optionLabel
+    let optionLabel, optionKey
     if (optionId) {
+        const optionEntity = entities.find(e => e.id === optionId)
         const optionLabelObject = getItemLabel({
             id: optionId,
             getString,
+            entity: optionEntity,
             i18nNamespace
         })
         optionLabel = typeof optionId !== undefined && optionLabelObject?.shortLabel
+        optionKey = optionLabelObject.key
     }
 
     const directionKey = getTrendDirectionKey({ question, direction: 'positive', getString })
@@ -60,7 +69,12 @@ export const CorrelationsContent = (props: CorrelationProps) => {
                 <div className="correlations-heading-wrapper2">
                     <div className="correlations-heading-wrapper3">
                         <div className="correlations-heading-wrapper4">
-                            <h3 className="correlations-heading">
+                            <h3
+                                className="correlations-heading"
+                                data-optionKey={optionKey}
+                                data-questionKey={questionKey}
+                                data-directionKey={directionKey}
+                            >
                                 <T
                                     k={headingKey}
                                     values={{ count, directionLabel, questionLabel, optionLabel }}
