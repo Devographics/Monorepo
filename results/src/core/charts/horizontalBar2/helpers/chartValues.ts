@@ -52,7 +52,7 @@ export const useChartValues = ({
 
     chartValues.maxOverallValue = maxOverallValue
 
-    if (serie.data._correlations) {
+    if (serie?.data?._correlations) {
         chartValues._correlations = serie.data._correlations
     }
 

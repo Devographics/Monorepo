@@ -11,6 +11,7 @@ queryOptions:
     addBucketsEntities: false
     editionsCount: 1
     subField: responses
+    addCorrelations: false
 parameters:
     cutoff: 1
     sort: { order: asc, property: id }

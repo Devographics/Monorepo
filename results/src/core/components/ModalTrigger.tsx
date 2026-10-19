@@ -32,6 +32,7 @@ const ModalTrigger = ({
     }
 
     const closeModal = e => {
+        e && e.stopPropagation()
         e && e.preventDefault()
         setIsOpen(false)
     }
@@ -65,19 +66,23 @@ const ModalTrigger = ({
         <>
             {triggerComponent}
 
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                style={customStyles}
-                contentLabel={label}
-                className={`ModalContent ${className}`}
-                // overlayClassName="ModalOverlay"
-            >
-                <Content size={size}>
-                    <ModalClose closeModal={closeModal} />
-                    <Inner className="modal-inner secondary-bg">{childrenComponent}</Inner>
-                </Content>
-            </Modal>
+            {/* react-modal renders in a portal, but React events still bubble through the
+            React tree to ancestors (e.g. a clickable chart row); stop them here. */}
+            <span onClick={e => e.stopPropagation()}>
+                <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    style={customStyles}
+                    contentLabel={label}
+                    className={`ModalContent ${className}`}
+                    // overlayClassName="ModalOverlay"
+                >
+                    <Content size={size}>
+                        <ModalClose closeModal={closeModal} />
+                        <Inner className="modal-inner secondary-bg">{childrenComponent}</Inner>
+                    </Content>
+                </Modal>
+            </span>
         </>
     )
 }

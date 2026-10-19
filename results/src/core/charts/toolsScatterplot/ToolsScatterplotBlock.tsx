@@ -44,7 +44,7 @@ const useNodes = ({
         const yValue = responses?.currentEdition?.ratios?.['retention'] || 0
 
         const formattedX = axis1Formatter(xValue)
-        const formattedY = axis2Formatter(yValue * 100)
+        const formattedY = axis2Formatter(yValue)
 
         // const x = xScale(xValue)
         // const y = yScale(yValue * 100)
@@ -118,7 +118,7 @@ export const ToolsScatterplotBlock = (
                     data={data}
                     useNodes={useNodes}
                     axis1Formatter={formatNumber}
-                    axis2Formatter={formatPercentage}
+                    axis2Formatter={v => formatPercentage(v * 100)}
                     axis1Label={axis1Label}
                     axis2Label={axis2Label}
                 />
