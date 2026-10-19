@@ -2,6 +2,36 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 
+// Discard stored source/referrer values older than this, so that a source from
+// one survey year doesn't keep applying indefinitely in future years.
+const MAX_AGE = 1000 * 60 * 60 * 24 * 90; // 90 days (~3 months)
+
+/**
+ * Store a value in localStorage alongside the current timestamp.
+ */
+const storeWithTimestamp = (key: string, value: string) => {
+  if (typeof localStorage === "undefined") return;
+  localStorage.setItem(key, value);
+  localStorage.setItem(`${key}_timestamp`, Date.now().toString());
+};
+
+/**
+ * Read a value from localStorage, discarding (and clearing) it if it's older
+ * than MAX_AGE or has no recorded timestamp.
+ */
+const readWithTimestamp = (key: string): string | null => {
+  if (typeof localStorage === "undefined") return null;
+  const value = localStorage.getItem(key);
+  if (!value) return null;
+  const timestamp = Number(localStorage.getItem(`${key}_timestamp`));
+  if (!timestamp || Date.now() - timestamp > MAX_AGE) {
+    localStorage.removeItem(key);
+    localStorage.removeItem(`${key}_timestamp`);
+    return null;
+  }
+  return value;
+};
+
 const useStoreReferrer = () => {
   const query = useSearchParams()!;
   const sourceParam = query.get("source");
@@ -11,22 +41,18 @@ const useStoreReferrer = () => {
   const referrer = query.get("referrer");
   useEffect(() => {
     if (source) {
-      localStorage.setItem("source", source.toString());
+      storeWithTimestamp("source", source.toString());
     }
     if (referrer) {
-      localStorage.setItem("referrer", referrer.toString());
+      storeWithTimestamp("referrer", referrer.toString());
     }
   }, []);
 };
 
 export const useReferrer = () => {
   const query = useSearchParams()!;
-  const source =
-    query.get("source") ||
-    (typeof localStorage !== "undefined" && localStorage.getItem("source"));
-  const referrer =
-    query.get("referrer") ||
-    (typeof localStorage !== "undefined" && localStorage.getItem("referrer"));
+  const source = query.get("source") || readWithTimestamp("source");
+  const referrer = query.get("referrer") || readWithTimestamp("referrer");
   return { source, referrer };
 };
 

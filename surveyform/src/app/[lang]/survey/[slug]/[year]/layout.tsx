@@ -24,11 +24,9 @@ interface SurveyPageServerProps {
   year: string;
 }
 
-export async function generateMetadata(
-  props: {
-    params: Promise<SurveyPageServerProps>;
-  }
-): Promise<Metadata | undefined> {
+export async function generateMetadata(props: {
+  params: Promise<SurveyPageServerProps>;
+}): Promise<Metadata | undefined> {
   const params = await props.params;
   return await rscGetMetadata({ params });
 }
@@ -38,17 +36,13 @@ export async function generateMetadata(
  * @param param0
  * @returns
  */
-export default async function SurveyLayout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ slug: string; year: string; lang: string }>;
-  }
-) {
+export default async function SurveyLayout(props: {
+  children: React.ReactNode;
+  params: Promise<{ slug: string; year: string; lang: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
   const {
@@ -58,7 +52,7 @@ export default async function SurveyLayout(
   } = await rscLocaleFromParams({
     lang: params.lang,
     contexts: [
-      // NOTE: 
+      // NOTE:
       // we reload common contexts here because there is no parent layout,
       // context is not shared with (mainLayout pages) that are outside of the scope of a precise survey
       // we could have a shared layout between (mainLayout) and "survey/[slug]/[year]" that handle common locales
@@ -71,7 +65,7 @@ export default async function SurveyLayout(
   if (localeError) {
     console.log(localeError);
     throw new Error(
-      `Can't load translations from API, error: ${JSON.stringify(localeError)}`
+      `Can't load translations from API, error: ${JSON.stringify(localeError)}`,
     );
   }
   // locales lists
