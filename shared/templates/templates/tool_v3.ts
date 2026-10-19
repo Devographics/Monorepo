@@ -11,6 +11,7 @@ export const toolv3: TemplateFunction = options => {
             id,
             intlId: `options.features.${id}.short`
         })),
+        optionsNamespace: 'experience',
         defaultSort: 'options',
         inputComponent: 'featurev3',
         followups: followups.featurev3,

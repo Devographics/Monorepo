@@ -184,8 +184,10 @@ type QuestionMetadata {
     yearAdded: Int
     label: String
     intlId: String
-    # used for options namespace
+    # used for options namespace, should be deprecated
     i18nNamespace: String
+    # more explicit name
+    optionsNamespace: String
     template: String
     inputComponent: String
     rawPaths: RawDbPaths

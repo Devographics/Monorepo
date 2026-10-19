@@ -223,7 +223,10 @@ export type Question = {
 
     id?: string
     intlId?: string
+    // should be deprecated eventually, name is too vague
     i8nNamespace?: string
+    // more explicit name; only applies to options
+    optionsNamespace?: string
     // override the sectionId (e.g. to save data to another section)
     sectionId?: string
     label?: string

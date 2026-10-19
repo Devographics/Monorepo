@@ -73,6 +73,7 @@ export const featurev2: ApiTemplateFunction = options => {
     const fieldTypeName = `${graphqlize(survey.id)}Feature`
     const output: QuestionApiTemplateOutput = {
         ...featureTemplateFunctionv2(options),
+        optionsNamespace: 'features',
         fieldTypeName,
         filterTypeName: 'FeatureFilters',
         autogenerateFilterType: false,
