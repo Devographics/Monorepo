@@ -74,6 +74,7 @@ export const CorrelationItemComponent = ({
         question,
         block
     })
+
     const questionLabel = questionLabelObject.question
     const questionName = questionLabelObject.questionName
 
@@ -83,7 +84,7 @@ export const CorrelationItemComponent = ({
             id: optionId2,
             getString,
             entity: optionEntity,
-            i18nNamespace: questionId2
+            i18nNamespace: question.optionsNamespace || questionId2
         })
         optionLabel = optionLabelObject?.shortLabel
     }

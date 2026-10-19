@@ -4,14 +4,15 @@ import { getAllQuestions } from './options'
 
 export const useEntities = (): Entity[] => {
     const context = usePageContext()
-    const { currentEdition } = context
-    const allQuestions = getAllQuestions(currentEdition)
-    const questionsEntities = allQuestions.map((q: QuestionMetadata) => q.entity).flat()
-    const optionsEntities = allQuestions
-        .map((q: QuestionMetadata) => q?.options?.map(o => o?.entity))
-        .flat()
-    const allEntities = [...questionsEntities, ...optionsEntities].filter(e => !!e) as Entity[]
-    return allEntities
+    const { currentEdition, allEntities: contextEntities } = context
+    return contextEntities
+    // const allQuestions = getAllQuestions(currentEdition)
+    // const questionsEntities = allQuestions.map((q: QuestionMetadata) => q.entity).flat()
+    // const optionsEntities = allQuestions
+    //     .map((q: QuestionMetadata) => q?.options?.map(o => o?.entity))
+    //     .flat()
+    // const allEntities = [...questionsEntities, ...optionsEntities].filter(e => !!e) as Entity[]
+    // return allEntities
 }
 
 export const useEntity = (id: string) => {

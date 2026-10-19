@@ -1,4 +1,4 @@
-import { EditionMetadata, SurveyMetadata } from '@devographics/types'
+import { EditionMetadata, Entity, SurveyMetadata } from '@devographics/types'
 import React from 'react'
 import type { Locale } from '@devographics/react-i18n'
 import { BlockDefinition, BlockVariantDefinition } from './block'
@@ -54,6 +54,8 @@ interface SurveyPageContext {
     allSurveys: SurveyMetadata[]
     currentSurvey: SurveyMetadata
     currentEdition: EditionMetadata
+    // all entities found anywhere in the entire survey data (including nested buckets)
+    allEntities: Entity[]
     locale?: Locale
     block: any
     blocks?: Array<BlockDefinition>

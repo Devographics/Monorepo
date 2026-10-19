@@ -7,7 +7,9 @@ import {
     createBlockPages,
     getLoadMethod,
     getMetadata,
-    getTranslationContexts
+    getTranslationContexts,
+    collectEntities,
+    keepPageEntities
 } from './helpers'
 import { runPageQueries } from './run_page_queries'
 import { getSendOwlData } from './sendowl'
@@ -24,6 +26,7 @@ import type { PageContextValue } from '../src/core/types/context'
 import type { SponsorProduct } from '../src/core/types/sponsors'
 import { LocaleWithStrings } from './react-i18n/typings'
 import trim from 'lodash/trim.js'
+import { Entity } from '@devographics/types'
 
 //  Not needed in TS/ recent versions of node
 // import { fileURLToPath } from 'url'
@@ -181,7 +184,7 @@ export const createPagesSingleLoop = async ({
         const { flat } = await computeSitemap(rawSitemap, editionVariables)
 
         const flatSitemap = { locales: cleanLocales, contents: flat }
-        logToFile('flat_sitemap.yml', yaml.dump(flatSitemap, { noRefs: true }), {
+        logToFile('flat_sitemap.yml', flatSitemap, {
             mode: 'overwrite'
             //editionId
         })
@@ -205,6 +208,9 @@ export const createPagesSingleLoop = async ({
             }
         }
 
+        const pagesWithData: any[] = []
+
+        // first loop to aggregate all data in one array
         for (const page of flat) {
             console.log('// Building page ' + page.path)
             let pageData = {}
@@ -236,11 +242,62 @@ export const createPagesSingleLoop = async ({
                 })
                 pageData = queryResults.pageData
                 blockErrors = queryResults.blockErrors
+                pagesWithData.push({ page, pageData, blockErrors, fullContext })
+
+                logToFile(`pages/${page.id}__page.yml`, page, {
+                    mode: 'overwrite'
+                })
+
+                logToFile(`pages/${page.id}__data.yml`, pageData, {
+                    mode: 'overwrite'
+                })
+
+                logToFile(`pages/${page.id}__errors.yml`, blockErrors, {
+                    mode: 'overwrite'
+                })
             } catch (error) {
                 console.log(`// GraphQL error for page ${page.id}`)
                 console.log(page)
                 throw error
             }
+        }
+
+        /*
+
+        Extract all entity metadata from all pages data. 
+
+        note: this is mainly used for labels and only contains name, description, etc. fields, not the full entity metadata
+
+        TODO for v2027:
+        
+        There are a few problems here:
+
+        1. It is still theoretically possible that a question correlation refers to an entity that was not part of the pages data dataset. 
+
+        2. Entities metadata is currently duplicated between allEntitiesSimplified and each question's own metadata. 
+
+        3. Two questions mentioning the same entity will also duplicate its metadata anyway.
+
+        In the future, it would be better to switch to the following flow:
+
+        1. Get the data for all questions
+        2. Extract all mentioned entities ids
+        3. Run a separate query to get metadata for all these entities
+        4. Load this once on the client and cache it
+
+        */
+        const allEntitiesSimplified = collectEntities(pagesWithData)
+
+        logToFile(`allEntitiesSimplified.yml`, allEntitiesSimplified, {
+            mode: 'overwrite'
+        })
+
+        // second loop to actually create pages
+        for (const pageWithData of pagesWithData) {
+            const { page, pageData, blockErrors, fullContext } = pageWithData
+
+            // restrict entities to those actually appearing in this page
+            const allEntities = keepPageEntities(allEntitiesSimplified, pageData)
 
             // loop over locales
             for (let index = 0; index < activeLocales.length; index++) {
@@ -259,7 +316,8 @@ export const createPagesSingleLoop = async ({
                         locale,
                         localePath,
                         localeId: locale.id,
-                        i18nNamespaces
+                        i18nNamespaces,
+                        allEntities
                     }
                 }
 
@@ -289,7 +347,7 @@ export const createPagesSingleLoop = async ({
                 )
             }
         }
-        logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), {
+        logToFile('build.yml', buildInfo, {
             mode: 'overwrite'
             //editionId
         })

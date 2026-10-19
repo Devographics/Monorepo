@@ -86,6 +86,7 @@ query {
                                 sectionIdOverride
                                 template
                                 i18nNamespace
+                                optionsNamespace
                                 optionsAreNumeric
                                 optionsAreRange
                                 optionsAreSequential

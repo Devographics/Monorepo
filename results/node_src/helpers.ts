@@ -8,8 +8,10 @@ import { logToFile } from './log_to_file'
 // import { allowedCachingMethods } from "@devographics/fetch"
 import { PageContextValue, PageDef } from '../src/core/types'
 import template from 'lodash/template.js'
+import pick from 'lodash/pick.js'
 
 import { getMetadataQuery } from './queries/fragments/getMetadataQuery'
+import { Entity } from '@devographics/types'
 
 /**
  * Get caching methods based on current config
@@ -348,5 +350,58 @@ export const parseCustomQuery = ({
     } catch (error) {
         console.log(`// parseCustomQuery error in question "${variables.questionId}"`)
         console.log(error)
+    }
+}
+
+// recursively loop through every field of pageData and add any `entity` object to allEntities
+export function collectEntities(pagesData: any[]) {
+    const allEntities: Array<Entity> = []
+    collectEntities2(pagesData, allEntities)
+    return allEntities
+}
+
+function collectEntities2(data: any, allEntities: Array<Entity>) {
+    if (!data || typeof data !== 'object') return
+    for (const key of Object.keys(data)) {
+        const value = data[key]
+        if (key === 'entity' && value?.id && !allEntities.some(e => e.id === value.id)) {
+            const entity = value as Entity
+            allEntities.push(trimEntityFields(entity))
+        }
+        collectEntities2(value, allEntities)
+    }
+}
+
+const fieldsToKeep = [
+    'name',
+    'nameClean',
+    'nameHtml',
+    'description',
+    'descriptionClean',
+    'descriptionHtml',
+    'id'
+]
+
+const trimEntityFields = (entity: Entity) => {
+    const trimmedEntity = pick(entity, fieldsToKeep) as Entity
+    return trimmedEntity
+}
+
+// only keep entities whose id appears somewhere in pageData (as a key or as a string value)
+export function keepPageEntities(entities: Entity[], pageData: any[]) {
+    const pageStrings = new Set<string>()
+    collectStrings(pageData, pageStrings)
+    return entities.filter(entity => pageStrings.has(entity.id))
+}
+
+function collectStrings(data: any, strings: Set<string>) {
+    if (typeof data === 'string') {
+        strings.add(data)
+        return
+    }
+    if (!data || typeof data !== 'object') return
+    for (const key of Object.keys(data)) {
+        strings.add(key)
+        collectStrings(data[key], strings)
     }
 }
