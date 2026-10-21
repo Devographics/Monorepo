@@ -10,7 +10,7 @@ export const NewQuestionIndicator = ({ question }: { question?: QuestionMetadata
     const isNew = question?.yearAdded === currentEdition.year
     return isNew ? (
         <Tooltip
-            trigger={<span className="question-label-new">✨</span>}
+            trigger={<span className="question-label-new">🆕</span>}
             contents={<T token="general.newly_added" />}
             showBorder={false}
         />
