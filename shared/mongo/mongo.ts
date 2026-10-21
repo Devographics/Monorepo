@@ -140,7 +140,7 @@ export const getCustomNormalizationsCollection = async () => {
  * Handle the connection automatically when called the first time
  */
 export const getProjectsCollection = async <T extends Document>() => {
-    const db = await getAppDb()
+    const db = await getPublicDb()
     return db.collection<T>('projects')
 }
 
