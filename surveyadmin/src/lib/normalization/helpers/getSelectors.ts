@@ -228,7 +228,9 @@ export const getSelector = async ({
         } else {
           const formPaths = getFormPaths({ edition, question: questionObject });
           if (formPaths.other) {
-            selector[formPaths.other] = getExistsSelector();
+            // don't filter out ignored values ("None", "n/a", etc.) here: the freeform subfield
+            // handles them, and needs to see these responses to clear any stale normalized values
+            selector[formPaths.other] = getExistsSelector({ removeEmpty: false });
           }
         }
       }

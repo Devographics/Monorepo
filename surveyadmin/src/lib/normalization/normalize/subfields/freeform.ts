@@ -1,6 +1,7 @@
 import { cleanupValue, getParentIds } from "../helpers";
 import { normalize } from "../normalize";
 import set from "lodash/set.js";
+import unset from "lodash/unset.js";
 import {
   NormalizationMetadata,
   NormalizationToken,
@@ -249,6 +250,13 @@ export const freeform: SubfieldProcessFunction = async ({
             metadata,
           });
 
+          return { normResp, modifiedFields };
+        } else {
+          // every answer was an ignored value ("None", "n/a", etc.): clear the normalized
+          // fields, otherwise the raw values copied over by the "response" subfield (same
+          // path for textList questions) or left by a previous normalization would remain
+          unset(normResp, normPaths.other!);
+          unset(normResp, normPaths.metadata!);
           return { normResp, modifiedFields };
         }
       } catch (error) {
