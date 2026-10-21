@@ -980,6 +980,45 @@
         queryOptions:
             addQuestionComments: false
 
+      - id: did_you_run_into_technical_issues
+        template: multiple_options2_freeform
+        parameters:
+            showNoAnswer: true
+            cutoff: 5
+            mergeOtherBuckets: true
+        queryOptions:
+            addBucketsEntities: true
+            subField: freeform
+            addGroupedBuckets: false
+            addNestedBuckets: true
+            sectionId: user_info
+
+      - id: missing_questions
+        template: multiple_options2_freeform
+        parameters:
+            showNoAnswer: true
+            cutoff: 5
+            mergeOtherBuckets: true
+        queryOptions:
+            addBucketsEntities: true
+            subField: freeform
+            addGroupedBuckets: false
+            addNestedBuckets: true
+            sectionId: user_info
+
+      - id: how_can_we_improve
+        template: multiple_options2_freeform
+        parameters:
+            showNoAnswer: true
+            cutoff: 5
+            mergeOtherBuckets: true
+        queryOptions:
+            addBucketsEntities: true
+            subField: freeform
+            addGroupedBuckets: false
+            addNestedBuckets: true
+            sectionId: user_info
+
       - id: tokyodev_resource
         items: [td-article]
         template: recommended_resources
