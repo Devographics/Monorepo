@@ -8,12 +8,13 @@ export async function GET(req: NextRequest) {
     const projects = (query && (await searchProjects({ query }))) || [];
     return NextResponse.json({ data: projects });
   } catch (error) {
+    console.log(error);
     if (error instanceof HandlerError) {
       return await error.toNextResponse(req);
     } else {
       return NextResponse.json(
-        { error: `Could not load response` },
-        { status: 500 }
+        { error: `projects/search: could not load projects` },
+        { status: 500 },
       );
     }
   }

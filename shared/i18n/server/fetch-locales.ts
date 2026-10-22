@@ -132,14 +132,18 @@ async function getLocaleContextStrings({ locale, context }: { locale: Locale; co
  */
 export async function getLocaleDict({
     localeId,
-    contexts
+    contexts,
+    enableCache = true
 }: {
     localeId: string
     contexts: Array<string>
+    /** If false, fetch from the API even if Redis has a cached copy (Redis is still updated) */
+    enableCache?: boolean
 }) {
     const cacheKey = localeWithStringsCacheKey({ localeId, contexts })
     const { data: locale, error } = await cachedPipeline<LocaleWithStrings>({
-        cacheKey
+        cacheKey,
+        enableCache
     })
         .fetcher(async () => {
             const query = localeWithStringsQuery({ localeId, contexts })
