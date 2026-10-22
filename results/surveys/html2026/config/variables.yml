@@ -1,0 +1,6 @@
+surveyType: state_of_html
+
+# used for scatterplot chart
+totalCountRounded: 10000
+
+currentYear: 2025
