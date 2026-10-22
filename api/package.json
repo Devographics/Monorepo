@@ -15,7 +15,7 @@
         "@sentry/tracing": "^7.11.1",
         "apollo-server-express": "^3.10.1",
         "apollo-server-plugin-response-cache": "^3.7.0",
-        "chokidar": "^3.5.3",
+        "chokidar": "^6.0.0",
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
         "graphql": "16.6.0",
