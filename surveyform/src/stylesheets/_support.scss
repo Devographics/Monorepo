@@ -2,6 +2,13 @@
 
 .support {
 }
+.support-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--doubleSpacing);
+  max-width: 800px;
+  margin: 0 auto;
+}
 
 .support-item {
   @include variables.flex-center;
@@ -9,7 +16,6 @@
   a {
     display: block;
     width: 100%;
-    max-width: 350px;
   }
   img {
     display: block;
