@@ -45,7 +45,11 @@ export const parseSurveys = async ({
     context: RequestContext
 }): Promise<SurveyApiObject[]> => {
     console.log('// parsing surveys…')
-    return await Promise.all(surveys.map(survey => getSurveyObject({ survey, context })))
+    const allSurveys = await Promise.all(
+        surveys.map(survey => getSurveyObject({ survey, context }))
+    )
+    console.log('// done parsing surveys')
+    return allSurveys
 }
 
 // Take a Survey and return a SurveyApiObject
