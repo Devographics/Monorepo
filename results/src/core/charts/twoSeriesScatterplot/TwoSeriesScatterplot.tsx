@@ -1,5 +1,5 @@
 import React from 'react'
-import { AllToolsData, QuestionMetadata, StandardQuestionData } from '@devographics/types'
+import { AllToolsData, Bucket, QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { useI18n } from '@devographics/react-i18n'
 import { useTheme } from 'styled-components'
@@ -58,7 +58,12 @@ const useNodes = ({
         const serieIndex = 0
         const serieId = 'dummy_serie_id'
 
-        const labelObject = getItemLabel({ id, i18nNamespace, getString })
+        const labelObject = getItemLabel({
+            id,
+            i18nNamespace,
+            getString,
+            entity: bucket1Item?.entity
+        })
 
         const nodeData: NodeData = {
             index,
@@ -130,9 +135,18 @@ export const TwoSeriesScatterplot = (
     // legend
     const groups = options && uniq(options.map(option => option.group))
     const i18nNamespace = block.i18nNamespace || question.id
-    const bucketIds = data[0].combined.allEditions?.[0].buckets.map(b => b.id)
+    const buckets1 = data[0].combined.allEditions?.[0].buckets
+    const buckets2 = data[1].combined.allEditions?.[0].buckets
+    // skip buckets missing an average on either axis (e.g. "other answers"),
+    // otherwise they get plotted at 0
+    const hasAverage = (buckets: Bucket[] | undefined, id: string) =>
+        buckets?.find(b => b.id === id)?.averageByFacet != null
+    const bucketIds = buckets1
+        .map(b => b.id)
+        .filter(id => hasAverage(buckets1, id) && hasAverage(buckets2, id))
     const items = bucketIds.map((id, index) => {
-        const labelObject = getItemLabel({ id, i18nNamespace, getString })
+        const entity = buckets1.find(b => b.id === id)?.entity
+        const labelObject = getItemLabel({ id, i18nNamespace, getString, entity })
         const option = options?.find(option => option.id === id)
         let color
         if (option && groups) {
