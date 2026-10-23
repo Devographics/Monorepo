@@ -1,0 +1,29 @@
+id: ${mainBlockId}_vs_experience_vs_salary
+fieldId: ${mainBlockId}
+i18nNamespace: ${mainBlockId}
+tabId: tabs.by_experience_vs_compensation
+blockType: TwoSeriesScatterplot
+hasData: true
+queryOptions:
+    editionsCount: 1
+    subField: combined
+    # entities give named technologies (languages, frameworks…) their display names
+    addBucketsEntities: true
+    addCorrelations: false
+    addCardinalities: false
+    addComments: false
+parameters:
+    showNoAnswer: false
+    cutoff: 20
+    limit: 20
+chartOptions:
+    showTrendLine: true
+series:
+    - id: ${mainBlockId}_vs_years_of_experience
+      facet:
+          sectionId: user_info
+          id: years_of_experience
+    - id: ${mainBlockId}_vs_salary
+      facet:
+          sectionId: compensation
+          id: current_total_annual_compensation
