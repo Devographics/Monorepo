@@ -154,7 +154,12 @@ export interface ResponsesParameters {
 
     enableCache?: boolean
     showNoAnswer?: boolean
+    showNoMatch?: boolean
     mergeOtherBuckets?: boolean
+    enableBucketGroups?: boolean
+    enableBucketNesting?: boolean
+    enableAddOverallBucket?: boolean
+    enableAddMissingBuckets?: boolean
 }
 
 export type ApiSectionTypes = typeof TOOLS_TYPE | typeof FEATURES_TYPE

@@ -198,6 +198,7 @@ export const sortProperties = {
     PERCENT: 'percent',
     ID: 'id',
     AVERAGE_BY_FACET: 'averageByFacet',
+    MEDIAN_BY_FACET: 'medianByFacet',
     MEAN: 'mean'
 } as const
 

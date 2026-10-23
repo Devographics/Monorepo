@@ -1,7 +1,7 @@
 import { RawDataItem } from './normalization'
 import { ResultsSubFieldEnum } from './api'
 import { Entity, Token } from './entities'
-import { Option, SortOrder, SortProperty } from './outlines'
+import { Option, OrderOptions, SortProperty } from './outlines'
 import { QuestionMetadata } from './metadata'
 
 export type QueryData<T> = {
@@ -128,7 +128,7 @@ export interface ResponseEditionData {
 
 export interface SortSpecifier {
     property: SortProperty
-    order: SortOrder
+    order?: `${OrderOptions}`
 }
 
 export interface ResponseEditionMetadata {
