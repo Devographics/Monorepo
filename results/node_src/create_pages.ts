@@ -1,5 +1,6 @@
 import type { CreatePagesArgs, Page } from 'gatsby'
 import { computeSitemap } from './sitemap'
+import { validateRawSitemap } from './sitemap_schema'
 import {
     getPageContext,
     getLocalizedPath,
@@ -53,6 +54,7 @@ const GENERATE_BLOCKS = process.env.GATSBY_GENERATE_BLOCKS === 'true'
 const rawSitemap = yaml.load(
     fs.readFileSync(path.join(editionFolder, 'config/raw_sitemap.yml'), 'utf8')
 )
+validateRawSitemap(rawSitemap, `${process.env.EDITIONID}/config/raw_sitemap.yml`)
 const config = {
     ...yaml.load(fs.readFileSync(path.join(editionFolder, 'config/config.yml'), 'utf8')),
     editionId: process.env.EDITIONID

@@ -31,6 +31,8 @@ node_modules
 # NOTE: in Vite or Next app, .env can actually be tracked
 # However, .local are NEVER tracked whatever the framework
 *.local
+*.local.deprecated
+*.local.disabled
 
 # docker volumes
 esdata

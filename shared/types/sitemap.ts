@@ -234,19 +234,31 @@ export interface ResultsSitemapBlock {
     // question
     fieldId?: string
     // css2022 only: turns `id` into `<id>_by_<facet>`, see computeSitemap
+
+    /** @deprecated */
     facet?: string
 
     // i18n
+
+    /** @deprecated use optionsNamespace */
     i18nNamespace?: string
+    optionsNamespace?: string
+
+    /** @deprecated use titleKey */
     titleId?: string
     titleKey?: string
+
+    /** @deprecated use descriptionKey */
     descriptionId?: string
     descriptionKey?: string
     questionKey?: string
     noteKey?: string
     tabId?: string
+
+    /** @deprecated use takeawayKey */
     takeaway?: string
     takeawayKey?: string
+    /** @deprecated */
     translateData?: boolean
 
     // data

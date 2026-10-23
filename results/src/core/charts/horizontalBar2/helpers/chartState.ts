@@ -38,7 +38,7 @@ export const getDefaultState = ({
     }
     const order = block?.filtersState?.options?.order || _metadata?.axis1Sort?.order
     if (order) {
-        defaultState.order = order
+        defaultState.order = order as OrderOptions
     }
     const nested = block?.variables?.defaultNested
     if (nested) {
