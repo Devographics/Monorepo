@@ -137,11 +137,6 @@ These styles will only be active for specific surveys and/or editions
   .comment-trigger-wrapper {
     display: none;
   }
-  .question-label-new {
-    &::after {
-      content: "🆕" !important;
-    }
-  }
 
   .form-note {
     &[data-key="user_info.gender.note"] {
