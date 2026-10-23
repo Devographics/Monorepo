@@ -412,7 +412,6 @@
       - template: features_experience_linechart
         tabId: blocks.tools_experience_ranking.percentages
         parameters:
-            years: [2020, 2021, 2022, 2023]
             rankCutoff: 10
         variants:
             - template: features_experience_ranking

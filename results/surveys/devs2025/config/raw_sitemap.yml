@@ -64,7 +64,6 @@
         parameters: { limit: 40 }
         chartOptions:
             limit: 20
-            cutoff: 20
         queryOptions:
             addBucketsEntities: false
         variants:
@@ -756,7 +755,7 @@
 
       - id: programming_languages
         template: multiple_options2_combined
-        paramters:
+        parameters:
             limit: 40
         variants:
             - template: vs_salary

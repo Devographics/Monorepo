@@ -217,7 +217,6 @@
         parameters: { limit: 40 }
         chartOptions:
             limit: 10
-            cutoff: 20
         queryOptions:
             addBucketsEntities: false
         variants:
