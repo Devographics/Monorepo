@@ -51,6 +51,7 @@ export const resolveAliases = ({
 }) => {
     if (!stringFile.strings) {
         console.warn(`‼️ no strings found for locale ${locale.id}/${stringFile.context}`)
+        stringFile.strings = []
         return stringFile
     }
     const aliasedStrings: TranslationStringObject[] = []
