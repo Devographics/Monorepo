@@ -21,7 +21,7 @@ const getContext = (blockId: string) => ({
 })
 
 test('parses a full path', () => {
-    assert.deepEqual(parseDatapointPath('$main_vs_salary:devs2025.a+b.c.p75', 'employment_status'), {
+    assert.deepEqual(parseDatapointPath('$block_vs_salary:devs2025.a+b.c.p75', 'employment_status'), {
         blockId: 'employment_status_vs_salary',
         editionId: 'devs2025',
         bucketLevels: [['a', 'b'], ['c']],
@@ -30,7 +30,7 @@ test('parses a full path', () => {
 })
 
 test('bucket percentage from the main block', () => {
-    const result = resolveDatapoint('$main.range_0_4', getContext('years_of_experience'))
+    const result = resolveDatapoint('$block.range_0_4', getContext('years_of_experience'))
     assert.equal(result.value, 8.67)
     assert.equal(result.stat, 'percentage')
     assert.equal(result.fullPath, 'years_of_experience.range_0_4')
@@ -38,62 +38,61 @@ test('bucket percentage from the main block', () => {
     assert.equal(result.error, undefined)
 })
 
-test('full block id works the same as $main', () => {
+test('full block id works the same as $block', () => {
     const result = resolveDatapoint('years_of_experience.range_0_4', getContext('employment_status'))
     assert.equal(result.value, 8.67)
 })
 
 test('previous edition', () => {
-    const result = resolveDatapoint('$main:devs2025.range_0_4', getContext('years_of_experience'))
+    const result = resolveDatapoint('$block:devs2025.range_0_4', getContext('years_of_experience'))
     assert.equal(result.value, 16)
 })
 
 test('summed buckets', () => {
-    const result = resolveDatapoint('$main.range_0_4+range_5_9', getContext('years_of_experience'))
+    const result = resolveDatapoint('$block.range_0_4+range_5_9', getContext('years_of_experience'))
     assert.equal(Math.round(result.value! * 100) / 100, 33.85)
     assert.deepEqual(result.elementIds, ['range_0_4', 'range_5_9'])
 })
 
 test('bucket count', () => {
-    const result = resolveDatapoint('$main.freelance.count', getContext('employment_status'))
+    const result = resolveDatapoint('$block.freelance.count', getContext('employment_status'))
     assert.equal(result.value, 1110)
 })
 
 test('facet bucket percentage from a variant', () => {
     const context = getContext('employment_status')
-    const employees = resolveDatapoint('$main_vs_income_evolution.company_employee.increased', context)
+    const employees = resolveDatapoint('$block_vs_income_evolution.company_employee.increased', context)
     assert.equal(employees.value, 52.84)
     assert.equal(employees.blockId, 'employment_status_vs_income_evolution')
     assert.deepEqual(employees.elementIds, ['company_employee.increased'])
-    const freelancers = resolveDatapoint('$main_vs_income_evolution.freelance.increased', context)
+    const freelancers = resolveDatapoint('$block_vs_income_evolution.freelance.increased', context)
     assert.equal(freelancers.value, 32.61)
 })
 
 test('bucket median and percentile', () => {
     const context = getContext('employment_status')
-    assert.equal(resolveDatapoint('$main_vs_salary.company_employee.median', context).value, 90000)
-    assert.equal(resolveDatapoint('$main_vs_salary.company_employee.p75', context).value, 125000)
-    assert.equal(resolveDatapoint('$main_vs_salary.company_employee.average', context).value, 96481.5)
+    assert.equal(resolveDatapoint('$block_vs_salary.company_employee.median', context).value, 90000)
+    assert.equal(resolveDatapoint('$block_vs_salary.company_employee.p75', context).value, 125000)
+    assert.equal(resolveDatapoint('$block_vs_salary.company_employee.average', context).value, 96481.5)
 })
 
 test('question-level stats', () => {
     const context = getContext('years_of_experience')
-    assert.equal(resolveDatapoint('$main.median', context).value, 12)
-    assert.equal(resolveDatapoint('$main.average', context).value, 14.4)
-    assert.equal(resolveDatapoint('$main.count', context).value, 5356)
+    assert.equal(resolveDatapoint('$block.median', context).value, 12)
+    assert.equal(resolveDatapoint('$block.average', context).value, 14.4)
+    assert.equal(resolveDatapoint('$block.count', context).value, 5356)
 })
 
 test('filtered series', () => {
-    const result = resolveDatapoint('$main_men_vs_non_men_1.burnout', getContext('career_issues'))
+    const result = resolveDatapoint('$block_men_vs_non_men_1.burnout', getContext('career_issues'))
     assert.equal(result.value, 68.22)
 })
 
 test('errors', () => {
     const context = getContext('years_of_experience')
-    assert.match(resolveDatapoint('$main_foo.range_0_4', context).error!, /No data found for block/)
-    assert.match(resolveDatapoint('$main:devs2020.range_0_4', context).error!, /No data found for edition/)
-    assert.match(resolveDatapoint('$main.range_foo', context).error!, /No bucket "range_foo"/)
-    assert.match(resolveDatapoint('$main', context).error!, /A stat .* is needed/)
+    assert.match(resolveDatapoint('$block_foo.range_0_4', context).error!, /No data found for block/)
+    assert.match(resolveDatapoint('$block:devs2020.range_0_4', context).error!, /No data found for edition/)
+    assert.match(resolveDatapoint('$block.range_foo', context).error!, /No bucket "range_foo"/)
     assert.match(
         resolveDatapoint('employment_status_vs_salary.company_employee+freelance.median', context).error!,
         /cannot be combined/
@@ -105,7 +104,7 @@ const formatDatapoint = (datapoint: ResolvedDatapoint) =>
 
 test('renders values', () => {
     const html = replaceDatapoints({
-        html: '<p>Only {$main.range_0_4} of respondents</p>',
+        html: '<p>Only {@$block.range_0_4} of respondents</p>',
         context: getContext('years_of_experience'),
         formatDatapoint
     })
@@ -117,7 +116,7 @@ test('renders values', () => {
 
 test('renders link-only text with the value for the tooltip', () => {
     const html = replaceDatapoints({
-        html: '[the <strong>most</strong> common]{$main_vs_income_evolution.company_employee+freelance.increased}',
+        html: '[the <strong>most</strong> common]{@$block_vs_income_evolution.company_employee+freelance.increased}',
         context: getContext('employment_status'),
         formatDatapoint
     })
@@ -128,7 +127,7 @@ test('renders link-only text with the value for the tooltip', () => {
 })
 
 test('leaves other placeholders and brackets alone', () => {
-    const html = '<p>Hello {name}, see [this] {not a path} and [a link](https://example.com)</p>'
+    const html = '<p>Hello {name}, see [this] {not a path} {a.b} and [a link](https://example.com)</p>'
     const context = getContext('years_of_experience')
     assert.equal(replaceDatapoints({ html, context, formatDatapoint }), html)
 })
@@ -136,8 +135,8 @@ test('leaves other placeholders and brackets alone', () => {
 test('renders errors', () => {
     mock.method(console, 'warn', () => {})
     const context = getContext('years_of_experience')
-    assert.match(replaceDatapoints({ html: '{$main.range_foo}', context, formatDatapoint }), /^<span class="datapoint-error" title="No bucket &quot;range_foo&quot;[^"]*">\[\?\$main.range_foo\]<\/span>$/)
-    assert.match(replaceDatapoints({ html: '[some text]{$main.range_foo}', context, formatDatapoint }), /^some text <span class="datapoint-error"/)
+    assert.match(replaceDatapoints({ html: '{@$block.range_foo}', context, formatDatapoint }), /^<span class="datapoint-error" title="No bucket &quot;range_foo&quot;[^"]*">\[\?@\$block.range_foo\]<\/span>$/)
+    assert.match(replaceDatapoints({ html: '[some text]{@$block.range_foo}', context, formatDatapoint }), /^some text <span class="datapoint-error"/)
     mock.restoreAll()
 })
 
@@ -166,5 +165,26 @@ test('freeform questions', () => {
         }
     }
     const context = { ...getContext('native_languages'), pageData: freeformPageData }
-    assert.equal(resolveDatapoint('$main.japanese.count', context).value, 22)
+    assert.equal(resolveDatapoint('$block.japanese.count', context).value, 22)
+})
+
+test('block-only paths', () => {
+    const context = getContext('career_issues')
+    // no value and no data needed (filtered series store their data under _1, _2…)
+    const result = resolveDatapoint('$block_men_vs_non_men', context)
+    assert.equal(result.error, undefined)
+    assert.equal(result.value, undefined)
+    assert.equal(result.blockId, 'career_issues_men_vs_non_men')
+    assert.deepEqual(result.elementIds, [])
+    assert.equal(
+        replaceDatapoints({ html: '[gender]{@$block_men_vs_non_men}', context, formatDatapoint }),
+        '<span class="datapoint" data-datapoint-block="career_issues_men_vs_non_men" data-datapoint-edition="devs2026" data-datapoint="">gender</span>'
+    )
+    // without a text there's nothing to show
+    mock.method(console, 'warn', () => {})
+    assert.match(
+        replaceDatapoints({ html: '{@$block_men_vs_non_men}', context, formatDatapoint }),
+        /^<span class="datapoint-error" title="[^"]*has no value/
+    )
+    mock.restoreAll()
 })

@@ -2,23 +2,29 @@
 
 Resolve "datapoint paths" used in takeaways, such as:
 
-{$main.range_0_4}
-{$main_vs_income_evolution.company_employee.increased}
-{$main:devs2025.tokyo+kanagawa.count}
+{@$block.range_0_4}
+{@$block_vs_income_evolution.company_employee.increased}
+{@$block:devs2025.tokyo+kanagawa.count}
+[gender]{@$block_men_vs_non_men}
 
-Syntax: block[:edition][.bucket[.facetBucket]][.stat]
+In takeaways, paths always start with `@`. The functions below take the path
+without it: block[:edition][.bucket[.facetBucket]][.stat]
 
-- block: a variant id as it appears in the page data; `$main` is the takeaway's
-  own block, `$main_vs_salary` is the block id followed by that suffix
+- block: a variant id as it appears in the page data; `$block` is the takeaway's
+  own block, `$block_vs_salary` is the block id followed by that suffix
 - edition: read another edition from the same data (defaults to the current one)
 - bucket/facetBucket: bucket ids; `+` combines several buckets (values are summed)
 - stat: percentage (default), count, median, average, or any percentile (p75…)
+
+A path with only a block (no bucket or stat) has no value: it can only be used
+in [text]{@path} links, to point to the whole block (e.g. a tab).
 
 Note: this file should only contain type imports so it can be tested with node:test
 
 */
 
-export const MAIN_BLOCK = '$main'
+export const PATH_PREFIX = '@'
+export const BLOCK_PLACEHOLDER = '$block'
 export const EDITION_SEPARATOR = ':'
 export const BUCKETS_SEPARATOR = '+'
 
@@ -28,12 +34,12 @@ export interface DatapointContext {
     pageData: any
     surveyId: string
     editionId: string
-    // id of the block the takeaway belongs to, used to expand `$main`
+    // id of the block the takeaway belongs to, used to expand `$block`
     blockId: string
 }
 
 export interface ParsedDatapointPath {
-    // id of the block variant, with `$main` expanded
+    // id of the block variant, with `$block` expanded
     blockId: string
     // edition to read, if different from the current one
     editionId?: string
@@ -44,7 +50,7 @@ export interface ParsedDatapointPath {
 
 export interface ResolvedDatapoint {
     path: string
-    // path with `$main` expanded
+    // path with `$block` expanded
     fullPath: string
     blockId: string
     // edition the value comes from (the current one unless specified)
@@ -62,8 +68,8 @@ const isStat = (segment: string) =>
     ['percentage', 'count', 'median', 'average'].includes(segment) || /^p\d{1,3}$/.test(segment)
 
 export const expandBlockId = (blockSegment: string, mainBlockId: string) => {
-    if (blockSegment.startsWith(MAIN_BLOCK)) {
-        return mainBlockId + blockSegment.slice(MAIN_BLOCK.length)
+    if (blockSegment.startsWith(BLOCK_PLACEHOLDER)) {
+        return mainBlockId + blockSegment.slice(BLOCK_PLACEHOLDER.length)
     }
     return blockSegment
 }
@@ -178,6 +184,12 @@ export const resolveDatapoint = (path: string, context: DatapointContext): Resol
 
     const result: ResolvedDatapoint = { path, fullPath, blockId, editionId, elementIds: [], stat }
 
+    // a path with only a block points to the whole block and has no value,
+    // so there's no need to look up its data
+    if (bucketLevels.length === 0 && !stat) {
+        return result
+    }
+
     const blockData = getBlockData(context, blockId)
     if (!blockData) {
         result.error = `No data found for block "${blockId}"`
@@ -191,10 +203,6 @@ export const resolveDatapoint = (path: string, context: DatapointContext): Resol
     }
 
     if (bucketLevels.length === 0) {
-        if (!stat) {
-            result.error = `A stat (count, median, average, pNN) is needed when no bucket is specified`
-            return result
-        }
         result.value = getEditionStat(editionData, stat)
         if (result.value === undefined) {
             result.error = `No "${stat}" value found for block "${blockId}"`
@@ -259,9 +267,9 @@ export const resolveDatapoint = (path: string, context: DatapointContext): Resol
 
 Rendering
 
-Replace `{path}` with the formatted value, and `[text]{path}` with the text,
-both wrapped in a span pointing to the chart elements. Paths must contain a dot,
-other `{…}` placeholders are left alone.
+Replace `{@path}` with the formatted value, and `[text]{@path}` with the text,
+both wrapped in a span pointing to the chart elements. Other `{…}` placeholders
+are left alone.
 
 The app uses renderDatapoints() (see renderDatapoints.ts), which calls this
 with the page's data and formatting. The spans only describe the datapoint:
@@ -270,7 +278,7 @@ Datapoint component when the takeaway is rendered.
 
 */
 
-const DATAPOINT_REGEX = /(?:\[([^\]]+)\])?\{([^{}\s]+\.[^{}\s]*)\}/g
+const DATAPOINT_REGEX = /(?:\[([^\]]+)\])?\{@([^{}\s]+)\}/g
 
 const escapeAttribute = (s: string) => s.replaceAll('&', '&amp;').replaceAll('"', '&quot;')
 
@@ -285,25 +293,32 @@ export const replaceDatapoints = ({
 }) =>
     html.replace(DATAPOINT_REGEX, (_match, text: string | undefined, path: string) => {
         const datapoint = resolveDatapoint(path, context)
+        // block-only paths have no value to show, so they need a text
+        if (!datapoint.error && datapoint.value === undefined && !text) {
+            datapoint.error = `"${path}" has no value, use it as a link: [text]{@${path}}`
+        }
         if (datapoint.error) {
             console.warn(
                 `// Datapoint error in takeaway for block "${context.blockId}": ${datapoint.error}`
             )
             const error = `<span class="datapoint-error" title="${escapeAttribute(
                 datapoint.error
-            )}">[?${path}]</span>`
+            )}">[?@${path}]</span>`
             return text ? `${text} ${error}` : error
         }
-        const formatted = formatDatapoint(datapoint)
         const attributes = [
             `class="datapoint"`,
             `data-datapoint-block="${escapeAttribute(datapoint.blockId)}"`,
             `data-datapoint-edition="${escapeAttribute(datapoint.editionId)}"`,
             `data-datapoint="${escapeAttribute(datapoint.elementIds.join(' '))}"`
         ]
-        // when the text doesn't show the value, show it in a tooltip instead
         if (text) {
-            attributes.push(`data-datapoint-value="${escapeAttribute(formatted)}"`)
+            // when the text doesn't show the value, show it in a tooltip instead
+            if (datapoint.value !== undefined) {
+                const formatted = formatDatapoint(datapoint)
+                attributes.push(`data-datapoint-value="${escapeAttribute(formatted)}"`)
+            }
+            return `<span ${attributes.join(' ')}>${text}</span>`
         }
-        return `<span ${attributes.join(' ')}>${text ?? formatted}</span>`
+        return `<span ${attributes.join(' ')}>${formatDatapoint(datapoint)}</span>`
     })

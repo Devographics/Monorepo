@@ -80,10 +80,10 @@ export const makeTranslatorFunc =
 
 /**
  * Matches anything betwen { }, tolerate spaces, allow multiple interpolations
- * Skips anything containing a dot, such as takeaway datapoints ({$main.range_0_4}),
+ * Skips anything starting with @, such as takeaway datapoints ({@$block.range_0_4}),
  * which are handled separately by the results app
  */
-const INTERPOLATION_REGEX = /{([^{}.]+?)}/g
+const INTERPOLATION_REGEX = /{([^{}@][^{}]*?)}/g
 /**
  * TODO: see the perf impact of computing the templates
  * Precomputing is probably useless, but we could cache computations

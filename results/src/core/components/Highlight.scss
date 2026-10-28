@@ -28,3 +28,10 @@ svg .datapoint-ancestor {
     stroke-width: 1px;
     stroke-dasharray: 3 2;
 }
+
+// datapoints whose chart is in another tab: clicking them opens that tab
+// placeholder style, to be refined
+.datapoint-opens-tab {
+    cursor: pointer;
+    text-decoration-style: dashed;
+}

@@ -4,8 +4,8 @@ import type { LocaleParsed } from './typings'
 
 const strings = [
     { key: 'greeting', t: 'Hello {name}', tHtml: '<p>Hello {name}</p>' },
-    { key: 'takeaway', t: '{$main.range_0_4} of respondents', tHtml: '<p>{$main.range_0_4} of respondents</p>' },
-    { key: 'mixed', t: '{name} said [over 30%]{$main.range_over_50.yes}' }
+    { key: 'takeaway', t: '{@$block.range_0_4} of respondents', tHtml: '<p>{@$block.range_0_4} of respondents</p>' },
+    { key: 'mixed', t: '{name} said [over 30%]{@$block.range_over_50.yes}' }
 ]
 
 const locale = {
@@ -27,20 +27,20 @@ test('placeholders are still filled in', () => {
 test('datapoints are left untouched, without warnings', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const result = getMessage('takeaway')
-    expect(result.t).toBe('{$main.range_0_4} of respondents')
-    expect(result.tHtml).toBe('<p>{$main.range_0_4} of respondents</p>')
+    expect(result.t).toBe('{@$block.range_0_4} of respondents')
+    expect(result.tHtml).toBe('<p>{@$block.range_0_4} of respondents</p>')
     expect(warn).not.toHaveBeenCalled()
     warn.mockRestore()
 })
 
 test('placeholders and datapoints can be mixed', () => {
     expect(getMessage('mixed', { name: 'Ada' }).t).toBe(
-        'Ada said [over 30%]{$main.range_over_50.yes}'
+        'Ada said [over 30%]{@$block.range_over_50.yes}'
     )
 })
 
 test('legacy translator function also skips datapoints', () => {
     expect(getString('mixed', { values: { name: 'Ada' } }).t).toBe(
-        'Ada said [over 30%]{$main.range_over_50.yes}'
+        'Ada said [over 30%]{@$block.range_over_50.yes}'
     )
 })

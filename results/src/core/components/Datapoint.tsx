@@ -22,11 +22,12 @@ export const Datapoint = ({
     value?: string
     children: React.ReactNode
 }) => {
-    const { setHighlighted, select } = useHighlightContext()
+    const { setHighlighted, select, opensTab } = useHighlightContext()
 
     const span = (
         <span
-            className="datapoint"
+            // datapoint-opens-tab: clicking it would switch to another tab
+            className={opensTab(datapoint) ? 'datapoint datapoint-opens-tab' : 'datapoint'}
             data-datapoint-block={datapoint.blockId}
             data-datapoint-edition={datapoint.editionId}
             data-datapoint={datapoint.elementIds.join(' ')}

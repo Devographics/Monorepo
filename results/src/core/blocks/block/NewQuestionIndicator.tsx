@@ -3,6 +3,7 @@ import { T } from '@devographics/react-i18n'
 import Tooltip from 'core/components/Tooltip'
 import { QuestionMetadata } from '@devographics/types'
 import { usePageContext } from 'core/helpers/pageContext'
+import { NewIcon } from '@devographics/icons'
 
 export const NewQuestionIndicator = ({ question }: { question?: QuestionMetadata }) => {
     const pageContext = usePageContext()
@@ -10,7 +11,11 @@ export const NewQuestionIndicator = ({ question }: { question?: QuestionMetadata
     const isNew = question?.yearAdded === currentEdition.year
     return isNew ? (
         <Tooltip
-            trigger={<span className="question-label-new">✨</span>}
+            trigger={
+                <span className="question-label-new">
+                    <NewIcon size="large" />
+                </span>
+            }
             contents={<T token="general.newly_added" />}
             showBorder={false}
         />

@@ -17,8 +17,8 @@ const findVariant = (pageContext: PageContextValue, blockId: string) => {
 /*
 
 Medians, averages and percentiles use the unit of the question they describe:
-the question itself for question-level stats ({$main.median}),
-or the variant's facet for bucket-level stats ({$main_vs_salary.man.median})
+the question itself for question-level stats ({@$block.median}),
+or the variant's facet for bucket-level stats ({@$block_vs_salary.man.median})
 
 */
 const getStatQuestion = (pageContext: PageContextValue, datapoint: ResolvedDatapoint) => {
@@ -58,7 +58,7 @@ const getDatapointContext = (pageContext: PageContextValue, blockId: string): Da
 Replace {path} and [text]{path} datapoints in a takeaway's HTML
 with values from the page's data
 
-- blockId: id of the block the takeaway belongs to, used to expand `$main`
+- blockId: id of the block the takeaway belongs to, used to expand `$block`
 
 */
 export const renderDatapoints = ({

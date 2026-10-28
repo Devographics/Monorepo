@@ -34,24 +34,31 @@ interface HighlightContextValue {
     setHighlighted: (highlighted: HighlightedDatapoint | null) => void
     // called when a datapoint is clicked (e.g. to open the tab its chart is in)
     select: (datapoint: HighlightedDatapoint) => void
+    // whether selecting the datapoint would open a different tab
+    opensTab: (datapoint: HighlightedDatapoint) => boolean
 }
 
 const HighlightContext = createContext<HighlightContextValue>({
     highlighted: null,
     setHighlighted: () => {},
-    select: () => {}
+    select: () => {},
+    opensTab: () => false
 })
 
 export const HighlightProvider = ({
     children,
-    onSelect = () => {}
+    onSelect = () => {},
+    opensTab = () => false
 }: {
     children: React.ReactNode
     onSelect?: (datapoint: HighlightedDatapoint) => void
+    opensTab?: (datapoint: HighlightedDatapoint) => boolean
 }) => {
     const [highlighted, setHighlighted] = useState<HighlightedDatapoint | null>(null)
     return (
-        <HighlightContext.Provider value={{ highlighted, setHighlighted, select: onSelect }}>
+        <HighlightContext.Provider
+            value={{ highlighted, setHighlighted, select: onSelect, opensTab }}
+        >
             {children}
         </HighlightContext.Provider>
     )

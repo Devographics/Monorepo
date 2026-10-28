@@ -38,17 +38,28 @@ and clicking one opens the tab its data is in (the active tab lives here for tha
 export const TabsWrapper = (props: TabsWrapperProps) => {
     const [activeTab, setActiveTab] = useState(getRegularTabId(0))
 
-    const openDatapointTab = (datapoint: HighlightedDatapoint) => {
+    // id of the tab showing the datapoint's variant, if any
+    const getDatapointTabId = (datapoint: HighlightedDatapoint) => {
         const variantIndex = props.block.variants.findIndex(variant =>
             belongsToBlock(datapoint.blockId, variant.id)
         )
-        if (variantIndex !== -1) {
-            setActiveTab(getRegularTabId(variantIndex))
+        return variantIndex === -1 ? null : getRegularTabId(variantIndex)
+    }
+
+    const openDatapointTab = (datapoint: HighlightedDatapoint) => {
+        const tabId = getDatapointTabId(datapoint)
+        if (tabId) {
+            setActiveTab(tabId)
         }
     }
 
+    const datapointOpensTab = (datapoint: HighlightedDatapoint) => {
+        const tabId = getDatapointTabId(datapoint)
+        return tabId !== null && tabId !== activeTab
+    }
+
     return (
-        <HighlightProvider onSelect={openDatapointTab}>
+        <HighlightProvider onSelect={openDatapointTab} opensTab={datapointOpensTab}>
             <TabsWrapperContents {...props} activeTab={activeTab} setActiveTab={setActiveTab} />
         </HighlightProvider>
     )
