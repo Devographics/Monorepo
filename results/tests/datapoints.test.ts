@@ -140,3 +140,31 @@ test('renders errors', () => {
     assert.match(replaceDatapoints({ html: '[some text]{$main.range_foo}', context, formatDatapoint }), /^some text <span class="datapoint-error"/)
     mock.restoreAll()
 })
+
+test('freeform questions', () => {
+    const freeformPageData = {
+        dataAPI: {
+            surveys: {
+                state_of_devs: {
+                    devs2026: {
+                        user_info: {
+                            native_languages: {
+                                id: 'native_languages',
+                                freeform: {
+                                    allEditions: [
+                                        {
+                                            editionId: 'devs2026',
+                                            buckets: [{ id: 'japanese', count: 22 }]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    const context = { ...getContext('native_languages'), pageData: freeformPageData }
+    assert.equal(resolveDatapoint('$main.japanese.count', context).value, 22)
+})

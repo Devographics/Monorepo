@@ -251,11 +251,13 @@ export const BlockHeader = styled.div`
 `
 
 export const BlockHeaderRight_ = styled.div`
-    display: flex;
-    justify-content: space-between;
+    /* display: flex; */
+    /* justify-content: space-between; */
+    display: grid;
+    grid-template-columns: 1fr min-content;
     width: 100%;
     align-items: center;
-    gap: 10px;
+    column-gap: 10px;
     @media ${mq.large} {
         /* padding-right: 52px; */
     }
@@ -319,5 +321,6 @@ const BlockHeaderTop_ = styled.div`
 
 const CustomizeButton_ = styled(Button)`
     min-height: 40px;
+    white-space: nowrap;
 `
 export default TabsWrapper

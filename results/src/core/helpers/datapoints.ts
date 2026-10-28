@@ -103,7 +103,12 @@ export const getBlockData = (context: DatapointContext, blockId: string) => {
 }
 
 export const getEditionData = (blockData: any, editionId: string) => {
-    const allEditions = blockData?.combined?.allEditions || blockData?.allEditions || []
+    // freeform questions (e.g. native languages) store their data under `freeform`
+    const allEditions =
+        blockData?.combined?.allEditions ||
+        blockData?.freeform?.allEditions ||
+        blockData?.allEditions ||
+        []
     const editionData = allEditions.find((e: any) => e.editionId === editionId)
     if (editionData) {
         return editionData
