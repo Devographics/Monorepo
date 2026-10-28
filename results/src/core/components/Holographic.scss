@@ -1,0 +1,26 @@
+.holographic {
+    display: inline-block;
+    position: relative;
+}
+
+// the gradient definition must stay rendered (not display: none) to be referenced
+.holographic-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.holographic-stroke,
+.holographic-all {
+    [stroke='currentColor'] {
+        stroke: var(--holographic-paint);
+    }
+}
+
+.holographic-fill,
+.holographic-all {
+    [fill='currentColor'] {
+        fill: var(--holographic-paint);
+    }
+}

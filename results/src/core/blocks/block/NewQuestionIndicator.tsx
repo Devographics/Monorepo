@@ -4,6 +4,7 @@ import Tooltip from 'core/components/Tooltip'
 import { QuestionMetadata } from '@devographics/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import { NewIcon } from '@devographics/icons'
+import Holographic from 'core/components/Holographic'
 
 export const NewQuestionIndicator = ({ question }: { question?: QuestionMetadata }) => {
     const pageContext = usePageContext()
@@ -13,7 +14,9 @@ export const NewQuestionIndicator = ({ question }: { question?: QuestionMetadata
         <Tooltip
             trigger={
                 <span className="question-label-new">
-                    <NewIcon size="large" />
+                    <Holographic applyTo="stroke">
+                        <NewIcon size="none" />
+                    </Holographic>
                 </span>
             }
             contents={<T token="general.newly_added" />}

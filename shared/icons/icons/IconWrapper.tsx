@@ -8,6 +8,8 @@ const getIconSize = ({
     size: 'small' | 'petite' | 'medium' | 'large' | string
 }) => {
     switch (size) {
+        case 'none':
+            return 'none'
         case 'small':
             return '16px'
         case 'petite':
@@ -60,7 +62,7 @@ export interface IconProps {
     label?: string | JSX.Element
     values?: any
     inSVG?: boolean
-    size?: 'small' | 'petite' | 'medium' | 'large'
+    size?: 'small' | 'petite' | 'medium' | 'large' | 'none'
     onClick?: () => void
 }
 

@@ -281,7 +281,7 @@ const BlockItem = ({ block, closeSidebar, page, isActive = false }) => {
                     </span>
                 )}
                 <span className="nav-link-label">
-                    {label}
+                    <span>{label}</span>
                     <NewQuestionIndicator question={question} />
                 </span>
             </InternalLink_>

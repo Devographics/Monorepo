@@ -71,6 +71,7 @@ export * from './CorrelationTrend'
 export * from './CorrelationOption'
 export * from './CorrelationCardinality'
 export * from './Cardinality'
+export * from './New'
 
 // browsers
 export * from './Chrome'
