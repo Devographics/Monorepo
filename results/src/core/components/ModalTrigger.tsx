@@ -66,23 +66,33 @@ const ModalTrigger = ({
         <>
             {triggerComponent}
 
-            {/* react-modal renders in a portal, but React events still bubble through the
-            React tree to ancestors (e.g. a clickable chart row); stop them here. */}
-            <span onClick={e => e.stopPropagation()}>
-                <Modal
-                    isOpen={modalIsOpen}
-                    onRequestClose={closeModal}
-                    style={customStyles}
-                    contentLabel={label}
-                    className={`ModalContent ${className}`}
-                    // overlayClassName="ModalOverlay"
-                >
-                    <Content size={size}>
-                        <ModalClose closeModal={closeModal} />
-                        <Inner className="modal-inner secondary-bg">{childrenComponent}</Inner>
-                    </Content>
-                </Modal>
-            </span>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                style={customStyles}
+                contentLabel={label}
+                className={`ModalContent ${className}`}
+                // overlayClassName="ModalOverlay"
+                // react-modal renders in a portal, but React events still bubble through the
+                // React tree to ancestors (e.g. a clickable chart row); stop them at the overlay,
+                // which wraps everything inside the modal.
+                overlayElement={(props, contentElement) => (
+                    <div
+                        {...props}
+                        onClick={e => {
+                            props.onClick(e)
+                            e.stopPropagation()
+                        }}
+                    >
+                        {contentElement}
+                    </div>
+                )}
+            >
+                <Content size={size}>
+                    <ModalClose closeModal={closeModal} />
+                    <Inner className="modal-inner secondary-bg">{childrenComponent}</Inner>
+                </Content>
+            </Modal>
         </>
     )
 }
