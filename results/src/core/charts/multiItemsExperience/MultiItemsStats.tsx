@@ -65,7 +65,7 @@ const StatItem = ({
                 <T k={`charts.average.${itemId}`} />:
             </span>
             <span className="chart-metadata-item-value">
-                {formatPercentage({ value: average, localeId })}%
+                {formatPercentage({ value: average, localeId })}
             </span>
         </div>
     )

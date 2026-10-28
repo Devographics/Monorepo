@@ -21,8 +21,9 @@ interface TProps {
     element?: string
     fallback?: string
     className?: string
-    // post-process the translated string (e.g. to render takeaway datapoints)
-    transform?: (translation: string) => string
+    // render the translated HTML as React elements instead of raw HTML
+    // (e.g. to turn takeaway datapoints into components)
+    renderHtml?: (translation: string) => React.ReactNode
 }
 
 export const T = ({
@@ -37,7 +38,7 @@ export const T = ({
     useShort = false,
     className,
     element,
-    transform
+    renderHtml
 }: TProps) => {
     const { getString, getFallbacks } = useI18n()
     const { modKeyDown } = useKeydownContext()
@@ -115,12 +116,12 @@ export const T = ({
 
     props.className = classNames.join(' ')
 
-    if (transform && translation) {
-        translation = transform(translation)
-    }
-
     const isHtml = md || html
     const Element = element ? element : isHtml ? 'div' : 'span'
+
+    if (isHtml && renderHtml && translation) {
+        return <Element {...props}>{renderHtml(translation)}</Element>
+    }
 
     return isHtml ? (
         <Element {...props} dangerouslySetInnerHTML={{ __html: translation }} />

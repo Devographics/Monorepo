@@ -72,6 +72,7 @@
         "graphql": "16.9.0",
         "graphql-print": "^1.0.1",
         "html-loader": "^4.2.0",
+        "html-react-parser": "^6.1.9",
         "indent-string": "^5.0.0",
         "ioredis": "^5.2.4",
         "js-yaml": "^4.3.0",

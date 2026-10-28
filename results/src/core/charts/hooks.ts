@@ -618,26 +618,3 @@ function nFormatter(num: number, digits = 1) {
         })
     return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0'
 }
-
-export const useChartLabelFormatter = ({
-    units,
-    facet
-}: {
-    units: BucketUnits
-    facet?: FacetItem
-}) => {
-    if (isPercentage(units)) {
-        return (value: number) => `${round(value, 1)}%`
-    } else if (
-        facet &&
-        [BucketUnits.AVERAGE, BucketUnits.MEDIAN, BucketUnits.PERCENTILES].includes(units)
-    ) {
-        if (isDollar(facet.id)) {
-            return (value: number) => usdFormatter.format(value)
-        } else if (isYen(facet.id)) {
-            return (value: number) => `¥${nFormatter(value)}`
-            // return (value: number) => yenFormatter.format(value)
-        }
-    }
-    return (value: number) => value
-}

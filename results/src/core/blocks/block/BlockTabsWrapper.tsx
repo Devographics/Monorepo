@@ -19,17 +19,40 @@ import { EditIcon } from '@devographics/icons'
 import BlockQuestion from './BlockQuestion'
 import { BlockDefinition } from 'core/types'
 import { getAllQuestions } from 'core/helpers/options'
-import { Highlight, HighlightProvider } from 'core/components/Highlight'
+import {
+    belongsToBlock,
+    Highlight,
+    HighlightedDatapoint,
+    HighlightProvider
+} from 'core/components/Highlight'
 import './BlockTabsWrapper.scss'
 export const getRegularTabId = (index: number) => `tab-${index}`
 export const getCustomTabId = (id: string) => `tabCustom-${id}`
 
-// lets takeaway datapoints highlight elements in this block's tabs and charts
-export const TabsWrapper = (props: TabsWrapperProps) => (
-    <HighlightProvider>
-        <TabsWrapperContents {...props} />
-    </HighlightProvider>
-)
+/*
+
+Takeaway datapoints can highlight elements in this block's tabs and charts,
+and clicking one opens the tab its data is in (the active tab lives here for that reason)
+
+*/
+export const TabsWrapper = (props: TabsWrapperProps) => {
+    const [activeTab, setActiveTab] = useState(getRegularTabId(0))
+
+    const openDatapointTab = (datapoint: HighlightedDatapoint) => {
+        const variantIndex = props.block.variants.findIndex(variant =>
+            belongsToBlock(datapoint.blockId, variant.id)
+        )
+        if (variantIndex !== -1) {
+            setActiveTab(getRegularTabId(variantIndex))
+        }
+    }
+
+    return (
+        <HighlightProvider onSelect={openDatapointTab}>
+            <TabsWrapperContents {...props} activeTab={activeTab} setActiveTab={setActiveTab} />
+        </HighlightProvider>
+    )
+}
 
 interface TabsWrapperProps {
     block: BlockDefinition
@@ -42,10 +65,14 @@ const TabsWrapperContents = ({
     block,
     pageData,
     blockIndex,
-    withMargin = true
-}: TabsWrapperProps) => {
+    withMargin = true,
+    activeTab,
+    setActiveTab
+}: TabsWrapperProps & {
+    activeTab: string
+    setActiveTab: (tabId: string) => void
+}) => {
     const [customVariants, setCustomVariants] = useState<CustomVariant[]>([])
-    const [activeTab, setActiveTab] = useState(getRegularTabId(0))
     const pageContext = usePageContext()
     const { getString, getFallbacks } = useI18n()
     const entities = useEntities()

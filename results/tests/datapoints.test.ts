@@ -111,11 +111,11 @@ test('renders values', () => {
     })
     assert.equal(
         html,
-        '<p>Only <span class="datapoint" data-datapoint-block="years_of_experience" data-datapoint-edition="devs2026" data-datapoint="range_0_4" tabindex="0">9%</span> of respondents</p>'
+        '<p>Only <span class="datapoint" data-datapoint-block="years_of_experience" data-datapoint-edition="devs2026" data-datapoint="range_0_4">9%</span> of respondents</p>'
     )
 })
 
-test('renders link-only text with the value as a title', () => {
+test('renders link-only text with the value for the tooltip', () => {
     const html = replaceDatapoints({
         html: '[the <strong>most</strong> common]{$main_vs_income_evolution.company_employee+freelance.increased}',
         context: getContext('employment_status'),
@@ -123,7 +123,7 @@ test('renders link-only text with the value as a title', () => {
     })
     assert.equal(
         html,
-        '<span class="datapoint" data-datapoint-block="employment_status_vs_income_evolution" data-datapoint-edition="devs2026" data-datapoint="company_employee.increased freelance.increased" tabindex="0" title="85%">the <strong>most</strong> common</span>'
+        '<span class="datapoint" data-datapoint-block="employment_status_vs_income_evolution" data-datapoint-edition="devs2026" data-datapoint="company_employee.increased freelance.increased" data-datapoint-value="85%">the <strong>most</strong> common</span>'
     )
 })
 

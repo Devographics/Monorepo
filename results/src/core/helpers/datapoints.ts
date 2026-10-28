@@ -227,7 +227,10 @@ export const resolveDatapoint = (path: string, context: DatapointContext): Resol
                     result.error = `No facet bucket "${facetBucketId}" found in bucket "${elementId}" of block "${blockId}"`
                     return result
                 }
-                facetBuckets.push({ bucket: facetBucket, elementId: `${elementId}.${facetBucketId}` })
+                facetBuckets.push({
+                    bucket: facetBucket,
+                    elementId: `${elementId}.${facetBucketId}`
+                })
             }
         }
         buckets = facetBuckets
@@ -261,7 +264,9 @@ both wrapped in a span pointing to the chart elements. Paths must contain a dot,
 other `{…}` placeholders are left alone.
 
 The app uses renderDatapoints() (see renderDatapoints.ts), which calls this
-with the page's data and formatting.
+with the page's data and formatting. The spans only describe the datapoint:
+interactions (tooltip, highlighting, opening the tab) are added by the
+Datapoint component when the takeaway is rendered.
 
 */
 
@@ -281,8 +286,12 @@ export const replaceDatapoints = ({
     html.replace(DATAPOINT_REGEX, (_match, text: string | undefined, path: string) => {
         const datapoint = resolveDatapoint(path, context)
         if (datapoint.error) {
-            console.warn(`// Datapoint error in takeaway for block "${context.blockId}": ${datapoint.error}`)
-            const error = `<span class="datapoint-error" title="${escapeAttribute(datapoint.error)}">[?${path}]</span>`
+            console.warn(
+                `// Datapoint error in takeaway for block "${context.blockId}": ${datapoint.error}`
+            )
+            const error = `<span class="datapoint-error" title="${escapeAttribute(
+                datapoint.error
+            )}">[?${path}]</span>`
             return text ? `${text} ${error}` : error
         }
         const formatted = formatDatapoint(datapoint)
@@ -290,13 +299,11 @@ export const replaceDatapoints = ({
             `class="datapoint"`,
             `data-datapoint-block="${escapeAttribute(datapoint.blockId)}"`,
             `data-datapoint-edition="${escapeAttribute(datapoint.editionId)}"`,
-            `data-datapoint="${escapeAttribute(datapoint.elementIds.join(' '))}"`,
-            // make it focusable so keyboard users can trigger the highlight too
-            `tabindex="0"`
+            `data-datapoint="${escapeAttribute(datapoint.elementIds.join(' '))}"`
         ]
-        // when the text doesn't show the value, show it on hover instead
+        // when the text doesn't show the value, show it in a tooltip instead
         if (text) {
-            attributes.push(`title="${escapeAttribute(formatted)}"`)
+            attributes.push(`data-datapoint-value="${escapeAttribute(formatted)}"`)
         }
         return `<span ${attributes.join(' ')}>${text ?? formatted}</span>`
     })

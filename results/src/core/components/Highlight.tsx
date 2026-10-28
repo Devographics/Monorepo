@@ -1,4 +1,11 @@
-import React, { Children, ReactElement, cloneElement, createContext, useContext, useState } from 'react'
+import React, {
+    Children,
+    ReactElement,
+    cloneElement,
+    createContext,
+    useContext,
+    useState
+} from 'react'
 import classNames from 'classnames'
 import { usePageContext } from 'core/helpers/pageContext'
 import './Highlight.scss'
@@ -25,17 +32,26 @@ export interface HighlightedDatapoint {
 interface HighlightContextValue {
     highlighted: HighlightedDatapoint | null
     setHighlighted: (highlighted: HighlightedDatapoint | null) => void
+    // called when a datapoint is clicked (e.g. to open the tab its chart is in)
+    select: (datapoint: HighlightedDatapoint) => void
 }
 
 const HighlightContext = createContext<HighlightContextValue>({
     highlighted: null,
-    setHighlighted: () => {}
+    setHighlighted: () => {},
+    select: () => {}
 })
 
-export const HighlightProvider = ({ children }: { children: React.ReactNode }) => {
+export const HighlightProvider = ({
+    children,
+    onSelect = () => {}
+}: {
+    children: React.ReactNode
+    onSelect?: (datapoint: HighlightedDatapoint) => void
+}) => {
     const [highlighted, setHighlighted] = useState<HighlightedDatapoint | null>(null)
     return (
-        <HighlightContext.Provider value={{ highlighted, setHighlighted }}>
+        <HighlightContext.Provider value={{ highlighted, setHighlighted, select: onSelect }}>
             {children}
         </HighlightContext.Provider>
     )
@@ -56,7 +72,7 @@ export interface HighlightIds {
 export type HighlightState = 'target' | 'ancestor' | null
 
 // a datapoint for a filtered series (`foo_2`) also belongs to variant `foo`
-const belongsToBlock = (datapointBlockId: string, blockId: string) =>
+export const belongsToBlock = (datapointBlockId: string, blockId: string) =>
     datapointBlockId === blockId || new RegExp(`^${blockId}_\\d+$`).test(datapointBlockId)
 
 export const getElementId = ({ bucketId, facetBucketId }: HighlightIds) => {
