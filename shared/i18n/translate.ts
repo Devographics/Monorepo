@@ -33,8 +33,7 @@ const applyTemplate = ({
     key: string
 }) => {
     try {
-        // Detect any text within {}
-        return template(t, { interpolate: /{([\s\S]+?)}/g })(values)
+        return template(t, { interpolate: INTERPOLATION_REGEX })(values)
     } catch (error) {
         // note: console.error() crashes Gatsby build on render.com
         // console.error(error)
@@ -79,8 +78,12 @@ export const makeTranslatorFunc =
         return result as StringTranslatorResult
     }
 
-/** Matches anything betwen { }, tolerate spaces, allow multiple interpolations */
-const INTERPOLATION_REGEX = /{([\s\S]+?)}/g
+/**
+ * Matches anything betwen { }, tolerate spaces, allow multiple interpolations
+ * Skips anything containing a dot, such as takeaway datapoints ({$main.range_0_4}),
+ * which are handled separately by the results app
+ */
+const INTERPOLATION_REGEX = /{([^{}.]+?)}/g
 /**
  * TODO: see the perf impact of computing the templates
  * Precomputing is probably useless, but we could cache computations

@@ -1,8 +1,4 @@
-// @see https://bun.sh/docs/cli/test
-// TODO: make node:test work with TS to avoid depending on Bun ?
-// Run this file with 
-// bun test ./tokenExpr.test.ts
-import { test, expect } from "bun:test"
+import { test, expect } from "vitest"
 import { TokenExpr } from "./tokenExpr"
 
 const makeCtx = () => ({
@@ -10,19 +6,19 @@ const makeCtx = () => ({
 })
 test("html2022.foobar matches {{editionId}}.foobar, but no other edition", () => {
     const te = new TokenExpr("{{editionId}}.foobar", makeCtx())
-    expect(te.match("html2022.foobar")).toBeTrue()
+    expect(te.match("html2022.foobar")).toBe(true)
     // incorrect year
-    expect(te.match("html2023.foobar")).toBeFalse()
+    expect(te.match("html2023.foobar")).toBe(false)
 })
 test("substring 'foobar' doesn't match complete string 'foobar.action", () => {
     const te = new TokenExpr("foobar", makeCtx())
-    expect(te.match("foobar")).toBeTrue()
+    expect(te.match("foobar")).toBe(true)
     // suffix, it's not the same string
-    expect(te.match("foobar.action")).toBeFalse()
+    expect(te.match("foobar.action")).toBe(false)
 
 })
 test("wildcard matches any param", () => {
     const te = new TokenExpr("*.title", makeCtx())
-    expect(te.match("hello.title")).toBeTrue()
-    expect(te.match("hello.nope")).toBeFalse()
+    expect(te.match("hello.title")).toBe(true)
+    expect(te.match("hello.nope")).toBe(false)
 })

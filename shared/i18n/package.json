@@ -8,17 +8,18 @@
         "./server": "./server/index.ts"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "vitest run"
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
         "@devographics/debug": "workspace:^1.0.0",
-        "@devographics/helpers": "workspace:^1.0.0",
         "@devographics/fetch": "workspace:^1.0.0",
+        "@devographics/helpers": "workspace:^1.0.0",
         "@devographics/redis": "workspace:^1.0.0",
         "@devographics/types": "workspace:^1.0.0",
-        "@types/node": "^18.11.18"
+        "@types/node": "^18.11.18",
+        "vitest": "^5.0.1"
     },
     "dependencies": {
         "@types/lodash": "^4.17.0",
