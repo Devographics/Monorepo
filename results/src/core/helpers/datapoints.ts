@@ -47,6 +47,8 @@ export interface ResolvedDatapoint {
     // path with `$main` expanded
     fullPath: string
     blockId: string
+    // id of the question the block is about
+    questionId?: string
     // ids of the chart elements the datapoint refers to, e.g. `company_employee.increased`
     elementIds: string[]
     stat: DatapointStat
@@ -126,7 +128,15 @@ const getEditionStat = (editionData: any, stat: DatapointStat) => {
 
 // stat for a single bucket; percentages are relative to the parent
 // (question for top-level buckets, bucket for facet buckets)
-const getBucketStat = (bucket: any, stat: DatapointStat, isFacetBucket: boolean) => {
+const getBucketStat = ({
+    bucket,
+    stat,
+    isFacetBucket
+}: {
+    bucket: any
+    stat: DatapointStat
+    isFacetBucket: boolean
+}) => {
     if (stat === 'percentage') {
         return isFacetBucket ? bucket.percentageBucket : bucket.percentageQuestion
     } else if (stat === 'count') {
@@ -166,6 +176,7 @@ export const resolveDatapoint = (path: string, context: DatapointContext): Resol
         result.error = `No data found for block "${blockId}"`
         return result
     }
+    result.questionId = blockData.id
     const editionData = getEditionData(blockData, editionId)
     if (!editionData) {
         result.error = `No data found for edition "${editionId}" in block "${blockId}"`
@@ -222,7 +233,7 @@ export const resolveDatapoint = (path: string, context: DatapointContext): Resol
 
     let total = 0
     for (const { bucket, elementId } of buckets) {
-        const value = getBucketStat(bucket, stat, isFacetBucket)
+        const value = getBucketStat({ bucket, stat, isFacetBucket })
         if (value === undefined || value === null) {
             result.error = `No "${stat}" value found for "${elementId}" in block "${blockId}"`
             return result
@@ -233,3 +244,49 @@ export const resolveDatapoint = (path: string, context: DatapointContext): Resol
     result.value = total
     return result
 }
+
+/*
+
+Rendering
+
+Replace `{path}` with the formatted value, and `[text]{path}` with the text,
+both wrapped in a span pointing to the chart elements. Paths must contain a dot,
+other `{…}` placeholders are left alone.
+
+The app uses renderDatapoints() (see renderDatapoints.ts), which calls this
+with the page's data and formatting.
+
+*/
+
+const DATAPOINT_REGEX = /(?:\[([^\]]+)\])?\{([^{}\s]+\.[^{}\s]*)\}/g
+
+const escapeAttribute = (s: string) => s.replaceAll('&', '&amp;').replaceAll('"', '&quot;')
+
+export const replaceDatapoints = ({
+    html,
+    context,
+    formatDatapoint
+}: {
+    html: string
+    context: DatapointContext
+    formatDatapoint: (datapoint: ResolvedDatapoint) => string
+}) =>
+    html.replace(DATAPOINT_REGEX, (_match, text: string | undefined, path: string) => {
+        const datapoint = resolveDatapoint(path, context)
+        if (datapoint.error) {
+            console.warn(`// Datapoint error in takeaway for block "${context.blockId}": ${datapoint.error}`)
+            const error = `<span class="datapoint-error" title="${escapeAttribute(datapoint.error)}">[?${path}]</span>`
+            return text ? `${text} ${error}` : error
+        }
+        const formatted = formatDatapoint(datapoint)
+        const attributes = [
+            `class="datapoint"`,
+            `data-datapoint-block="${escapeAttribute(datapoint.blockId)}"`,
+            `data-datapoint="${escapeAttribute(datapoint.elementIds.join(' '))}"`
+        ]
+        // when the text doesn't show the value, show it on hover instead
+        if (text) {
+            attributes.push(`title="${escapeAttribute(formatted)}"`)
+        }
+        return `<span ${attributes.join(' ')}>${text ?? formatted}</span>`
+    })

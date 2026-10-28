@@ -5,6 +5,7 @@ import { BlockVariantDefinition } from 'core/types'
 import T from 'core/i18n/T'
 import { useI18n } from '@devographics/react-i18n'
 import { usePageContext } from 'core/helpers/pageContext'
+import { renderDatapoints } from 'core/helpers/renderDatapoints'
 
 const BlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
     const { getFallbacks } = useI18n()
@@ -30,9 +31,14 @@ const BlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
     ]
 
     const hasTakeaway = !getFallbacks(keysList)?.missing
+
+    // replace {path} and [text]{path} datapoints with values from the block's data
+    const transform = (takeaway: string) =>
+        renderDatapoints({ takeaway, pageContext, blockId: block.id })
+
     return hasTakeaway ? (
         <Takeaway_>
-            <T keysList={keysList} html={true} md={true} />
+            <T keysList={keysList} html={true} md={true} transform={transform} />
         </Takeaway_>
     ) : null
 }

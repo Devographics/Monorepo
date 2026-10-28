@@ -22,6 +22,16 @@
         "3601"
       ],
       "port": 3601
+    },
+    {
+      "name": "results-clean",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "results",
+        "dev:clean"
+      ],
+      "port": 8001
     }
   ]
 }

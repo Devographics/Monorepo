@@ -48,6 +48,8 @@ Reads another edition from the same data: `{$main:devs2025.up_to_employee}`. Onl
 
 ## Named values
 
+> Not implemented yet: postponed as an optional nice-to-have.
+
 Figures that can't be read from the data directly (ratios, differences, editions the data doesn't include, counts hidden in `cutoff_answers`…) are hardcoded once, for all locales, on the block or variant in `raw_sitemap.yml`:
 
 ```yaml
@@ -120,4 +122,5 @@ A script writes a `.yml` report (and changes nothing) listing, for every takeawa
 ## Implementation
 
 - Path resolver: `results/src/core/helpers/datapoints.ts` (tests in `results/tests/`, run with `npm test` in `results`).
+- Rendering: `renderDatapoints({ takeaway, pageContext, blockId })` in `results/src/core/helpers/renderDatapoints.ts` (formatting included), called from `BlockTakeaway` through `T`'s `transform` prop; the pure string replacement is `replaceDatapoints` in `datapoints.ts`. Values are formatted with the locale-aware `formatLocalizedValue` from `results/src/core/charts/common2/helpers/format.ts` (chart labels don't use it yet).
 - i18n placeholders skip anything containing a dot: `INTERPOLATION_REGEX` in `shared/i18n/translate.ts` (tests in `shared/i18n/translate.test.ts`, run with `pnpm test` in `shared/i18n`).

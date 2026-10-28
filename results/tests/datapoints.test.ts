@@ -1,8 +1,13 @@
-// Run with: node --test tests/
-import { test } from 'node:test'
+// Run with: npm test
+import { test, mock } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-import { parseDatapointPath, resolveDatapoint } from '../src/core/helpers/datapoints.ts'
+import {
+    parseDatapointPath,
+    replaceDatapoints,
+    resolveDatapoint,
+    type ResolvedDatapoint
+} from '../src/core/helpers/datapoints.ts'
 
 const pageData = JSON.parse(
     readFileSync(new URL('./fixtures/devs2026_career.json', import.meta.url), 'utf8')
@@ -93,4 +98,45 @@ test('errors', () => {
         resolveDatapoint('employment_status_vs_salary.company_employee+freelance.median', context).error!,
         /cannot be combined/
     )
+})
+
+const formatDatapoint = (datapoint: ResolvedDatapoint) =>
+    datapoint.stat === 'percentage' ? `${Math.round(datapoint.value!)}%` : String(datapoint.value)
+
+test('renders values', () => {
+    const html = replaceDatapoints({
+        html: '<p>Only {$main.range_0_4} of respondents</p>',
+        context: getContext('years_of_experience'),
+        formatDatapoint
+    })
+    assert.equal(
+        html,
+        '<p>Only <span class="datapoint" data-datapoint-block="years_of_experience" data-datapoint="range_0_4">9%</span> of respondents</p>'
+    )
+})
+
+test('renders link-only text with the value as a title', () => {
+    const html = replaceDatapoints({
+        html: '[the <strong>most</strong> common]{$main_vs_income_evolution.company_employee+freelance.increased}',
+        context: getContext('employment_status'),
+        formatDatapoint
+    })
+    assert.equal(
+        html,
+        '<span class="datapoint" data-datapoint-block="employment_status_vs_income_evolution" data-datapoint="company_employee.increased freelance.increased" title="85%">the <strong>most</strong> common</span>'
+    )
+})
+
+test('leaves other placeholders and brackets alone', () => {
+    const html = '<p>Hello {name}, see [this] {not a path} and [a link](https://example.com)</p>'
+    const context = getContext('years_of_experience')
+    assert.equal(replaceDatapoints({ html, context, formatDatapoint }), html)
+})
+
+test('renders errors', () => {
+    mock.method(console, 'warn', () => {})
+    const context = getContext('years_of_experience')
+    assert.match(replaceDatapoints({ html: '{$main.range_foo}', context, formatDatapoint }), /^<span class="datapoint-error" title="No bucket &quot;range_foo&quot;[^"]*">\[\?\$main.range_foo\]<\/span>$/)
+    assert.match(replaceDatapoints({ html: '[some text]{$main.range_foo}', context, formatDatapoint }), /^some text <span class="datapoint-error"/)
+    mock.restoreAll()
 })

@@ -21,6 +21,8 @@ interface TProps {
     element?: string
     fallback?: string
     className?: string
+    // post-process the translated string (e.g. to render takeaway datapoints)
+    transform?: (translation: string) => string
 }
 
 export const T = ({
@@ -34,7 +36,8 @@ export const T = ({
     isFallback = false,
     useShort = false,
     className,
-    element
+    element,
+    transform
 }: TProps) => {
     const { getString, getFallbacks } = useI18n()
     const { modKeyDown } = useKeydownContext()
@@ -111,6 +114,10 @@ export const T = ({
     }
 
     props.className = classNames.join(' ')
+
+    if (transform && translation) {
+        translation = transform(translation)
+    }
 
     const isHtml = md || html
     const Element = element ? element : isHtml ? 'div' : 'span'

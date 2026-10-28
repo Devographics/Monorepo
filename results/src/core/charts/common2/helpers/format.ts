@@ -1,5 +1,5 @@
-import { QuestionMetadata } from '@devographics/types'
-import round from 'lodash/round'
+import type { QuestionMetadata } from '@devographics/types'
+import round from 'lodash/round.js'
 
 /*
 
@@ -108,5 +108,70 @@ export const formatQuestionValue = (value: number, question?: QuestionMetadata) 
         return formatYears(value)
     } else {
         return formatNumber(value)
+    }
+}
+
+/*
+
+Locale-aware formatting (currently used for takeaways)
+
+Note: chart formatters above are called as formatValue(value, question, chartState),
+so they can't simply take an extra locale argument
+
+*/
+export type LocalizedUnit = 'percentage' | 'count' | 'usd' | 'jpy' | 'years'
+
+export const getQuestionUnit = (question?: QuestionMetadata): LocalizedUnit => {
+    if (!question) {
+        return 'count'
+    } else if (isDollar(question)) {
+        return 'usd'
+    } else if (isYen(question)) {
+        return 'jpy'
+    } else if (isPercentage(question)) {
+        return 'percentage'
+    } else if (isYears(question)) {
+        return 'years'
+    } else {
+        return 'count'
+    }
+}
+
+export const formatLocalizedValue = ({
+    value,
+    unit,
+    localeId
+}: {
+    value: number
+    unit: LocalizedUnit
+    localeId: string
+}) => {
+    if (unit === 'percentage') {
+        return new Intl.NumberFormat(localeId, {
+            style: 'percent',
+            maximumFractionDigits: 2
+        }).format(roundPercentage(value) / 100)
+    } else if (unit === 'usd') {
+        return new Intl.NumberFormat(localeId, {
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0
+        }).format(value)
+    } else if (unit === 'jpy') {
+        // Japanese uses the currency name to get 950万円 instead of ￥950万
+        return new Intl.NumberFormat(localeId, {
+            style: 'currency',
+            currency: 'JPY',
+            notation: 'compact',
+            currencyDisplay: localeId.startsWith('ja') ? 'name' : 'narrowSymbol'
+        }).format(value)
+    } else if (unit === 'years') {
+        return new Intl.NumberFormat(localeId, {
+            style: 'unit',
+            unit: 'year',
+            unitDisplay: 'long'
+        }).format(value)
+    } else {
+        return new Intl.NumberFormat(localeId).format(value)
     }
 }
