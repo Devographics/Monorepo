@@ -434,6 +434,37 @@
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_experience_vs_salary
             - template: tokyodev_vs_employer_type
+            # those here less than a year, 1–3 years, and 4 years or more
+            - template: tokyodev_variant_base
+              id: residency_status_by_years_in_japan
+              tabId: tabs.by_years_in_japan
+              parameters:
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: years_in_japan
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_under_1
+                      - conditions:
+                            - fieldId: years_in_japan
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_1_3
+                      - conditions:
+                            - fieldId: years_in_japan
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_4_6
+                                  - range_7_9
+                                  - range_10_12
+                                  - range_13_15
+                                  - range_16_20
+                                  - range_over_20
 
       - id: country
         template: tokyodev_multiple_options2
@@ -461,55 +492,29 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            - template: tokyodev_variant_base
+              id: age_by_remote_work_policy
+              tabId: tabs.by_remote_work_policy
+              parameters:
+                  sort: { property: options }
+              filtersState:
+                  facet:
+                      sectionId: job_info
+                      id: remote_work_policy
 
       - id: gender
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: tokyodev_vs_salary
+            - template: tokyodev_vs_experience_vs_salary
             - template: tokyodev_vs_employer_type
-            - template: tokyodev_vs_years_of_experience
-            - template: tokyodev_variant_base
-              id: gender_by_compensation_by_experience
-              tabId: tabs.by_compensation_by_experience
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: years_of_experience
-                              sectionId: user_info
-                              operator: in
-                              value:
-                                  - range_under_1
-                                  - range_1_3
-                      - conditions:
-                            - fieldId: years_of_experience
-                              sectionId: user_info
-                              operator: in
-                              value:
-                                  - range_4_6
-                      - conditions:
-                            - fieldId: years_of_experience
-                              sectionId: user_info
-                              operator: in
-                              value:
-                                  - range_7_9
-                      - conditions:
-                            - fieldId: years_of_experience
-                              sectionId: user_info
-                              operator: in
-                              value:
-                                  - range_10_12
-                                  - range_13_15
-                                  - range_16_20
-                                  - range_over_20
-                  facet:
-                      sectionId: compensation
-                      id: current_total_annual_compensation
 
       - id: identify_as_lgbtq
         template: tokyodev_multiple_options2_combined
         variants:
             - template: tokyodev_vs_salary
+            - template: tokyodev_vs_experience_vs_salary
             - template: tokyodev_vs_employer_type
             - template: tokyodev_variant_base
               id: identify_as_lgbtq_by_gender
@@ -577,6 +582,71 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            # Japanese ability of those here 3 years or less, 4–9 years, and 10 years or more
+            - template: tokyodev_variant_base
+              id: years_in_japan_by_japanese_proficiency
+              fieldId: language_proficiency_japanese
+              i18nNamespace: language_proficiency_japanese
+              tabId: tabs.by_japanese_proficiency
+              queryOptions:
+                  sectionId: user_info
+              parameters:
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: years_in_japan
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_under_1
+                                  - range_1_3
+                      - conditions:
+                            - fieldId: years_in_japan
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_4_6
+                                  - range_7_9
+                      - conditions:
+                            - fieldId: years_in_japan
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_10_12
+                                  - range_13_15
+                                  - range_16_20
+                                  - range_over_20
+            # where those here less than 10 years and 10 years or more lived
+            - template: tokyodev_variant_base
+              id: years_in_japan_by_japan_province
+              fieldId: japan_province
+              i18nNamespace: japan_province
+              tabId: tabs.by_japanese_province
+              queryOptions:
+                  sectionId: user_info
+              parameters:
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: years_in_japan
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_under_1
+                                  - range_1_3
+                                  - range_4_6
+                                  - range_7_9
+                      - conditions:
+                            - fieldId: years_in_japan
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_10_12
+                                  - range_13_15
+                                  - range_16_20
+                                  - range_over_20
 
       - id: professional_qualifications
         template: tokyodev_multiple_options2_combined
@@ -598,6 +668,37 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            # AI impact for native speakers, fluent speakers, and business-level or below
+            - template: tokyodev_variant_base
+              id: language_proficiency_english_by_ai_impact
+              fieldId: ai_impact
+              i18nNamespace: ai_impact
+              tabId: tabs.by_ai_impact
+              queryOptions:
+                  sectionId: ai_usage
+              parameters:
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: language_proficiency_english
+                              sectionId: user_info
+                              operator: eq
+                              value: native_bilingual
+                      - conditions:
+                            - fieldId: language_proficiency_english
+                              sectionId: user_info
+                              operator: eq
+                              value: fluent
+                      - conditions:
+                            - fieldId: language_proficiency_english
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - none
+                                  - basic
+                                  - conversational
+                                  - business
 
       - id: language_proficiency_japanese
         template: tokyodev_multiple_options2
@@ -611,13 +712,33 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
-            - id: language_proficiency_japanese_by_years_in_japan
-              template: tokyodev_variant_base
-              tabId: tabs.by_years_in_japan
+            # negative aspects of life in Japan for basic or no Japanese vs business-level or better
+            - template: tokyodev_variant_base
+              id: language_proficiency_japanese_by_negative_aspects
+              fieldId: life_japan_negative_aspects
+              i18nNamespace: life_japan_negative_aspects
+              tabId: tabs.by_negative_aspects
+              queryOptions:
+                  sectionId: life_in_japan
+              parameters:
+                  showNoAnswer: false
               filtersState:
-                  facet:
-                      sectionId: user_info
-                      id: years_in_japan
+                  filters:
+                      - conditions:
+                            - fieldId: language_proficiency_japanese
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - none
+                                  - basic
+                      - conditions:
+                            - fieldId: language_proficiency_japanese
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - business
+                                  - fluent
+                                  - native_bilingual
 
       - id: jlpt_level
         template: tokyodev_multiple_options2_combined
@@ -625,6 +746,39 @@
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_experience_vs_salary
             - template: tokyodev_vs_employer_type
+            # positive aspects of life in Japan for N3 or lower (or no JLPT), N2, and N1
+            - template: tokyodev_variant_base
+              id: jlpt_level_by_positive_aspects
+              fieldId: life_japan_positive_aspects
+              i18nNamespace: life_japan_positive_aspects
+              tabId: tabs.by_positive_aspects
+              queryOptions:
+                  sectionId: life_in_japan
+              parameters:
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: jlpt_level
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - none
+                                  - n5
+                                  - n4
+                                  - n3
+                      - conditions:
+                            - fieldId: jlpt_level
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - n2
+                      - conditions:
+                            - fieldId: jlpt_level
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - n1
             - id: jlpt_level_by_japanese_ability
               tabId: tabs.by_japanese_ability
               template: tokyodev_variant_base
@@ -690,6 +844,23 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            - template: tokyodev_variant_base
+              id: languages_used_colleagues_japanese_by_remote_work_policy
+              tabId: tabs.by_remote_work_policy
+              filtersState:
+                  facet:
+                      sectionId: job_info
+                      id: remote_work_policy
+            - template: tokyodev_variant_base
+              id: languages_used_colleagues_japanese_by_overtime_hours
+              tabId: tabs.by_overtime_hours
+              # the median is 1–9 hours for every group, so show the full breakdown instead
+              chartOptions:
+                  defaultView: percentageBucket
+              filtersState:
+                  facet:
+                      sectionId: job_info
+                      id: overtime_hours
 
       - id: searching_for_job
         template: tokyodev_multiple_options2
@@ -730,8 +901,33 @@
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_experience_vs_salary
             - template: tokyodev_vs_employer_type
+            # job search status of those who experienced discrimination vs those who did not
+            - template: tokyodev_variant_base
+              id: discrimination_issues_by_job_search_status
+              fieldId: searching_for_job
+              i18nNamespace: searching_for_job
+              queryOptions:
+                  sectionId: job_info
+              tabId: tabs.by_job_search_status
+              parameters:
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: discrimination_issues
+                              sectionId: job_info
+                              operator: nin
+                              value:
+                                  - na
+                      - conditions:
+                            - fieldId: discrimination_issues
+                              sectionId: job_info
+                              operator: eq
+                              value: na
             - template: tokyodev_variant_base
               id: discrimination_issues_vs_job_happiness
+              # the API returns an empty "other answers" bucket, which the average view can't draw
+              hideOtherAnswersBucket: true
               tabId: tabs.by_job_happiness
               chartOptions:
                   defaultView: average
@@ -771,14 +967,24 @@
               parameters:
                   limit: 20
             - template: tokyodev_variant_base
-              id: industry_sector_by_japanese_usage
-              tabId: tabs.by_japanese_usage
+              id: industry_sector_by_ai_management_pressure
+              tabId: tabs.by_ai_management_pressure
               parameters:
                   limit: 20
+                  # percentages of those who answered, as in the takeaway
+                  showNoAnswer: false
+              # the options are numeric, which would default to a median view
+              chartOptions:
+                  defaultView: percentageBucket
               filtersState:
                   facet:
-                      sectionId: job_info
-                      id: languages_used_colleagues_japanese
+                      sectionId: ai_usage
+                      id: ai_management_pressure
+                  # industries where the most employers require AI use first
+                  options:
+                      mode: facet
+                      sort: "4"
+                      order: desc
 
       - id: working_hours_policy
         template: tokyodev_multiple_options2_combined
@@ -829,6 +1035,22 @@
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_experience_vs_salary
             - template: tokyodev_vs_employer_type
+            # one row per amount of overtime, showing the share with fixed overtime pay
+            - template: tokyodev_variant_base
+              id: overtime_pay_by_overtime_hours
+              fieldId: overtime_hours
+              i18nNamespace: overtime_hours
+              tabId: tabs.by_overtime_hours
+              queryOptions:
+                  sectionId: job_info
+              parameters:
+                  sort: { property: options }
+                  # percentages of those who answered, as in the takeaway
+                  showNoAnswer: false
+              filtersState:
+                  facet:
+                      sectionId: job_info
+                      id: overtime_pay
 
       - id: remote_work_policy
         template: tokyodev_multiple_options2
@@ -844,8 +1066,6 @@
               queryOptions: { sectionId: job_info }
               parameters:
                   sort: { property: options }
-            - template: tokyodev_vs_years_of_experience
-              queryOptions: { sectionId: job_info }
             - template: tokyodev_variant_base
               id: remote_work_policy_vs_job_happiness
               tabId: tabs.by_job_happiness
@@ -895,7 +1115,29 @@
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_experience_vs_salary
             - template: tokyodev_vs_employer_type
-            - template: tokyodev_vs_years_of_experience
+            # permanent employees vs freelancers vs contract employees
+            - template: tokyodev_variant_base
+              id: income_evolution_by_employment_status
+              tabId: tabs.by_employment_status
+              parameters:
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: employment_status
+                              sectionId: job_info
+                              operator: eq
+                              value: permanent_employee
+                      - conditions:
+                            - fieldId: employment_status
+                              sectionId: job_info
+                              operator: eq
+                              value: freelancer_self_employed
+                      - conditions:
+                            - fieldId: employment_status
+                              sectionId: job_info
+                              operator: eq
+                              value: contract_employee
 
 - id: technology
   path: /technology
@@ -1042,8 +1284,29 @@
               parameters:
                   cutoff: 1
                   sort: { property: options }
-            - template: tokyodev_vs_experience_vs_salary
             - template: tokyodev_vs_employer_type
+            # Claude Code users vs everyone else
+            - template: tokyodev_variant_base
+              id: ai_generated_code_balance_by_claude_code
+              tabId: tabs.by_claude_code_usage
+              parameters:
+                  cutoff: 1
+                  sort: { property: options }
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: ai_tools
+                              sectionId: ai_usage
+                              operator: in
+                              value:
+                                  - claude_code
+                      - conditions:
+                            - fieldId: ai_tools
+                              sectionId: ai_usage
+                              operator: nin
+                              value:
+                                  - claude_code
 
       - id: ai_code_generation_frequency
         template: tokyodev_multiple_options2_combined
@@ -1085,6 +1348,19 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            # share of code generated with AI, by employer stance (median view)
+            - template: tokyodev_variant_base
+              id: ai_management_pressure_by_ai_generated_code_balance
+              # the API returns an empty "other answers" bucket, which the boxplot can't draw
+              hideOtherAnswersBucket: true
+              tabId: tabs.by_ai_generated_code_balance
+              parameters:
+                  sort: { property: options }
+                  showNoAnswer: false
+              filtersState:
+                  facet:
+                      sectionId: ai_usage
+                      id: ai_generated_code_balance
 
       - id: ai_impact
         template: tokyodev_multiple_options2_combined
@@ -1096,6 +1372,24 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            # one row per level of agreement that AI made respondents more productive
+            - template: tokyodev_variant_base
+              id: ai_impact_by_more_productive
+              fieldId: more_productive
+              i18nNamespace: opinions
+              tabId: tabs.by_more_productive
+              queryOptions:
+                  sectionId: ai_usage
+              parameters:
+                  sort: { property: options }
+                  showNoAnswer: false
+              # ai_impact's options are numeric, which would default to a median view
+              chartOptions:
+                  defaultView: percentageBucket
+              filtersState:
+                  facet:
+                      sectionId: ai_usage
+                      id: ai_impact
 
 - id: life_in_japan
   path: /life-in-japan
@@ -1106,37 +1400,11 @@
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_experience_vs_salary
             - template: tokyodev_vs_employer_type
-            - id: life_japan_positive_aspects_by_years_in_japan
-              tabId: tabs.by_years_in_japan
+            - id: life_japan_positive_aspects_by_americans
+              tabId: tabs.by_americans
               template: tokyodev_variant_base
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: years_in_japan
-                              sectionId: user_info
-                              operator: in
-                              value:
-                                  - range_under_1
-                                  - range_1_3
-                      - conditions:
-                            - fieldId: years_in_japan
-                              sectionId: user_info
-                              operator: in
-                              value:
-                                  - range_10_12
-                                  - range_13_15
-                                  - range_16_20
-                                  - range_over_20
-
-      - id: life_japan_negative_aspects
-        template: tokyodev_multiple_options2_combined
-        variants:
-            - template: tokyodev_vs_salary
-            - template: tokyodev_vs_experience_vs_salary
-            - template: tokyodev_vs_employer_type
-            - id: life_japan_negative_aspects_vs_country
-              tabId: tabs.by_country
-              template: tokyodev_variant_base
+              parameters:
+                  showNoAnswer: false
               filtersState:
                   filters:
                       - conditions:
@@ -1147,21 +1415,37 @@
                       - conditions:
                             - fieldId: country
                               sectionId: user_info
-                              operator: eq
-                              value: IND
-                      - conditions:
-                            - fieldId: country
-                              sectionId: user_info
-                              operator: eq
-                              value: JPN
-                      - conditions:
-                            - fieldId: country
-                              sectionId: user_info
                               operator: nin
                               value:
                                   - USA
-                                  - IND
-                                  - JPN
+
+      - id: life_japan_negative_aspects
+        template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_experience_vs_salary
+            - template: tokyodev_vs_employer_type
+            # unhappy (or very unhappy) with their job vs very happy
+            - id: life_japan_negative_aspects_by_job_happiness
+              tabId: tabs.by_job_happiness
+              template: tokyodev_variant_base
+              parameters:
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: job_happiness
+                              sectionId: job_info
+                              operator: in
+                              # numeric options are passed to the API as value_N enums
+                              value:
+                                  - value_0
+                                  - value_1
+                      - conditions:
+                            - fieldId: job_happiness
+                              sectionId: job_info
+                              operator: eq
+                              value: value_4
 
       - id: quality_of_life_over_time
         template: tokyodev_multiple_options2_combined
@@ -1187,6 +1471,34 @@
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_experience_vs_salary
             - template: tokyodev_vs_employer_type
+            # the four most common residency statuses
+            - template: tokyodev_variant_base
+              id: new_immigration_measures_by_residency_status
+              tabId: tabs.by_residency_status
+              parameters:
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: residency_status
+                              sectionId: user_info
+                              operator: eq
+                              value: permanent_resident
+                      - conditions:
+                            - fieldId: residency_status
+                              sectionId: user_info
+                              operator: eq
+                              value: engineer
+                      - conditions:
+                            - fieldId: residency_status
+                              sectionId: user_info
+                              operator: eq
+                              value: spouse_dependent_japanese_permanent_resident
+                      - conditions:
+                            - fieldId: residency_status
+                              sectionId: user_info
+                              operator: eq
+                              value: hsfp
 
       - id: yen_value
         template: tokyodev_multiple_options2_combined
@@ -1210,6 +1522,43 @@
             - template: tokyodev_vs_employer_type
               queryOptions:
                   addBucketsEntities: true
+            # men vs women
+            - template: tokyodev_variant_base
+              id: communities_by_gender
+              tabId: tabs.by_gender
+              parameters:
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: man
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: woman
+            # coding bootcamp graduates vs everyone else
+            - template: tokyodev_variant_base
+              id: communities_by_coding_bootcamp
+              tabId: tabs.by_coding_bootcamp
+              parameters:
+                  showNoAnswer: false
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: professional_qualifications
+                              sectionId: user_info
+                              operator: eq
+                              value: coding_bootcamp
+                      - conditions:
+                            - fieldId: professional_qualifications
+                              sectionId: user_info
+                              operator: nin
+                              value:
+                                  - coding_bootcamp
             - template: tokyodev_vs_years_of_experience
 
 - id: _user_metadata
