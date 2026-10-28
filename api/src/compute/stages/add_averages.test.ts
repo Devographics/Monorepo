@@ -301,7 +301,8 @@ describe('addAverages', () => {
             expect(results[0].buckets[0][AVERAGE]).toBe(0)
         })
 
-        test('is skipped for the "na" (not applicable) bucket', async () => {
+        test('is calculated for the "na" bucket like any other bucket', async () => {
+            // e.g. respondents who picked "🚫 None" on a multiple-choice question
             const results = [
                 editionData([
                     { id: NOT_APPLICABLE, facetBuckets: [{ id: 'high', count: 1 }] },
@@ -309,8 +310,8 @@ describe('addAverages', () => {
                 ])
             ]
             await addAverages(results, otherAxis, rangeAxis)
-            expect(results[0].buckets[0][AVERAGE]).toBeUndefined()
-            expect(results[0].buckets[1][AVERAGE]).toBeUndefined()
+            expect(results[0].buckets[0][AVERAGE]).toBe(30)
+            expect(results[0].buckets[1][AVERAGE]).toBe(0)
         })
     })
 

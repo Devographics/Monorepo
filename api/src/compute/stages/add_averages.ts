@@ -137,26 +137,26 @@ export async function addAverages(
         }
         // calculate averages of all facet buckets for each top-level bucket
         for (let bucket of editionData.buckets) {
-            if (bucket.id !== NOT_APPLICABLE) {
-                if (bucket.hasInsufficientData) {
-                    bucket[BucketUnits.AVERAGE] = 0
-                } else {
-                    const option = findBucketOption(axis1?.options, bucket)
-                    if (bucket.facetBuckets && calculateAxis2Average) {
-                        const average = calculateAverage({
-                            buckets: bucket.facetBuckets,
-                            axis: axis2
-                        })
-                        if (!isNil(average) && !isNaN(average)) {
-                            bucket[BucketUnits.AVERAGE] = average
-                        }
-                    } else if (option?.average) {
-                        // bucket is a range with a hardcoded average value
-                        // note: this is not actually an "averageByFacet" but we can reuse
-                        // the same property for now
-                        // TODO: add a note explaining in which scenario we use this
-                        bucket[BucketUnits.AVERAGE] = option.average
+            if (bucket.hasInsufficientData) {
+                bucket[BucketUnits.AVERAGE] = 0
+            } else {
+                const option = findBucketOption(axis1?.options, bucket)
+                if (bucket.facetBuckets && calculateAxis2Average) {
+                    // note: an "na" bucket (e.g. "🚫 None" on a multiple-choice question)
+                    // is a real group of respondents, so it gets a facet average too
+                    const average = calculateAverage({
+                        buckets: bucket.facetBuckets,
+                        axis: axis2
+                    })
+                    if (!isNil(average) && !isNaN(average)) {
+                        bucket[BucketUnits.AVERAGE] = average
                     }
+                } else if (bucket.id !== NOT_APPLICABLE && option?.average) {
+                    // bucket is a range with a hardcoded average value
+                    // note: this is not actually an "averageByFacet" but we can reuse
+                    // the same property for now
+                    // TODO: add a note explaining in which scenario we use this
+                    bucket[BucketUnits.AVERAGE] = option.average
                 }
             }
         }
