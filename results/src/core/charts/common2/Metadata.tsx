@@ -1,4 +1,5 @@
 import Tooltip from 'core/components/Tooltip'
+import { usePageContext } from 'core/helpers/pageContext'
 import './Metadata.scss'
 import { QuestionMetadata, sortProperties, YearCompletion } from '@devographics/types'
 import T from 'core/i18n/T'
@@ -37,21 +38,27 @@ export const Metadata = <T,>({
         question?: QuestionMetadata
     }) => {
     const { getString } = useI18n()
+    const { localeId } = usePageContext()
     const seriesMaxBucketCount = seriesMetadata?.seriesMaxBucketCount
 
     const firstSerieMetadata = getSerieMetadata({ serie: series[0], block }) || {}
     const { limit, cutoff, axis1Sort } = firstSerieMetadata
     const items = []
-    const total = formatNumber(total_ ?? completion?.total ?? 0)
+    const total = formatNumber({ value: total_ ?? completion?.total ?? 0, localeId })
 
     if (completion) {
         const { count, percentageSurvey } = completion
 
-        items.push({ id: 'respondents', icon: UserIcon, value: formatNumber(count), total })
+        items.push({
+            id: 'respondents',
+            icon: UserIcon,
+            value: formatNumber({ value: count, localeId }),
+            total
+        })
         items.push({
             id: 'completion',
             icon: PercentIcon,
-            value: formatPercentage(percentageSurvey),
+            value: formatPercentage({ value: percentageSurvey, localeId }),
             total
         })
     }
@@ -59,7 +66,7 @@ export const Metadata = <T,>({
         items.push({
             id: 'average',
             icon: AverageIcon,
-            value: formatQuestionValue(average, question),
+            value: formatQuestionValue({ value: average, question, localeId }),
             total
         })
     }
@@ -67,7 +74,7 @@ export const Metadata = <T,>({
         items.push({
             id: 'median',
             icon: MedianIcon,
-            value: formatQuestionValue(median, question),
+            value: formatQuestionValue({ value: median, question, localeId }),
             total
         })
     }

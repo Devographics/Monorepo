@@ -1,4 +1,5 @@
 import React from 'react'
+import { usePageContext } from 'core/helpers/pageContext'
 import { AllToolsData, SectionMetadata, StandardQuestionData } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { useI18n } from '@devographics/react-i18n'
@@ -92,6 +93,7 @@ export const ToolsScatterplotBlock = (
     const { data } = series[0]
 
     const { getString } = useI18n()
+    const { localeId } = usePageContext()
     const theme = useTheme()
     const toolSections = useToolSections()
 
@@ -117,8 +119,8 @@ export const ToolsScatterplotBlock = (
                     chartState={chartState}
                     data={data}
                     useNodes={useNodes}
-                    axis1Formatter={formatNumber}
-                    axis2Formatter={v => formatPercentage(v * 100)}
+                    axis1Formatter={value => formatNumber({ value, localeId })}
+                    axis2Formatter={value => formatPercentage({ value: value * 100, localeId })}
                     axis1Label={axis1Label}
                     axis2Label={axis2Label}
                 />

@@ -1,4 +1,5 @@
 import T from 'core/i18n/T'
+import { usePageContext } from 'core/helpers/pageContext'
 import './Axis.scss'
 import React from 'react'
 import { FormatValueType, Tick } from './types'
@@ -18,6 +19,7 @@ export type AxisProps = {
 
 export const Axis = ({ variant, ticks, question, label, formatValue, r2 }: AxisProps) => {
     const interval = getInterval(ticks.length)
+    const { localeId } = usePageContext()
 
     return (
         <div className={`chart-axis chart-axis-horizontal chart-axis-${variant} chart-subgrid`}>
@@ -36,7 +38,7 @@ export const Axis = ({ variant, ticks, question, label, formatValue, r2 }: AxisP
                                 }}
                             >
                                 <div className="chart-axis-tick-label">
-                                    {formatValue(tick.value, question)}
+                                    {formatValue({ value: tick.value, question, localeId })}
                                 </div>
                             </div>
                         )

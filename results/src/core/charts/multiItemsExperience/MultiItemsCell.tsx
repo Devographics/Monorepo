@@ -1,4 +1,5 @@
 import React from 'react'
+import { usePageContext } from 'core/helpers/pageContext'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsChartState, ColumnId, CombinedBucket, GroupingOptions, Totals } from './types'
 import Tooltip from 'core/components/Tooltip'
@@ -29,6 +30,7 @@ export const MultiItemsCell = ({
     groupedTotals: Totals
 }) => {
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
+    const { localeId } = usePageContext()
 
     const theme = useTheme()
     const { getString } = useI18n()
@@ -67,7 +69,7 @@ export const MultiItemsCell = ({
             trigger={
                 <div className="multiexp-cell chart-cell" style={style} ref={ref}>
                     <div className="multiexp-cell-segment multiexp-cell-segment-experience">
-                        {showLabel && <CellLabel label={formatPercentage(value)} />}
+                        {showLabel && <CellLabel label={formatPercentage({ value, localeId })} />}
                     </div>
 
                     {!isNeutral && (

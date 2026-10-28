@@ -1,11 +1,13 @@
 import { UserIcon } from '@devographics/icons'
+import { usePageContext } from 'core/helpers/pageContext'
 import { formatNumber } from 'core/charts/common2/helpers/format'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
 import React from 'react'
 
 export const CorrelationCount = ({ n }: { n: number }) => {
-    const respondentCount = formatNumber(n)
+    const { localeId } = usePageContext()
+    const respondentCount = formatNumber({ value: n, localeId })
     return (
         <div className="correlation-item-n">
             <Tooltip

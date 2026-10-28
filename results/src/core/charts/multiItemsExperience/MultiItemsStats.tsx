@@ -1,4 +1,5 @@
 import React from 'react'
+import { usePageContext } from 'core/helpers/pageContext'
 import { MultiItemSerie, Totals } from './types'
 import { combineItems, getItemTotals } from './helpers/helpers'
 import { CommonProps } from '../common2/types'
@@ -53,6 +54,7 @@ const StatItem = ({
     itemId: FeaturesOptions | SimplifiedSentimentOptions
     groupedTotals: Totals[]
 }) => {
+    const { localeId } = usePageContext()
     const allTotals = groupedTotals.map(item => item[`${itemId}__value`])
     const totalsSum = sum(allTotals)
     const average = totalsSum / allTotals.length
@@ -62,7 +64,9 @@ const StatItem = ({
             <span className="chart-metadata-item-label">
                 <T k={`charts.average.${itemId}`} />:
             </span>
-            <span className="chart-metadata-item-value">{formatPercentage(average)}%</span>
+            <span className="chart-metadata-item-value">
+                {formatPercentage({ value: average, localeId })}%
+            </span>
         </div>
     )
 }

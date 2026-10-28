@@ -1,4 +1,5 @@
 import React from 'react'
+import { usePageContext } from 'core/helpers/pageContext'
 import Tooltip from 'core/components/Tooltip'
 import { BasicPointData, VerticalBarViewDefinition } from '../types'
 import { QuestionMetadata } from '@devographics/types'
@@ -29,6 +30,8 @@ export const Dot = <SerieData, PointData extends BasicPointData, ChartStateType>
     chartState
 }: DotComponentProps<SerieData, PointData, ChartStateType>) => {
     const { formatValue } = viewDefinition
+    const { localeId } = usePageContext()
+    const formattedValue = formatValue({ value, question, chartState, localeId })
     const cx = getXCoord(pointIndex)
     const cy = getYCoord(value)
     return (
@@ -43,11 +46,11 @@ export const Dot = <SerieData, PointData extends BasicPointData, ChartStateType>
                         r={dotRadius * 3}
                     />
                     <text className="chart-line-label" x={cx} y={`${cy + 20}`}>
-                        {formatValue(value, question, chartState)}
+                        {formattedValue}
                     </text>
                 </g>
             }
-            contents={`${lineLabel}: ${formatValue(value, question, chartState)} (${columnId})`}
+            contents={`${lineLabel}: ${formattedValue} (${columnId})`}
             asChild={true}
         />
     )

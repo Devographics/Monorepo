@@ -77,7 +77,7 @@ export const FreeformAnswersTrigger = (props: {
     const label = (
         <span>
             <CommentIcon size={'small'} label={answersLabel} enableTooltip={false} />{' '}
-            {formatNumber(count || 0)}
+            {formatNumber({ value: count || 0, localeId: pageContext.localeId })}
         </span>
     )
 

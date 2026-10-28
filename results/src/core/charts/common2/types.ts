@@ -135,11 +135,13 @@ export type Tick = {
     yOffset?: number
 }
 
-export type FormatValueType<ChartStateType> = (
-    v: number,
-    question: QuestionMetadata,
-    chartState: ChartStateType
-) => string
+export type FormatValueType<ChartStateType> = (options: {
+    value: number
+    question?: QuestionMetadata
+    chartState?: ChartStateType
+    // the page's locale, see usePageContext()
+    localeId: string
+}) => string
 
 export type LegendItemType = {
     id: string

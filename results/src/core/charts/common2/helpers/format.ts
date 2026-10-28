@@ -3,20 +3,12 @@ import round from 'lodash/round.js'
 
 /*
 
-How to format chart labels
+How to format values (chart labels, takeaways…)
+
+All formatters take the page's locale, so values match the page's language
+and are formatted the same way on the server and in the browser.
 
 */
-export const usdFormatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0
-})
-
-export const yenFormatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'JPY',
-    maximumFractionDigits: 0
-})
 
 // TODO: find a better way to define this
 export const isDollar = (question: QuestionMetadata) => ['yearly_salary'].includes(question.id)
@@ -30,38 +22,6 @@ export const isPercentage = (question: QuestionMetadata) =>
 export const isYears = (question: QuestionMetadata) =>
     ['years_of_experience', 'age'].includes(question.id)
 
-export const formatYears = (value: number) => {
-    const formatter = new Intl.NumberFormat(undefined, {
-        style: 'unit',
-        unit: 'year',
-        unitDisplay: 'short' // Options: "long", "short", "narrow"
-    })
-    return formatter.format(value)
-}
-
-// https://stackoverflow.com/a/9462382
-function largeNumberFormatter(num: number, digits = 1) {
-    const lookup = [
-        { value: 1, symbol: '' },
-        { value: 1e3, symbol: 'k' },
-        { value: 1e6, symbol: 'M' },
-        { value: 1e9, symbol: 'B' },
-        { value: 1e12, symbol: 'T' },
-        { value: 1e15, symbol: 'P' },
-        { value: 1e18, symbol: 'E' }
-    ]
-    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/
-    const item = lookup
-        .slice()
-        .reverse()
-        .find(function (item) {
-            return num >= item.value
-        })
-    return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0'
-}
-
-export const formatNumber = new Intl.NumberFormat().format
-
 export const roundPercentage = (value: number) => {
     if (value < 0.1) {
         return round(value, 2)
@@ -71,54 +31,7 @@ export const roundPercentage = (value: number) => {
         return round(value)
     }
 }
-export const formatPercentage = (value: number) => {
-    return `${roundPercentage(value)}%`
-}
 
-enum ValueUnits {
-    COUNT = 'count',
-    PERCENTAGE = 'percentage',
-    USD = 'usd',
-    JPY = 'jpy'
-}
-export const formatUnitValue = (value: number, unit: ValueUnits) => {
-    if (!unit || unit === ValueUnits.COUNT) {
-        return formatNumber(value)
-    } else if (unit === ValueUnits.USD) {
-        return usdFormatter.format(value)
-    } else if (unit === ValueUnits.JPY) {
-        return `¥${largeNumberFormatter(value)}`
-    } else if (unit === ValueUnits.PERCENTAGE) {
-        return formatPercentage(value)
-    } else {
-        return formatNumber(value)
-    }
-}
-
-export const formatQuestionValue = (value: number, question?: QuestionMetadata) => {
-    if (!question) {
-        return formatNumber(value)
-    } else if (isDollar(question)) {
-        return usdFormatter.format(value)
-    } else if (isYen(question)) {
-        return `¥${largeNumberFormatter(value)}`
-    } else if (isPercentage(question)) {
-        return formatPercentage(value)
-    } else if (isYears(question)) {
-        return formatYears(value)
-    } else {
-        return formatNumber(value)
-    }
-}
-
-/*
-
-Locale-aware formatting (currently used for takeaways)
-
-Note: chart formatters above are called as formatValue(value, question, chartState),
-so they can't simply take an extra locale argument
-
-*/
 export type LocalizedUnit = 'percentage' | 'count' | 'usd' | 'jpy' | 'years'
 
 export const getQuestionUnit = (question?: QuestionMetadata): LocalizedUnit => {
@@ -140,11 +53,14 @@ export const getQuestionUnit = (question?: QuestionMetadata): LocalizedUnit => {
 export const formatLocalizedValue = ({
     value,
     unit,
-    localeId
+    localeId,
+    short = false
 }: {
     value: number
     unit: LocalizedUnit
     localeId: string
+    // short units, e.g. "12 yrs" instead of "12 years"
+    short?: boolean
 }) => {
     if (unit === 'percentage') {
         return new Intl.NumberFormat(localeId, {
@@ -169,9 +85,42 @@ export const formatLocalizedValue = ({
         return new Intl.NumberFormat(localeId, {
             style: 'unit',
             unit: 'year',
-            unitDisplay: 'long'
+            unitDisplay: short ? 'short' : 'long'
         }).format(value)
     } else {
         return new Intl.NumberFormat(localeId).format(value)
     }
 }
+
+/*
+
+Shortcuts. They also accept the options passed to view definitions' formatValue
+({ value, question, chartState, localeId }), so they can be used directly there.
+
+*/
+export const formatNumber = ({ value, localeId }: { value: number; localeId: string }) =>
+    formatLocalizedValue({ value, unit: 'count', localeId })
+
+export const formatPercentage = ({ value, localeId }: { value: number; localeId: string }) =>
+    formatLocalizedValue({ value, unit: 'percentage', localeId })
+
+// charts use short units (e.g. "12 yrs")
+export const formatQuestionValue = ({
+    value,
+    question,
+    localeId
+}: {
+    value: number
+    question?: QuestionMetadata
+    localeId: string
+}) => formatLocalizedValue({ value, unit: getQuestionUnit(question), localeId, short: true })
+
+export const formatUnitValue = ({
+    value,
+    unit = 'count',
+    localeId
+}: {
+    value: number
+    unit?: LocalizedUnit
+    localeId: string
+}) => formatLocalizedValue({ value, unit, localeId })

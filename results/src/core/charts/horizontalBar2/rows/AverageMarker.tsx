@@ -1,4 +1,5 @@
 import { CommonProps } from 'core/charts/common2/types'
+import { usePageContext } from 'core/helpers/pageContext'
 import React, { useState } from 'react'
 import { HorizontalBarChartState, HorizontalBarViewProps } from '../types'
 import { formatQuestionValue } from 'core/charts/common2/helpers/format'
@@ -66,10 +67,11 @@ export const AverageMarker = (
     const { chartOptions = {} } = block
     const { defaultMarker = MEDIAN } = chartOptions
     const [type, setType] = useState<typeof AVERAGE | typeof MEDIAN>(defaultMarker)
+    const { localeId } = usePageContext()
 
     const value = serieMetadataProps[type]
     if (value !== undefined && value !== null) {
-        const averageFormatted = formatQuestionValue(value, question)
+        const averageFormatted = formatQuestionValue({ value, question, localeId })
         const offset = getOffsetCoefficient({ question, buckets, value })
         if (offset === undefined) {
             return null

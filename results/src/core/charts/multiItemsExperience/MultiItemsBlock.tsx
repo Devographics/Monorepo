@@ -38,7 +38,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
 
     // not used but expected by Rows.tsx
     const viewDefinition = {
-        formatValue: (v: any) => v
+        formatValue: ({ value }: any) => value
     }
 
     const commonProps = {

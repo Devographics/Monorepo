@@ -10,7 +10,7 @@ export const FigureBlock = ({ block }: { block: BlockVariantDefinition }) => {
     const { currentEdition } = context
     const { variables } = block
     const { value, unit } = variables
-    const formattedValue = formatUnitValue(value, unit)
+    const formattedValue = formatUnitValue({ value, unit, localeId: context.localeId })
     return (
         <div className="figure-block">
             <div className="figure-block-number">{formattedValue}</div>

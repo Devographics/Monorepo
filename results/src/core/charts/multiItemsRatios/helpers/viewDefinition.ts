@@ -85,8 +85,10 @@ export const viewDefinition: VerticalBarViewDefinition<
         return years.map(y => y.toString())
     },
     formatColumnId: ({ columnId }) => columnId,
-    formatValue: (value, _question, chartState) =>
-        chartState.mode === ModesEnum.VALUE ? formatPercentage(value) : `#${value + 1}`,
+    formatValue: ({ value, chartState, localeId }) =>
+        chartState?.mode === ModesEnum.VALUE
+            ? formatPercentage({ value, localeId })
+            : `#${value + 1}`,
     getPointValue: (point, chartState) =>
         chartState.mode === ModesEnum.VALUE
             ? Math.floor((point?.ratios?.[chartState.view] || 0) * 100)

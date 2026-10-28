@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { usePageContext } from 'core/helpers/pageContext'
 import Tooltip from 'core/components/Tooltip'
 import { Entity, ResponseEditionData } from '@devographics/types'
 import {
@@ -83,8 +84,9 @@ export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType
 
     const { question } = chartValues
     const { formatValue } = viewDefinition
+    const { localeId } = usePageContext()
 
-    const v = formatValue(value, question, chartState)
+    const v = formatValue({ value, question, chartState, localeId })
 
     let label = point.columnId
     if (cellId) {

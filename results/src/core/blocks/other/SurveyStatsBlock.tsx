@@ -8,7 +8,7 @@ import { formatNumber } from 'core/charts/common2/helpers/format'
 import Link from 'core/components/LocaleLink'
 
 const SurveyStatsBlock = ({ block }: { block: BlockVariantDefinition }) => {
-    const { currentEdition, currentEditionStats } = usePageContext()
+    const { currentEdition, currentEditionStats, localeId } = usePageContext()
     const { startedAt, endedAt, questionsUrl } = currentEdition
     const { variables = {} } = block
     const { enableDownload = true } = variables
@@ -30,7 +30,7 @@ const SurveyStatsBlock = ({ block }: { block: BlockVariantDefinition }) => {
                 <h4>
                     <T k="general.number_of_respondents" />
                 </h4>
-                <p>{formatNumber(currentEditionStats.totalRespondents)}</p>
+                <p>{formatNumber({ value: currentEditionStats.totalRespondents, localeId })}</p>
             </div>
             <div>
                 <h4>

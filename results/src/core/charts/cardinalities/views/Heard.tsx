@@ -22,7 +22,7 @@ Note: for ease of comprehension the label still says "% of survey respondents"
 */
 export const Heard: CardinalitiesViewDefinition = {
     getValue: bucket => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0,
-    formatValue: v => formatPercentage(v),
+    formatValue: formatPercentage,
     getTicks,
     component: props => {
         return (

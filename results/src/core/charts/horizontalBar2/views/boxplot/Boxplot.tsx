@@ -1,4 +1,5 @@
 import './Boxplot.scss'
+import { usePageContext } from 'core/helpers/pageContext'
 import React, { useMemo, useRef } from 'react'
 import {
     HorizontalBarChartState,
@@ -29,6 +30,7 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     const { variables } = block
     const { facetQuestion } = chartValues
     const theme = useTheme()
+    const { localeId } = usePageContext()
     const { buckets, isReversed } = viewProps
     const contentHeight = BAR_HEIGHT
 
@@ -51,7 +53,8 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
         [buckets]
     )
 
-    const labelFormatter = (value: number) => formatValue(value, facetQuestion)
+    const labelFormatter = (value: number) =>
+        formatValue({ value, question: facetQuestion, localeId })
 
     const legends = [] as BlockLegend[]
 

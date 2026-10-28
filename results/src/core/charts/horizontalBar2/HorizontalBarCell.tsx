@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { usePageContext } from 'core/helpers/pageContext'
 import Tooltip from 'core/components/Tooltip'
 import { Bucket, FacetBucket } from '@devographics/types'
 import {
@@ -127,7 +128,8 @@ export const Cell = ({
     })
     const { label: cellLabel } = itemLabel
 
-    const v = formatValue(value, facetQuestion || question, chartState)
+    const { localeId } = usePageContext()
+    const v = formatValue({ value, question: facetQuestion || question, chartState, localeId })
 
     const isActiveSort = sort === id
     const isHighlighted = highlightedCell === id

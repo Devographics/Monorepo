@@ -1,4 +1,5 @@
 import './AxisV.scss'
+import { usePageContext } from 'core/helpers/pageContext'
 import React from 'react'
 import { FormatValueType, Tick } from './types'
 import { QuestionMetadata } from '@devographics/types'
@@ -31,6 +32,7 @@ export const AxisV = <ChartStateType,>({
     chartState: ChartStateType
 }) => {
     const interval = getInterval(ticks.length)
+    const { localeId } = usePageContext()
 
     return (
         <div className={`chart-axis chart-axis-vertical chart-axis-${variant}`}>
@@ -50,7 +52,12 @@ export const AxisV = <ChartStateType,>({
                                 }}
                             >
                                 <div className="chart-axis-tick-label">
-                                    {formatValue(tick.value, question, chartState)}
+                                    {formatValue({
+                                        value: tick.value,
+                                        question,
+                                        chartState,
+                                        localeId
+                                    })}
                                 </div>
                             </div>
                         )

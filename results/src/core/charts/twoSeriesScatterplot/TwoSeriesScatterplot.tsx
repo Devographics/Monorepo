@@ -1,4 +1,5 @@
 import React from 'react'
+import { usePageContext } from 'core/helpers/pageContext'
 import { AllToolsData, Bucket, QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { useI18n } from '@devographics/react-i18n'
@@ -99,6 +100,7 @@ export const TwoSeriesScatterplot = (
 ) => {
     const { getString } = useI18n()
     const { block, series, question } = props
+    const { localeId } = usePageContext()
     const { options } = question
     const data = series.map(serie => serie.data)
 
@@ -114,8 +116,10 @@ export const TwoSeriesScatterplot = (
         throw new Error(`Could not find question2 with id ${question2Id}`)
     }
 
-    const axis1Formatter = (v: number) => formatQuestionValue(v, question1)
-    const axis2Formatter = (v: number) => formatQuestionValue(v, question2)
+    const axis1Formatter = (value: number) =>
+        formatQuestionValue({ value, question: question1, localeId })
+    const axis2Formatter = (value: number) =>
+        formatQuestionValue({ value, question: question2, localeId })
 
     const q1Label = getQuestionLabel({ getString, question: question1 })?.questionName
     const q2Label = getQuestionLabel({ getString, question: question2 })?.questionName

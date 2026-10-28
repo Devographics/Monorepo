@@ -1,4 +1,5 @@
 import './Column.scss'
+import { usePageContext } from 'core/helpers/pageContext'
 import React from 'react'
 import {
     BasicPointData,
@@ -40,6 +41,7 @@ export const ColumnWrapper = <SerieData, PointData extends BasicPointData, Chart
     } = props
     const { highlighted } = chartState
     const { formatColumnId, formatValue } = viewDefinition
+    const { localeId } = usePageContext()
     const { columnAverages } = chartValues
     /*
 
@@ -76,7 +78,11 @@ export const ColumnWrapper = <SerieData, PointData extends BasicPointData, Chart
                                     <T
                                         k="charts.average_value"
                                         values={{
-                                            value: formatValue(columnAverage, {}, chartState)
+                                            value: formatValue({
+                                                value: columnAverage,
+                                                chartState,
+                                                localeId
+                                            })
                                         }}
                                     />
                                 }
