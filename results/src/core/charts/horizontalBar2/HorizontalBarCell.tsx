@@ -19,6 +19,7 @@ import { ColumnModes } from '../common2/types'
 import OtherBucketMarker from './OtherBucketMarker'
 import { OTHER_ANSWERS } from '@devographics/constants'
 import classNames from 'classnames'
+import { Highlight, HighlightIds } from 'core/components/Highlight'
 import { ChevronUpIcon, ChevronDownIcon } from '@devographics/icons'
 
 // hide labels for cells under this size
@@ -51,7 +52,8 @@ export const Cell = ({
     oversizedBar = false,
     parentTotal,
     showNestedBuckets,
-    setShowNestedBuckets
+    setShowNestedBuckets,
+    highlightIds
 }: {
     block: BlockVariantDefinition
     bucket: Bucket | FacetBucket
@@ -69,6 +71,8 @@ export const Cell = ({
     parentTotal: number
     showNestedBuckets: RowComponentProps['showNestedBuckets']
     setShowNestedBuckets: RowComponentProps['setShowNestedBuckets']
+    // ids used to highlight this cell from takeaway datapoints (stacked rows only)
+    highlightIds?: HighlightIds
 }) => {
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
     const { variables = {} } = block
@@ -152,68 +156,71 @@ export const Cell = ({
     const isStacked = columnMode === ColumnModes.STACKED
 
     return (
-        <div
-            className={className}
-            style={style}
-            ref={ref}
-            onMouseEnter={() => {
-                setHighlightedCell && setHighlightedCell(id)
-            }}
-            onMouseLeave={() => {
-                setHighlightedCell && setHighlightedCell(null)
-            }}
-            onClick={() => {
-                setShowNestedBuckets && setShowNestedBuckets(!showNestedBuckets)
-            }}
-        >
-            <Tooltip
-                trigger={
-                    <div className="chart-cell-inner">
-                        {showLabel && <CellLabel label={v} />}
-                        {oversizedBar && <Oversized />}
-                        {hasNestedBuckets && (
-                            <>
-                                <ChevronUpIcon className="chart-cell-expand chart-cell-expand-up" />
-                                <ChevronDownIcon className="chart-cell-expand chart-cell-expand-down" />
-                            </>
-                        )}
-                    </div>
-                }
-                contents={
-                    <div>
-                        [<span dangerouslySetInnerHTML={{ __html: label }} />] <strong>{v}</strong>{' '}
-                        {isStacked ? (
-                            <T
-                                k="charts.facet_detail_answers"
-                                values={{ count, totalAnswers: parentTotal }}
+        <Highlight {...highlightIds}>
+            <div
+                className={className}
+                style={style}
+                ref={ref}
+                onMouseEnter={() => {
+                    setHighlightedCell && setHighlightedCell(id)
+                }}
+                onMouseLeave={() => {
+                    setHighlightedCell && setHighlightedCell(null)
+                }}
+                onClick={() => {
+                    setShowNestedBuckets && setShowNestedBuckets(!showNestedBuckets)
+                }}
+            >
+                <Tooltip
+                    trigger={
+                        <div className="chart-cell-inner">
+                            {showLabel && <CellLabel label={v} />}
+                            {oversizedBar && <Oversized />}
+                            {hasNestedBuckets && (
+                                <>
+                                    <ChevronUpIcon className="chart-cell-expand chart-cell-expand-up" />
+                                    <ChevronDownIcon className="chart-cell-expand chart-cell-expand-down" />
+                                </>
+                            )}
+                        </div>
+                    }
+                    contents={
+                        <div>
+                            [<span dangerouslySetInnerHTML={{ __html: label }} />]{' '}
+                            <strong>{v}</strong>{' '}
+                            {isStacked ? (
+                                <T
+                                    k="charts.facet_detail_answers"
+                                    values={{ count, totalAnswers: parentTotal }}
+                                />
+                            ) : (
+                                <T
+                                    k="charts.facet_detail"
+                                    values={{ count, totalRespondents: parentTotal }}
+                                />
+                            )}
+                        </div>
+                    }
+                    showBorder={false}
+                />
+                {/* we need getWidth to be able to figure out the dimensions for the other bucket marker */}
+                {otherBucket &&
+                    otherBucketsType &&
+                    getWidth &&
+                    !disableOtherBucket &&
+                    !isOtherAnswersBucket && (
+                        <>
+                            <OtherBucketMarker
+                                viewDefinition={viewDefinition}
+                                mainBucket={bucket}
+                                otherBucket={otherBucket}
+                                otherBucketsType={otherBucketsType}
+                                getWidth={getWidth}
                             />
-                        ) : (
-                            <T
-                                k="charts.facet_detail"
-                                values={{ count, totalRespondents: parentTotal }}
-                            />
-                        )}
-                    </div>
-                }
-                showBorder={false}
-            />
-            {/* we need getWidth to be able to figure out the dimensions for the other bucket marker */}
-            {otherBucket &&
-                otherBucketsType &&
-                getWidth &&
-                !disableOtherBucket &&
-                !isOtherAnswersBucket && (
-                    <>
-                        <OtherBucketMarker
-                            viewDefinition={viewDefinition}
-                            mainBucket={bucket}
-                            otherBucket={otherBucket}
-                            otherBucketsType={otherBucketsType}
-                            getWidth={getWidth}
-                        />
-                    </>
-                )}
-        </div>
+                        </>
+                    )}
+            </div>
+        </Highlight>
     )
 }
 

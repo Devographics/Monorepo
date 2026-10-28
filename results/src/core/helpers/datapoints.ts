@@ -282,7 +282,9 @@ export const replaceDatapoints = ({
         const attributes = [
             `class="datapoint"`,
             `data-datapoint-block="${escapeAttribute(datapoint.blockId)}"`,
-            `data-datapoint="${escapeAttribute(datapoint.elementIds.join(' '))}"`
+            `data-datapoint="${escapeAttribute(datapoint.elementIds.join(' '))}"`,
+            // make it focusable so keyboard users can trigger the highlight too
+            `tabindex="0"`
         ]
         // when the text doesn't show the value, show it on hover instead
         if (text) {

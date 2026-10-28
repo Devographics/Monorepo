@@ -1,0 +1,18 @@
+// takeaway datapoints (see core/helpers/datapoints.ts)
+.datapoint {
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+    cursor: help;
+}
+
+// chart elements highlighted from a takeaway datapoint (see Highlight.tsx)
+// placeholder styles, to be refined
+.datapoint-target {
+    outline: 2px solid var(--activeColor, currentColor);
+    outline-offset: 1px;
+}
+
+.datapoint-ancestor {
+    outline: 1px dashed var(--activeColor, currentColor);
+    outline-offset: 1px;
+}

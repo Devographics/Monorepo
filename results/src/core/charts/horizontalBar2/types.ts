@@ -9,14 +9,15 @@ import {
     Tick,
     ViewDefinition
 } from '../common2/types'
-import { FacetItem } from 'core/filters/types'
+import { DataSeries, FacetItem } from 'core/filters/types'
 import { IconProps } from '@devographics/icons'
 import {
     Bucket,
     Correlations,
     FacetBucket,
     QuestionMetadata,
-    ResponseEditionMetadata
+    ResponseEditionMetadata,
+    StandardQuestionData
 } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import { Dimension } from '../multiItemsExperience/types'
@@ -74,6 +75,7 @@ export enum OtherBucketsType {
 }
 
 export type HorizontalBarViewProps = CommonProps<HorizontalBarChartState> & {
+    serie: DataSeries<StandardQuestionData>
     chartState: HorizontalBarChartState
     chartValues: HorizontalBarChartValues
     buckets: Bucket[]

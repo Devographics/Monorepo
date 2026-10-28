@@ -19,21 +19,31 @@ import { EditIcon } from '@devographics/icons'
 import BlockQuestion from './BlockQuestion'
 import { BlockDefinition } from 'core/types'
 import { getAllQuestions } from 'core/helpers/options'
+import { Highlight, HighlightProvider } from 'core/components/Highlight'
 import './BlockTabsWrapper.scss'
 export const getRegularTabId = (index: number) => `tab-${index}`
 export const getCustomTabId = (id: string) => `tabCustom-${id}`
 
-export const TabsWrapper = ({
-    block,
-    pageData,
-    blockIndex,
-    withMargin = true
-}: {
+// lets takeaway datapoints highlight elements in this block's tabs and charts
+export const TabsWrapper = (props: TabsWrapperProps) => (
+    <HighlightProvider>
+        <TabsWrapperContents {...props} />
+    </HighlightProvider>
+)
+
+interface TabsWrapperProps {
     block: BlockDefinition
     pageData: any
     blockIndex: number
     withMargin: boolean
-}) => {
+}
+
+const TabsWrapperContents = ({
+    block,
+    pageData,
+    blockIndex,
+    withMargin = true
+}: TabsWrapperProps) => {
     const [customVariants, setCustomVariants] = useState<CustomVariant[]>([])
     const [activeTab, setActiveTab] = useState(getRegularTabId(0))
     const pageContext = usePageContext()
@@ -120,9 +130,13 @@ export const TabsWrapper = ({
                                         })
                                         return (
                                             <Tab_ key={block.id}>
-                                                <TabsTrigger value={getRegularTabId(variantIndex)}>
-                                                    <span data-key={key}>{label}</span>
-                                                </TabsTrigger>
+                                                <Highlight blockId={block.id}>
+                                                    <TabsTrigger
+                                                        value={getRegularTabId(variantIndex)}
+                                                    >
+                                                        <span data-key={key}>{label}</span>
+                                                    </TabsTrigger>
+                                                </Highlight>
                                             </Tab_>
                                         )
                                     })}

@@ -6,10 +6,16 @@ import T from 'core/i18n/T'
 import { useI18n } from '@devographics/react-i18n'
 import { usePageContext } from 'core/helpers/pageContext'
 import { renderDatapoints } from 'core/helpers/renderDatapoints'
+import { useHighlightContext } from 'core/components/Highlight'
+
+// find the takeaway datapoint span an event happened in, if any
+const getDatapointSpan = (target: EventTarget | null) =>
+    target instanceof Element ? (target.closest('.datapoint') as HTMLElement | null) : null
 
 const BlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
     const { getFallbacks } = useI18n()
     const pageContext = usePageContext()
+    const { setHighlighted } = useHighlightContext()
     const blockKey = getBlockKey({ block })
     const takeawayKey = `${blockKey}.takeaway`
     const { currentEdition } = pageContext
@@ -36,8 +42,31 @@ const BlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
     const transform = (takeaway: string) =>
         renderDatapoints({ takeaway, pageContext, blockId: block.id })
 
+    // the takeaway is rendered as HTML, so we listen to events on the wrapper
+    const highlightDatapoint = (event: React.SyntheticEvent) => {
+        const span = getDatapointSpan(event.target)
+        if (span) {
+            setHighlighted({
+                blockId: span.dataset.datapointBlock || '',
+                elementIds: (span.dataset.datapoint || '').split(' ').filter(Boolean)
+            })
+        }
+    }
+    const clearDatapoint = (event: React.MouseEvent | React.FocusEvent) => {
+        const span = getDatapointSpan(event.target)
+        // ignore moves between elements inside the same span (e.g. <strong>)
+        if (span && !span.contains(event.relatedTarget as Node | null)) {
+            setHighlighted(null)
+        }
+    }
+
     return hasTakeaway ? (
-        <Takeaway_>
+        <Takeaway_
+            onMouseOver={highlightDatapoint}
+            onMouseOut={clearDatapoint}
+            onFocus={highlightDatapoint}
+            onBlur={clearDatapoint}
+        >
             <T keysList={keysList} html={true} md={true} transform={transform} />
         </Takeaway_>
     ) : null

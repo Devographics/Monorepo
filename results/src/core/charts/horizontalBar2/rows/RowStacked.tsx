@@ -11,6 +11,7 @@ import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataI
 
 export const RowStacked = (props: RowComponentProps) => {
     const {
+        serie,
         block,
         bucket,
         buckets,
@@ -75,6 +76,11 @@ export const RowStacked = (props: RowComponentProps) => {
                                 gradient={gradient}
                                 viewDefinition={viewDefinition}
                                 parentTotal={bucket.count || 0}
+                                highlightIds={{
+                                    blockId: serie.name,
+                                    bucketId: bucket.id,
+                                    facetBucketId: facetBucket.id
+                                }}
                             />
                         )
                     })

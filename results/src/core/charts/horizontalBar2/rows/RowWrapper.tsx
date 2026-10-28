@@ -5,6 +5,7 @@ import { OVERALL } from '@devographics/constants'
 import { Gridlines } from './Gridlines'
 import { RowComponentProps } from '../types'
 import { RowDepth } from './RowDepth'
+import { Highlight } from 'core/components/Highlight'
 
 export type MetadataItem = { id: string; component: JSX.Element }
 
@@ -17,6 +18,7 @@ export const RowWrapper = (props: RowWrapperProps) => {
     const {
         chartState,
         chartValues,
+        serie,
         bucket,
         buckets,
         items,
@@ -57,55 +59,57 @@ export const RowWrapper = (props: RowWrapperProps) => {
     const showSpacer = itemLength >= 10 && rowIndex_ < 10
 
     return (
-        <div
-            className={className}
-            onClick={() => {
-                setShowNestedBuckets && setShowNestedBuckets(!showNestedBuckets)
-            }}
-            onMouseEnter={() => {
-                setHighlightedRow(bucket.id)
-            }}
-            onMouseLeave={() => {
-                setHighlightedRow(null)
-            }}
-        >
-            <div className="chart-row-left">
-                <div className="chart-row-index">
-                    {showSpacer && <span className="chart-row-index-spacer">0</span>}
-                    {rowIndex_}
+        <Highlight blockId={serie.name} bucketId={bucket.id}>
+            <div
+                className={className}
+                onClick={() => {
+                    setShowNestedBuckets && setShowNestedBuckets(!showNestedBuckets)
+                }}
+                onMouseEnter={() => {
+                    setHighlightedRow(bucket.id)
+                }}
+                onMouseLeave={() => {
+                    setHighlightedRow(null)
+                }}
+            >
+                <div className="chart-row-left">
+                    <div className="chart-row-index">
+                        {showSpacer && <span className="chart-row-index-spacer">0</span>}
+                        {rowIndex_}
+                    </div>
+                    {showDepthIndicator ? (
+                        <RowDepth
+                            nestedBuckets={bucket.nestedBuckets}
+                            hasNestedBuckets={hasNestedBuckets}
+                            setShowNestedBuckets={setShowNestedBuckets}
+                            showNestedBuckets={showNestedBuckets}
+                            depth={depth}
+                        />
+                    ) : (
+                        <div className="chart-depth-placeholder" />
+                    )}
+                    <RowHeading {...props} nestedBuckets={bucket.nestedBuckets} />
                 </div>
-                {showDepthIndicator ? (
-                    <RowDepth
-                        nestedBuckets={bucket.nestedBuckets}
-                        hasNestedBuckets={hasNestedBuckets}
-                        setShowNestedBuckets={setShowNestedBuckets}
-                        showNestedBuckets={showNestedBuckets}
-                        depth={depth}
-                    />
-                ) : (
-                    <div className="chart-depth-placeholder" />
-                )}
-                <RowHeading {...props} nestedBuckets={bucket.nestedBuckets} />
-            </div>
-            <div className="chart-row-content" ref={contentRef}>
-                {ticks && <Gridlines ticks={ticks} />}
-                <div className="chart-bar">{children}</div>
-            </div>
+                <div className="chart-row-content" ref={contentRef}>
+                    {ticks && <Gridlines ticks={ticks} />}
+                    <div className="chart-bar">{children}</div>
+                </div>
 
-            {metadataItems &&
-                metadataItems.map((metadataItem, i) => {
-                    const { id, component } = metadataItem
-                    return (
-                        <div
-                            className={`chart-row-metadata-item chart-row-metadata-item-${id}  chart-row-metadata-item-${
-                                i + 1
-                            }`}
-                            key={i}
-                        >
-                            {component}
-                        </div>
-                    )
-                })}
-        </div>
+                {metadataItems &&
+                    metadataItems.map((metadataItem, i) => {
+                        const { id, component } = metadataItem
+                        return (
+                            <div
+                                className={`chart-row-metadata-item chart-row-metadata-item-${id}  chart-row-metadata-item-${
+                                    i + 1
+                                }`}
+                                key={i}
+                            >
+                                {component}
+                            </div>
+                        )
+                    })}
+            </div>
+        </Highlight>
     )
 }
