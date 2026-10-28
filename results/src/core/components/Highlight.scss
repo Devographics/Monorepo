@@ -16,3 +16,15 @@
     outline: 1px dashed var(--activeColor, currentColor);
     outline-offset: 1px;
 }
+
+// SVG elements don't render outlines
+svg .datapoint-target {
+    stroke: var(--activeColor, currentColor);
+    stroke-width: 3px;
+}
+
+svg .datapoint-ancestor {
+    stroke: var(--activeColor, currentColor);
+    stroke-width: 1px;
+    stroke-dasharray: 3 2;
+}

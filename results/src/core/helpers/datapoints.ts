@@ -47,6 +47,8 @@ export interface ResolvedDatapoint {
     // path with `$main` expanded
     fullPath: string
     blockId: string
+    // edition the value comes from (the current one unless specified)
+    editionId: string
     // id of the question the block is about
     questionId?: string
     // ids of the chart elements the datapoint refers to, e.g. `company_employee.increased`
@@ -174,7 +176,7 @@ export const resolveDatapoint = (path: string, context: DatapointContext): Resol
         fullPath += '.' + parsed.stat
     }
 
-    const result: ResolvedDatapoint = { path, fullPath, blockId, elementIds: [], stat }
+    const result: ResolvedDatapoint = { path, fullPath, blockId, editionId, elementIds: [], stat }
 
     const blockData = getBlockData(context, blockId)
     if (!blockData) {
@@ -287,6 +289,7 @@ export const replaceDatapoints = ({
         const attributes = [
             `class="datapoint"`,
             `data-datapoint-block="${escapeAttribute(datapoint.blockId)}"`,
+            `data-datapoint-edition="${escapeAttribute(datapoint.editionId)}"`,
             `data-datapoint="${escapeAttribute(datapoint.elementIds.join(' '))}"`,
             // make it focusable so keyboard users can trigger the highlight too
             `tabindex="0"`

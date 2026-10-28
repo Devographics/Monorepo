@@ -1,5 +1,6 @@
 import React, { Children, ReactElement, cloneElement, createContext, useContext, useState } from 'react'
 import classNames from 'classnames'
+import { usePageContext } from 'core/helpers/pageContext'
 import './Highlight.scss'
 
 /*
@@ -15,6 +16,8 @@ so both can be styled differently.
 // the datapoint currently hovered in a takeaway
 export interface HighlightedDatapoint {
     blockId: string
+    // edition the value comes from
+    editionId: string
     // e.g. ['company_employee.increased'], empty for question-level stats
     elementIds: string[]
 }
@@ -42,6 +45,8 @@ export const useHighlightContext = () => useContext(HighlightContext)
 
 export interface HighlightIds {
     blockId: string
+    // only needed for elements showing a specific edition (e.g. verticalBar2 columns)
+    editionId?: string
     bucketId?: string
     facetBucketId?: string
 }
@@ -65,16 +70,49 @@ export const getElementId = ({ bucketId, facetBucketId }: HighlightIds) => {
     return ids.join('.')
 }
 
-export const getHighlightState = (
-    highlighted: HighlightedDatapoint | null,
+/*
+
+Editions: elements with an editionId must match the datapoint's edition.
+Other elements with bucket ids are assumed to show the current edition,
+while block-level elements without an edition (tabs) match any edition.
+
+*/
+const matchesEdition = ({
+    highlighted,
+    ids,
+    currentEditionId
+}: {
+    highlighted: HighlightedDatapoint
     ids: HighlightIds
-): HighlightState => {
+    currentEditionId: string
+}) => {
+    if (ids.editionId) {
+        return ids.editionId === highlighted.editionId
+    } else if (ids.bucketId) {
+        return highlighted.editionId === currentEditionId
+    } else {
+        return true
+    }
+}
+
+export const getHighlightState = ({
+    highlighted,
+    ids,
+    currentEditionId
+}: {
+    highlighted: HighlightedDatapoint | null
+    ids: HighlightIds
+    currentEditionId: string
+}): HighlightState => {
     if (!highlighted || !belongsToBlock(highlighted.blockId, ids.blockId)) {
+        return null
+    }
+    if (!matchesEdition({ highlighted, ids, currentEditionId })) {
         return null
     }
     const elementId = getElementId(ids)
     if (!elementId) {
-        // block-level element (tab…): it's the target for question-level stats
+        // block-level element (tab, edition column…): it's the target for question-level stats
         return highlighted.elementIds.length > 0 ? 'ancestor' : 'target'
     }
     let state: HighlightState = null
@@ -91,13 +129,15 @@ export const getHighlightState = (
 // ids are optional so components can call the hook unconditionally
 export const useHighlight = (ids?: HighlightIds) => {
     const { highlighted } = useHighlightContext()
+    const { currentEdition } = usePageContext()
     if (!ids) {
         return { state: null, attributes: {} }
     }
-    const state = getHighlightState(highlighted, ids)
+    const state = getHighlightState({ highlighted, ids, currentEditionId: currentEdition.id })
     const elementId = getElementId(ids)
     const attributes = {
         'data-datapoint-block': ids.blockId,
+        'data-datapoint-edition': ids.editionId,
         'data-datapoint': elementId || undefined
     }
     return { state, attributes }

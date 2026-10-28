@@ -33,7 +33,8 @@ export const ColumnStacked = <
 >(
     props: ColumnStackedProps<SerieData, PointData, ChartStateType>
 ) => {
-    const { edition, chartState, chartValues, viewDefinition, point, columnId, colorScale } = props
+    const { serie, edition, chartState, chartValues, viewDefinition, point, columnId, colorScale } =
+        props
     const { getPointValue } = viewDefinition
     if (!getPointValue) {
         throw new Error('getPointValue not defined')
@@ -78,6 +79,11 @@ export const ColumnStacked = <
                             chartValues={chartValues}
                             gradient={gradient}
                             viewDefinition={viewDefinition}
+                            highlightIds={{
+                                blockId: serie.name,
+                                editionId: edition.editionId,
+                                bucketId: id
+                            }}
                         />
                     )
                 })}

@@ -77,7 +77,9 @@ const useNodes = ({
             formattedY,
             color: color || '#ffffffaa',
             isCurrentItem,
-            isHighlighted
+            isHighlighted,
+            // both series share the variant id (…_1 and …_2 datapoints match it)
+            highlightIds: { blockId: block.id, bucketId: id }
         }
         if (group) {
             nodeData.categoryId = group

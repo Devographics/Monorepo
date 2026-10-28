@@ -2,6 +2,7 @@ import React from 'react'
 import { NodeData } from './types'
 import { ScatterplotChartState } from '../scatterplot/chartState'
 import { crosshairConfig } from './Crosshair'
+import { Highlight } from 'core/components/Highlight'
 import './Node.scss'
 
 const nodeRadius = 7
@@ -29,24 +30,26 @@ type NodeMarkerProps = {
 
 export const NodeMarker = ({ chartState, node }: NodeMarkerProps) => {
     const { setCurrentItem } = chartState
-    const { id, color, x, y } = node
+    const { id, color, x, y, highlightIds } = node
 
     return (
-        <g
-            data-id={id}
-            className="scatterplot-node"
-            onMouseEnter={() => {
-                setCurrentItem(id)
-            }}
-            onMouseLeave={() => {
-                setCurrentItem(null)
-            }}
-            transform={`translate(${x},${y})`}
-            opacity={getNodeOpacity(chartState, node)}
-        >
-            <circle r={nodeCaptureRadius} fill="red" opacity={0} />
-            <circle r={nodeRadius} fill={color} />
-        </g>
+        <Highlight {...highlightIds}>
+            <g
+                data-id={id}
+                className="scatterplot-node"
+                onMouseEnter={() => {
+                    setCurrentItem(id)
+                }}
+                onMouseLeave={() => {
+                    setCurrentItem(null)
+                }}
+                transform={`translate(${x},${y})`}
+                opacity={getNodeOpacity(chartState, node)}
+            >
+                <circle r={nodeCaptureRadius} fill="red" opacity={0} />
+                <circle r={nodeRadius} fill={color} />
+            </g>
+        </Highlight>
     )
 }
 

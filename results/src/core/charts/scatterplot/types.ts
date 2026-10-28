@@ -1,4 +1,5 @@
 import { SectionMetadata } from '@devographics/types'
+import { HighlightIds } from 'core/components/Highlight'
 
 export type QuadrantScale = {
     type: string
@@ -21,6 +22,8 @@ export type NodeData = {
     isHighlighted: boolean
     categoryId?: string
     category?: SectionMetadata
+    // ids used to highlight this node from takeaway datapoints
+    highlightIds?: HighlightIds
 }
 
 export type NodeDataWithCoordinates = NodeData & {

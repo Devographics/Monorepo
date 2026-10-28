@@ -48,6 +48,7 @@ const BlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
         if (span) {
             setHighlighted({
                 blockId: span.dataset.datapointBlock || '',
+                editionId: span.dataset.datapointEdition || '',
                 elementIds: (span.dataset.datapoint || '').split(' ').filter(Boolean)
             })
         }

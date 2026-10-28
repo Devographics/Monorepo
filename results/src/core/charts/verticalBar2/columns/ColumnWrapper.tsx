@@ -8,6 +8,8 @@ import {
 } from '../types'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
+import { Highlight } from 'core/components/Highlight'
+import { ResponseEditionData } from '@devographics/types'
 
 type ColumnWrapperProps<
     SerieData,
@@ -18,12 +20,16 @@ type ColumnWrapperProps<
     rowMetadata?: JSX.Element
     children?: JSX.Element
     viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
+    // the column's edition, when the column is an edition (used for highlighting)
+    edition?: ResponseEditionData
 }
 
 export const ColumnWrapper = <SerieData, PointData extends BasicPointData, ChartStateType>(
     props: ColumnWrapperProps<SerieData, PointData, ChartStateType>
 ) => {
     const {
+        serie,
+        edition,
         columnId,
         columnIndex,
         children,
@@ -50,33 +56,37 @@ export const ColumnWrapper = <SerieData, PointData extends BasicPointData, Chart
 
     const columnLabel = <span> {formatColumnId({ columnId, columnIndex, chartValues })}</span>
     return (
-        <div
-            className={`chart-column chart-column-${
-                highlighted === null ? 'highlightInactive' : 'highlightActive'
-            }`}
-            style={style}
-        >
-            {rowMetadata && <div className="chart-column-top">{rowMetadata}</div>}
-            <div className="chart-column-content">
-                {children && <div className="chart-bar">{children}</div>}
-            </div>
-            <div className="chart-column-bottom chart-axis">
-                <div className="chart-column-label">
-                    {columnAverage ? (
-                        <Tooltip
-                            trigger={columnLabel}
-                            contents={
-                                <T
-                                    k="charts.average_value"
-                                    values={{ value: formatValue(columnAverage, {}, chartState) }}
-                                />
-                            }
-                        />
-                    ) : (
-                        columnLabel
-                    )}
+        <Highlight blockId={edition ? serie.name : undefined} editionId={edition?.editionId}>
+            <div
+                className={`chart-column chart-column-${
+                    highlighted === null ? 'highlightInactive' : 'highlightActive'
+                }`}
+                style={style}
+            >
+                {rowMetadata && <div className="chart-column-top">{rowMetadata}</div>}
+                <div className="chart-column-content">
+                    {children && <div className="chart-bar">{children}</div>}
+                </div>
+                <div className="chart-column-bottom chart-axis">
+                    <div className="chart-column-label">
+                        {columnAverage ? (
+                            <Tooltip
+                                trigger={columnLabel}
+                                contents={
+                                    <T
+                                        k="charts.average_value"
+                                        values={{
+                                            value: formatValue(columnAverage, {}, chartState)
+                                        }}
+                                    />
+                                }
+                            />
+                        ) : (
+                            columnLabel
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        </Highlight>
     )
 }

@@ -13,6 +13,7 @@ import { getViewComponent, getViewDefinition } from './helpers/views'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { BlockVariantDefinition } from 'core/types'
+import { HighlightIds, useHighlight } from 'core/components/Highlight'
 
 // hide labels for cells under this height
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 20
@@ -39,6 +40,8 @@ type CellProps<SerieData, PointData extends BasicPointData, ChartStateType> = {
     cellIndex: number
     gradient: string[]
     viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
+    // ids used to highlight this cell from takeaway datapoints (stacked columns only)
+    highlightIds?: HighlightIds
 }
 
 export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType>(
@@ -59,7 +62,8 @@ export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType
         offset,
         viewDefinition,
         cellIndex,
-        gradient
+        gradient,
+        highlightIds
     } = props
     const { getString } = useI18n()
 
@@ -67,6 +71,9 @@ export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType
     const { ref, cellHeight, isTallEnough: showLabel } = useIsTallEnough()
     const { highlighted } = chartState
     const isHighlighted = highlighted === cellId
+    // the tooltip trigger must be the DOM element itself, so we use the hook
+    // rather than wrapping it in <Highlight>
+    const highlight = useHighlight(highlightIds)
     const style = {
         '--color1': gradient[0],
         '--color2': gradient[1],
@@ -97,7 +104,8 @@ export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType
                     data-value={value}
                     className={`chart-cell vertical-chart-cell chart-cell-${
                         isHighlighted ? 'highlighted' : 'notHighlighted'
-                    }`}
+                    } ${highlight.state ? `datapoint-${highlight.state}` : ''}`}
+                    {...highlight.attributes}
                     style={style}
                     ref={ref}
                 >
