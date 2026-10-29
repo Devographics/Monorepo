@@ -5,14 +5,20 @@
 }
 
 .nav-link {
-    white-space: nowrap;
+    // white-space: nowrap;
 }
 
 .nav-link-label {
-    white-space: normal;
-    display: flex;
-    align-items: center;
-    gap: 3px;
+    // white-space: normal;
+    // display: flex;
+    // align-items: center;
+    // gap: 3px;
+    .question-label-new {
+        margin-left: 3px;
+        display: inline-block;
+        line-height: 1;
+        vertical-align: baseline;
+    }
     svg {
         // width: 44px;
         // height: 26px;

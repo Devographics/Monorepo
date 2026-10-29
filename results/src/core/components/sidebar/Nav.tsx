@@ -275,12 +275,12 @@ const BlockItem = ({ block, closeSidebar, page, isActive = false }) => {
                 page={page}
                 data-key={key}
             >
-                {hasEmoji && (
-                    <span className="question-emoji">
-                        <T k={emojiKey} />{' '}
-                    </span>
-                )}
                 <span className="nav-link-label">
+                    {hasEmoji && (
+                        <span className="question-emoji">
+                            <T k={emojiKey} />{' '}
+                        </span>
+                    )}
                     <span>{label}</span>
                     <NewQuestionIndicator question={question} />
                 </span>
