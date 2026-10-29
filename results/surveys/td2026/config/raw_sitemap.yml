@@ -556,9 +556,14 @@
                               operator: eq
                               value: FRA
 
+      # TODO 2027: re-enable multi-year comparisons
+      # which were disabled between 2026 and 2025
+      # because of options change
       - id: years_of_experience
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
+        queryOptions:
+            editionsCount: 1
         variants:
             - template: tokyodev_vs_salary
               parameters:
@@ -983,7 +988,7 @@
                   # industries where the most employers require AI use first
                   options:
                       mode: facet
-                      sort: "4"
+                      sort: '4'
                       order: desc
 
       - id: working_hours_policy
