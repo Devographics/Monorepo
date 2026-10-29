@@ -23,6 +23,11 @@ overrides:
     graphql: 16.9.0
     webpack: 5.88.2
 
+# Gatsby resolves babel plugins added via setBabelPlugin() from its own package
+# location, so they must be reachable from the root node_modules
+publicHoistPattern:
+    - babel-plugin-styled-components
+
 # Security baseline:
 # - review dependency build scripts explicitly (default deny)
 # - block exotic transitive dependencies
