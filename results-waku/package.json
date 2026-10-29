@@ -29,9 +29,10 @@
         "graphql-print": "^1.0.1",
         "js-yaml": "^4.1.0",
         "lodash": "^4.17.23",
-        "react": "19.2.0",
-        "react-dom": "19.2.0",
-        "waku": "https://pkg.pr.new/waku@6dfbc99"
+        "react": "19.3.1",
+        "react-dom": "19.3.1",
+        "react-server-dom-webpack": "19.3.1",
+        "waku": "1.0.0-rc.4"
     },
     "devDependencies": {
         "@playwright/test": "^1.47.0",
@@ -50,7 +51,7 @@
         "pngjs": "^7.0.0",
         "storybook": "^8.6.14",
         "typescript": "^5.9.3",
-        "vite": "^6.4.1"
+        "vite": "^8.3.5"
     },
     "engines": {
         "node": "24.x"
