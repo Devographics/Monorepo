@@ -59,7 +59,7 @@ export const RowWrapper = (props: RowWrapperProps) => {
     const showSpacer = itemLength >= 10 && rowIndex_ < 10
 
     return (
-        <Highlight blockId={serie.name} bucketId={bucket.id}>
+        <Highlight blockId={serie?.name} bucketId={bucket.id}>
             <div
                 className={className}
                 onClick={() => {
