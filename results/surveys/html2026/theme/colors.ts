@@ -176,20 +176,17 @@ export const surveyColorTheme = {
         ]
     }
 }
-const commonColors = {
-    textAlt: 'rgba(255, 246, 229, 0.5)'
-}
 
 const stateOfHtmlThemeColors: DefaultTheme['colors'] = {
-    ...commonColors,
     background: getThemeColor('background.default'),
     backgroundAlt: getThemeColor('background.alt'),
     backgroundAlt2: getThemeColor('background.alt2'),
     text: getThemeColor('text.default'),
-
+    textAlt: getThemeColor('text.alt'),
     link: getThemeColor('primary.default'),
     no_answer: [colors.greyLight, colors.greyLightest],
-    border: '#FFF6E6',
+    border: getThemeColor('border.default'),
+    borderAlt: getThemeColor('border.alt'),
     velocityBarColors: velocity.map((color, i) => ({
         id: `velocityColor${i}`,
         color: velocity[i * 2],

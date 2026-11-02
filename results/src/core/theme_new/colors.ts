@@ -5,7 +5,8 @@ export const defaultColorTheme = {
     lightOnDark: {
         primary: { default: '#38D6FE', darker: '#1c9fc0ff' },
         background: { default: '#272325', alt: '#3A3444', alt2: '#604B81' },
-        text: { default: '#FFF6E6' },
+        text: { default: '#FFF6E6', alt: 'rgba(255, 246, 229, 0.5)' },
+        border: { default: '#FFF6E6', alt: 'rgba(255, 246, 229, 0.35)' },
         experience: {
             heard: '#AEEFFF',
             used: '#129DC0',
