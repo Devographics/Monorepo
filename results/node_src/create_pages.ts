@@ -33,9 +33,8 @@ import { Entity } from '@devographics/types'
 // import { fileURLToPath } from 'url'
 // const __filename = fileURLToPath(import.meta.url)
 // const __dirname = path.dirname(__filename)
-const editionFolder = path.resolve(__dirname, `../surveys/${process.env.EDITIONID}`)
 
-function checkConfig() {
+function checkConfig(editionFolder: string) {
     const errors: Array<string> = []
     if (!process.env.EDITIONID) errors.push('EDITIONID not defined')
     if (!process.env.SURVEYID) errors.push('SURVEYID not defined')
@@ -46,18 +45,30 @@ function checkConfig() {
         throw new Error(errors.join('\n'))
     }
 }
-checkConfig()
 
 const USE_FAST_BUILD = process.env.FAST_BUILD === 'true'
 const GENERATE_BLOCKS = process.env.GATSBY_GENERATE_BLOCKS === 'true'
 
-const rawSitemap = yaml.load(
-    fs.readFileSync(path.join(editionFolder, 'config/raw_sitemap.yml'), 'utf8')
-)
-validateRawSitemap(rawSitemap, `${process.env.EDITIONID}/config/raw_sitemap.yml`)
-const config = {
-    ...yaml.load(fs.readFileSync(path.join(editionFolder, 'config/config.yml'), 'utf8')),
-    editionId: process.env.EDITIONID
+/**
+ * Don't do this when the module loads: Gatsby swallows errors thrown at that point,
+ * and later fails with an unrelated "Cannot access 'u' before initialization"
+ */
+function loadEditionConfig({ reporter }: { reporter: CreatePagesArgs['reporter'] }) {
+    try {
+        const editionFolder = path.resolve(__dirname, `../surveys/${process.env.EDITIONID}`)
+        checkConfig(editionFolder)
+        const rawSitemap = yaml.load(
+            fs.readFileSync(path.join(editionFolder, 'config/raw_sitemap.yml'), 'utf8')
+        )
+        validateRawSitemap(rawSitemap, `${process.env.EDITIONID}/config/raw_sitemap.yml`)
+        const config = {
+            ...yaml.load(fs.readFileSync(path.join(editionFolder, 'config/config.yml'), 'utf8')),
+            editionId: process.env.EDITIONID
+        }
+        return { rawSitemap, config }
+    } catch (err) {
+        reporter.panic(err.message)
+    }
 }
 
 function strikeThrough(text) {
@@ -79,11 +90,13 @@ class FatalError extends Error {
  */
 export const createPagesSingleLoop = async ({
     graphql,
+    reporter,
     /**
      * @see https://www.gatsbyjs.com/docs/reference/config-files/actions/#createPage
      */
     actions: { createPage, createRedirect }
 }: CreatePagesArgs) => {
+    const { rawSitemap, config } = loadEditionConfig({ reporter })
     try {
         // await initRedis()
 
