@@ -12,7 +12,7 @@ import { computeRegression, TrendLine } from './TrendLine'
 import { NodeData } from './types'
 import { BlockVariantDefinition } from 'core/types'
 import { useChartValues } from './chartValues'
-import { LegendItemType } from '../common2/types'
+import { LegendItemType, ValueFormatter } from '../common2/types'
 
 export type GetNodeProps = {
     items: LegendItemType[]
@@ -20,8 +20,8 @@ export type GetNodeProps = {
     question?: QuestionMetadata
     chartState: ScatterplotChartState
     block: BlockVariantDefinition
-    axis1Formatter: (v: number) => string
-    axis2Formatter: (v: number) => string
+    axis1Formatter: ValueFormatter<ScatterplotChartState>
+    axis2Formatter: ValueFormatter<ScatterplotChartState>
 }
 
 type ScatterplotChartProps = {

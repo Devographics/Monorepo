@@ -53,8 +53,8 @@ const useNodes = ({
         const xValue = bucket1Item?.averageByFacet || 0
         const yValue = bucket2Item?.averageByFacet || 0
 
-        const formattedX = axis1Formatter(xValue)
-        const formattedY = axis2Formatter(yValue)
+        const formattedX = axis1Formatter({ value: xValue })
+        const formattedY = axis2Formatter({ value: yValue })
 
         const serieIndex = 0
         const serieId = 'dummy_serie_id'
@@ -116,9 +116,9 @@ export const TwoSeriesScatterplot = (
         throw new Error(`Could not find question2 with id ${question2Id}`)
     }
 
-    const axis1Formatter = (value: number) =>
+    const axis1Formatter = ({ value }: { value: number }) =>
         formatQuestionValue({ value, question: question1, localeId })
-    const axis2Formatter = (value: number) =>
+    const axis2Formatter = ({ value }: { value: number }) =>
         formatQuestionValue({ value, question: question2, localeId })
 
     const q1Label = getQuestionLabel({ getString, question: question1 })?.questionName

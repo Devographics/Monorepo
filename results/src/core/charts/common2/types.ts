@@ -88,7 +88,7 @@ export type GetTicksType = ({
 export type ViewDefinition<ChartStateType> = {
     id: string
     defaultUnits?: BucketUnits
-    formatValue: FormatValueType<ChartStateType>
+    formatValue: ValueFormatter<ChartStateType>
     getTicks?: GetTicksType
     showLegend?: boolean
 }
@@ -135,7 +135,7 @@ export type Tick = {
     yOffset?: number
 }
 
-export type FormatValueType<ChartStateType> = (options: {
+export type ValueFormatter<ChartStateType> = (options: {
     value: number
     question?: QuestionMetadata
     chartState?: ChartStateType

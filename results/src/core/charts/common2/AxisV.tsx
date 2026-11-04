@@ -1,7 +1,7 @@
 import './AxisV.scss'
 import { usePageContext } from 'core/helpers/pageContext'
 import React from 'react'
-import { FormatValueType, Tick } from './types'
+import { ValueFormatter, Tick } from './types'
 import { QuestionMetadata } from '@devographics/types'
 
 // export const getTicks = (values: number[]) => {
@@ -28,7 +28,7 @@ export const AxisV = <ChartStateType,>({
     ticks: Tick[]
     question?: QuestionMetadata
     labelId?: string
-    formatValue: FormatValueType
+    formatValue: ValueFormatter
     chartState: ChartStateType
 }) => {
     const interval = getInterval(ticks.length)

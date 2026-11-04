@@ -62,34 +62,36 @@ export const formatLocalizedValue = ({
     // short units, e.g. "12 yrs" instead of "12 years"
     short?: boolean
 }) => {
+    let formattedValue
     if (unit === 'percentage') {
-        return new Intl.NumberFormat(localeId, {
+        formattedValue = new Intl.NumberFormat(localeId, {
             style: 'percent',
             maximumFractionDigits: 2
         }).format(roundPercentage(value) / 100)
     } else if (unit === 'usd') {
-        return new Intl.NumberFormat(localeId, {
+        formattedValue = new Intl.NumberFormat(localeId, {
             style: 'currency',
             currency: 'USD',
             maximumFractionDigits: 0
         }).format(value)
     } else if (unit === 'jpy') {
         // Japanese uses the currency name to get 950万円 instead of ￥950万
-        return new Intl.NumberFormat(localeId, {
+        formattedValue = new Intl.NumberFormat(localeId, {
             style: 'currency',
             currency: 'JPY',
             notation: 'compact',
             currencyDisplay: localeId.startsWith('ja') ? 'name' : 'narrowSymbol'
         }).format(value)
     } else if (unit === 'years') {
-        return new Intl.NumberFormat(localeId, {
+        formattedValue = new Intl.NumberFormat(localeId, {
             style: 'unit',
             unit: 'year',
             unitDisplay: short ? 'short' : 'long'
         }).format(value)
     } else {
-        return new Intl.NumberFormat(localeId).format(value)
+        formattedValue = new Intl.NumberFormat(localeId).format(value)
     }
+    return formattedValue
 }
 
 /*

@@ -91,7 +91,12 @@ export const NodeLabel = ({ chartState, node, labelVisibleByDefault = true }: No
                 ry={2}
                 opacity={labelBackgroundOpacity}
             />
-            <text className="scatterplot-node-label-text" x={26} alignmentBaseline="middle">
+            <text
+                className="scatterplot-node-label-text"
+                x={26}
+                alignmentBaseline="middle"
+                dominantBaseline="middle"
+            >
                 {label}
             </text>
         </g>

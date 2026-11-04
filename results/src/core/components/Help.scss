@@ -1,7 +1,7 @@
 @use '../../stylesheets/_breakpoints.scss';
 
 .helpnote {
-    background: var(--linkColor);
+    background: var(--backgroundAlt2Color);
     padding: var(--spacing);
     color: var(--textColorInverted);
     display: grid;

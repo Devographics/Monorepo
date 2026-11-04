@@ -2,7 +2,7 @@ import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import './Axis.scss'
 import React from 'react'
-import { FormatValueType, Tick } from './types'
+import { ValueFormatter, Tick } from './types'
 import { QuestionMetadata } from '@devographics/types'
 import Tooltip from 'core/components/Tooltip'
 
@@ -13,7 +13,7 @@ export type AxisProps = {
     ticks: Tick[]
     question?: QuestionMetadata
     label?: string
-    formatValue: FormatValueType
+    formatValue: ValueFormatter
     r2?: number
 }
 

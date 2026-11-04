@@ -181,6 +181,8 @@ const stateOfHtmlThemeColors: DefaultTheme['colors'] = {
     background: getThemeColor('background.default'),
     backgroundAlt: getThemeColor('background.alt'),
     backgroundAlt2: getThemeColor('background.alt2'),
+    backgroundInverted: getThemeColor('background.inverted'),
+    backgroundInvertedAlt: getThemeColor('background.invertedAlt'),
     text: getThemeColor('text.default'),
     textAlt: getThemeColor('text.alt'),
     link: getThemeColor('primary.default'),
