@@ -90,7 +90,8 @@ export const getItemLabel = (options: {
         namespace = `options.${i18nNamespace}`
     }
 
-    const i18nLabelKey = `${namespace}.${id}`
+    let i18nLabelKey = `${namespace}.${id}`
+    let i18nDescriptionKey = `${i18nLabelKey}.description`
 
     // 1. use i18n id as default
     let key = i18nLabelKey,
@@ -100,12 +101,11 @@ export const getItemLabel = (options: {
         descriptionKey,
         source = LabelSourcesEnum.ID
 
-    // 2. if this is a predefined key, use that as default
+    // 2. this is special field with a predefined key
     if (Object.keys(predefinedKeys).includes(String(id))) {
-        // 2. this is special field with a predefined key
         const predefinedKey = predefinedKeys[id]
-        label = getString(predefinedKey)?.t
-        shortLabel = label
+        i18nLabelKey = predefinedKey
+        i18nDescriptionKey = `${predefinedKey}.description`
         source = LabelSourcesEnum.PREDEFINED
     }
 
@@ -164,7 +164,6 @@ export const getItemLabel = (options: {
         shortLabel = getFields(i18nShortObject, [html ? 'tHtml' : 'tClean', 't']) as string
     }
 
-    const i18nDescriptionKey = `${key}.description`
     const i18nDescriptionObject = getString(i18nDescriptionKey, { values })
     if (!i18nDescriptionObject.missing) {
         key = i18nDescriptionKey

@@ -10,6 +10,7 @@ import {
     OVERLIMIT_ANSWERS
 } from '@devographics/constants'
 import { QuestionMetadata } from '@devographics/types'
+import { getThemeColor } from 'core/theme_new/colors'
 import { DefaultTheme, useTheme } from 'styled-components'
 import colors from 'Theme/colors'
 
@@ -23,6 +24,40 @@ export type ColorScale = {
 const otherBucketIds = [NO_ANSWER, NO_MATCH, CUTOFF_ANSWERS, OTHER_ANSWERS, OVERLIMIT_ANSWERS]
 
 export const getDistinctColor = (colors: string[], index: number) => colors[index % colors.length]
+
+/*
+
+Pick a color for item `i` out of `itemsCount` items, spreading the items
+across the scale while staying away from its edges when possible.
+
+*/
+export const getSequentialColor = ({
+    colorScale,
+    itemsCount,
+    i
+}: {
+    colorScale: string[]
+    itemsCount: number
+    i: number
+}) => {
+    const colorsCount = colorScale.length
+
+    if (itemsCount >= colorsCount) {
+        return colorScale[i % colorsCount]
+    }
+
+    // gap between two items if they were evenly spaced with margins on both sides,
+    // capped to make sure all the items still fit within the scale
+    const idealStep = Math.round((colorsCount + 1) / (itemsCount + 1))
+    const maxStep = Math.floor((colorsCount - 1) / (itemsCount - 1))
+    const step = Math.min(idealStep, maxStep)
+
+    // center the items within the scale
+    const span = step * (itemsCount - 1)
+    const start = Math.floor((colorsCount - 1 - span) / 2)
+
+    return colorScale[start + step * i]
+}
 
 export const useDefaultColorScale = () => {
     const theme = useTheme()
@@ -60,7 +95,11 @@ export const useColorScale = ({
             if (question.options) {
                 if (question.optionsAreSequential || question.optionsAreNumeric) {
                     question.options.forEach((option, index) => {
-                        const color = theme.colors.velocity[index]
+                        const color = getSequentialColor({
+                            colorScale: getThemeColor('velocity'),
+                            itemsCount: question.options!.length,
+                            i: index
+                        })
                         colorScale[option.id] = [color, color]
                     })
                 } else {
