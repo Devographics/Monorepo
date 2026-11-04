@@ -25,7 +25,6 @@
         showInNav: false
 
       - template: tokyodev_vs_salary
-        wrapBlock: false
         disableExport: true
         showInNav: false
         id: years_of_experience_vs_salary
@@ -45,7 +44,6 @@
         showInNav: false
 
       - template: tokyodev_vs_salary
-        wrapBlock: false
         disableExport: true
         showInNav: false
         id: current_employer_vs_salary
@@ -63,7 +61,6 @@
         showInNav: false
 
       - template: tokyodev_vs_experience_vs_salary
-        wrapBlock: false
         disableExport: true
         showInNav: false
         id: work_areas_vs_experience_vs_salary
@@ -82,8 +79,9 @@
         showInNav: false
 
       - id: ai_generated_code_balance
+        titleKey: ai_usage.ai_generated_code_balance
+        questionKey: ai_usage.ai_generated_code_balance.question
         disableExport: true
-        wrapBlock: false
         showInNav: false
         template: tokyodev_multiple_options2_combined
         defaultUnits: percentageQuestion
@@ -99,8 +97,9 @@
         showInNav: false
 
       - id: ai_tools
+        titleKey: ai_usage.ai_tools
+        questionKey: ai_usage.ai_tools.question
         disableExport: true
-        wrapBlock: false
         showInNav: false
         template: tokyodev_multiple_options2_combined
         defaultUnits: percentageQuestion
@@ -116,11 +115,12 @@
         showInNav: false
 
       - id: ai_impact_by_years_of_experience
+        titleKey: ai_usage.ai_impact
+        questionKey: ai_usage.ai_impact.question
         template: tokyodev_variant_base
         fieldId: ai_impact
         i18nNamespace: ai_impact
         disableExport: true
-        wrapBlock: false
         showInNav: false
         defaultUnits: percentageQuestion
         queryOptions:
@@ -156,8 +156,9 @@
         showInNav: false
 
       - id: new_immigration_measures
+        titleKey: life_in_japan.new_immigration_measures
+        questionKey: life_in_japan.new_immigration_measures.question
         disableExport: true
-        wrapBlock: false
         showInNav: false
         template: tokyodev_multiple_options2_combined
         defaultUnits: percentageQuestion
@@ -172,9 +173,11 @@
         wrapBlock: false
         showInNav: false
 
-      - id: remaining_in_japan
+      - id: remaining_in_japan_overview
+        fieldId: remaining_in_japan
+        titleKey: life_in_japan.remaining_in_japan
+        questionKey: life_in_japan.remaining_in_japan.question
         disableExport: true
-        wrapBlock: false
         showInNav: false
         template: tokyodev_multiple_options2_combined
         defaultUnits: percentageQuestion
@@ -191,7 +194,6 @@
 
       - template: tokyodev_variant_base
         disableExport: true
-        wrapBlock: false
         showInNav: false
         fieldId: working_hours_policy
         i18nNamespace: working_hours_policy
@@ -199,6 +201,8 @@
             sectionId: job_info
             addCorrelations: false
         id: working_hours_policy_by_remote_work_policy
+        titleKey: job_info.working_hours_policy
+        questionKey: job_info.working_hours_policy.question
         tabId: tabs.by_remote_work_policy
         filtersState:
             filters:
@@ -231,10 +235,11 @@
 
       - id: searching_for_job_by_remote_work_policy
         disableExport: true
-        wrapBlock: false
         showInNav: false
         i18nNamespace: searching_for_job
         fieldId: searching_for_job
+        titleKey: job_info.searching_for_job
+        questionKey: job_info.searching_for_job.question
         queryOptions:
             sectionId: job_info
             addCorrelations: false
@@ -271,7 +276,6 @@
 
       - template: tokyodev_variant_base
         disableExport: true
-        wrapBlock: false
         showInNav: false
         fieldId: gender
         queryOptions:
@@ -328,9 +332,10 @@
 
       - template: tokyodev_variant_base
         disableExport: true
-        wrapBlock: false
         showInNav: false
         fieldId: identify_as_lgbtq
+        titleKey: user_info.identify_as_lgbtq
+        questionKey: user_info.identify_as_lgbtq.question
         i18nNamespace: identify_as_lgbtq
         queryOptions:
             sectionId: user_info
@@ -364,7 +369,6 @@
 
       - id: source
         disableExport: true
-        wrapBlock: false
         showInNav: false
         template: multiple_options2_freeform
         defaultView: percentageSurvey
@@ -397,6 +401,14 @@
       #       - training_2025
       #       - satisfaction_2025
       #       - favourite_thing_about_japan_2025
+
+      - id: full_survey_cta
+        blockType: CTABlock
+        wrapBlock: false
+        showInNav: false
+        variables:
+            ctaKey: general.view_full_results
+            ctaLink: /demographics/
 
       - id: survey_newsletter
         blockType: NewsletterBlock

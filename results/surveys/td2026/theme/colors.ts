@@ -158,30 +158,23 @@ export const surveyColorTheme = {
         background: { default: '#030d1f', alt: '#182a4a', alt2: '#604B81' },
         text: { default: '#ffffff' },
         velocity: [
-            'hsl(300, 61%, 20%)',
-            'hsl(300, 61%, 25%)',
-            'hsl(300, 61%, 30%)',
-            'hsl(300, 61%, 35%)',
-            'hsl(300, 61%, 40%)',
+            'hsl(300, 61%, 10%)',
+            'hsl(300, 61%, 17%)',
+            'hsl(300, 61%, 24%)',
+            'hsl(300, 61%, 31%)',
+            'hsl(300, 61%, 38%)',
             'hsl(300, 61%, 45%)',
-            'hsl(300, 61%, 50%)',
-            'hsl(300, 61%, 55%)',
-            'hsl(300, 61%, 60%)',
-            'hsl(300, 61%, 65%)',
-            'hsl(300, 61%, 70%)',
-            'hsl(300, 61%, 75%)',
+            'hsl(300, 61%, 52%)',
+            'hsl(300, 61%, 59%)',
+            'hsl(300, 61%, 66%)',
+            'hsl(300, 61%, 73%)',
             'hsl(300, 61%, 80%)',
-            'hsl(300, 61%, 85%)'
+            'hsl(300, 61%, 90%)'
         ]
     }
 }
 
-const commonColors = {
-    textAlt: 'rgba(255, 246, 229, 0.5)'
-}
-
 const tokyodevThemeColors: DefaultTheme['colors'] = {
-    ...commonColors,
     background: getThemeColor('background.default'),
     backgroundAlt: getThemeColor('background.alt'),
     backgroundAlt2: getThemeColor('background.alt2'),
@@ -191,8 +184,9 @@ const tokyodevThemeColors: DefaultTheme['colors'] = {
     textAlt: getThemeColor('text.alt'),
     link: getThemeColor('primary.default'),
     no_answer: [colors.greyLight, colors.greyLightest],
-    border: '#FFF6E6',
-    velocityBarColors: velocity.map((color, i) => ({
+    border: getThemeColor('border.default'),
+    borderAlt: getThemeColor('border.alt'),
+    velocityBarColors: getThemeColor('velocity').map((color, i) => ({
         id: `velocityColor${i}`,
         color: velocity[i * 2],
         gradient: [velocity[i * 2 + 1], velocity[i * 2]]
