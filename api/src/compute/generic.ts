@@ -23,6 +23,7 @@ import {
     addMissingBuckets,
     addEntities,
     addCompletionCounts,
+    addFacetAnsweredCounts,
     addPercentages,
     sortData,
     limitData,
@@ -554,6 +555,7 @@ export async function genericComputeFunction(
 
         await runStage(addAverages, [results, axis2, axis1])
         await runStage(addPercentiles, [results, axis2, axis1])
+        await runStage(addFacetAnsweredCounts, [results])
 
         if (executionContext === ExecutionContext.REGULAR) {
             // decorating with entities and tokens need to come before grouping stage

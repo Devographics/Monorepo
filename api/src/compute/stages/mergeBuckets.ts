@@ -56,6 +56,10 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
                 axis: secondaryAxis,
                 mergedBucket: mergedBucket_
             }) ?? []
+        mergedBucket_.facetAnsweredCount = sumBy(
+            buckets as Bucket[],
+            b => b.facetAnsweredCount || 0
+        )
 
         /*
 

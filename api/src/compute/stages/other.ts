@@ -8,7 +8,7 @@ import {
 import isEmpty from 'lodash/isEmpty.js'
 import sumBy from 'lodash/sumBy.js'
 import difference from 'lodash/difference.js'
-import { NO_ANSWER } from '@devographics/constants'
+import { NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
 import { BucketUnits } from '@devographics/types'
 
 /*
@@ -203,6 +203,31 @@ export async function removeEmptyEditions(resultsByEdition: ResponseEditionData[
 //         }
 //     }
 // }
+
+/*
+
+Count how many of a bucket's respondents actually answered the facet question.
+
+When `showNoAnswer` is enabled `bucket.count` also includes respondents who
+skipped the facet question, whereas averages and percentiles only use those who
+answered it. This is the count that actually matches those stats.
+
+Note: needs to run before the dataset cutoff stage, which alters facet buckets.
+
+*/
+export async function addFacetAnsweredCounts(resultsByEdition: ResponseEditionData[]) {
+    for (const editionData of resultsByEdition) {
+        for (const bucket of editionData.buckets) {
+            let facetAnsweredCount = 0
+            for (const facetBucket of bucket.facetBuckets ?? []) {
+                if (facetBucket.id !== NO_ANSWER && facetBucket.id !== NOT_APPLICABLE) {
+                    facetAnsweredCount += facetBucket.count || 0
+                }
+            }
+            bucket.facetAnsweredCount = facetAnsweredCount
+        }
+    }
+}
 
 /*
 

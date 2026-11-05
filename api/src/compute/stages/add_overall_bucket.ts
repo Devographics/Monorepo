@@ -55,10 +55,14 @@ export const addOverallBucket = async (
     for (let editionData of resultsByEdition) {
         // for each edition, find corresponding edition in overall results
         const editionOverallResults = overallResults.find(
-            editionData => editionData.editionId === editionData.editionId
+            overallEditionData => overallEditionData.editionId === editionData.editionId
         )
+        if (!editionOverallResults) {
+            // this edition has no overall results for this combination of parameters
+            continue
+        }
         // use that to generate an overall bucket
-        const overallBucket = getOverallBucket(editionOverallResults!)
+        const overallBucket = getOverallBucket(editionOverallResults)
         editionData.buckets = [...editionData.buckets, overallBucket]
     }
 }

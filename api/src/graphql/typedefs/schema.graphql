@@ -559,6 +559,11 @@ type Bucket {
     """
     percentilesByFacet: Percentiles
     """
+    Number of bucket respondents who answered the facet question, when bucket is faceted
+    (unlike count, excludes no answer and not applicable facet buckets)
+    """
+    facetAnsweredCount: Int
+    """
     For combined results, indicates if this is issued from freeform data
     """
     isFreeformData: Boolean
@@ -633,6 +638,11 @@ type GroupedBucket {
     Percentiles by facet
     """
     percentilesByFacet: Percentiles
+    """
+    Number of bucket respondents who answered the facet question, when bucket is faceted
+    (unlike count, excludes no answer and not applicable facet buckets)
+    """
+    facetAnsweredCount: Int
     """
     For combined results, indicates if this is issued from freeform data
     """

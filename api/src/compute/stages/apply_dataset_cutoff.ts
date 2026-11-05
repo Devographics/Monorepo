@@ -32,6 +32,7 @@ messing up the charts because of missing datapoints.
 const getZeroBucket = <T extends Bucket | FacetBucket>(bucket: T) => ({
     ...bucket,
     [BucketUnits.COUNT]: 0,
+    facetAnsweredCount: 0,
     [BucketUnits.PERCENTAGE_QUESTION]: 0,
     [BucketUnits.PERCENTAGE_SURVEY]: 0,
     [BucketUnits.PERCENTILES]: zeroPercentiles,

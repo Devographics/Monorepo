@@ -224,6 +224,7 @@ export interface BucketMetadata {
     isFreeformData?: boolean
     facetsCountSum?: number
     facetsPercentSum?: number
+    facetAnsweredCount?: number
 }
 
 export interface Bucket extends BucketData, BucketMetadata {
