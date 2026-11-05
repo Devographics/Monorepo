@@ -302,18 +302,17 @@ enum ContentType {
     number
 }
 
-scalar StringOrInt
-
 scalar StringOrFloatOrArray
 
 type OptionMetadata {
-    id: StringOrInt
+    id: String
     intlId: String
     label: String
     lowerBound: Float
     upperBound: Float
     """
-    Value associated with this option, if different from id
+    Numeric value associated with this option. For numeric questions, this
+    is the id as a number unless the option specifies a different value.
     """
     value: Float
 

@@ -273,6 +273,22 @@ export const addOptionsAverages = (options: Option[]) => {
 
 /*
 
+Option ids are exposed as strings by the API, so for numeric questions
+use `value` to expose the option's numeric value.
+
+Note: some numeric questions have non-numeric ids (e.g. the rows of a likert
+question), in which case there is no value to add.
+
+*/
+export const addNumericOptionsValues = <T extends Option>(options: T[]) => {
+    return options.map(option => {
+        const value = option.value ?? Number(option.id)
+        return Number.isNaN(value) ? option : { ...option, value }
+    })
+}
+
+/*
+
 Disallow some fields because their contents would not be valid GraphQL
 enum members. In the future use normalization to make sure that data
 is properly formatted in the database itself.

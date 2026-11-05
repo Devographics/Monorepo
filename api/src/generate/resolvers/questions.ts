@@ -6,7 +6,7 @@ import omit from 'lodash/omit.js'
 import { getEntity, getEntities } from '../../load/entities'
 import { loadOrGetLocales } from '../../load/locales/locales'
 import { convertLocaleId, unconvertLocaleId } from './locales'
-import { addOptionsAverages, addGroupsAverages } from '../helpers'
+import { addOptionsAverages, addGroupsAverages, addNumericOptionsValues } from '../helpers'
 
 export const getQuestionResolverMap = async ({
     questionObject
@@ -67,7 +67,7 @@ export const questionMetadataResolverMap = {
     },
 
     options: async (parent: QuestionApiObject, {}, context: RequestContext) => {
-        const { template, options, editionId } = parent
+        const { template, options, editionId, optionsAreNumeric } = parent
         if (!options) {
             return
         }
@@ -88,7 +88,7 @@ export const questionMetadataResolverMap = {
         // return ['feature', 'tool'].includes(template) ? [] : optionsWithEntities
         // add averages if needed
         const optionsWithAverages = addOptionsAverages(optionsWithEntities)
-        return optionsWithAverages
+        return optionsAreNumeric ? addNumericOptionsValues(optionsWithAverages) : optionsWithAverages
     },
     groups: async (parent: QuestionApiObject, {}, context: RequestContext) => {
         const { groups } = parent

@@ -11,8 +11,8 @@ type DisabilityStatusOption {
     editions: [StateOfJsEditionID]
 }
 
-Note: when option are numeric, we use the Float type because enums items
-can't be numbers.
+Note: when option are numeric, we use the String type because enums items
+can't be numbers (and to match bucket ids, which are always strings).
 
 */
 
@@ -29,7 +29,7 @@ export const generateOptionType = ({
         typeName: optionTypeName,
         typeType: TypeTypeEnum.OPTION,
         typeDef: `type ${optionTypeName} {
-    id: ${optionsAreNumeric ? 'Float' : enumTypeName}
+    id: ${optionsAreNumeric ? 'String' : enumTypeName}
     label: String
     entity: Entity
     """
