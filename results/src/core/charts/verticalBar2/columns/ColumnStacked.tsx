@@ -81,7 +81,7 @@ export const ColumnStacked = <
                             viewDefinition={viewDefinition}
                             highlightIds={{
                                 blockId: serie.name,
-                                editionId: edition.editionId,
+                                editionId: edition?.editionId,
                                 bucketId: id
                             }}
                         />

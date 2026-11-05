@@ -35,6 +35,7 @@ export const getBucketsFragment = (options: {
                     ${addBucketsEntities ? getEntityFragment() : ''}
                     ${facet ? BucketUnits.AVERAGE : ''}
                     ${facet ? getPercentilesFragment() : ''}
+                    ${facet ? 'facetAnsweredCount' : ''}
                     ${facet ? getFacetFragment(addBucketsEntities) : ''}
                     ${
                         addGroupedBuckets && currentDepth === 0

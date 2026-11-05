@@ -177,7 +177,12 @@ const BoxplotRow = (props: BoxplotRowProps) => {
             metadataItems={[
                 {
                     id: 'respondentCount',
-                    component: <RespondentCount key={1} count={bucket.count} />
+                    component: (
+                        <RespondentCount
+                            key={1}
+                            count={bucket.facetAnsweredCount ?? bucket.count}
+                        />
+                    )
                 }
             ]}
         >
