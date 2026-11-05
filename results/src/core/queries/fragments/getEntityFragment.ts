@@ -11,6 +11,7 @@ export const getEntityFragmentContents = () => `name
     descriptionHtml
     descriptionClean
     id
+    idAliases
     parentId
     entityType
     tags

@@ -8,6 +8,7 @@ export const getEntityFragment = () => `entity {
     descriptionHtml
     descriptionClean
     id
+    idAliases
     parentId
     entityType
     tags
