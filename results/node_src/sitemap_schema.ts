@@ -150,6 +150,7 @@ const blockSchema: z.ZodType<ResultsSitemapBlock> = z.lazy(() =>
         template: z.string().optional(),
         blockType: z.string().optional(),
         variants: z.array(blockSchema).optional(),
+        extends: z.string().optional(),
 
         // question
         fieldId: z.string().optional(),
@@ -222,7 +223,6 @@ const blockSchema: z.ZodType<ResultsSitemapBlock> = z.lazy(() =>
         dataFunction: z.string().optional(),
         hideCutoff: z.number().optional(),
         units: unitsSchema.optional(),
-        extends: z.string().optional(),
         noteId: z.string().nullable().optional(),
         keysPath: z.string().optional(),
         bucketKeysName: z.string().optional(),
