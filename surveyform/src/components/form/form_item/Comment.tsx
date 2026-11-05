@@ -72,7 +72,10 @@ export const CommentInput = (props: CommentInputProps) => {
     typeof questionValue === "number" || !isEmpty(questionValue);
 
   let translatedAnswer: string | undefined;
-  const option = question.options?.find((o) => o.id === questionValue);
+  // note: option ids are strings, while numeric answers are numbers
+  const option = Array.isArray(questionValue)
+    ? undefined
+    : question.options?.find((o) => String(o.id) === String(questionValue));
   const i18n = option && getOptioni18nIds({ ...props, option });
   translatedAnswer = i18n && t(i18n.base);
 

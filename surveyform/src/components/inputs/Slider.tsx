@@ -5,6 +5,7 @@ import { FormOption } from "~/components/form/FormOption";
 import { useI18n } from "@devographics/react-i18n";
 import { getOptioni18nIds } from "~/lib/i18n/survey";
 import { FormCheck, FormCheckInput, FormCheckLabel } from "../form/FormCheck";
+import { convertValueToNumber } from "./helpers";
 
 export const Slider = (props: FormInputProps) => {
   const { path, value, question, readOnly, updateCurrentValues } = props;
@@ -16,8 +17,8 @@ export const Slider = (props: FormInputProps) => {
       <div className="form-slider">
         <div className="form-slider-options">
           {options?.map((option, i) => {
-            const hasLabel = option.label && Number(option.label) !== option.id;
-            const isChecked = value === option.id;
+            // note: option ids are strings, while numeric answers are numbers
+            const isChecked = String(value) === String(option.id);
             const checkClass = hasValue
               ? isChecked
                 ? "form-check-checked"
@@ -39,10 +40,10 @@ export const Slider = (props: FormInputProps) => {
                       checked={isChecked}
                       className={checkClass}
                       onChange={(e) => {
-                        const val =
-                          typeof option.id === "number"
-                            ? parseInt(e.currentTarget.value)
-                            : e.currentTarget.value;
+                        const v = e.currentTarget.value;
+                        const val = question.optionsAreNumeric
+                          ? convertValueToNumber(v, question)
+                          : v;
                         updateCurrentValues({ [path]: val });
                       }}
                       disabled={readOnly}
