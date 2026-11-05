@@ -19,7 +19,8 @@ export const groups = range(0, 100 / groupBy).map(n => {
         id: getId(n),
         lowerBound,
         average,
-        upperBound
+        // upper bounds are exclusive, so extend the top group to include 100
+        upperBound: upperBound === 100 ? 101 : upperBound
     }
 })
 
