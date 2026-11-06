@@ -51,8 +51,7 @@ export const resolveAliases = ({
 }) => {
     if (!stringFile.strings) {
         console.warn(`‼️ no strings found for locale ${locale.id}/${stringFile.context}`)
-        stringFile.strings = []
-        return stringFile
+        return { ...stringFile, strings: [] }
     }
     const aliasedStrings: TranslationStringObject[] = []
     /*
@@ -65,12 +64,13 @@ export const resolveAliases = ({
       aliasFor: foo.bar
 
     */
-    stringFile.strings = stringFile.strings.map(s => {
+    // note: work on a copy so the raw stringFile isn't mutated (en-US gets processed twice)
+    const strings = stringFile.strings.map(s => {
         // resolve alias
         if (s.aliasFor) {
             const realString = findRealString(s.aliasFor, locale)
             if (realString) {
-                s = { ...realString, key: s.key, aliasFor: s.aliasFor }
+                s = { ...realString, aliases: undefined, key: s.key, aliasFor: s.aliasFor }
             } else {
                 report.unresolvedAliases.push(s.aliasFor)
             }
@@ -88,11 +88,16 @@ export const resolveAliases = ({
     */
     if (enStringFile) {
         enStringFile.strings.forEach(s => {
-            const currentLocaleString = stringFile.strings.find(s_ => s_.key === s.key)
+            const currentLocaleString = strings.find(s_ => s_.key === s.key)
             if (!currentLocaleString && s.aliasFor) {
                 const realString = findRealString(s.aliasFor, locale)
                 if (realString) {
-                    stringFile.strings.push({ ...realString, key: s.key, aliasFor: s.aliasFor })
+                    strings.push({
+                        ...realString,
+                        aliases: undefined,
+                        key: s.key,
+                        aliasFor: s.aliasFor
+                    })
                 }
             }
         })
@@ -108,12 +113,14 @@ export const resolveAliases = ({
 
     */
 
-    stringFile.strings.forEach((s: TranslationStringObject) => {
+    strings.forEach((s: TranslationStringObject) => {
         // resolve aliases
         if (s.aliases) {
-            s.aliases.forEach((aliasKey: string) => {
+            // alias copies don't carry the aliases list, so they can't create aliases of their own
+            const { aliases, ...stringWithoutAliases } = s
+            aliases.forEach((aliasKey: string) => {
                 aliasedStrings.push({
-                    ...s,
+                    ...stringWithoutAliases,
                     key: aliasKey,
                     aliasFor: s.key
                 })
@@ -121,8 +128,7 @@ export const resolveAliases = ({
         }
     })
 
-    stringFile.strings = [...stringFile.strings, ...aliasedStrings]
-    return stringFile
+    return { ...stringFile, strings: [...strings, ...aliasedStrings] }
 }
 
 /*
