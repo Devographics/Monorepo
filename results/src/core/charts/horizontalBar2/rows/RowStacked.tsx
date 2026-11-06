@@ -8,6 +8,8 @@ import { Bucket } from '@devographics/types'
 import { getBlockAllFacetBucketIds, getBucketsAllFacetBucketIds } from '../helpers/other'
 import { AnswersCount } from 'core/charts/common2/AnswersCount'
 import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataIndicator'
+import { OVERALL } from '@devographics/constants'
+import sumBy from 'lodash/sumBy'
 
 export const RowStacked = (props: RowComponentProps) => {
     const {
@@ -40,10 +42,17 @@ export const RowStacked = (props: RowComponentProps) => {
     const allFacetBucketIds = getBucketsAllFacetBucketIds(buckets)
     const colorScale = useColorScale({ question: facetQuestion, bucketIds: allFacetBucketIds })
 
+    // the overall bucket's count leaves out respondents who skipped the question,
+    // but its facet buckets (and therefore its bar) can include them
+    const rowTotal =
+        bucket_.id === OVERALL && !hasInsufficientData
+            ? sumBy(facetBuckets, fb => fb.count || 0)
+            : bucket.count
+
     const rowWrapperProps = {
         ...props,
         metadataItems: [
-            { id: 'answersCount', component: <AnswersCount key={1} count={bucket.count} /> }
+            { id: 'answersCount', component: <AnswersCount key={1} count={rowTotal} /> }
         ]
     }
 
@@ -75,7 +84,7 @@ export const RowStacked = (props: RowComponentProps) => {
                                 chartValues={chartValues}
                                 gradient={gradient}
                                 viewDefinition={viewDefinition}
-                                parentTotal={bucket.count || 0}
+                                parentTotal={rowTotal || 0}
                                 highlightIds={{
                                     blockId: serie.name,
                                     bucketId: bucket.id,
