@@ -14,6 +14,7 @@ export const InsufficientData = ({
         <text
             className="insufficient-data"
             width={width}
+            x={10}
             y={y}
             textAnchor="start"
             alignmentBaseline="middle"

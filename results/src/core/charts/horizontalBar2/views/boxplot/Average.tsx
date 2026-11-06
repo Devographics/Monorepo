@@ -15,6 +15,15 @@ export const AverageBox = ({
 }: BoxProps) => {
     const { getString } = useI18n()
 
+    if (bucket.hasInsufficientData) {
+        return (
+            <g>
+                <InsufficientData width={`${contentWidth}px`} y={rowHeight / 2 + 3}>
+                    {getString('charts.insufficient_data')?.t}
+                </InsufficientData>
+            </g>
+        )
+    }
     const average = bucket.averageByFacet || 0
 
     const dotProps = {
@@ -31,13 +40,7 @@ export const AverageBox = ({
         values: { value: labelFormatter(average) }
     })?.t
 
-    return bucket.hasInsufficientData ? (
-        <g>
-            <InsufficientData width={`${contentWidth}px`} y={rowHeight / 2 + 3}>
-                {getString('charts.insufficient_data')?.t}
-            </InsufficientData>
-        </g>
-    ) : (
+    return (
         <>
             {/* <AverageDot value={average} xCoord={xCoord} {...dotProps} /> */}
             <ValueLabel

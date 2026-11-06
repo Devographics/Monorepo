@@ -39,6 +39,16 @@ export const PercentilesBox = ({
 }: BoxProps) => {
     const { getString } = useI18n()
 
+    if (bucket.hasInsufficientData) {
+        return (
+            <g>
+                <InsufficientData width={`${contentWidth}px`} y={rowHeight / 2 + 3}>
+                    {getString('charts.insufficient_data')?.t}
+                </InsufficientData>
+            </g>
+        )
+    }
+
     const { p0, p10, p25, p50, p75, p90, p100 } = boxData
 
     const getXCoord = (x: number) => (isReversed ? contentWidth - x : x)
@@ -62,13 +72,7 @@ export const PercentilesBox = ({
         values: { percentile: 50, value: labelFormatter(percentilesData.p50) }
     })?.t
 
-    return bucket.hasInsufficientData ? (
-        <g>
-            <InsufficientData width={`${contentWidth}px`} y={rowHeight / 2 + 3}>
-                {getString('charts.insufficient_data')?.t}
-            </InsufficientData>
-        </g>
-    ) : (
+    return (
         <>
             <defs>
                 <linearGradient id={gradientId}>

@@ -144,7 +144,7 @@ const BoxplotRow = (props: BoxplotRowProps) => {
 
     const { view } = chartState
     const boxData = useBoxplotData({ bucket, xScale, isReversed })
-    if (!bucket.percentilesByFacet || !boxData) {
+    if (!bucket.hasInsufficientData && (!bucket.percentilesByFacet || !boxData)) {
         console.log(`BoxplotRow: could not find data for bucket ${bucket.id}`)
         console.log(bucket)
         console.log(boxData)
