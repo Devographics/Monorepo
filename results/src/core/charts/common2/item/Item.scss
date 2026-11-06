@@ -6,14 +6,6 @@
     gap: 10px;
     max-width: 100%;
 }
-@keyframes scroll-text {
-    0% {
-        transform: translateX(0%);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
-}
 .chart-item-label-wrapper {
     text-align: right;
     font-size: 0.8rem;
@@ -83,13 +75,21 @@
     }
 }
 
-.chart-item-label-wrapper:hover {
+// only added (via JS, see Item.tsx) when the label is actually truncated,
+// so non-truncated labels don't change at all on hover
+.chart-item-label-wrapper-marquee {
     .chart-item-label {
-        text-overflow: initial;
         overflow: visible;
-        translate: -100%;
-        margin-left: 100%;
-        transition: 1s linear;
+        flex-shrink: 0;
+        animation: chart-item-label-marquee var(--marquee-duration) linear 300ms both;
+    }
+}
+@keyframes chart-item-label-marquee {
+    from {
+        translate: 0;
+    }
+    to {
+        translate: calc(-1 * var(--marquee-distance));
     }
 }
 

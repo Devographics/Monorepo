@@ -1,6 +1,6 @@
 import './Item.scss'
 
-import React, { ReactNode, useContext } from 'react'
+import React, { ReactNode } from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { LabelObject, getItemLabel } from 'core/helpers/labels'
 import {
@@ -15,13 +15,11 @@ import Button from 'core/components/Button'
 import Popover from 'core/components/Popover2'
 import { PeopleIcon, PeopleModal } from './People'
 import { services } from './services'
-import { baselineStatuses, FeatureModal } from './Feature'
+import { FeatureModal } from './Feature'
 import { LibraryModal } from './Library'
 import { ExternalLinkIcon, FeatureIcon, LibraryIcon } from '@devographics/icons'
 import Tooltip from 'core/components/Tooltip'
 import { usePageContext } from 'core/helpers/pageContext'
-import T from 'core/i18n/T'
-import { SeriesMetadata } from '../types'
 import { BaselineIcon } from './BaselineIcon'
 
 export const entityComponents = {
@@ -137,13 +135,40 @@ const Wrapper = ({
     className?: string
 }) => <span className={`chart-item chart-item-${type} ${className}`}>{children}</span>
 
+// scroll speed for truncated labels, in pixels per second
+const MARQUEE_SPEED = 70
+
+// on hover, if the label is truncated, store how far it overflows
+// so the CSS animation can scroll it at a constant speed
+const startMarquee = (e: React.MouseEvent<HTMLSpanElement>) => {
+    const wrapper = e.currentTarget
+    const label = wrapper.firstElementChild as HTMLElement | null
+    if (!label) {
+        return
+    }
+    const overflow = label.scrollWidth - wrapper.clientWidth
+    if (overflow > 1) {
+        wrapper.style.setProperty('--marquee-distance', `${overflow}px`)
+        wrapper.style.setProperty('--marquee-duration', `${overflow / MARQUEE_SPEED}s`)
+        wrapper.classList.add('chart-item-label-wrapper-marquee')
+    }
+}
+
+const stopMarquee = (e: React.MouseEvent<HTMLSpanElement>) => {
+    e.currentTarget.classList.remove('chart-item-label-wrapper-marquee')
+}
+
 const Label = ({ label: label_, href, id }: { label: LabelObject; href?: string; id: string }) => {
     const { label, description, shortLabel, key } = label_
     const longLabel = label !== shortLabel ? label : null
     const tooltipContents = description || longLabel
     const LabelElement = href ? 'a' : 'span'
     const labelComponent = (
-        <span className="chart-item-label-wrapper">
+        <span
+            className="chart-item-label-wrapper"
+            onMouseEnter={startMarquee}
+            onMouseLeave={stopMarquee}
+        >
             <LabelElement
                 data-key={key}
                 data-id={id}
