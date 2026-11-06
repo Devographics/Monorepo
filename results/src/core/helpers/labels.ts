@@ -101,12 +101,33 @@ export const getItemLabel = (options: {
         descriptionKey,
         source = LabelSourcesEnum.ID
 
-    // 2. this is special field with a predefined key
+    // 2. this is a special field with a predefined key
     if (Object.keys(predefinedKeys).includes(String(id))) {
         const predefinedKey = predefinedKeys[id]
-        i18nLabelKey = predefinedKey
-        i18nDescriptionKey = `${predefinedKey}.description`
-        source = LabelSourcesEnum.PREDEFINED
+
+        const i18nPredefinedLabelObject = getString(predefinedKey, { values })
+        if (!i18nPredefinedLabelObject.missing) {
+            label = getFields(i18nPredefinedLabelObject, [html ? 'tHtml' : 'tClean', 't']) as string
+            source = LabelSourcesEnum.PREDEFINED
+        }
+
+        const i18nPredefinedShortLabelObject = getString(`${predefinedKey}.short`, { values })
+        if (!i18nPredefinedShortLabelObject.missing) {
+            shortLabel = getFields(i18nPredefinedShortLabelObject, [
+                html ? 'tHtml' : 'tClean',
+                't'
+            ]) as string
+        }
+
+        const i18nPredefinedDescriptionObject = getString(`${predefinedKey}.description`, {
+            values
+        })
+        if (!i18nPredefinedDescriptionObject.missing) {
+            description = getFields(i18nPredefinedDescriptionObject, [
+                html ? 'tHtml' : 'tClean',
+                't'
+            ]) as string
+        }
     }
 
     // 3. look for entity metadata
@@ -159,14 +180,13 @@ export const getItemLabel = (options: {
         source = LabelSourcesEnum.I18N
     }
 
-    const i18nShortObject = getString(`${i18nLabelKey}.short`, { values })
-    if (!i18nShortObject.missing) {
-        shortLabel = getFields(i18nShortObject, [html ? 'tHtml' : 'tClean', 't']) as string
+    const i18nShortLabelObject = getString(`${i18nLabelKey}.short`, { values })
+    if (!i18nShortLabelObject.missing) {
+        shortLabel = getFields(i18nShortLabelObject, [html ? 'tHtml' : 'tClean', 't']) as string
     }
 
     const i18nDescriptionObject = getString(i18nDescriptionKey, { values })
     if (!i18nDescriptionObject.missing) {
-        key = i18nDescriptionKey
         description = getFields(i18nDescriptionObject, [html ? 'tHtml' : 'tClean', 't']) as string
     }
 
@@ -175,7 +195,6 @@ export const getItemLabel = (options: {
         // 1. if a label is provided, use that
         key = 'provided'
         label = providedLabel
-        shortLabel = providedLabel
         source = LabelSourcesEnum.PROVIDED
     }
 
@@ -183,11 +202,12 @@ export const getItemLabel = (options: {
     if (!shortLabel) {
         shortLabel = label
     }
+
     const result = { id, key, label, shortLabel, descriptionKey, description, values, source }
 
     // console.log('// labelObject')
-    // console.log(result)
     // console.log(result.key)
+    // console.log(result)
     return result
 }
 

@@ -33,9 +33,11 @@
 }
 
 .chart-grid-item-heading-label {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+    @media (hover: hover) {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 }
 .chart-grid-item-heading-count {
 }

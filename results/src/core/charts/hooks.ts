@@ -488,16 +488,20 @@ export const useAllQuestionsWithOptions2 = (): FilterItem[] => {
     return keys
 }
 
+const excludedTemplates = ['help']
+
 export const useAllQuestions = (): FilterItem[] => {
     const context = usePageContext()
     const { currentEdition } = context
-    const keys = []
+    const questions = []
     for (const section of currentEdition.sections) {
         for (const question of section.questions) {
-            keys.push({ sectionId: section.id, ...question })
+            if (!excludedTemplates.includes(question.template)) {
+                questions.push({ sectionId: section.id, ...question })
+            }
         }
     }
-    return keys
+    return questions
 }
 /*
 
