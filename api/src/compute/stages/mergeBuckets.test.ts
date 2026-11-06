@@ -114,6 +114,33 @@ describe('mergeBuckets', () => {
         expect(merged[BucketUnits.AVERAGE]).toBe(0)
     })
 
+    test('wrapping a single bucket keeps its stats even when its facets were cut off', () => {
+        // a `cutoff_answers` bucket whose salary facets were all under the facet
+        // cutoff, so only special facet buckets are left to recompute from
+        const percentiles = { ...zeroPercentiles, p50: 200000 }
+        const cutoffAnswers = bucket(
+            'cutoff_answers',
+            [
+                ['cutoff_answers', 4],
+                ['insufficient_data', 1]
+            ],
+            {
+                [BucketUnits.AVERAGE]: 152500,
+                [BucketUnits.PERCENTILES]: percentiles,
+                [BucketUnits.MEDIAN]: 200000
+            }
+        )
+        const merged = mergeBuckets<Bucket>({
+            buckets: [cutoffAnswers],
+            mergedProps: { id: 'other_answers' },
+            primaryAxis: hoursAxis,
+            secondaryAxis: salaryAxis
+        })
+        expect(merged[BucketUnits.AVERAGE]).toBe(152500)
+        expect(merged[BucketUnits.PERCENTILES]).toEqual(percentiles)
+        expect(merged[BucketUnits.MEDIAN]).toBe(200000)
+    })
+
     test('nothing to average (facets all na/no_answer or zero-count) gives 0, not NaN', () => {
         const withStats = { [BucketUnits.AVERAGE]: 0, [BucketUnits.PERCENTILES]: zeroPercentiles }
         const merged = mergeBuckets<Bucket>({

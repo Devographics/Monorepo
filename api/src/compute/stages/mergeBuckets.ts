@@ -78,7 +78,16 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
         */
         const hasFacetStats =
             secondaryAxis.question.optionsAreRange || secondaryAxis.question.optionsAreNumeric
-        if (hasFacetStats && mergedBucket_.facetBuckets.length > 0) {
+        if (hasFacetStats && buckets.length === 1 && !mergedBucket.hasInsufficientData) {
+            // When wrapping a single bucket (e.g. `cutoff_answers` into `other_answers`)
+            // its stats are already the right ones, so keep them. Recomputing wouldn't work:
+            // its facet buckets may have been merged by the facet-level cutoff into special
+            // buckets (`cutoff_answers`, `insufficient_data`) that combineFacetBuckets drops.
+            const onlyBucket = buckets[0]
+            mergedBucket[BucketUnits.AVERAGE] = onlyBucket[BucketUnits.AVERAGE]
+            mergedBucket[BucketUnits.PERCENTILES] = onlyBucket[BucketUnits.PERCENTILES]
+            mergedBucket[BucketUnits.MEDIAN] = onlyBucket[BucketUnits.MEDIAN]
+        } else if (hasFacetStats && mergedBucket_.facetBuckets.length > 0) {
             if (mergedBucket.hasInsufficientData) {
                 mergedBucket[BucketUnits.AVERAGE] = 0
                 mergedBucket[BucketUnits.PERCENTILES] = zeroPercentiles
