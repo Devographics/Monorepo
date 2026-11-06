@@ -5,13 +5,13 @@ const getUrl = entity => entity?.homepage?.url || entity?.twitter?.url
 
 export const Avatar = ({ entity, size = 60 }) => (
     <a className="avatar avatar-link" href={getUrl(entity)} style={{ '--size': size }}>
-        <img src={entity?.avatar?.url} alt={entity.name} />
+        <img src={entity?.avatar?.url} title={entity.name} alt={entity.name} />
     </a>
 )
 
 export const AvatarNotLink = ({ entity, size = 60 }) => (
     <span className="avatar" style={{ '--size': size }}>
-        <img src={entity?.avatar?.url} alt={entity.name} />
+        <img src={entity?.avatar?.url} title={entity.name} alt={entity.name} />
     </span>
 )
 
