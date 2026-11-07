@@ -119,7 +119,7 @@ const QuadrantLabel = styled(animated.text)`
     text-transform: uppercase;
     letter-spacing: 3px;
     opacity: 0.75;
-    font-size: ${({ theme }) => theme.typography.size.larger};
+    font-size: var(--fontSizeLarger);
     user-select: none;
     pointer-events: none;
 `

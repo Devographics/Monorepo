@@ -34,7 +34,7 @@ const ShareSite = () => {
 }
 
 const Container = styled.div`
-    border-top: ${props => props.theme.separationBorder};
+    border-top: var(--separationBorder);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     position: relative;

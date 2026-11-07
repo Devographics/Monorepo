@@ -53,7 +53,7 @@ Pagination.defaultProps = {
 }
 
 const Container = styled.div`
-    border-bottom: ${props => props.theme.separationBorder};
+    border-bottom: var(--separationBorder);
     /* z-index: 10; */
     position: relative;
     display: grid;
@@ -63,8 +63,8 @@ const Container = styled.div`
         grid-template-columns: 1fr 0px 1fr;
 
         > *:first-child {
-            border-left: ${props => props.theme.separationBorder};
-            border-right: ${props => props.theme.separationBorder};
+            border-left: var(--separationBorder);
+            border-right: var(--separationBorder);
         }
     }
     @media ${mq.large} {
@@ -76,8 +76,8 @@ const MiddleContent = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border-left: ${props => props.theme.separationBorder};
-    border-right: ${props => props.theme.separationBorder};
+    border-left: var(--separationBorder);
+    border-right: var(--separationBorder);
 
     @media ${mq.smallMedium} {
         border-left: none;

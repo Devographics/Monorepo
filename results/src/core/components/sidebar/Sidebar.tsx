@@ -62,12 +62,12 @@ export const Sidebar = ({
 }
 
 const SidebarContainer = styled.div`
-    border-right: ${props => props.theme.separationBorder};
+    border-right: var(--separationBorder);
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr) min-content;
 
     @media ${mq.large} {
-        width: ${({ theme }) => theme.dimensions.sidebar.width}px;
+        width: var(--sidebarWidth);
         /* height: 100%; */
         /* position: fixed; */
         position: absolute;

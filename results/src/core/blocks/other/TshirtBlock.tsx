@@ -72,7 +72,7 @@ const TshirtBlock = () => {
 }
 
 const Container = styled.div`
-    border: ${props => props.theme.separationBorder};
+    border: var(--separationBorder);
 
     @media ${mq.mediumLarge} {
         display: grid;
@@ -86,10 +86,10 @@ const ImagesContainer = styled.div`
     grid-template-rows: auto auto;
 
     @media ${mq.small} {
-        border-bottom: ${props => props.theme.separationBorder};
+        border-bottom: var(--separationBorder);
     }
     @media ${mq.mediumLarge} {
-        border-right: ${props => props.theme.separationBorder};
+        border-right: var(--separationBorder);
     }
 
     img {
@@ -101,13 +101,13 @@ const ImagesContainer = styled.div`
 const Image = styled.div`
     background: white;
     &:nth-child(1) {
-        /* border-bottom: ${props => props.theme.separationBorder}; */
+        /* border-bottom: var(--separationBorder); */
         grid-column-start: 1;
         grid-column-end: 3;
     }
 
     &:nth-child(2) {
-        border-right: ${props => props.theme.separationBorder};
+        border-right: var(--separationBorder);
     }
 `
 

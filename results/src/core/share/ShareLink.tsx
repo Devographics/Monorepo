@@ -40,7 +40,7 @@ const Link = styled.a`
         padding: var(--spacing) ${spacing(0.33)};
 
         &:not(:last-child) {
-            border-right: ${({ theme }) => theme.separationBorder};
+            border-right: var(--separationBorder);
         }
 
         &:hover,

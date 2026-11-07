@@ -38,7 +38,7 @@ const Container = styled.div`
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
-    border: ${props => props.theme.separationBorder};
+    border: var(--separationBorder);
     padding: ${spacing(2)};
 `
 

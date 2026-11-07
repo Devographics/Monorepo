@@ -286,7 +286,7 @@ export const BlockHeader = styled.div`
     gap: var(--halfSpacing); */
     min-width: 100%;
     width: max-content;
-    border-bottom: ${props => props.theme.border};
+    border-bottom: var(--border);
 `
 
 export const BlockHeaderRight_ = styled.div`
@@ -316,7 +316,7 @@ export const TabsList = styled(Tabs.List)`
 `
 
 export const Tab_ = styled.div`
-    border: ${props => props.theme.border};
+    border: var(--border);
     background: ${getThemeColor('background.default')};
     /* border: 1px solid ${getThemeColor('border.default')}; */
     border-radius: 3px 3px 0 0;

@@ -100,7 +100,7 @@ const Container = styled.div`
 
     .Sidebar & {
         margin-bottom: ${spacing(1)};
-        border: ${({ theme }) => theme.separationBorder};
+        border: var(--separationBorder);
 
         @media ${mq.large} {
             display: none;
@@ -167,10 +167,10 @@ const PopoverPopup = styled.div`
     left: 50%;
     padding: ${props => (props.addPadding ? spacing(1) : 0)};
     background: var(--backgroundAltColor);
-    border: ${props => props.theme.separationBorder};
+    border: var(--separationBorder);
     transform: translateX(-50%);
     z-index: ${zIndex('popover')};
-    box-shadow: ${({ theme }) => theme.blockShadow};
+    box-shadow: var(--blockShadow);
 
     &:before {
         left: 50%;
@@ -182,7 +182,7 @@ const PopoverPopup = styled.div`
         position: absolute;
         pointer-events: none;
         transform-origin: center center;
-        border: ${props => props.theme.separationBorder};
+        border: var(--separationBorder);
         top: 0;
         transform: translate(${ARROW_SIZE * -0.5}px, ${ARROW_SIZE * -0.5}px) rotate(-45deg);
         border-bottom: 0;

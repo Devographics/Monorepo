@@ -106,7 +106,7 @@ const Skip = styled.a`
 const PaginationWrapper = styled.div`
     @media ${mq.smallMedium} {
         padding-left: 5rem;
-        border-bottom: ${({ theme }) => theme.separationBorder};
+        border-bottom: var(--separationBorder);
     }
 `
 
@@ -162,8 +162,8 @@ const Page = styled.div`
     grid-area: content;
     @media ${mq.large} {
         display: grid;
-        grid-template-columns: ${({ theme }) => theme.dimensions.sidebar.width}px calc(
-                100% - ${({ theme }) => theme.dimensions.sidebar.width}px
+        grid-template-columns: var(--sidebarWidth) calc(
+                100% - var(--sidebarWidth)
             );
     }
 

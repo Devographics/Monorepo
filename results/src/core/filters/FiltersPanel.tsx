@@ -348,7 +348,7 @@ export const FiltersExport = ({
 }
 
 export const TabsTrigger_ = styled(Tabs.Trigger)`
-    border: ${props => props.theme.border};
+    border: var(--border);
     background: ${getThemeColor('background.alt')};
     /* border: 1px solid ${getThemeColor('border.default')}; */
     border-radius: 3px 3px 0 0;

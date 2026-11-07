@@ -55,7 +55,11 @@ const ThemedLayout = (props: LayoutProps) => {
         '--fontMedium': theme.typography.weight.medium,
         '--fontBold': theme.typography.weight.bold,
         '--zIndexPopover': theme.zIndexes.popover,
-        '--zIndexModal': theme.zIndexes.modal
+        '--zIndexModal': theme.zIndexes.modal,
+        '--sidebarWidth': `${theme.dimensions.sidebar.width}px`,
+        '--border': theme.border,
+        '--separationBorder': theme.separationBorder,
+        '--blockShadow': theme.blockShadow
     }
     // one --fontSizeXyz variable for each size the survey's theme defines
     for (const size of Object.keys(theme.typography.size)) {

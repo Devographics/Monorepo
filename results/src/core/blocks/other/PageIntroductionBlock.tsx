@@ -38,7 +38,7 @@ const Introduction = styled.div`
     }
 
     @media ${mq.large} {
-        font-size: ${props => props.theme.typography.size.large};
+        font-size: var(--fontSizeLarge);
         margin-bottom: var(--quadrupleSpacing);
     }
 `

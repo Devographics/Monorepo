@@ -31,9 +31,7 @@ const getStyledLink = component => styled(component)`
     /* white-space: nowrap; */
     margin: 0 0 ${spacing(0.33)} 0;
     font-size: ${props =>
-        props.depth > 0
-            ? props.theme.typography.size.smallish
-            : props.theme.typography.size.medium};
+        props.depth > 0 ? 'var(--fontSizeSmallish)' : 'var(--fontSizeMedium)'};
     font-weight: ${props => (props.depth === 0 ? fontWeight('bold') : fontWeight('medium'))};
 
     /* & > span {

@@ -111,7 +111,7 @@ export const LanguageSwitcherContents = () => {
 
 //     .Sidebar & {
 //         margin-bottom: ${spacing(1)};
-//         border: ${({ theme }) => theme.separationBorder};
+//         border: var(--separationBorder);
 
 //         @media ${mq.large} {
 //             display: none;
@@ -169,7 +169,7 @@ export const LanguageSwitcherContents = () => {
 //     border: ${(props) => props.theme.separationBorder};
 //     transform: translateX(-50%);
 //     z-index: 10000;
-//     box-shadow: ${({ theme }) => theme.blockShadow};
+//     box-shadow: var(--blockShadow);
 
 //     &:before {
 //         left: 50%;
@@ -207,7 +207,7 @@ const LanguageSwitcherHelp = styled.div`
     font-size: var(--fontSizeSmall);
     padding-top: ${spacing(1)};
     margin-top: ${spacing(1)};
-    border-top: ${props => props.theme.separationBorder};
+    border-top: var(--separationBorder);
 `
 
 export default LanguageSwitcher

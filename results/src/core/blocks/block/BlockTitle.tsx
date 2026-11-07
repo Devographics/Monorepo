@@ -159,7 +159,7 @@ const StyledBlockTitle = styled.div`
     ${({ isCapturing }) =>
         isCapturing &&
         css`
-            border-bottom: ${props => props.theme.separationBorder};
+            border-bottom: var(--separationBorder);
             padding-bottom: var(--halfSpacing);
             margin-bottom: ${spacing(1)};
         `}

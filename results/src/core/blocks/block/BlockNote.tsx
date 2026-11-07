@@ -34,7 +34,7 @@ export const Note_ = styled.div`
     background: ${getThemeColor('background.alt')};
     padding: var(--spacing);
     margin-top: ${spacing(2)};
-    font-size: ${props => props.theme.typography.size.small};
+    font-size: var(--fontSizeSmall);
     p,
     ul,
     ol {
