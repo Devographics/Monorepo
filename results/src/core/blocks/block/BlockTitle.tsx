@@ -193,7 +193,7 @@ const BlockTitleText = styled.h3`
     align-items: center;
     justify-content: flex-start;
     line-height: 1.2;
-    ${secondaryFontMixin};
+    font-family: var(--secondaryFontFamily);
     font-size: var(--fontSizeLargerest);
     code {
         font-size: var(--fontSizeLargest);

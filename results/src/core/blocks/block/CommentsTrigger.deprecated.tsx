@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import styled, { useTheme } from 'styled-components'
 import ModalTrigger from 'core/components/ModalTrigger'
 import T from 'core/i18n/T'
-import { secondaryFontMixin } from 'core/theme'
 import { CommentIcon } from '@devographics/icons'
 import { runQuery } from 'core/helpers/data'
 import newGithubIssueUrl from 'new-github-issue-url'
@@ -460,7 +459,7 @@ export const CommentQuote = styled.div`
     left: 5px;
     line-height: 1;
     opacity: 0.15;
-    ${secondaryFontMixin}
+    font-family: var(--secondaryFontFamily);
 `
 
 export const CommentMessage = styled.div``

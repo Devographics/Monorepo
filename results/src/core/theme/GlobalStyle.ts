@@ -1,5 +1,4 @@
 import { createGlobalStyle } from 'styled-components'
-import { primaryFontMixin, secondaryFontMixin } from './typography'
 import { textShadowHighlightMixin } from './mixins'
 import mq from './mq'
 import { getThemeColor } from 'core/theme_new/colors'
@@ -12,7 +11,7 @@ export const GlobalStyle = createGlobalStyle`
         font-feature-settings: 'liga' 0;
         line-height: 1.7;
 
-        ${primaryFontMixin};
+        font-family: var(--fontFamily);
         
         @media ${mq.small} {
             font-size: var(--rootSizeMobile);
@@ -41,7 +40,6 @@ export const GlobalStyle = createGlobalStyle`
     h4,
     h5,
     h6 {
-        /* ${secondaryFontMixin} */
         margin: 0 0 var(--spacing) 0;
     }
     
