@@ -13,7 +13,8 @@ type SizeKeys =
     | 'larger'
     | 'largest'
     | 'huge'
-    | "largerest"
+    | 'largerest'
+    | 'smallest'
 
 type WeightKeys = 'light' | 'medium' | 'bold'
 
@@ -44,27 +45,20 @@ type ColorKeys =
 
 type ZIndexKeys = 'popover' | 'modal'
 
-export const spacing =
-    (multiplier = 1) =>
-        ({ theme }: ThemeProps) =>
-            `${theme.dimensions.spacing * multiplier}px`
+// these mixins return CSS variables defined in core/layout/LayoutWrapper.tsx
 
-export const fontSize =
-    (size: SizeKeys) =>
-        ({ theme }: ThemeProps) =>
-            theme.typography.size[size]
+export const spacing = (multiplier = 1) =>
+    multiplier === 1 ? 'var(--spacing)' : `calc(var(--spacing) * ${multiplier})`
 
-export const fontWeight =
-    (weight: WeightKeys) =>
-        ({ theme }: ThemeProps) =>
-            theme.typography.weight[weight]
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+export const fontSize = (size: SizeKeys) => `var(--fontSize${capitalize(size)})`
+
+export const fontWeight = (weight: WeightKeys) => `var(--font${capitalize(weight)})`
 
 export const color =
     (id: ColorKeys) =>
         ({ theme }: ThemeProps) =>
             theme.colors?.[id] as string
 
-export const zIndex =
-    (id: ZIndexKeys) =>
-        ({ theme }: ThemeProps) =>
-            theme.zIndexes[id]
+export const zIndex = (id: ZIndexKeys) => `var(--zIndex${capitalize(id)})`

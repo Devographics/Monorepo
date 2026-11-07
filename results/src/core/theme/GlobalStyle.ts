@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-import { spacing, fontWeight, zIndex } from './util'
+import { zIndex } from './util'
 import { primaryFontMixin, secondaryFontMixin } from './typography'
 import { textShadowHighlightMixin } from './mixins'
 import mq from './mq'
@@ -16,11 +16,11 @@ export const GlobalStyle = createGlobalStyle`
         ${primaryFontMixin};
         
         @media ${mq.small} {
-            font-size: ${props => props.theme.typography.rootSize.mobile};
+            font-size: var(--rootSizeMobile);
         }
         
         @media ${mq.large} {
-            font-size: ${props => props.theme.typography.rootSize.desktop};
+            font-size: var(--rootSizeDesktop);
             /* min-height: 100vh; */
         }
     }

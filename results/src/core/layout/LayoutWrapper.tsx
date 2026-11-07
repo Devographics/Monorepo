@@ -24,7 +24,7 @@ interface LayoutProps {
     children: React.ReactNode
 }
 const ThemedLayout = (props: LayoutProps) => {
-    const variables = {
+    const variables: Record<string, string | number> = {
         '--textColor': getThemeColor('text.default'),
         '--textColorInverted': getThemeColor('background.default'),
         '--textAltColor': getThemeColor('text.alt'),
@@ -47,16 +47,20 @@ const ThemedLayout = (props: LayoutProps) => {
         '--doubleSpacing': `${theme.dimensions.spacing * 2}px`,
         '--tripleSpacing': `${theme.dimensions.spacing * 3}px`,
         '--quadrupleSpacing': `${theme.dimensions.spacing * 4}px`,
+        '--fontFamily': theme.typography.fontFamily,
         '--secondaryFontFamily': `${theme.typography.fontFamily2}`,
+        '--rootSizeMobile': theme.typography.rootSize.mobile,
+        '--rootSizeDesktop': theme.typography.rootSize.desktop,
         '--fontLight': theme.typography.weight.light,
         '--fontMedium': theme.typography.weight.medium,
         '--fontBold': theme.typography.weight.bold,
-        '--fontSizeSmaller': theme.typography.size.smaller,
-        '--fontSizeSmall': theme.typography.size.small,
-        '--fontSizeSmallish': theme.typography.size.smallish,
-        '--fontSizeMedium': theme.typography.size.medium,
-        '--fontSizeLarge': theme.typography.size.large,
-        '--fontSizeLargest': theme.typography.size.largest
+        '--zIndexPopover': theme.zIndexes.popover,
+        '--zIndexModal': theme.zIndexes.modal
+    }
+    // one --fontSizeXyz variable for each size the survey's theme defines
+    for (const size of Object.keys(theme.typography.size)) {
+        variables[`--fontSize${size.charAt(0).toUpperCase()}${size.slice(1)}`] =
+            theme.typography.size[size]
     }
     return (
         // @ts-expect-errors legacy

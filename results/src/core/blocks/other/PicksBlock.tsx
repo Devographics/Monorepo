@@ -109,7 +109,7 @@ const PickContent = styled.div`
         position: absolute;
         width: ${spacing(triangleWidth)};
         height: ${spacing(triangleWidth / 2)};
-        bottom: -${spacing(triangleWidth / 2)};
+        bottom: ${spacing(-triangleWidth / 2)};
         left: ${spacing(triangleWidth)};
     }
     a,

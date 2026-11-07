@@ -1,12 +1,12 @@
 import { css } from 'styled-components'
 
 export const primaryFontMixin = css`
-    font-family: ${({ theme }) => theme.typography.fontFamily};
-    font-weight: ${({ theme }) => theme.typography.weight.light};
+    font-family: var(--fontFamily);
+    font-weight: var(--fontLight);
 `
 
 export const secondaryFontMixin = css`
-    font-family: ${({ theme }) => theme.typography.fontFamily2};
+    font-family: var(--secondaryFontFamily);
     letter-spacing: 2px;
-    /* font-weight: ${({ theme }) => theme.typography.weight.bold}; */
+    /* font-weight: var(--fontBold); */
 `
