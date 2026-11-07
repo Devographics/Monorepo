@@ -21,7 +21,6 @@ import {
     // END_MARKER
 } from './constants'
 import { useI18n } from '@devographics/react-i18n'
-import { useTheme } from 'styled-components'
 import { getThemeColor } from 'core/theme_new/colors'
 import round from 'lodash/round'
 import {
@@ -529,8 +528,6 @@ export const useFilterLegends = ({
 
     const reverse = mode === MODE_FACET && block.blockType === 'VerticalBarBlock'
 
-    const theme = useTheme()
-    const { colors } = theme
     const { getString } = useI18n()
     let results: FilterLegend[]
     if (chartFilters.options.mode === MODE_GRID || chartFilters.options.mode === MODE_COMBINED) {
@@ -638,13 +635,10 @@ export const useFilterLegends = ({
             })
             let barColorItem
             if (id === NO_ANSWER) {
-                const { mainColor, colors: gradientColors } = noAnswerGradient(colors, HORIZONTAL)
+                const { mainColor, colors: gradientColors } = noAnswerGradient(HORIZONTAL)
                 barColorItem = { gradientColors, color: mainColor }
             } else if (id === INSUFFICIENT_DATA) {
-                const { mainColor, colors: gradientColors } = insufficientDataGradient(
-                    colors,
-                    HORIZONTAL
-                )
+                const { mainColor, colors: gradientColors } = insufficientDataGradient(HORIZONTAL)
                 barColorItem = { gradientColors, color: mainColor }
             } else {
                 barColorItem = getVariantBarColorItem(index + 1, facetField)

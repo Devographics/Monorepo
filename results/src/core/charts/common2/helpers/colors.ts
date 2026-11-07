@@ -11,7 +11,7 @@ import {
 } from '@devographics/constants'
 import { QuestionMetadata } from '@devographics/types'
 import { getThemeColor } from 'core/theme_new/colors'
-import { useTheme } from 'styled-components'
+import surveyTheme from 'Theme/index'
 
 export const neutralColor = '#ffffff44'
 export const neutralColor2 = '#ffffff22'
@@ -78,13 +78,12 @@ export const useColorScale = ({
 }) => {
     let colorScale = {} as ColorScale
     const defaultColors = useDefaultColorScale()
-    const theme = useTheme()
 
     if (!question) {
         colorScale = defaultColors
     } else {
         // older surveys can define a color range per question in their theme
-        const ranges = theme.colors?.ranges as Record<string, ColorScale> | undefined
+        const ranges = surveyTheme.colors?.ranges as Record<string, ColorScale> | undefined
         const questionScale = ranges?.[question.id]
 
         if (questionScale) {

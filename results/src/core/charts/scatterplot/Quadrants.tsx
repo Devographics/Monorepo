@@ -4,7 +4,6 @@ import { getThemeColor } from 'core/theme_new/colors'
  */
 
 import React, { useMemo } from 'react'
-import { useTheme } from 'styled-components'
 import { useI18n } from '@devographics/react-i18n'
 import { ChartLayerProps } from './types'
 import { Quadrant } from './Quadrant'
@@ -88,7 +87,6 @@ const useQuadrants = (
 ) => {
     const { yMetric } = chartState
     const { translate } = useI18n()
-    const theme = useTheme()
 
     return useMemo(
         () => [
@@ -125,7 +123,7 @@ const useQuadrants = (
                 label: translate(`options.quadrant.${quadrantLabels[yMetric][3]}`)
             }
         ],
-        [xScale, yScale, theme, translate, yMetric]
+        [xScale, yScale, translate, yMetric]
     )
 }
 

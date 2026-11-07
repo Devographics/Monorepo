@@ -1,5 +1,4 @@
 import React, { useState, ReactNode } from 'react'
-import { useTheme } from 'styled-components'
 import styled from 'styled-components'
 import { mq, spacing, fontSize, color } from 'core/theme'
 import Button from 'core/components/Button'
@@ -22,7 +21,6 @@ const ModalTrigger = ({
     size = 'm',
     children
 }: ModalTriggerProps) => {
-    const theme = useTheme()
     const [modalIsOpen, setIsOpen] = useState(false)
     const { translate } = useI18n()
 
@@ -57,7 +55,7 @@ const ModalTrigger = ({
     }
 
     const ModalClose = ({ closeModal }) => (
-        <Close onClick={closeModal} theme={theme}>
+        <Close onClick={closeModal}>
             <span aria-hidden="true">x</span>
             <span className="sr-only">{translate('share.close')}</span>
         </Close>

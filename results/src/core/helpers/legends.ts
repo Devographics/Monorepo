@@ -1,4 +1,4 @@
-import { useTheme } from 'styled-components'
+import surveyTheme from 'Theme/index'
 import { getThemeColor } from 'core/theme_new/colors'
 import { useI18n } from '@devographics/react-i18n'
 import { BlockLegend, BlockVariantDefinition } from 'core/types/block'
@@ -41,11 +41,10 @@ export const useLegends = ({
     if (!keys || keys.length === 0) {
         return []
     }
-    const theme = useTheme()
     const { translate, getString } = useI18n()
 
     const namespace = providedNamespace ?? block.i18nNamespace ?? block.fieldId ?? block.id
-    const colorRange = theme.colors?.ranges?.[namespace]
+    const colorRange = surveyTheme.colors?.ranges?.[namespace]
     const legends = keys.map(id => {
         const labelKey = `options.${namespace}.${id}`
         const shortLabelKey = labelKey + '.short'

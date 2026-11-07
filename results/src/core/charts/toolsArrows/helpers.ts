@@ -20,7 +20,7 @@ export const getVelocity = (points) => {
 For a given velocity and a theme, get the associated color
 
 */
-export const getVelocityColor = (v, theme) => {
+export const getVelocityColor = (v: number) => {
     const scale = getThemeColor('tools.arrowsVelocity')
     const scaleSteps = scale.length - 1
     const stepValue = Math.round(((v + 100) * scaleSteps) / 200)
@@ -34,7 +34,7 @@ export const getVelocityColor = (v, theme) => {
 For a given velocity and a theme, get the associated color scale
 
 */
-export const getVelocityColorScale = (v, theme) => {
-    const color = getVelocityColor(v, theme)
+export const getVelocityColorScale = (v: number) => {
+    const color = getVelocityColor(v)
     return scaleLinear().domain([1, 0]).range([color, '#303652']).clamp(true)
 }

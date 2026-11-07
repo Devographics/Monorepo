@@ -3,7 +3,6 @@ import { useI18n } from '@devographics/react-i18n'
 import { Units, Mode, isPercentage } from 'core/helpers/units'
 import { ChartOptionDefinition } from '@types/data'
 import { BlockMode, BlockUnits } from '@types/index'
-import { DefaultTheme, useTheme } from 'styled-components'
 import { getThemeColor } from 'core/theme_new/colors'
 import { usePageContext } from 'core/helpers/pageContext'
 import round from 'lodash/round'
@@ -208,12 +207,9 @@ export type GradientDefinition = {
     y2?: number
 }
 
-export type GradientFunction = (
-    colors: DefaultTheme['colors'],
-    orientation: 'Horizontal' | 'Vertical'
-) => GradientDefinition
+export type GradientFunction = (orientation: 'Horizontal' | 'Vertical') => GradientDefinition
 
-export const naGradient: GradientFunction = (colors, orientation) => ({
+export const naGradient: GradientFunction = orientation => ({
     id: `Gradient${orientation}Na`,
     type: 'linearGradient',
     colors: [
@@ -223,7 +219,7 @@ export const naGradient: GradientFunction = (colors, orientation) => ({
     ...(orientation === HORIZONTAL ? horizontalDefs : {})
 })
 
-export const insufficientDataGradient: GradientFunction = (colors, orientation) => ({
+export const insufficientDataGradient: GradientFunction = orientation => ({
     id: `Gradient${orientation}InsufficientData`,
     type: 'linearGradient',
     mainColor: 'rgba(255,255,255,0.3)',
@@ -234,7 +230,7 @@ export const insufficientDataGradient: GradientFunction = (colors, orientation) 
     ...(orientation === HORIZONTAL ? horizontalDefs : {})
 })
 
-export const noAnswerGradient: GradientFunction = (colors, orientation) => ({
+export const noAnswerGradient: GradientFunction = orientation => ({
     id: `Gradient${orientation}NoAnswer`,
     type: 'linearGradient',
     mainColor: 'rgba(255,255,255,0.3)',
@@ -245,7 +241,7 @@ export const noAnswerGradient: GradientFunction = (colors, orientation) => ({
     ...(orientation === HORIZONTAL ? horizontalDefs : {})
 })
 
-export const overallGradient: GradientFunction = (colors, orientation) => ({
+export const overallGradient: GradientFunction = orientation => ({
     id: `Gradient${orientation}Overall`,
     type: 'linearGradient',
     colors: [
@@ -255,7 +251,7 @@ export const overallGradient: GradientFunction = (colors, orientation) => ({
     ...(orientation === HORIZONTAL ? horizontalDefs : {})
 })
 
-export const freeformAnswersGradient: GradientFunction = (colors, orientation) => ({
+export const freeformAnswersGradient: GradientFunction = orientation => ({
     id: `Gradient${orientation}Freeform`,
     type: 'linearGradient',
     colors: [
@@ -265,7 +261,7 @@ export const freeformAnswersGradient: GradientFunction = (colors, orientation) =
     ...(orientation === HORIZONTAL ? horizontalDefs : {})
 })
 
-export const defaultGradient: GradientFunction = (colors, orientation) => ({
+export const defaultGradient: GradientFunction = orientation => ({
     id: `Gradient${orientation}Default`,
     type: 'linearGradient',
     colors: [
@@ -277,8 +273,6 @@ export const defaultGradient: GradientFunction = (colors, orientation) => ({
 
 export const useColorDefs = (options: UseColorDefsOptions = {}): GradientDefinition[] => {
     const { orientation = VERTICAL } = options
-    const theme = useTheme()
-    const { colors } = theme
     const barColors = getBarColors().map((barColor, i) => ({
         id: `Gradient${orientation}${i + 1}`,
         type: 'linearGradient' as const,
@@ -302,12 +296,12 @@ export const useColorDefs = (options: UseColorDefsOptions = {}): GradientDefinit
     return [
         ...barColors,
         ...velocity,
-        defaultGradient(colors, orientation),
-        freeformAnswersGradient(colors, orientation),
-        noAnswerGradient(colors, orientation),
-        insufficientDataGradient(colors, orientation),
-        overallGradient(colors, orientation),
-        naGradient(colors, orientation)
+        defaultGradient(orientation),
+        freeformAnswersGradient(orientation),
+        noAnswerGradient(orientation),
+        insufficientDataGradient(orientation),
+        overallGradient(orientation),
+        naGradient(orientation)
     ]
 }
 

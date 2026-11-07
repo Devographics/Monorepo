@@ -6,7 +6,6 @@ import { extent, max, sum } from 'd3-array'
 import offsets from './toolsArrowsLabelOffsets'
 import { useI18n } from '@devographics/react-i18n'
 import './ToolsArrowsChart.scss'
-import { useTheme } from 'styled-components'
 import { getVelocity, getVelocityColor, getVelocityColorScale } from './helpers'
 import { Delaunay } from 'd3-delaunay'
 import compact from 'lodash/compact.js'
@@ -44,7 +43,6 @@ export const ToolsArrowsChart = ({
     const { currentEdition } = context
     const { translate } = useI18n()
     const allEntities = useEntities()
-    const theme = useTheme()
     const toolSections = useToolSections()
     const getColor = (id: string) => getThemeColor(`tools.sections.${id}`)
 
@@ -140,7 +138,7 @@ export const ToolsArrowsChart = ({
                     const y = scales.y(thisYearPoint[1]) + ((offsets[tool.id] || {}).y || 0)
 
                     const velocity = getVelocity(points)
-                    const color = getVelocityColor(velocity, theme)
+                    const color = getVelocityColor(velocity)
 
                     return {
                         tool,
@@ -205,8 +203,8 @@ export const ToolsArrowsChart = ({
                 const r = gradientLineWidthScale(i / points.length)
 
                 const velocity = getVelocity(points)
-                const color = getVelocityColor(velocity, theme)
-                const colorScale = getVelocityColorScale(velocity, theme)
+                const color = getVelocityColor(velocity)
+                const colorScale = getVelocityColorScale(velocity)
 
                 // const colorStart = colorScale(i / points.length)
                 const colorStart = colorScale(i / points.length)
@@ -448,7 +446,7 @@ export const ToolsArrowsChart = ({
                 <p
                     className="legend_label right"
                     style={{
-                        borderColor: getVelocityColor(100, theme),
+                        borderColor: getVelocityColor(100),
                         color: getThemeColor('tools.highVelocity'),
                         fontWeight: 'bold'
                     }}
@@ -458,18 +456,15 @@ export const ToolsArrowsChart = ({
                 <div
                     className="legend_colors"
                     style={{
-                        backgroundImage: `linear-gradient(90deg, ${getVelocityColor(
-                            -100,
-                            theme
-                        )}, ${getVelocityColor(0, theme)}, ${getVelocityColor(100, theme)})`,
-                        borderLeftColor: getVelocityColor(-80, theme),
-                        borderRightColor: getVelocityColor(90, theme)
+                        backgroundImage: `linear-gradient(90deg, ${getVelocityColor(-100)}, ${getVelocityColor(0)}, ${getVelocityColor(100)})`,
+                        borderLeftColor: getVelocityColor(-80),
+                        borderRightColor: getVelocityColor(90)
                     }}
                 ></div>
                 <p
                     className="legend_label left"
                     style={{
-                        borderColor: getVelocityColor(-80, theme),
+                        borderColor: getVelocityColor(-80),
                         color: getThemeColor('tools.lowVelocity'),
                         fontWeight: 'bold'
                     }}

@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import React from 'react'
-import { useTheme } from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
 import { TableData } from 'core/helpers/datatables'
 import round from 'lodash/round.js'
