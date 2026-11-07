@@ -21,21 +21,23 @@ export const getQuestionLabel = ({
     getString,
     question,
     i18nNamespace,
-    block
+    block,
+    html = false
 }: {
     getString: StringTranslator
     question: QuestionMetadataWithSection
     i18nNamespace?: string
     block?: BlockVariantDefinition
+    html?: boolean
 }): QuestionLabelObject => {
     let key, label, i18nNamespace_, questionLabel, questionName
     const { template, entity, id } = question
     const sectionId = question.sectionId || question?.section?.id
     const entityName = entity && getEntityName(entity)
     if (entityName) {
-        key = 'entity'
-        label = entityName
-        questionName = entityName
+        key = `entity__${entity.id}`
+        label = html ? entity.nameHtml : entityName
+        questionName = label
     } else {
         if (block?.titleId) {
             key = block.titleId
@@ -55,9 +57,9 @@ export const getQuestionLabel = ({
         }
         const s = getString(key)
         const q = getString(`${key}.question`)
-        questionName = s?.tClean || s?.t
+        questionName = html ? s?.tHtml : s?.tClean || s?.t
         label = questionName || id
-        questionLabel = q?.tClean || q?.t
+        questionLabel = html ? q?.tHtml : q?.tClean || q?.t
     }
     return { key, label, question: questionLabel, questionName }
 }

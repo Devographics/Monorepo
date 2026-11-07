@@ -72,7 +72,8 @@ export const CorrelationItemComponent = ({
     const questionLabelObject = getQuestionLabel({
         getString,
         question,
-        block
+        block,
+        html: true
     })
 
     const questionLabel = questionLabelObject.question
