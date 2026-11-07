@@ -1,3 +1,4 @@
+import { getThemeColor } from 'core/theme_new/colors'
 /**
  * Not currently used
  */
@@ -96,7 +97,7 @@ const useQuadrants = (
                 y: yScale(quadrantsConfig[0].yRange[0]),
                 width: xScale(quadrantsConfig[0].xRange[1]) - xScale(quadrantsConfig[0].xRange[0]),
                 height: yScale(quadrantsConfig[0].yRange[1]) - yScale(quadrantsConfig[0].yRange[0]),
-                color: theme.colors.background,
+                color: getThemeColor('background.default'),
                 label: translate(`options.quadrant.${quadrantLabels[yMetric][0]}`)
             },
             {
@@ -104,7 +105,7 @@ const useQuadrants = (
                 y: yScale(quadrantsConfig[1].yRange[0]),
                 width: xScale(quadrantsConfig[1].xRange[1]) - xScale(quadrantsConfig[1].xRange[0]),
                 height: yScale(quadrantsConfig[1].yRange[1]) - yScale(quadrantsConfig[1].yRange[0]),
-                color: theme.colors.backgroundForeground,
+                color: getThemeColor('background.default'),
                 label: translate(`options.quadrant.${quadrantLabels[yMetric][1]}`)
             },
             {
@@ -112,7 +113,7 @@ const useQuadrants = (
                 y: yScale(quadrantsConfig[2].yRange[0]),
                 width: xScale(quadrantsConfig[2].xRange[1]) - xScale(quadrantsConfig[2].xRange[0]),
                 height: yScale(quadrantsConfig[2].yRange[1]) - yScale(quadrantsConfig[2].yRange[0]),
-                color: theme.colors.backgroundBackground,
+                color: getThemeColor('background.default'),
                 label: translate(`options.quadrant.${quadrantLabels[yMetric][2]}`)
             },
             {
@@ -120,7 +121,7 @@ const useQuadrants = (
                 y: yScale(quadrantsConfig[3].yRange[0]),
                 width: xScale(quadrantsConfig[3].xRange[1]) - xScale(quadrantsConfig[3].xRange[0]),
                 height: yScale(quadrantsConfig[3].yRange[1]) - yScale(quadrantsConfig[3].yRange[0]),
-                color: theme.colors.background,
+                color: getThemeColor('background.default'),
                 label: translate(`options.quadrant.${quadrantLabels[yMetric][3]}`)
             }
         ],

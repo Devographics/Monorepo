@@ -1,5 +1,5 @@
 import React, { memo, useState, useCallback } from 'react'
-import styled, { useTheme, keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import Confetti from 'react-confetti'
 import tinycolor from 'tinycolor2'
 import { useI18n } from '@devographics/react-i18n'
@@ -9,6 +9,7 @@ import { getItemLabel } from 'core/helpers/labels'
 import { Entity } from '@devographics/types'
 import { Award } from 'core/types'
 import './AwardBlock.scss'
+import { getThemeColor } from 'core/theme_new/colors'
 
 /**
  * Awards for one category (= winner and runner ups for this category)
@@ -23,7 +24,6 @@ const AwardBlock = ({
     const { id, awards } = block
     const type = id
     const { translate } = useI18n()
-    const theme = useTheme()
 
     const [isRevealed, setIsRevealed] = useState(false)
     const handleClick = useCallback(() => {
@@ -59,7 +59,7 @@ const AwardBlock = ({
                                     initialVelocityX={5}
                                     initialVelocityY={20}
                                     confettiSource={{ x: 200, y: 100, w: 100, h: 100 }}
-                                    colors={theme.colors.distinct}
+                                    colors={getThemeColor('distinct')}
                                 />
                             </div>
                         )}
@@ -128,39 +128,39 @@ AwardBlock.propTypes = {
 
 const getGlowColor = (color: any, alpha: number) => tinycolor(color).setAlpha(alpha).toRgbString()
 
-const glowSoft = (theme: any) => keyframes`
+const glowSoft = keyframes`
     from {
-        box-shadow: 0px 1px 1px 1px ${getGlowColor(theme.colors.link, 0.1)};
+        box-shadow: 0px 1px 1px 1px ${getGlowColor(getThemeColor('primary.default'), 0.1)};
     }
     50% {
-        box-shadow: 0px 1px 20px 1px ${getGlowColor(theme.colors.link, 0.4)};
+        box-shadow: 0px 1px 20px 1px ${getGlowColor(getThemeColor('primary.default'), 0.4)};
     }
     to {
-        box-shadow: 0px 1px 1px 1px ${getGlowColor(theme.colors.link, 0.1)};
+        box-shadow: 0px 1px 1px 1px ${getGlowColor(getThemeColor('primary.default'), 0.1)};
     }
 `
 
-const glow = (theme: any) => keyframes`
+const glow = keyframes`
     from {
-        box-shadow: 0px 1px 2px 1px ${getGlowColor(theme.colors.link, 0.5)};
+        box-shadow: 0px 1px 2px 1px ${getGlowColor(getThemeColor('primary.default'), 0.5)};
     }
     50% {
-        box-shadow: 0px 1px 30px 2px ${getGlowColor(theme.colors.link, 0.9)};
+        box-shadow: 0px 1px 30px 2px ${getGlowColor(getThemeColor('primary.default'), 0.9)};
     }
     to {
-        box-shadow: 0px 1px 2px 1px ${getGlowColor(theme.colors.link, 0.5)};
+        box-shadow: 0px 1px 2px 1px ${getGlowColor(getThemeColor('primary.default'), 0.5)};
     }
 `
 
-const burst = (theme: any) => keyframes`
+const burst = keyframes`
     from {
-        box-shadow: 0px 0px 0px 0px ${getGlowColor(theme.colors.link, 0)};
+        box-shadow: 0px 0px 0px 0px ${getGlowColor(getThemeColor('primary.default'), 0)};
     }
     50% {
-        box-shadow: 0px 0px 30px 30px ${getGlowColor(theme.colors.link, 0.9)};
+        box-shadow: 0px 0px 30px 30px ${getGlowColor(getThemeColor('primary.default'), 0.9)};
     }
     to {
-        box-shadow: 0px 0px 60px 60px ${getGlowColor(theme.colors.link, 0)};
+        box-shadow: 0px 0px 60px 60px ${getGlowColor(getThemeColor('primary.default'), 0)};
     }
 `
 
@@ -179,19 +179,19 @@ const Element = styled.div`
     }
 
     .Award--hide & {
-        animation-name: ${({ theme }) => glowSoft(theme)};
+        animation-name: ${glowSoft};
         animation-duration: 3000ms;
         animation-iteration-count: infinite;
         animation-timing-function: linear;
 
         &:hover {
-            animation-name: ${({ theme }) => glow(theme)};
+            animation-name: ${glow};
             animation-duration: 1200ms;
         }
     }
 
     .Award--show & {
-        animation-name: ${({ theme }) => burst(theme)};
+        animation-name: ${burst};
         animation-duration: 500ms;
         animation-iteration-count: 1;
         animation-timing-function: ease-out;

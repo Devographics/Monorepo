@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import Pagination from 'core/pages/Pagination'
 import { Sidebar } from 'core/components/sidebar'
 import { mq, spacing, screenReadersOnlyMixin } from 'core/theme'
-import colors from 'core/theme/colors'
 import classNames from 'classnames'
 import Hamburger from 'core/components/Hamburger'
 import { useI18n } from '@devographics/react-i18n'
 import SurveyBanner from 'core/components/SurveyBanner'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const MainLayout = ({
     context,
@@ -139,13 +139,13 @@ const MenuToggle = styled.button`
     }
 
     &:focus {
-        border: 2px solid ${colors.greenLight};
+        border: 2px solid ${getThemeColor('primary.default')};
         outline: 5px auto -webkit-focus-ring-color;
     }
 
     &:hover,
     &:focus {
-        background: ${({ theme }) => theme.colors.backgroundAlt};
+        background: ${getThemeColor('background.alt')};
     }
 `
 

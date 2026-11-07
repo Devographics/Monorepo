@@ -1,3 +1,4 @@
+import { getThemeColor } from 'core/theme_new/colors'
 import React, { useState, useEffect } from 'react'
 import styled, { useTheme } from 'styled-components'
 import ModalTrigger from 'core/components/ModalTrigger'
@@ -436,7 +437,7 @@ export const CommentItem_ = styled.div`
 
 export const CommentMessageWrapper = styled.div`
     border-radius: 5px;
-    background: ${({ theme }) => theme.colors.backgroundAlt2};
+    background: ${getThemeColor('background.alt2')};
     padding: var(--spacing);
     position: relative;
 `

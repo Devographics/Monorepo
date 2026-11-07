@@ -6,6 +6,7 @@ import PageLabel from './PageLabel'
 import PageLink from './PageLink'
 import { PageContextValue } from 'core/types'
 import './PaginationLink.scss'
+import { getThemeColor } from 'core/theme_new/colors'
 const StyledLink = styled(PageLink)`
     display: flex;
     align-items: center;
@@ -24,7 +25,7 @@ const StyledLink = styled(PageLink)`
 
     &:hover,
     &:focus {
-        background: ${props => props.theme.colors.backgroundAlt};
+        background: ${getThemeColor('background.alt')};
     }
 `
 

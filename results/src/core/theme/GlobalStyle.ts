@@ -1,14 +1,14 @@
 import { createGlobalStyle } from 'styled-components'
-import { color, spacing, fontWeight, zIndex } from './util'
+import { spacing, fontWeight, zIndex } from './util'
 import { primaryFontMixin, secondaryFontMixin } from './typography'
 import { textShadowHighlightMixin } from './mixins'
 import mq from './mq'
-import colors from './colors'
+import { getThemeColor } from 'core/theme_new/colors'
 
 export const GlobalStyle = createGlobalStyle`
     body {
-        background: ${color('background')};
-        color: ${color('text')};
+        background: ${getThemeColor('background.default')};
+        color: ${getThemeColor('text.default')};
         padding: 0;
         font-feature-settings: 'liga' 0;
         line-height: 1.7;
@@ -55,12 +55,11 @@ export const GlobalStyle = createGlobalStyle`
         &:visited,
         &:active,
         &:focus {
-            color: ${color('link')};
+            color: ${getThemeColor('primary.default')};
         }
         
         &:hover, &:focus {
             text-decoration: underline;
-            color: ${color('linkHover')};
         }
     }
     
@@ -109,10 +108,10 @@ export const GlobalStyle = createGlobalStyle`
     }
     .t-modkeydown{
         &.t-isFallback, &.t-missing{
-            ${textShadowHighlightMixin(colors.green, 0.05)}
+            ${textShadowHighlightMixin('limegreen', 0.05)}
             &:hover{
                 cursor: pointer;
-                ${textShadowHighlightMixin(colors.pink, 0.05)}
+                ${textShadowHighlightMixin('limegreen', 0.05)}
             }
         }
     }
@@ -156,7 +155,7 @@ export const GlobalStyle = createGlobalStyle`
     
     .hint-completion-indicator{
         display: inline-block;
-        color: ${color('link')};
+        color: ${getThemeColor('primary.default')};
         font-size: 1.4rem;
     }
 `

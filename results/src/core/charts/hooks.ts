@@ -4,6 +4,7 @@ import { Units, Mode, isPercentage } from 'core/helpers/units'
 import { ChartOptionDefinition } from '@types/data'
 import { BlockMode, BlockUnits } from '@types/index'
 import { DefaultTheme, useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import { usePageContext } from 'core/helpers/pageContext'
 import round from 'lodash/round'
 import { CHART_MODE_GRID, CHART_MODE_STACKED, CHART_MODE_GROUPED } from 'core/filters/constants'
@@ -91,12 +92,34 @@ Variant 10 = barColor 10
 Variant 11 = barColor 1 // start over
 
 */
-export const getVariantBarColorItem = (
-    theme: DefaultTheme,
-    variantIndex: number,
-    facet?: FacetItem
-) => {
-    const { velocityBarColors, barColors } = theme.colors
+type BarColorItem = { id: string; color: string; gradient: [string, string] }
+
+export const getBarColors = (): BarColorItem[] => {
+    const variants: string[] = getThemeColor('distinct')
+    return variants.map((color, i) => ({
+        id: `barColor${i + 1}`,
+        color,
+        gradient: [color, color]
+    }))
+}
+
+// each velocity bar uses two consecutive colors of the velocity scale
+export const getVelocityBarColors = (): BarColorItem[] => {
+    const velocity: string[] = getThemeColor('velocity')
+    const items = []
+    for (let i = 0; i < Math.floor(velocity.length / 2); i++) {
+        items.push({
+            id: `velocityColor${i}`,
+            color: velocity[i * 2],
+            gradient: [velocity[i * 2 + 1], velocity[i * 2]] as [string, string]
+        })
+    }
+    return items
+}
+
+export const getVariantBarColorItem = (variantIndex: number, facet?: FacetItem) => {
+    const velocityBarColors = getVelocityBarColors()
+    const barColors = getBarColors()
     if (facet && facet.optionsAreSequential) {
         const i = Math.min(variantIndex, velocityBarColors.length - 1)
         return velocityBarColors[i]
@@ -226,8 +249,8 @@ export const overallGradient: GradientFunction = (colors, orientation) => ({
     id: `Gradient${orientation}Overall`,
     type: 'linearGradient',
     colors: [
-        { offset: 0, color: colors.barColorOverall?.gradient[1] },
-        { offset: 100, color: colors.barColorOverall?.gradient[0] }
+        { offset: 0, color: getThemeColor('bar.overall') },
+        { offset: 100, color: getThemeColor('bar.overall') }
     ],
     ...(orientation === HORIZONTAL ? horizontalDefs : {})
 })
@@ -236,8 +259,8 @@ export const freeformAnswersGradient: GradientFunction = (colors, orientation) =
     id: `Gradient${orientation}Freeform`,
     type: 'linearGradient',
     colors: [
-        { offset: 0, color: `${colors.barColorDefault.gradient[1]}70` },
-        { offset: 100, color: `${colors.barColorDefault.gradient[0]}70` }
+        { offset: 0, color: `${getThemeColor('bar.default')}70` },
+        { offset: 100, color: `${getThemeColor('bar.default')}70` }
     ],
     ...(orientation === HORIZONTAL ? horizontalDefs : {})
 })
@@ -246,8 +269,8 @@ export const defaultGradient: GradientFunction = (colors, orientation) => ({
     id: `Gradient${orientation}Default`,
     type: 'linearGradient',
     colors: [
-        { offset: 0, color: colors.barColorDefault.gradient[1] },
-        { offset: 100, color: colors.barColorDefault.gradient[0] }
+        { offset: 0, color: getThemeColor('bar.default') },
+        { offset: 100, color: getThemeColor('bar.default') }
     ],
     ...(orientation === HORIZONTAL ? horizontalDefs : {})
 })
@@ -256,9 +279,9 @@ export const useColorDefs = (options: UseColorDefsOptions = {}): GradientDefinit
     const { orientation = VERTICAL } = options
     const theme = useTheme()
     const { colors } = theme
-    const barColors = colors.barColors.map((barColor, i) => ({
+    const barColors = getBarColors().map((barColor, i) => ({
         id: `Gradient${orientation}${i + 1}`,
-        type: 'linearGradient',
+        type: 'linearGradient' as const,
         colors: [
             { offset: 0, color: barColor.gradient[1] },
             { offset: 100, color: barColor.gradient[0] }
@@ -266,9 +289,9 @@ export const useColorDefs = (options: UseColorDefsOptions = {}): GradientDefinit
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }))
 
-    const velocity = colors.velocityBarColors.map((barColor, i) => ({
+    const velocity = getVelocityBarColors().map((barColor, i) => ({
         id: `Velocity${orientation}${i + 1}`,
-        type: 'linearGradient',
+        type: 'linearGradient' as const,
         colors: [
             { offset: 0, color: barColor.gradient[1] },
             { offset: 100, color: barColor.gradient[0] }
@@ -308,7 +331,6 @@ chartKeys are e.g.
 
 */
 export const useColorFills = (options: UseColorFillsOptions) => {
-    const theme = useTheme()
     const allFilters = useAllFilters()
 
     const {
@@ -320,7 +342,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
         showDefaultSeries
     } = options
 
-    const numberOfVariantColors = theme.colors.barColors.length
+    const numberOfVariantColors = getBarColors().length
 
     const naFill = {
         match: d => d.data.indexValue === 'na',
@@ -409,7 +431,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
             This will match keys of the type count__1, count__2, etc.
 
             */
-            const numberedSeriesFills = theme.colors.barColors.map((x, i) => ({
+            const numberedSeriesFills = getBarColors().map((x, i) => ({
                 match: d => {
                     return d.key.includes(`__${i + 1}`)
                 },

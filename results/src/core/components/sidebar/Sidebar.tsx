@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import Link from 'core/components/LocaleLink'
 import ShareSite from 'core/share/ShareSite'
 import { useI18n } from '@devographics/react-i18n'
-import { mq, color, screenReadersOnlyMixin } from 'core/theme'
-import colors from 'core/theme/colors'
+import { mq, screenReadersOnlyMixin } from 'core/theme'
 import { Nav } from './Nav'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getSiteTitle } from 'core/helpers/pageHelpers'
 import SurveyPopover from './SurveyPopover'
 import './Sidebar.scss'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const CloseIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -81,7 +81,7 @@ const SidebarContainer = styled.div`
         bottom: 0;
         left: 0;
         right: 0;
-        background: ${color('background')};
+        background: ${getThemeColor('background.default')};
         z-index: 1000;
         text-align: center;
         position: fixed;
@@ -114,7 +114,7 @@ const SidebarCloseButton = styled.button`
     height: 68px;
 
     svg {
-        stroke: ${color('link')};
+        stroke: ${getThemeColor('primary.default')};
     }
 
     @media ${mq.large} {
@@ -123,6 +123,6 @@ const SidebarCloseButton = styled.button`
 
     &:hover,
     &:focus {
-        background-color: ${colors.greyDarkish};
+        background-color: ${getThemeColor('background.alt')};
     }
 `

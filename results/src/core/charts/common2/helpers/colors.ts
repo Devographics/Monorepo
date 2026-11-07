@@ -11,8 +11,7 @@ import {
 } from '@devographics/constants'
 import { QuestionMetadata } from '@devographics/types'
 import { getThemeColor } from 'core/theme_new/colors'
-import { DefaultTheme, useTheme } from 'styled-components'
-import colors from 'Theme/colors'
+import { useTheme } from 'styled-components'
 
 export const neutralColor = '#ffffff44'
 export const neutralColor2 = '#ffffff22'
@@ -60,10 +59,8 @@ export const getSequentialColor = ({
 }
 
 export const useDefaultColorScale = () => {
-    const theme = useTheme()
-    const { colors } = theme
     return {
-        [DEFAULT]: [colors.barChart.primaryGradient[1], colors.barChart.primaryGradient[0]],
+        [DEFAULT]: [getThemeColor('primary.default'), getThemeColor('primary.darker')],
         [NOT_APPLICABLE]: [neutralColor, neutralColor],
         [NO_ANSWER]: [neutralColor, neutralColor],
         [OVERALL]: [neutralColor, neutralColor],
@@ -79,14 +76,16 @@ export const useColorScale = ({
     question: QuestionMetadata
     bucketIds?: string[]
 }) => {
-    const theme = useTheme()
     let colorScale = {} as ColorScale
     const defaultColors = useDefaultColorScale()
+    const theme = useTheme()
 
     if (!question) {
         colorScale = defaultColors
     } else {
-        const questionScale = colors?.ranges?.[question.id]
+        // older surveys can define a color range per question in their theme
+        const ranges = theme.colors?.ranges as Record<string, ColorScale> | undefined
+        const questionScale = ranges?.[question.id]
 
         if (questionScale) {
             colorScale = { ...questionScale, ...defaultColors }
@@ -107,7 +106,7 @@ export const useColorScale = ({
                         if (otherBucketIds.includes(String(option.id))) {
                             colorScale[option.id] = [neutralColor, neutralColor]
                         } else {
-                            const color = getDistinctColor(theme.colors.distinct, index)
+                            const color = getDistinctColor(getThemeColor('distinct'), index)
                             colorScale[option.id] = [color, color]
                         }
                     })
@@ -117,7 +116,7 @@ export const useColorScale = ({
                     if (otherBucketIds.includes(String(id))) {
                         colorScale[id] = [neutralColor, neutralColor]
                     } else {
-                        const color = theme.colors.distinct[index % theme.colors.distinct.length]
+                        const color = getDistinctColor(getThemeColor('distinct'), index)
                         colorScale[id] = [color, color]
                     }
                 })

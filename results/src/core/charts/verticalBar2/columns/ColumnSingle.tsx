@@ -4,7 +4,7 @@ import {
     VerticalBarChartValues,
     VerticalBarViewDefinition
 } from '../types'
-import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import { RespondentCount } from '../../common2'
 import React from 'react'
 import { Cell } from '../VerticalBarCell'
@@ -25,7 +25,6 @@ type ColumnSingleProps<
 export const ColumnSingle = <SerieData, PointData extends BasicPointData, ChartStateType>(
     props: ColumnSingleProps<SerieData, PointData, ChartStateType>
 ) => {
-    const theme = useTheme()
     const { point, chartState, chartValues, showCount = true, viewDefinition } = props
     const { getPointValue } = viewDefinition
     const { maxValue } = chartValues
@@ -36,7 +35,7 @@ export const ColumnSingle = <SerieData, PointData extends BasicPointData, ChartS
 
     const value = point && getPointValue(point, chartState)
 
-    const gradient = theme.colors.barChart.primaryGradient
+    const gradient = [getThemeColor('primary.darker'), getThemeColor('primary.default')]
 
     const rowMetadata = <RespondentCount count={point?.completion?.count} />
     const columnWrapperProps = showCount ? { ...props, rowMetadata } : props

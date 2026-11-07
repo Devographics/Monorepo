@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import T from 'core/i18n/T'
 import newGithubIssueUrl from 'new-github-issue-url'
 import {
@@ -137,9 +137,8 @@ const ValueItem = ({
 }
 
 const ExperienceItem = ({ experience }: { experience: FeaturesOptions }) => {
-    const theme = useTheme()
     const experienceKey = getExperienceKey(experience)
-    const style = { '--color': theme?.colors?.ranges?.features?.[experience]?.[0] }
+    const style = { '--color': getThemeColor(`experience.${experience}`) }
     return (
         <span style={style} className={`experience-item experience-item-${experience}`}>
             <T k={experienceKey} />
@@ -148,10 +147,8 @@ const ExperienceItem = ({ experience }: { experience: FeaturesOptions }) => {
 }
 
 const SentimentItem = ({ sentiment }: { sentiment: SimplifiedSentimentOptions }) => {
-    const theme = useTheme()
-
     const sentimentKey = getSentimentKey(sentiment)
-    const style = { '--color': theme?.colors?.ranges?.sentiment?.[sentiment]?.[0] }
+    const style = { '--color': getThemeColor(`sentiment.${sentiment}`) }
     return (
         <span style={style} className={`sentiment-item sentiment-item-${sentiment}`}>
             <T k={sentimentKey} />

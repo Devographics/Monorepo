@@ -97,10 +97,10 @@
         // background: #ffffff22;
     }
     &:hover {
-        background: var(--rowHoverColor);
+        background: var(--backgroundAltColor);
     }
     &.chart-row-highlighted {
-        background: var(--rowHoverColor);
+        background: var(--backgroundAltColor);
     }
 }
 
@@ -259,7 +259,7 @@
     gap: var(--halfSpacing);
 }
 .chart-row-heading-content-count {
-    color: var(--textAltColor2);
+    color: var(--textAltColor);
     background: var(--backgroundAltColor);
     border-radius: 100%;
     display: grid;

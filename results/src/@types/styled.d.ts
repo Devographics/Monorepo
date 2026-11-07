@@ -42,30 +42,31 @@ declare module 'styled-components' {
                 bold: number
             }
         }
-        colors: {
-            barColorDefault: any
-            barColorOverall: any
-            barColors: any
-            tiers: string[]
-            background: string
-            backgroundBackground: string
-            backgroundForeground: string
-            backgroundAlt: string
-            backgroundAlt2: string
-            backgroundInverted: string
-            backgroundInvertedAlt: string
-            text: string
-            textAlt: string
-            textInverted: string
-            textHighlight: string
-            link: string
-            linkActive: string
-            linkHover: string
-            contrast: string
-            border: string
-            heatmap: string
-            lineChartDefaultColor: string
-            barChart: {
+        colors?: {
+            // everything except ranges is now read through getThemeColor(), kept for older surveys
+            barColorDefault?: any
+            barColorOverall?: any
+            barColors?: any
+            tiers?: string[]
+            background?: string
+            backgroundBackground?: string
+            backgroundForeground?: string
+            backgroundAlt?: string
+            backgroundAlt2?: string
+            backgroundInverted?: string
+            backgroundInvertedAlt?: string
+            text?: string
+            textAlt?: string
+            textInverted?: string
+            textHighlight?: string
+            link?: string
+            linkActive?: string
+            linkHover?: string
+            contrast?: string
+            border?: string
+            heatmap?: string
+            lineChartDefaultColor?: string
+            barChart?: {
                 primary: string
                 primaryGradient: [string, string]
                 secondary: string
@@ -91,11 +92,11 @@ declare module 'styled-components' {
                     0: string
                 }
             }
-            distinct: string[]
-            velocity: string[]
-            countries: string[]
+            distinct?: string[]
+            velocity?: string[]
+            countries?: string[]
         }
-        charts: {
+        charts?: {
             fontFamily: string
             axis: {
                 ticks: {

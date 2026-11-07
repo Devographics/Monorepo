@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import { getThemeColor } from 'core/theme_new/colors'
 import { scaleLinear } from 'd3-scale'
 import flatten from 'lodash/flatten'
 import { extent, max, sum } from 'd3-array'
@@ -45,7 +46,7 @@ export const ToolsArrowsChart = ({
     const allEntities = useEntities()
     const theme = useTheme()
     const toolSections = useToolSections()
-    const getColor = (id: string) => theme.colors.ranges.toolSections[id]
+    const getColor = (id: string) => getThemeColor(`tools.sections.${id}`)
 
     const categoryColorMap: ColorMap = {}
     const categoryColorScales: ColorScales = {}
@@ -448,7 +449,7 @@ export const ToolsArrowsChart = ({
                     className="legend_label right"
                     style={{
                         borderColor: getVelocityColor(100, theme),
-                        color: theme.colors.highVelocity,
+                        color: getThemeColor('tools.highVelocity'),
                         fontWeight: 'bold'
                     }}
                 >
@@ -469,7 +470,7 @@ export const ToolsArrowsChart = ({
                     className="legend_label left"
                     style={{
                         borderColor: getVelocityColor(-80, theme),
-                        color: theme.colors.lowVelocity,
+                        color: getThemeColor('tools.lowVelocity'),
                         fontWeight: 'bold'
                     }}
                 >

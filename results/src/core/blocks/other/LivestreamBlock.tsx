@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const LivestreamBlock = () => {
     return (
@@ -14,7 +15,7 @@ const LivestreamBlock = () => {
 const Livestream = styled.div`
     max-width: 700px;
     margin: 0 auto;
-    background: ${({ theme }) => theme.colors.backgroundAlt};
+    background: ${getThemeColor('background.alt')};
     padding: var(--spacing);
     margin-bottom: ${spacing(2)};
 `

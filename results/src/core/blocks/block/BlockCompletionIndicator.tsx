@@ -1,7 +1,8 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 import { useI18n } from '@devographics/react-i18n'
-import { color, spacing, fontSize } from 'core/theme'
+import { spacing, fontSize } from 'core/theme'
+import { getThemeColor } from 'core/theme_new/colors'
 import Tooltip from 'core/components/Tooltip'
 
 const BlockCompletionIndicator = ({
@@ -12,8 +13,8 @@ const BlockCompletionIndicator = ({
     variant: 'grey' | 'pink' | string
 }) => {
     const { translate } = useI18n()
-    const colorName1 = variant === 'pink' ? 'link' : 'text'
-    const colorName2 = variant === 'pink' ? 'link' : 'textAlt'
+    const colorName1 = variant === 'pink' ? 'primary.default' : 'text.default'
+    const colorName2 = variant === 'pink' ? 'primary.default' : 'text.alt'
     return (
         <Container className="CompletionIndicator">
             <Tooltip
@@ -66,12 +67,12 @@ const Chart = styled.svg`
 `
 
 const ChartBackground = styled.circle`
-    fill: ${({ colorName }) => color(colorName)};
+    fill: ${({ colorName }) => getThemeColor(colorName)};
     opacity: 0.5;
 `
 
 const ChartForeground = styled.circle`
-    stroke: ${({ colorName }) => color(colorName)};
+    stroke: ${({ colorName }) => getThemeColor(colorName)};
 `
 
 export default memo(BlockCompletionIndicator)

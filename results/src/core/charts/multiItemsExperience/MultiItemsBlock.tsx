@@ -6,7 +6,8 @@ import { MultiItemsExperienceControls } from './MultiItemsControls'
 import { COMMENTS, GroupingOptions, MultiItemSerie } from './types'
 import { useChartState } from './helpers/chartState'
 import { ChartControls, ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
-import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
+import { ColorScale } from '../common2/helpers/colors'
 import { NoteContents } from './MultiItemsNote'
 import ChartShare from '../common2/ChartShare'
 import ViewSwitcher from '../horizontalBar2/ViewSwitcher'
@@ -26,8 +27,6 @@ export interface MultiItemsExperienceBlockProps extends BlockComponentProps {
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { series, block, question, pageContext } = props
     const { chartOptions = {} } = block
-    const theme = useTheme()
-
     const chartState = useChartState({
         ...chartOptions,
         rowsLimit: chartOptions?.limit || defaultLimit
@@ -55,10 +54,12 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
             ? Object.values(FeaturesOptions).map(option => ({ id: option }))
             : Object.values(SimplifiedSentimentOptions).map(option => ({ id: option }))
 
-    const colorScale =
-        grouping === GroupingOptions.EXPERIENCE
-            ? theme.colors.ranges.features
-            : theme.colors.ranges.sentiment
+    const colorNamespace = grouping === GroupingOptions.EXPERIENCE ? 'experience' : 'sentiment'
+    const colorScale: ColorScale = {}
+    for (const option of options) {
+        const color = getThemeColor(`${colorNamespace}.${option.id}`)
+        colorScale[option.id] = [color, color]
+    }
 
     return (
         <ChartWrapper block={block} question={question} className={className}>

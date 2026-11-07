@@ -2,7 +2,7 @@ import React from 'react'
 import { MetadataItem, RowWrapper, RowWrapperProps } from './RowWrapper'
 import { Cell } from '../HorizontalBarCell'
 import { RowComponentProps } from '../types'
-import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import { RespondentCount } from '../../common2'
 import { FreeformAnswersTrigger } from '../../common2/freeform_answers/FreeformAnswersTrigger'
 import { CUTOFF_ANSWERS, OVERLIMIT_ANSWERS } from '@devographics/constants'
@@ -12,7 +12,6 @@ import { getTopBound } from '../views'
 import { CorrelationsTrigger } from 'core/correlations/CorrelationsTrigger'
 
 export const RowSingle = (props: RowComponentProps) => {
-    const theme = useTheme()
     const {
         block,
         bucket,
@@ -48,11 +47,20 @@ export const RowSingle = (props: RowComponentProps) => {
         return Math.min(100, (100 * widthValue) / getTopBound(maxOverallValue))
     }
 
+    const primaryGradient = [getThemeColor('primary.darker'), getThemeColor('primary.default')]
     let gradient
 
     if (question?.template === 'opinion') {
-        gradient =
-            theme?.colors?.ranges?.opinions?.[bucket.id] || theme.colors.barChart.primaryGradient
+        // opinion n (0-4) uses velocity colors 2n and 2n+1
+        const opinionIndex = Number(bucket.id)
+        if (Number.isNaN(opinionIndex)) {
+            gradient = primaryGradient
+        } else {
+            gradient = [
+                getThemeColor(`velocity[${opinionIndex * 2 + 1}]`),
+                getThemeColor(`velocity[${opinionIndex * 2}]`)
+            ]
+        }
     } else {
         // const gradientsByDepth = [
         //     theme.colors.barChart.primaryGradient,
@@ -62,7 +70,7 @@ export const RowSingle = (props: RowComponentProps) => {
         // ]
 
         // gradient = showNestedBuckets ? gradientsByDepth[depth + 1] : gradientsByDepth[depth]
-        gradient = theme.colors.barChart.primaryGradient
+        gradient = primaryGradient
     }
 
     // TODO: do this better

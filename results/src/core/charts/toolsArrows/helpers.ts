@@ -1,4 +1,5 @@
 import { scaleLinear } from 'd3-scale'
+import { getThemeColor } from 'core/theme_new/colors'
 
 /*
 
@@ -20,7 +21,7 @@ For a given velocity and a theme, get the associated color
 
 */
 export const getVelocityColor = (v, theme) => {
-    const scale = theme.colors.arrowsVelocity
+    const scale = getThemeColor('tools.arrowsVelocity')
     const scaleSteps = scale.length - 1
     const stepValue = Math.round(((v + 100) * scaleSteps) / 200)
     // add a floor and ceiling to make sure the step stays "inside" the array

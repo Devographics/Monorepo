@@ -8,6 +8,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { RecommendedResource, RecommendedResourceJob } from 'core/types/other'
 import './RecommendedResources.scss'
 import { trackClick } from 'core/helpers/trackClick'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const RecommendedResourcesBlock = ({ block, data }) => {
     const context = usePageContext()
@@ -118,7 +119,7 @@ const Job = ({ job }: { job: RecommendedResourceJob }) => {
 }
 
 const List = styled.div`
-    background: ${({ theme }) => theme.colors.backgroundAlt};
+    background: ${getThemeColor('background.alt')};
     padding: var(--spacing);
     /* margin-top: ${spacing(1)}; */
     @media ${mq.large} {
@@ -202,7 +203,7 @@ const ResourceCompany = styled.div`
     margin-top: ${spacing(0)};
     font-size: ${fontSize('smaller')};
     text-transform: uppercase;
-    color: ${({ theme }) => theme.colors.textAlt};
+    color: ${getThemeColor('text.alt')};
 `
 
 export default RecommendedResourcesBlock

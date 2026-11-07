@@ -142,12 +142,6 @@ export const ItemSelectOptions = ({
     )
 }
 
-export const Condition_ = styled.div`
-    background: ${({ theme }) => theme.colors.backgroundTrans};
-    border-radius: 10px;
-    position: relative;
-`
-
 export const Label_ = styled.label`
     display: block;
     width: 100%;

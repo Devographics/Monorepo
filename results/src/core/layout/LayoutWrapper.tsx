@@ -13,6 +13,7 @@ import MainLayout from 'core/layout/MainLayout'
 // import ReportLayout from 'core/report/ReportLayout'
 import theme from 'Theme/index.ts'
 import { PageContextValue } from 'core/types'
+import { getThemeColor } from 'core/theme_new/colors'
 
 interface LayoutProps {
     context: any
@@ -23,26 +24,23 @@ interface LayoutProps {
     children: React.ReactNode
 }
 const ThemedLayout = (props: LayoutProps) => {
-    const { colors } = theme
     const variables = {
-        '--textColor': colors.text,
-        '--textColorInverted': colors.textInverted,
-        '--textAltColor': colors.textAlt,
-        '--textAltColor2': colors.textAlt2 || colors.textAlt,
-        '--backgroundColor': colors.background,
-        '--backgroundAltColor': colors.backgroundAlt,
-        '--backgroundAlt2Color': colors.backgroundAlt2,
-        '--rowHoverColor': colors.rowHover || colors.backgroundAlt,
-        '--backgroundInvertedColor': colors.backgroundInverted,
-        '--borderColor': colors.border,
-        '--borderAltColor': colors.borderAlt,
-        '--sentimentPositiveColor': colors.ranges.sentiment.positive[0],
-        '--sentimentNegativeColor': colors.ranges.sentiment.negative[0],
-        '--sentimentNeutralColor': colors.ranges.sentiment.neutral[0],
-        '--experienceUsedColor': colors.ranges.features.used[0],
-        '--experienceHeardColor': colors.ranges.features.heard[0],
-        '--experienceNeverHeardColor': colors.ranges.features.never_heard[0],
-        '--linkColor': colors.link,
+        '--textColor': getThemeColor('text.default'),
+        '--textColorInverted': getThemeColor('background.default'),
+        '--textAltColor': getThemeColor('text.alt'),
+        '--backgroundColor': getThemeColor('background.default'),
+        '--backgroundAltColor': getThemeColor('background.alt'),
+        '--backgroundAlt2Color': getThemeColor('background.alt2'),
+        '--backgroundInvertedColor': getThemeColor('background.inverted'),
+        '--borderColor': getThemeColor('border.default'),
+        '--borderAltColor': getThemeColor('border.alt'),
+        '--sentimentPositiveColor': getThemeColor('sentiment.positive'),
+        '--sentimentNegativeColor': getThemeColor('sentiment.negative'),
+        '--sentimentNeutralColor': getThemeColor('sentiment.neutral'),
+        '--experienceUsedColor': getThemeColor('experience.used'),
+        '--experienceHeardColor': getThemeColor('experience.heard'),
+        '--experienceNeverHeardColor': getThemeColor('experience.never_heard'),
+        '--linkColor': getThemeColor('primary.default'),
         '--spacing': `${theme.dimensions.spacing}px`,
         '--halfSpacing': `${theme.dimensions.spacing / 2}px`,
         '--quarterSpacing': `${theme.dimensions.spacing / 4}px`,

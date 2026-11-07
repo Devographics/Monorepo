@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
+import { getThemeColor } from 'core/theme_new/colors'
 
 import * as RadixTooltip from '@radix-ui/react-tooltip'
 
@@ -8,7 +9,7 @@ export const getTooltipContent = element => styled(element)`
     background: var(--backgroundAltColor);
     font-size: var(--fontSizeSmall);
     padding: ${spacing(0.3)} ${spacing(0.6)};
-    border: 1px solid ${props => props.theme.colors.border};
+    border: 1px solid ${getThemeColor('border.default')};
     z-index: 10000;
     pointer-events: none;
     p:last-child {
@@ -38,8 +39,8 @@ const Trigger = styled(RadixTooltip.Trigger)`
 `
 
 const Arrow = styled(RadixTooltip.Arrow)`
-    fill: ${props => props.theme.colors.backgroundBackground};
-    stroke: ${props => props.theme.colors.text};
+    fill: ${getThemeColor('background.alt')};
+    stroke: ${getThemeColor('text.default')};
     stroke-width: 2px;
 `
 

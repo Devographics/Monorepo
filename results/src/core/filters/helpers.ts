@@ -22,6 +22,7 @@ import {
 } from './constants'
 import { useI18n } from '@devographics/react-i18n'
 import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import round from 'lodash/round'
 import {
     useAllFilters,
@@ -543,9 +544,10 @@ export const useFilterLegends = ({
             const defaultLabel = showYears
                 ? getString('filters.series.year', { values: { year: currentYear } })?.t
                 : getString('filters.legend.default')?.t
+            const defaultColor = getThemeColor('primary.default')
             const defaultLegendItem = {
-                color: colors.barColorDefault.color,
-                gradientColors: colors.barColorDefault.gradient,
+                color: defaultColor,
+                gradientColors: [defaultColor, defaultColor],
                 id: 'default',
                 label: defaultLabel,
                 shortLabel: defaultLabel
@@ -589,7 +591,7 @@ export const useFilterLegends = ({
                 }
                 const label = labelSegments.join(', ')
 
-                const barColorItem = getVariantBarColorItem(theme, seriesIndex)
+                const barColorItem = getVariantBarColorItem(seriesIndex)
 
                 const legendItem = {
                     color: barColorItem.color,
@@ -645,7 +647,7 @@ export const useFilterLegends = ({
                 )
                 barColorItem = { gradientColors, color: mainColor }
             } else {
-                barColorItem = getVariantBarColorItem(theme, index + 1, facetField)
+                barColorItem = getVariantBarColorItem(index + 1, facetField)
             }
             return {
                 color: barColorItem.color,

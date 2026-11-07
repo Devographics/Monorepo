@@ -1,13 +1,12 @@
+import { getThemeColor } from 'core/theme_new/colors'
 import React from 'react'
 import Helmet from 'react-helmet'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getPageSocialMeta, getPageMeta } from 'core/helpers/pageHelpers'
 import { useI18n } from '@devographics/react-i18n'
 // import { useTools } from 'core/helpers/toolsContext'
-import colors from 'core/theme/colors'
 import classNames from 'classnames'
 import { fontList } from 'Fonts/Fonts'
-import theme from 'Theme/index.ts'
 
 const Head = () => {
     const pageContext = usePageContext()
@@ -58,7 +57,6 @@ const Head = () => {
 
     const hasFonts = fontList && fontList.length > 0
 
-    const { colors } = theme
 
     return (
         <>
@@ -71,7 +69,7 @@ const Head = () => {
                 <html lang="en" />
                 <title>{meta.title}</title>
                 <link rel="shortcut icon" href={faviconUrl} />
-                <meta name="theme-color" content={colors.link} />
+                <meta name="theme-color" content={getThemeColor('primary.default')} />
 
                 {hasFonts && <link rel="preconnect" href="https://fonts.googleapis.com" />}
                 {hasFonts && (

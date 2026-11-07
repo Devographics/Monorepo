@@ -1,3 +1,4 @@
+import { getThemeColor } from 'core/theme_new/colors'
 import React from 'react'
 import Condition from './condition/Condition'
 import styled from 'styled-components'
@@ -9,7 +10,6 @@ import cloneDeep from 'lodash/cloneDeep.js'
 import { getNewCondition } from './helpers'
 import { Condition_ } from './condition/Condition'
 import { DeleteIcon } from '@devographics/icons'
-import { useTheme } from 'styled-components'
 import YearSelector from './YearSelector'
 import {
     CustomizationDefinition,
@@ -28,8 +28,6 @@ interface SeriesProps {
 }
 
 const Series = ({ allFilters, series, index, block, stateStuff }: SeriesProps) => {
-    const theme = useTheme()
-
     const { conditions } = series
     const { filtersState, setFiltersState } = stateStuff
     const { options } = filtersState
@@ -65,7 +63,7 @@ const Series = ({ allFilters, series, index, block, stateStuff }: SeriesProps) =
 
     const canAddConditions = conditions.length < allFilters.length
 
-    const backgroundColor = theme.colors.barColors[index].color
+    const backgroundColor = getThemeColor(`distinct[${index}]`)
 
     return (
         <ActiveSeries_>
@@ -112,11 +110,11 @@ const Series = ({ allFilters, series, index, block, stateStuff }: SeriesProps) =
 }
 
 export const Series_ = styled.div`
-    border: 1px solid ${({ theme }) => theme.colors.borderAlt};
+    border: 1px solid ${getThemeColor('border.alt')};
     border-radius: 3px;
     padding: var(--spacing);
     position: relative;
-    background: ${({ theme }) => theme.colors.backgroundAlt};
+    background: ${getThemeColor('background.alt')};
 `
 
 const ActiveSeries_ = styled(Series_)`
@@ -132,8 +130,8 @@ const DeleteSeries_ = styled(Button)`
     transform: translateX(50%);
     aspect-ratio: 1/1;
     border-radius: 100%;
-    background: ${({ theme }) => theme.colors.backgroundAlt};
-    border: 1px solid ${({ theme }) => theme.colors.borderAlt};
+    background: ${getThemeColor('background.alt')};
+    border: 1px solid ${getThemeColor('border.alt')};
     display: grid;
     place-items: center;
 `

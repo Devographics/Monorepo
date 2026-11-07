@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 
 /**
  * This component is used to render a custom label for charts,
@@ -23,10 +23,9 @@ const ChartLabel = ({
     transform: any
     style: any
 }) => {
-    const theme = useTheme()
 
-    const outlineColor = _outlineColor || theme.colors.background
-    const textColor = _textColor || theme.colors.text
+    const outlineColor = _outlineColor || getThemeColor('background.default')
+    const textColor = _textColor || getThemeColor('text.default')
 
     return (
         <g {...rest}>

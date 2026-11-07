@@ -6,6 +6,7 @@ import { mq, spacing } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import LanguageSwitcher from 'core/i18n/LanguageSwitcher'
 import PaginationLink from './PaginationLink'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const Pagination = (/*{
     toggleSidebar,
@@ -85,7 +86,7 @@ const MiddleContent = styled.div`
 `
 
 const SidebarToggle = styled.button`
-    background: ${props => props.theme.colors.background};
+    background: ${getThemeColor('background.default')};
     padding: 0 var(--halfSpacing);
     cursor: pointer;
     border: 0;
@@ -95,7 +96,7 @@ const SidebarToggle = styled.button`
     height: 100%;
 
     &:hover {
-        background: ${props => props.theme.colors.backgroundAlt};
+        background: ${getThemeColor('background.alt')};
     }
 
     &:focus {

@@ -1,4 +1,5 @@
 import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import { useI18n } from '@devographics/react-i18n'
 import { BlockLegend, BlockVariantDefinition } from 'core/types/block'
 import { stripHtml } from 'core/helpers/utils'
@@ -16,12 +17,12 @@ export const getColor = (colorRange, id) => {
     }
 }
 
-const getNoAnswerKey = (theme: any, translate: any) => ({
+const getNoAnswerKey = (translate: any) => ({
     id: 'no_answer',
     label: translate('charts.no_answer'),
     shortLabel: translate('charts.no_answer'),
-    color: theme.colors.no_answer[0],
-    gradientColors: theme.colors.no_answer
+    color: getThemeColor('background.alt2'),
+    gradientColors: [getThemeColor('background.alt2'), getThemeColor('background.alt2')]
 })
 
 export const useLegends = ({
@@ -44,7 +45,7 @@ export const useLegends = ({
     const { translate, getString } = useI18n()
 
     const namespace = providedNamespace ?? block.i18nNamespace ?? block.fieldId ?? block.id
-    const colorRange = theme.colors.ranges[namespace]
+    const colorRange = theme.colors?.ranges?.[namespace]
     const legends = keys.map(id => {
         const labelKey = `options.${namespace}.${id}`
         const shortLabelKey = labelKey + '.short'
@@ -61,5 +62,5 @@ export const useLegends = ({
         return legend
     })
 
-    return addNoAnswer ? [...legends, getNoAnswerKey(theme, translate)] : legends
+    return addNoAnswer ? [...legends, getNoAnswerKey(translate)] : legends
 }

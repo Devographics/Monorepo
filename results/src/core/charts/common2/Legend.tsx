@@ -1,7 +1,7 @@
 import './Legend.scss'
 import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
-import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import { getItemLabel } from 'core/helpers/labels'
 import { ChartStateWithHighlighted, LegendItemType } from './types'
 import { getDistinctColor } from './helpers/colors'
@@ -89,12 +89,11 @@ const LegendItem = <ChartStateType extends ChartStateWithHighlighted>({
     i18nNamespace?: string
 }) => {
     const { getString } = useI18n()
-    const theme = useTheme()
 
     const { id, entity, label: label_, color } = item
 
     const { highlighted, setHighlighted } = chartState
-    const lineColor = color || getDistinctColor(theme.colors.distinct, lineIndex)
+    const lineColor = color || getDistinctColor(getThemeColor('distinct'), lineIndex)
 
     const labelObject = getItemLabel({
         id,

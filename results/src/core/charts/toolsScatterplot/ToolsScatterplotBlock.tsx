@@ -1,9 +1,9 @@
 import React from 'react'
+import { getThemeColor } from 'core/theme_new/colors'
 import { usePageContext } from 'core/helpers/pageContext'
 import { AllToolsData, SectionMetadata, StandardQuestionData } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { useI18n } from '@devographics/react-i18n'
-import { useTheme } from 'styled-components'
 import { DataSeries } from 'core/filters/types'
 import { ChartFooter, ChartWrapper, Legend, Note } from '../common2'
 import ChartShare from '../common2/ChartShare'
@@ -29,7 +29,6 @@ const useNodes = ({
     const { highlighted: currentCategory, currentItem } = chartState
 
     const toolSections = useToolSections()
-    const theme = useTheme()
 
     const nodes: NodeData[] = items.map((item, index) => {
         const { id, entity, responses } = item
@@ -56,7 +55,7 @@ const useNodes = ({
             }) || ({ id: 'no_category_found' } as SectionMetadata)
         const categoryId = category.id
 
-        const color = theme.colors.ranges.toolSections[categoryId]
+        const color = getThemeColor(`tools.sections.${categoryId}`)
 
         const serieIndex = 0
         const serieId = 'dummy_serie_id'
@@ -94,7 +93,6 @@ export const ToolsScatterplotBlock = (
 
     const { getString } = useI18n()
     const { localeId } = usePageContext()
-    const theme = useTheme()
     const toolSections = useToolSections()
 
     const chartState = useChartState({ defaultXMetric: 'count', defaultYMetric: 'satisfaction' })
@@ -102,7 +100,7 @@ export const ToolsScatterplotBlock = (
     const legendItems = toolSections.map((section: SectionMetadata) => ({
         id: section.id,
         label: getString(`sections.${section.id}.title`)?.t,
-        color: theme.colors.ranges.toolSections[section.id]
+        color: getThemeColor(`tools.sections.${section.id}`)
     }))
 
     const axis1Label = getString(`charts.axis_legends.users_count`)?.t

@@ -62,7 +62,7 @@ export const fontWeight =
 export const color =
     (id: ColorKeys) =>
         ({ theme }: ThemeProps) =>
-            theme.colors[id] as string
+            theme.colors?.[id] as string
 
 export const zIndex =
     (id: ZIndexKeys) =>

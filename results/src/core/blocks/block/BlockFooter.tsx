@@ -4,6 +4,7 @@ import { spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 import { usePageContext } from 'core/helpers/pageContext'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const Footer = styled.div`
     .rawchartmode & {
@@ -15,7 +16,7 @@ const Footer = styled.div`
 const Respondents = styled.div`
     font-size: var(--fontSizeSmall);
     text-align: center;
-    color: ${props => props.theme.colors.textAlt};
+    color: ${getThemeColor('text.alt')};
     margin-bottom: var(--halfSpacing);
 `
 

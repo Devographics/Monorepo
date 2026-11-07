@@ -1,9 +1,10 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { mq, spacing, fontSize, color } from 'core/theme'
+import { mq, spacing, fontSize } from 'core/theme'
 import BlockLegendsItem, { BlockLegendSharedProps } from './BlockLegendsItem'
 import T from 'core/i18n/T'
 import { BlockLegend } from 'core/types'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const BlockLegends = ({
     legends = [],
@@ -90,7 +91,7 @@ const Container = styled.table`
     ${props => {
         if (props.withFrame) {
             return css`
-                border: 1px solid ${color('border')};
+                border: 1px solid ${getThemeColor('border.default')};
                 padding: var(--halfSpacing);
 
                 @media ${mq.small} {

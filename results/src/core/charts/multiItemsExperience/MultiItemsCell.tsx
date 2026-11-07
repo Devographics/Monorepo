@@ -5,7 +5,7 @@ import { MultiItemsChartState, ColumnId, CombinedBucket, GroupingOptions, Totals
 import Tooltip from 'core/components/Tooltip'
 import { useI18n } from '@devographics/react-i18n'
 import T from 'core/i18n/T'
-import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import { formatPercentage } from '../common2/helpers/format'
 import { useIsWideEnough } from '../horizontalBar2/HorizontalBarCell'
 import { CellLabel } from '../common2'
@@ -32,7 +32,6 @@ export const MultiItemsCell = ({
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
     const { localeId } = usePageContext()
 
-    const theme = useTheme()
     const { getString } = useI18n()
     const { variable } = chartState
     const { bucket, facetBucket } = combinedBucket
@@ -49,15 +48,15 @@ export const MultiItemsCell = ({
         sentiment: getString(sentimentKey)?.t || '?'
     }
 
-    const experienceColors = theme.colors.ranges.features
-    const sentimentColors = theme.colors.ranges.sentiment
+    const experienceColor = getThemeColor(`experience.${bucket.id}`)
+    const sentimentColor = getThemeColor(`sentiment.${facetBucket.id}`)
 
     const style = {
         '--percentageValue': value,
-        '--experienceColor1': experienceColors[bucket.id as FeaturesOptions][0],
-        '--experienceColor2': experienceColors[bucket.id as FeaturesOptions][0],
-        '--sentimentColor1': sentimentColors[facetBucket.id as SimplifiedSentimentOptions][0],
-        '--sentimentColor2': sentimentColors[facetBucket.id as SimplifiedSentimentOptions][0],
+        '--experienceColor1': experienceColor,
+        '--experienceColor2': experienceColor,
+        '--sentimentColor1': sentimentColor,
+        '--sentimentColor2': sentimentColor,
         '--width': width,
         '--offset': offset
     }

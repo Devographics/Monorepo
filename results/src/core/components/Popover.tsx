@@ -1,6 +1,7 @@
 import React, { memo, useState, useCallback, useRef, ReactNode, ReactElement } from 'react'
 import styled from 'styled-components'
 import { mq, spacing, fontSize, color, zIndex } from 'core/theme'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const svgs = {
     top: <polygon stroke="#000" points="0,50 100,50 50,0" />,
@@ -120,7 +121,7 @@ const PopoverToggle = styled.button`
     align-items: center;
     justify-content: center;
     background: transparent;
-    color: ${({ theme }) => theme.colors.text};
+    color: ${getThemeColor('text.default')};
     font-size: ${fontSize('medium')};
     cursor: pointer;
     outline: none;
@@ -138,7 +139,7 @@ const PopoverToggle = styled.button`
         width: 12px;
         position: relative;
         polygon {
-            fill: ${({ theme }) => theme.colors.text};
+            fill: ${getThemeColor('text.default')};
         }
     }
 
@@ -177,7 +178,7 @@ const PopoverPopup = styled.div`
         content: ' ';
         height: ${ARROW_SIZE}px;
         width: ${ARROW_SIZE}px;
-        background: ${props => props.theme.colors.backgroundAlt};
+        background: ${getThemeColor('background.alt')};
         position: absolute;
         pointer-events: none;
         transform-origin: center center;

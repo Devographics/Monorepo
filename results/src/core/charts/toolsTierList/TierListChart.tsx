@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import { useEntity } from 'core/helpers/entities'
 import { QuestionData } from '@devographics/types'
 import './TierListChart.scss'
@@ -62,8 +62,7 @@ export const TierListChart = ({ data, currentCategory }: TierListProps) => {
 }
 
 const Tier = ({ letter, items, lowerBound, upperBound, index, currentCategory }: TierProps) => {
-    const theme = useTheme()
-    const color = theme.colors.tiers[index]
+    const color = getThemeColor(`tools.tiers[${index}]`)
     return (
         <div className="tier-row">
             <div className="tier-letter" style={{ '--letterColor': color }}>

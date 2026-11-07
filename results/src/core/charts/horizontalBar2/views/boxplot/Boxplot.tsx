@@ -1,3 +1,4 @@
+import { getThemeColor } from 'core/theme_new/colors'
 import './Boxplot.scss'
 import { usePageContext } from 'core/helpers/pageContext'
 import React, { useMemo, useRef } from 'react'
@@ -10,7 +11,6 @@ import {
 } from '../../types'
 import { Axis, RespondentCount } from 'core/charts/common2'
 import { Tick } from 'core/charts/common2/types'
-import { useTheme } from 'styled-components'
 import * as d3 from 'd3'
 import { BlockLegend } from 'core/types'
 import { useWidth } from 'core/charts/common2/helpers'
@@ -29,7 +29,6 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     const { block, chartState, chartValues, seriesMetadata } = viewProps
     const { variables } = block
     const { facetQuestion } = chartValues
-    const theme = useTheme()
     const { localeId } = usePageContext()
     const { buckets, isReversed } = viewProps
     const contentHeight = BAR_HEIGHT
@@ -109,7 +108,7 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
                                 ticks={ticks}
                                 labelFormatter={labelFormatter}
                                 legends={legends}
-                                stroke={theme.colors.text}
+                                stroke={getThemeColor('text.default')}
                                 variant="bottom"
                             />
                         </div>
@@ -140,7 +139,6 @@ const BoxplotRow = (props: BoxplotRowProps) => {
         chartState
     } = props
 
-    const theme = useTheme()
 
     const { view } = chartState
     const boxData = useBoxplotData({ bucket, xScale, isReversed })
@@ -160,7 +158,7 @@ const BoxplotRow = (props: BoxplotRowProps) => {
     const boxProps: BoxProps = {
         i18nNamespace: 'foo',
         percentilesData: bucket.percentilesByFacet,
-        stroke: theme.colors.text,
+        stroke: getThemeColor('text.default'),
         labelFormatter,
         bucket,
         rowHeight: BAR_HEIGHT,

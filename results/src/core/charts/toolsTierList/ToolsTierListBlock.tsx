@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import TierListChart, { TierItemData, TierData } from 'core/charts/toolsTierList/TierListChart'
 import sortBy from 'lodash/sortBy.js'
 import {
@@ -39,7 +39,6 @@ Parse data and convert it into a format compatible with the TierList chart
 */
 const getChartData = (
     serie: DataSeries<StandardQuestionData[]>,
-    theme: any,
     toolsSections: SectionMetadata[]
 ): TierData[] => {
     let sortedData = tiers.map((tier, index) => ({ ...tier, index, items: [] as TierItemData[] }))
@@ -59,7 +58,7 @@ const getChartData = (
             throw Error(`Could not find section for tool id ${tool.id}`)
         }
         const sectionId = section.id
-        const color = sectionId ? theme.colors.ranges.toolSections[sectionId] : '#cccccc'
+        const color = sectionId ? getThemeColor(`tools.sections.${sectionId}`) : '#cccccc'
         if (userCount >= cutoff) {
             sortedData.forEach(tier => {
                 if (satisfactionRatio >= tier.lowerBound && satisfactionRatio <= tier.upperBound) {
@@ -84,16 +83,15 @@ const getChartData = (
 const TierListBlock = (props: TierListBlockProps) => {
     const { getString } = useI18n()
     const { block, series, question } = props
-    const theme = useTheme()
     const toolsSections = useToolSections()
-    const chartData = getChartData(series[0], theme, toolsSections)
+    const chartData = getChartData(series[0], toolsSections)
     const chartState = useChartState()
     const { highlighted: currentCategory } = chartState
 
     const legendItems = toolsSections.map(({ id }: SectionMetadata) => ({
         id,
         label: getString(`sections.${id}.title`)?.t,
-        color: theme.colors.ranges.toolSections[id]
+        color: getThemeColor(`tools.sections.${id}`)
     }))
 
     return (

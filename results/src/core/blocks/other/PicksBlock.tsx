@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { mq, spacing, fontSize, color } from 'core/theme'
+import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const PicksBlock = ({ block, data: entity }) => {
     const pageContext = usePageContext()
@@ -91,7 +92,7 @@ const PickContentWrapper = styled.div`
     position: relative;
 `
 const PickContent = styled.div`
-    background: ${color('backgroundInvertedAlt')};
+    background: ${getThemeColor('background.invertedAlt')};
     color: var(--textColorInverted);
     position: relative;
     margin-bottom: ${spacing(0.75)};
@@ -104,7 +105,7 @@ const PickContent = styled.div`
     &:after {
         content: ' ';
         clip-path: polygon(0 0, 100% 0, 50% 100%);
-        background: ${color('backgroundInvertedAlt')};
+        background: ${getThemeColor('background.invertedAlt')};
         position: absolute;
         width: ${spacing(triangleWidth)};
         height: ${spacing(triangleWidth / 2)};
@@ -125,7 +126,7 @@ const PickTitle = styled.h3`
     a:link,
     a:visited,
     a:hover {
-        color: ${({ theme }) => theme.colors.textInverted};
+        color: ${getThemeColor('text.inverted')};
     }
 `
 
@@ -144,7 +145,7 @@ const PicksIntroMobile = styled.div`
     font-size: var(--fontSizeSmall);
     text-align: center;
     margin-bottom: var(--halfSpacing);
-    color: ${({ theme }) => theme.colors.textAlt};
+    color: ${getThemeColor('text.alt')};
     @media ${mq.mediumLarge} {
         display: none;
     }
@@ -155,7 +156,7 @@ const PicksIntro = styled.div`
     position: absolute;
     bottom: -30px;
     right: 0;
-    color: ${({ theme }) => theme.colors.textAlt};
+    color: ${getThemeColor('text.alt')};
     @media ${mq.small} {
         display: none;
     }

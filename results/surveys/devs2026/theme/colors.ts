@@ -1,6 +1,7 @@
 import { DefaultTheme } from 'styled-components'
 import colors_ from 'core/theme/colors'
-import { getThemeColor } from 'core/theme_new/colors'
+import { getColorFromThemes } from 'core/theme_new/helpers'
+import { SurveyColorTheme } from 'core/theme_new/types'
 
 const colors = {
     ...colors_,
@@ -143,7 +144,7 @@ const distinct = [
     colors.kaki
 ]
 
-export const surveyColorTheme = {
+export const surveyColorTheme: SurveyColorTheme = {
     lightOnDark: {
         primary: { default: '#BDFDFF', darker: '#299295' },
         background: { default: '#272b2e', alt: '#303d47', alt2: '#406785' },
@@ -176,6 +177,9 @@ export const surveyColorTheme = {
         ]
     }
 }
+
+// local version that reads this file's surveyColorTheme directly (see core/theme_new/colors.ts)
+const getThemeColor = (colorPath: string) => getColorFromThemes(surveyColorTheme, colorPath)
 const stateOfDevsThemeColors: DefaultTheme['colors'] = {
     background: getThemeColor('background.default'),
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',

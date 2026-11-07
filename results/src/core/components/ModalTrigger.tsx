@@ -5,6 +5,7 @@ import { mq, spacing, fontSize, color } from 'core/theme'
 import Button from 'core/components/Button'
 import Modal from 'react-modal'
 import { useI18n } from '@devographics/react-i18n'
+import { getThemeColor } from 'core/theme_new/colors'
 
 type ModalTriggerProps = {
     label?: string
@@ -49,7 +50,7 @@ const ModalTrigger = ({
 
     const customStyles = {
         overlay: {
-            backgroundColor: `${theme.colors.background}99`,
+            backgroundColor: `${getThemeColor('background.default')}99`,
             backdropFilter: 'blur(5px)'
         },
         content: {}
@@ -105,17 +106,17 @@ const Close = styled.button`
     background: transparent;
     border: 2px solid transparent;
     outline: none;
-    color: ${props => props.theme.colors.text};
+    color: ${getThemeColor('text.default')};
     z-index: 100;
     &:hover,
     &:focus {
-        color: ${props => props.theme.colors.link};
-        border-bottom: 2px solid ${props => props.theme.colors.link};
+        color: ${getThemeColor('primary.default')};
+        border-bottom: 2px solid ${getThemeColor('primary.default')};
         padding-bottom: 0.15rem;
     }
 
     &:focus {
-        border-color: ${props => props.theme.colors.link};
+        border-color: ${getThemeColor('primary.default')};
     }
 
     @media ${mq.small} {

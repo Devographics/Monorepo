@@ -5,6 +5,7 @@ import { useTheme } from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
 import { TableData } from 'core/helpers/datatables'
 import round from 'lodash/round.js'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const Tables = ({ tables = [] }: { tables: TableData[] }) => {
     return (
@@ -61,7 +62,7 @@ const TableHeading = ({ id, colSpan, labelId }) => (
 )
 
 const TH_ = styled.th`
-    background: ${props => props.theme.colors.backgroundAlt};
+    background: ${getThemeColor('background.alt')};
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;

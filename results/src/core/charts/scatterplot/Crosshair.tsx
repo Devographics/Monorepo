@@ -1,9 +1,9 @@
 import React from 'react'
-import { useTheme } from 'styled-components'
 import { ScatterplotChartState } from '../scatterplot/chartState'
 import { ScatterplotChartValues } from '../scatterplot/chartValues'
 import { NodeData } from './types'
 import './Crosshair.scss'
+import { getThemeColor } from 'core/theme_new/colors'
 
 export const crosshairConfig = {
     labelWidth: 70,
@@ -19,7 +19,6 @@ type CrossHairProps = {
 }
 
 export const Crosshair = ({ chartState, nodes, innerHeight }: CrossHairProps) => {
-    const theme = useTheme()
 
     const { currentItem } = chartState
     const node = currentItem !== null ? nodes.find(node => node.id === currentItem) : undefined
@@ -33,7 +32,7 @@ export const Crosshair = ({ chartState, nodes, innerHeight }: CrossHairProps) =>
                 y1={node.y}
                 x2={node.x - crosshairConfig.circleRadius}
                 y2={node.y}
-                stroke={theme.colors.border}
+                stroke={getThemeColor('border.default')}
                 strokeWidth={3}
             />
             <line
@@ -42,7 +41,7 @@ export const Crosshair = ({ chartState, nodes, innerHeight }: CrossHairProps) =>
                 y1={innerHeight}
                 x2={node.x}
                 y2={node.y + crosshairConfig.circleRadius}
-                stroke={theme.colors.border}
+                stroke={getThemeColor('border.default')}
                 strokeWidth={3}
             />
             <g transform={`translate(0,${node.y})`}>
@@ -53,7 +52,7 @@ export const Crosshair = ({ chartState, nodes, innerHeight }: CrossHairProps) =>
                     height={crosshairConfig.labelHeight}
                     rx={2}
                     ry={2}
-                    fill={theme.colors.backgroundInverted}
+                    fill={getThemeColor('background.inverted')}
                 />
                 <text
                     className="scatterplot-crosshair-label"
@@ -71,7 +70,7 @@ export const Crosshair = ({ chartState, nodes, innerHeight }: CrossHairProps) =>
                     height={crosshairConfig.labelHeight}
                     rx={2}
                     ry={2}
-                    fill={theme.colors.backgroundInverted}
+                    fill={getThemeColor('background.inverted')}
                 />
                 <text
                     className="scatterplot-crosshair-label"
@@ -86,7 +85,7 @@ export const Crosshair = ({ chartState, nodes, innerHeight }: CrossHairProps) =>
                 <circle
                     r={crosshairConfig.circleRadius}
                     strokeWidth={3}
-                    stroke={theme.colors.border}
+                    stroke={getThemeColor('border.default')}
                     fill="none"
                 />
             </g>

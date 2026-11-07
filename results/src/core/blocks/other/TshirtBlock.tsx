@@ -6,6 +6,7 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import take from 'lodash/take'
 import { usePageContext } from 'core/helpers/pageContext'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const TshirtBlock = () => {
     const { translate } = useI18n()
@@ -140,7 +141,7 @@ const TshirtButton = styled(Button)`
 
 const Designer = styled.div`
     margin-top: var(--spacing);
-    background: ${props => props.theme.colors.backgroundAlt};
+    background: ${getThemeColor('background.alt')};
     padding: ${spacing(1)};
     h5,
     h3 {

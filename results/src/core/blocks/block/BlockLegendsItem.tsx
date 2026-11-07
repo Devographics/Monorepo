@@ -2,6 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import { BlockLegend } from 'core/types'
+import { getThemeColor } from 'core/theme_new/colors'
 
 type BlockEventHandler = ({ id, label, color }: Pick<BlockLegend, 'id' | 'label' | 'color'>) => void
 
@@ -116,21 +117,21 @@ const Container = styled.tr`
         margin-bottom: 0;
     }
 
-    ${({ isInteractive, theme }) => {
+    ${({ isInteractive }) => {
         if (isInteractive) {
             return css`
                 cursor: pointer;
                 &:hover {
-                    background: ${theme.colors.backgroundAlt};
+                    background: ${getThemeColor('background.alt')};
                 }
             `
         }
     }}
 
-    ${({ state, theme }) => {
+    ${({ state }) => {
         if (state === 'active') {
             return css`
-                /* background: ${theme.colors.backgroundAlt}; */
+                /* background: ${getThemeColor('background.alt')}; */
             `
         } else if (state === 'inactive') {
             return css`

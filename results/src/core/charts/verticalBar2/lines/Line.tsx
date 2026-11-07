@@ -1,6 +1,6 @@
 import React from 'react'
 import take from 'lodash/take'
-import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import { BasicPointData, LineItem } from '../types'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
@@ -49,7 +49,6 @@ export const Line = <
         isDisabled
     } = props
     const { getString } = useI18n()
-    const theme = useTheme()
     const { highlighted, setHighlighted, view, mode, subset } = chartState
     const { getPointValue } = viewDefinition
     const invertYAxis = mode === ModesEnum.RANK
@@ -71,8 +70,8 @@ export const Line = <
     const lineColor = isDisabled
         ? 'rgba(255,255,255)'
         : hasMultiple
-        ? getDistinctColor(theme.colors.distinct, subsetLineIndex)
-        : theme.colors.barChart.primaryGradient[0]
+        ? getDistinctColor(getThemeColor('distinct'), subsetLineIndex)
+        : getThemeColor('primary.darker')
 
     const style = {
         color: lineColor

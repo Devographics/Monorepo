@@ -3,7 +3,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { AllToolsData, Bucket, QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { useI18n } from '@devographics/react-i18n'
-import { useTheme } from 'styled-components'
+import { getThemeColor } from 'core/theme_new/colors'
 import { DataSeries } from 'core/filters/types'
 import { ChartFooter, ChartWrapper, Legend, Note } from '../common2'
 import ChartShare from '../common2/ChartShare'
@@ -32,7 +32,6 @@ const useNodes = ({
     const { highlighted, currentItem } = chartState
 
     const { getString } = useI18n()
-    const theme = useTheme()
 
     const buckets1 = data[0].combined.allEditions?.[0].buckets
     const buckets2 = data[1].combined.allEditions?.[0].buckets
@@ -131,7 +130,6 @@ export const TwoSeriesScatterplot = (
         values: { axis: q2Label }
     })?.t
 
-    const theme = useTheme()
 
     const chartState = useChartState({
         defaultXMetric: 'averageByFacet',
@@ -157,10 +155,10 @@ export const TwoSeriesScatterplot = (
         let color
         if (option && groups) {
             const groupIndex = groups.findIndex(group => group === option.group)
-            const groupColor = getDistinctColor(theme.colors.distinct, groupIndex)
+            const groupColor = getDistinctColor(getThemeColor('distinct'), groupIndex)
             color = groupColor
         } else {
-            color = getDistinctColor(theme.colors.distinct, index)
+            color = getDistinctColor(getThemeColor('distinct'), index)
         }
         return {
             id,

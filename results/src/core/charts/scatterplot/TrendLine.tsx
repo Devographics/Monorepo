@@ -1,7 +1,7 @@
 import React from 'react'
-import { useTheme } from 'styled-components'
 import { ScatterplotChartValues } from './chartValues'
 import { NodeData } from './types'
+import { getThemeColor } from 'core/theme_new/colors'
 
 export type Regression = {
     slope: number
@@ -51,7 +51,6 @@ type TrendLineProps = {
 
 // draw an ordinary least-squares regression line (with R²) through the points
 export const TrendLine = ({ chartValues, nodes }: TrendLineProps) => {
-    const theme = useTheme()
     const { xScale, yScale } = chartValues
 
     const points = nodes.map(node => ({ x: node.xValue, y: node.yValue }))
@@ -78,7 +77,7 @@ export const TrendLine = ({ chartValues, nodes }: TrendLineProps) => {
                 y1={y1}
                 x2={x2}
                 y2={y2}
-                stroke={theme.colors.text}
+                stroke={getThemeColor('text.default')}
                 strokeWidth={2}
                 strokeDasharray="6 4"
                 opacity={0.7}

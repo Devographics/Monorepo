@@ -1,9 +1,10 @@
+import { getThemeColor } from 'core/theme_new/colors'
 /**
  * Not currently used
  */
 
 import React, { useCallback, useMemo, useState } from 'react'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 import { useSpring, animated, to } from '@react-spring/web'
 // import { useMotionConfig } from '@nivo/core'
 import { staticProps } from './config'
@@ -47,8 +48,6 @@ export const Quadrant = ({
     const handleClick = () => {
         setZoomedQuadrantIndex(isZoomed ? null : quadrantIndex)
     }
-
-    const theme = useTheme()
 
     const transition = useSpring({
         x,
@@ -94,7 +93,7 @@ export const Quadrant = ({
                     (height: number) => height - staticProps.quadrantBorder
                 )}
                 fillOpacity={0}
-                stroke={theme.colors.border}
+                stroke={getThemeColor('border.default')}
                 strokeWidth={staticProps.quadrantBorder}
                 strokeOpacity={transition.strokeOpacity}
             />

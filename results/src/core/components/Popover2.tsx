@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import * as Popover from '@radix-ui/react-popover'
 import { CloseIcon } from '@devographics/icons'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const PopoverComponent = ({
     trigger,
@@ -30,7 +31,7 @@ const PopoverContent_ = styled(Popover.Content)`
     border-radius: 4px;
     padding: 20px;
     width: min(380px, 100vw);
-    background-color: ${({ theme }) => theme.colors.backgroundAlt};
+    background-color: ${getThemeColor('background.alt')};
     box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
     animation-duration: 400ms;
     animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
@@ -44,7 +45,7 @@ const PopoverContent_ = styled(Popover.Content)`
 `
 
 const PopoverArrow_ = styled(Popover.Arrow)`
-    fill: ${({ theme }) => theme.colors.backgroundAlt};
+    fill: ${getThemeColor('background.alt')};
 `
 
 const PopoverClose_ = styled(Popover.Close)`
@@ -53,7 +54,7 @@ const PopoverClose_ = styled(Popover.Close)`
     right: 5px;
     background: none;
     border: none;
-    stroke: ${({ theme }) => theme.colors.text};
+    stroke: ${getThemeColor('text.default')};
 `
 
 export default PopoverComponent
