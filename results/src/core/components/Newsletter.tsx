@@ -3,7 +3,6 @@ import { useI18n } from '@devographics/react-i18n'
 import { usePageContext } from 'core/helpers/pageContext'
 import Button from './Button'
 import styled from 'styled-components'
-import { spacing } from 'core/theme'
 import T from 'core/i18n/T'
 
 export default function Newsletter({ locale }: { locale?: any }) {

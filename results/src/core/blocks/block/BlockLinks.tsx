@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import { getThemeColor } from 'core/theme_new/colors'
 

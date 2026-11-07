@@ -1,7 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import Loading from 'core/components/Loading'
-import { spacing, fontSize } from 'core/theme'
 import Tooltip from 'core/components/Tooltip'
 import isEmpty from 'lodash/isEmpty'
 import { CHART_MODE_GRID } from '../constants'
@@ -74,7 +73,7 @@ const GridWrapper_ = styled.div`
                   @media ${mq.mediumLarge} {
                       display: grid;
                       grid-template-columns: repeat(auto-fit, minmax(${columnMinWidth}px, 1fr));
-                      gap: ${spacing(2)};
+                      gap: var(--doubleSpacing);
                   }
               `
             : css`
@@ -94,7 +93,7 @@ const GridItem_ = styled.div`
 
 const Legend_ = styled.h4`
     background: ${getThemeColor('background.alt')};
-    padding: ${spacing(0.25)} var(--halfSpacing);
+    padding: var(--quarterSpacing) var(--halfSpacing);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

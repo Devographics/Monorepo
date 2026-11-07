@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { fontSize, fontWeight, mq, spacing } from 'core/theme'
+import { mq } from 'core/theme'
 import { Entity } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import T from 'core/i18n/T'
@@ -54,13 +54,13 @@ const Wrapper = styled.div`
     @media ${mq.mediumLarge} {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        column-gap: ${spacing(2)};
-        row-gap: ${spacing(2)};
+        column-gap: var(--doubleSpacing);
+        row-gap: var(--doubleSpacing);
     }
 `
 
 const Takeaway_ = styled.section`
-    font-size: ${fontSize('large')};
+    font-size: var(--fontSizeLarge);
     background: ${getThemeColor('background.alt')};
     border-radius: 30px;
     padding: var(--spacing);
@@ -69,9 +69,9 @@ const Takeaway_ = styled.section`
 const Heading_ = styled.h3`
     text-transform: uppercase;
     color: ${getThemeColor('text.alt')};
-    margin-bottom: ${spacing(0.25)};
+    margin-bottom: var(--quarterSpacing);
     font-weight: var(--fontMedium);
-    font-size: ${fontSize('large')};
+    font-size: var(--fontSizeLarge);
 `
 const Content_ = styled.div``
 

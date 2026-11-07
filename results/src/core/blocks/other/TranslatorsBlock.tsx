@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 // import locales from '../../../../config/locales.yml'
 import { useI18n } from '@devographics/react-i18n'
-import { mq, spacing } from 'core/theme'
+import { mq } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import get from 'lodash/get'
 
@@ -39,7 +39,7 @@ const Container = styled.div`
     margin-left: auto;
     margin-right: auto;
     border: var(--separationBorder);
-    padding: ${spacing(2)};
+    padding: var(--doubleSpacing);
 `
 
 const Header = styled.h3`

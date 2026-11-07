@@ -1,7 +1,7 @@
 import React from 'react'
 import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import styled, { css } from 'styled-components'
-import { mq, spacing } from 'core/theme'
+import { mq } from 'core/theme'
 import { BlockVariantDefinition } from 'core/types'
 import './Block.scss'
 
@@ -34,7 +34,7 @@ const Wrapper = styled.section`
             margin-bottom: var(--tripleSpacing);
 
             @media ${mq.large} {
-                margin-bottom: ${spacing(6)};
+                margin-bottom: calc(var(--spacing) * 6);
             }
         `}
 `

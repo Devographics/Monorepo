@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import propTypes from 'prop-types'
-import { ThemeProvider } from 'styled-components'
 import '../../stylesheets/screen.scss'
 import Head from 'core/components/Head'
 import { PageContextProvider } from 'core/helpers/pageContext'
@@ -8,7 +7,7 @@ import { KeydownContextProvider } from 'core/helpers/keydownContext'
 import { mergePageContext } from 'core/helpers/pageHelpers'
 import { I18nContextProvider } from '@devographics/react-i18n'
 // import PageMetaDebug from './pages/PageMetaDebug'
-import { fontSize, fontWeight, GlobalStyle } from 'core/theme'
+import { GlobalStyle } from 'core/theme'
 import MainLayout from 'core/layout/MainLayout'
 // import ReportLayout from 'core/report/ReportLayout'
 import theme from 'Theme/index.ts'
@@ -67,8 +66,7 @@ const ThemedLayout = (props: LayoutProps) => {
             theme.typography.size[size]
     }
     return (
-        // @ts-expect-errors legacy
-        <ThemeProvider theme={theme}>
+        <>
             {/* @ts-expect-errors legacy */}
             <GlobalStyle />
             <Head />
@@ -87,7 +85,7 @@ const ThemedLayout = (props: LayoutProps) => {
                 )} */}
                 <MainLayout {...props} />
             </div>
-        </ThemeProvider>
+        </>
     )
 }
 

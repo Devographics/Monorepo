@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 import { usePageContext } from 'core/helpers/pageContext'

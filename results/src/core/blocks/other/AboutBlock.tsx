@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 

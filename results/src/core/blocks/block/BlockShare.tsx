@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useI18n } from '@devographics/react-i18n'
 import { getBlockMeta } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
-import { mq, spacing } from 'core/theme'
+import { mq } from 'core/theme'
 import T from 'core/i18n/T'
 
 import SharePreview from 'core/share/SharePreview'

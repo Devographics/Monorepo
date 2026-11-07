@@ -2,7 +2,6 @@
 // no need to move it to shared i18n code
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { spacing, fontSize } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import { T } from './T'
 import { Locales } from './Locales'
@@ -110,7 +109,7 @@ export const LanguageSwitcherContents = () => {
 //     }
 
 //     .Sidebar & {
-//         margin-bottom: ${spacing(1)};
+//         margin-bottom: var(--spacing);
 //         border: var(--separationBorder);
 
 //         @media ${mq.large} {
@@ -131,12 +130,12 @@ export const LanguageSwitcherContents = () => {
 //     display: flex;
 //     align-items: center;
 //     justify-content: center;
-//     font-size: ${fontSize('medium')};
+//     font-size: var(--fontSizeMedium);
 //     cursor: pointer;
 
 //     span {
 //         display: block;
-//         margin-right: ${spacing(0.25)};
+//         margin-right: var(--quarterSpacing);
 //     }
 
 //     svg {
@@ -149,7 +148,7 @@ export const LanguageSwitcherContents = () => {
 //     }
 
 //     .Pagination & {
-//         padding: ${spacing(1)};
+//         padding: var(--spacing);
 //     }
 
 //     @media ${mq.smallMedium} {
@@ -164,7 +163,7 @@ export const LanguageSwitcherContents = () => {
 //     top: 125%;
 //     width: 300px;
 //     left: 50%;
-//     padding: ${spacing(1)};
+//     padding: var(--spacing);
 //     background: ${(props) => props.theme.colors.background};
 //     border: ${(props) => props.theme.separationBorder};
 //     transform: translateX(-50%);
@@ -205,8 +204,8 @@ export const LanguageSwitcherContents = () => {
 
 const LanguageSwitcherHelp = styled.div`
     font-size: var(--fontSizeSmall);
-    padding-top: ${spacing(1)};
-    margin-top: ${spacing(1)};
+    padding-top: var(--spacing);
+    margin-top: var(--spacing);
     border-top: var(--separationBorder);
 `
 

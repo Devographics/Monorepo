@@ -1,7 +1,7 @@
 import React from 'react'
 import isEmpty from 'lodash/isEmpty'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import Link from 'core/components/LocaleLink'
 import Button from 'core/components/Button'
@@ -68,7 +68,7 @@ const Container = styled.footer`
         margin-top: var(--quadrupleSpacing);
     }
     @media ${mq.mediumLarge} {
-        margin-top: ${spacing(6)};
+        margin-top: calc(var(--spacing) * 6);
     }
 `
 
@@ -88,7 +88,7 @@ const Notes = styled.div`
         margin-top: var(--quadrupleSpacing);
     }
     @media ${mq.mediumLarge} {
-        margin-top: ${spacing(6)};
+        margin-top: calc(var(--spacing) * 6);
     }
 `
 

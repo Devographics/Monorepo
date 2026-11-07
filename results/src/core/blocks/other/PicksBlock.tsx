@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getThemeColor } from 'core/theme_new/colors'
@@ -79,7 +79,7 @@ PicksBlock.propTypes = {
 }
 
 const PicksContainer = styled.div`
-    margin-bottom: ${spacing(2)};
+    margin-bottom: var(--doubleSpacing);
 `
 
 const Pick = styled.div`
@@ -95,22 +95,22 @@ const PickContent = styled.div`
     background: ${getThemeColor('background.invertedAlt')};
     color: var(--textColorInverted);
     position: relative;
-    margin-bottom: ${spacing(0.75)};
+    margin-bottom: calc(var(--spacing) * 0.75);
     @media ${mq.small} {
-        padding: ${spacing(0.75)} var(--spacing) var(--spacing) var(--spacing);
+        padding: calc(var(--spacing) * 0.75) var(--spacing) var(--spacing) var(--spacing);
     }
     @media ${mq.mediumLarge} {
-        padding: ${spacing(1)} ${spacing(1.5)} ${spacing(1.5)} ${spacing(1.5)};
+        padding: var(--spacing) calc(var(--spacing) * 1.5) calc(var(--spacing) * 1.5) calc(var(--spacing) * 1.5);
     }
     &:after {
         content: ' ';
         clip-path: polygon(0 0, 100% 0, 50% 100%);
         background: ${getThemeColor('background.invertedAlt')};
         position: absolute;
-        width: ${spacing(triangleWidth)};
-        height: ${spacing(triangleWidth / 2)};
-        bottom: ${spacing(-triangleWidth / 2)};
-        left: ${spacing(triangleWidth)};
+        width: calc(var(--spacing) * ${triangleWidth});
+        height: calc(var(--spacing) * ${triangleWidth / 2});
+        bottom: calc(var(--spacing) * ${-triangleWidth / 2});
+        left: calc(var(--spacing) * ${triangleWidth});
     }
     a,
     a:link,
@@ -172,7 +172,7 @@ const PickPerson = styled.div`
 const imageWidth = '60px'
 
 const PickImage = styled.div`
-    margin-right: ${spacing(0.75)};
+    margin-right: calc(var(--spacing) * 0.75);
     width: ${imageWidth};
 
     div {

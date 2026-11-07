@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { usePageContext } from '../helpers/pageContext'
 import { getPageLabelKey } from '../helpers/pageHelpers'
-import { mq, secondaryFontMixin, fontSize } from 'core/theme'
+import { mq, secondaryFontMixin } from 'core/theme'
 import T from 'core/i18n/T'
 
 const PageHeader = () => {

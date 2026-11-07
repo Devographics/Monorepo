@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { spacing } from 'core/theme'
 import { useI18n } from '@devographics/react-i18n'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -33,7 +32,7 @@ export const Note_ = styled.div`
     }
     background: ${getThemeColor('background.alt')};
     padding: var(--spacing);
-    margin-top: ${spacing(2)};
+    margin-top: var(--doubleSpacing);
     font-size: var(--fontSizeSmall);
     p,
     ul,

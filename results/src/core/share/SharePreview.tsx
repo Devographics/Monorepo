@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize, color } from 'core/theme'
 import { stripMarkdown } from 'core/helpers/stripMarkdown'
 import { stripHtml } from 'core/helpers/utils'
 import T from 'core/i18n/T'
@@ -15,17 +14,17 @@ const Container = styled.div`
 const Meta = styled.div`
     background: ${getThemeColor('background.invertedAlt')};
     color: ${getThemeColor('text.inverted')};
-    padding: ${spacing(0.75)};
+    padding: calc(var(--spacing) * 0.75);
 `
 
 const Title = styled.h4`
-    font-size: ${fontSize('medium')};
-    margin-bottom: ${spacing(0)};
+    font-size: var(--fontSizeMedium);
+    margin-bottom: 0;
 `
 
 const Subtitle = styled.p`
-    font-size: ${fontSize('medium')};
-    margin-bottom: ${spacing(0.2)};
+    font-size: var(--fontSizeMedium);
+    margin-bottom: calc(var(--spacing) * 0.2);
 `
 
 const Image = styled.img`

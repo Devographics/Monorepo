@@ -1,5 +1,4 @@
 import { createGlobalStyle } from 'styled-components'
-import { zIndex } from './util'
 import { primaryFontMixin, secondaryFontMixin } from './typography'
 import { textShadowHighlightMixin } from './mixins'
 import mq from './mq'
@@ -101,7 +100,7 @@ export const GlobalStyle = createGlobalStyle`
         outline: none;
     }
     .ReactModal__Overlay {
-        z-index: ${zIndex('modal')};
+        z-index: var(--zIndexModal);
     }
     .ReactModal__Body--open{
         overflow: hidden;

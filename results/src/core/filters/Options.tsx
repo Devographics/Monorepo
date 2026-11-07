@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
-import { mq, spacing, fontSize } from 'core/theme'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { Series_ } from './Series'
 import { CustomizationDefinition } from './types'

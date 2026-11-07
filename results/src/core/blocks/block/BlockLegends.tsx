@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq } from 'core/theme'
 import BlockLegendsItem, { BlockLegendSharedProps } from './BlockLegendsItem'
 import T from 'core/i18n/T'
 import { BlockLegend } from 'core/types'
@@ -75,7 +75,7 @@ const BlockLegends = ({
 }
 
 const LegendHeading = styled.h4`
-    margin-bottom: ${spacing(0.25)};
+    margin-bottom: var(--quarterSpacing);
 `
 
 const Container = styled.table`
@@ -84,8 +84,8 @@ const Container = styled.table`
     }
     font-size: var(--fontSizeSmall);
     /* margin-top: var(--spacing); */
-    margin-top: ${({ position }) => (position === 'bottom' ? spacing() : 0)};
-    margin-bottom: ${({ position }) => (position === 'top' ? spacing() : 0)};
+    margin-top: ${({ position }) => (position === 'bottom' ? 'var(--spacing)' : 0)};
+    margin-bottom: ${({ position }) => (position === 'top' ? 'var(--spacing)' : 0)};
     width: 100%;
 
     ${props => {
@@ -112,13 +112,13 @@ const ContainerInner = styled.tbody`
 
                 @media ${mq.medium} {
                     grid-template-columns: 1fr 1fr;
-                    column-gap: ${spacing(0.75)};
+                    column-gap: calc(var(--spacing) * 0.75);
                 }
 
                 @media ${mq.large} {
                     // fit in as many columns as possible as long as they're wider than Npx
                     grid-template-columns: repeat(auto-fit, minmax(140px, auto));
-                    column-gap: ${spacing(0.85)};
+                    column-gap: calc(var(--spacing) * 0.85);
                 }
             `
         }

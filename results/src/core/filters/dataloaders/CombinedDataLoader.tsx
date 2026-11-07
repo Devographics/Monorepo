@@ -10,8 +10,7 @@ import styled from 'styled-components'
 import Loading from 'core/components/Loading'
 import { JSONTrigger } from 'core/blocks/block/BlockData'
 import FiltersTrigger from '../FiltersTrigger'
-// import { spacing, mq, fontSize } from 'core/theme'
-
+// 
 interface CombinedDataLoaderProps<T> extends DynamicDataLoaderProps<T> {
     defaultSeries: DataSeries<T>
 }

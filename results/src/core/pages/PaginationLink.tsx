@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq } from 'core/theme'
 import PageLabel from './PageLabel'
 import PageLink from './PageLink'
 import { PageContextValue } from 'core/types'
@@ -17,10 +17,10 @@ const StyledLink = styled(PageLink)`
     padding: var(--spacing);
 
     @media ${mq.smallMedium} {
-        font-size: ${fontSize('smaller')};
+        font-size: var(--fontSizeSmaller);
     }
     @media ${mq.large} {
-        font-size: ${fontSize('medium')};
+        font-size: var(--fontSizeMedium);
     }
 
     &:hover,

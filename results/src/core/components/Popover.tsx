@@ -1,6 +1,6 @@
 import React, { memo, useState, useCallback, useRef, ReactNode, ReactElement } from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize, color, zIndex } from 'core/theme'
+import { mq } from 'core/theme'
 import { getThemeColor } from 'core/theme_new/colors'
 
 const svgs = {
@@ -99,7 +99,7 @@ const Container = styled.div`
     }
 
     .Sidebar & {
-        margin-bottom: ${spacing(1)};
+        margin-bottom: var(--spacing);
         border: var(--separationBorder);
 
         @media ${mq.large} {
@@ -122,7 +122,7 @@ const PopoverToggle = styled.button`
     justify-content: center;
     background: transparent;
     color: ${getThemeColor('text.default')};
-    font-size: ${fontSize('medium')};
+    font-size: var(--fontSizeMedium);
     cursor: pointer;
     outline: none;
     border: none;
@@ -131,7 +131,7 @@ const PopoverToggle = styled.button`
 
     span {
         display: block;
-        margin-right: ${spacing(0.25)};
+        margin-right: var(--quarterSpacing);
     }
 
     svg {
@@ -144,7 +144,7 @@ const PopoverToggle = styled.button`
     }
 
     .Pagination & {
-        padding: ${spacing(1)};
+        padding: var(--spacing);
     }
 
     @media ${mq.smallMedium} {
@@ -165,11 +165,11 @@ const PopoverPopup = styled.div`
     position: absolute;
     top: 125%;
     left: 50%;
-    padding: ${props => (props.addPadding ? spacing(1) : 0)};
+    padding: ${props => (props.addPadding ? 'var(--spacing)' : 0)};
     background: var(--backgroundAltColor);
     border: var(--separationBorder);
     transform: translateX(-50%);
-    z-index: ${zIndex('popover')};
+    z-index: var(--zIndexPopover);
     box-shadow: var(--blockShadow);
 
     &:before {

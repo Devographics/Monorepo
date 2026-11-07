@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
 
 interface LogoProps {
     className?: string
@@ -17,7 +16,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
 
 const Wrapper = styled.div`
     margin: 0 auto;
-    margin-bottom: ${spacing(3)};
+    margin-bottom: var(--tripleSpacing);
     max-width: 400px;
     width: 100%;
     img {

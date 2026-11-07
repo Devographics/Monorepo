@@ -1,6 +1,6 @@
 import React, { useState, ReactNode } from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize, color } from 'core/theme'
+import { mq } from 'core/theme'
 import Button from 'core/components/Button'
 import Modal from 'react-modal'
 import { useI18n } from '@devographics/react-i18n'
@@ -173,7 +173,7 @@ const Inner = styled.div`
         max-height: calc(100vh - 60px);
     }
     @media ${mq.mediumLarge} {
-        padding: ${spacing(2)};
+        padding: var(--doubleSpacing);
         max-height: calc(100vh - 80px);
     }
 `

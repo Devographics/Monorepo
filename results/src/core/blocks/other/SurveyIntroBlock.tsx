@@ -2,7 +2,7 @@ import React from 'react'
 import IntroductionFooter from 'core/pages/IntroductionFooter'
 import T from 'core/i18n/T'
 import styled from 'styled-components'
-import { mq, fontSize } from 'core/theme'
+import { mq } from 'core/theme'
 // TODO: could not figure how to avoid IntroLogo typing conflict here
 import IntroLogo from 'Logo/IntroLogo'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -53,7 +53,7 @@ const Content = styled.div`
         max-width: 700px;
         margin: 0 auto;
     }
-    font-size: ${fontSize('large')};
+    font-size: var(--fontSizeLarge);
     .block__content {
         p:first-child {
             @media ${mq.mediumLarge} {

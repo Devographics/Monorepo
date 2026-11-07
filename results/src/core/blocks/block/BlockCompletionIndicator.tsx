@@ -1,7 +1,6 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 import { useI18n } from '@devographics/react-i18n'
-import { spacing, fontSize } from 'core/theme'
 import { getThemeColor } from 'core/theme_new/colors'
 import Tooltip from 'core/components/Tooltip'
 

@@ -5,7 +5,6 @@ import FiltersPanel from '../FiltersPanel'
 import Button from 'core/components/Button'
 import { JSONTrigger } from 'core/blocks/block/BlockData'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
 import { DynamicDataLoaderProps } from './DynamicDataLoader'
 
 export const DataLoaderFooter = (props: DynamicDataLoaderProps) => {
@@ -25,8 +24,8 @@ export const DataLoaderFooter = (props: DynamicDataLoaderProps) => {
 }
 
 const Footer_ = styled.section`
-    margin-top: ${spacing(1)};
-    margin-bottom: ${spacing(2)};
+    margin-top: var(--spacing);
+    margin-bottom: var(--doubleSpacing);
     display: flex;
     flex-direction: column;
     align-items: center;

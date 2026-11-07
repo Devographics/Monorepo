@@ -1,5 +1,4 @@
 import React from 'react'
-import { spacing, fontSize } from 'core/theme'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import Avatar from 'core/components/Avatar'
@@ -65,7 +64,7 @@ const Details = styled.div`
 `
 
 const Name = styled.h4`
-    font-size: ${fontSize('large')};
+    font-size: var(--fontSizeLarge);
     margin-bottom: 0px;
     line-height: 1.3;
 `

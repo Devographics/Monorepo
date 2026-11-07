@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { mq, spacing } from 'core/theme'
+import { mq } from 'core/theme'
 import { BlockLegend } from 'core/types'
 import { getThemeColor } from 'core/theme_new/colors'
 
@@ -142,17 +142,17 @@ const Container = styled.tr`
 `
 
 const ChipWrapper = styled.th`
-    padding: ${spacing(0.25)} var(--halfSpacing) ${spacing(0.25)};
+    padding: var(--quarterSpacing) var(--halfSpacing) var(--quarterSpacing);
 `
 const Chip = styled.div``
 
 const KeyLabel = styled.th`
-    padding: ${spacing(0.25)} var(--halfSpacing) ${spacing(0.25)} 0;
+    padding: var(--quarterSpacing) var(--halfSpacing) var(--quarterSpacing) 0;
     text-align: left;
 `
 
 const Label = styled.td`
-    padding: ${spacing(0.2)} var(--halfSpacing) ${spacing(0.25)} 0;
+    padding: calc(var(--spacing) * 0.2) var(--halfSpacing) var(--quarterSpacing) 0;
     width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -162,6 +162,6 @@ const Label = styled.td`
 `
 
 const Value = styled.td`
-    padding: ${spacing(0.25)} var(--halfSpacing) ${spacing(0.25)} 0;
+    padding: var(--quarterSpacing) var(--halfSpacing) var(--quarterSpacing) 0;
 `
 export default BlockLegendsItem

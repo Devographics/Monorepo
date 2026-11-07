@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq } from 'core/theme'
 import { useI18n } from '@devographics/react-i18n'
 import Button from 'core/components/Button'
 import { getThemeColor } from 'core/theme_new/colors'
@@ -37,7 +37,7 @@ const Link = styled.a`
         transition: none;
         flex-grow: 1;
         text-align: center;
-        padding: var(--spacing) ${spacing(0.33)};
+        padding: var(--spacing) calc(var(--spacing) * 0.33);
 
         &:not(:last-child) {
             border-right: var(--separationBorder);

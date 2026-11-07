@@ -2,7 +2,7 @@ import './BlockTitle.scss'
 import React, { memo, useState } from 'react'
 import styled, { css } from 'styled-components'
 import last from 'lodash/last'
-import { mq, spacing, fontSize, secondaryFontMixin } from 'core/theme'
+import { mq, secondaryFontMixin } from 'core/theme'
 import { useI18n } from '@devographics/react-i18n'
 import { usePageContext } from 'core/helpers/pageContext'
 import SharePermalink from 'core/share/SharePermalink'
@@ -161,7 +161,7 @@ const StyledBlockTitle = styled.div`
         css`
             border-bottom: var(--separationBorder);
             padding-bottom: var(--halfSpacing);
-            margin-bottom: ${spacing(1)};
+            margin-bottom: var(--spacing);
         `}
     display: flex;
     align-items: center;
@@ -194,15 +194,15 @@ const BlockTitleText = styled.h3`
     justify-content: flex-start;
     line-height: 1.2;
     ${secondaryFontMixin};
-    font-size: ${fontSize('largerest')};
+    font-size: var(--fontSizeLargerest);
     code {
-        font-size: ${fontSize('largest')};
+        font-size: var(--fontSizeLargest);
     }
     @media ${mq.small} {
         flex: 1;
-        font-size: ${fontSize('larger')};
+        font-size: var(--fontSizeLarger);
         code {
-            font-size: ${fontSize('large')};
+            font-size: var(--fontSizeLarge);
         }
     }
 `

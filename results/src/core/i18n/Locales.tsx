@@ -2,21 +2,21 @@ import React from 'react'
 import styled from 'styled-components'
 import { usePageContext } from 'core/helpers/pageContext'
 import { Link } from 'gatsby'
-import { mq, spacing, fontSize, fontWeight } from 'core/theme'
+import { mq } from 'core/theme'
 import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
 
 const Container = styled.div`
     @media ${mq.large} {
         display: grid;
         grid-template-columns: auto auto;
-        grid-column-gap: ${spacing(1.5)};
-        grid-row-gap: ${spacing(1.5)};
+        grid-column-gap: calc(var(--spacing) * 1.5);
+        grid-row-gap: calc(var(--spacing) * 1.5);
     }
 `
 
 const Item = styled.span`
     text-align: center;
-    font-size: ${fontSize('medium')};
+    font-size: var(--fontSizeMedium);
     display: flex;
     align-items: center;
     white-space: nowrap;
@@ -24,7 +24,7 @@ const Item = styled.span`
         font-size: var(--fontSizeSmall);    
     }
     @media ${mq.large} {
-        font-size: ${fontSize('medium')};
+        font-size: var(--fontSizeMedium);
     }
     
     &._is-current {

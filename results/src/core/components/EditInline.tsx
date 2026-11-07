@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { spacing } from 'core/theme'
 import T from 'core/i18n/T'
 import { EditIcon } from '@devographics/icons'
 import Button from 'core/components/Button'
@@ -56,12 +55,12 @@ const WrapperButton = styled(Wrapper)`
 `
 
 const Input = styled.input`
-    margin-right: ${spacing(0.25)};
+    margin-right: var(--quarterSpacing);
     padding: 3px 8px;
 `
 
 const Contents = styled.span`
-    margin-right: ${spacing(0.25)};
+    margin-right: var(--quarterSpacing);
 `
 
 const IconWrapper = styled.span`

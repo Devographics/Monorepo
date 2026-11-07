@@ -1,5 +1,5 @@
 import React from 'react'
-import { spacing, mq } from 'core/theme'
+import { mq } from 'core/theme'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import CreditItem from 'core/blocks/other/CreditItem'
@@ -28,7 +28,7 @@ export default CreditsBlock
 const Credits = styled.div`
     max-width: 700px;
     margin: 0 auto;
-    margin-bottom: ${spacing(2)};
+    margin-bottom: var(--doubleSpacing);
 `
 
 const Heading = styled.h3`
@@ -36,8 +36,8 @@ const Heading = styled.h3`
 `
 
 const CreditItems = styled.div`
-    column-gap: ${spacing(2)};
-    row-gap: ${spacing(2)};
+    column-gap: var(--doubleSpacing);
+    row-gap: var(--doubleSpacing);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     @media ${mq.small} {

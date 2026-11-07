@@ -4,7 +4,6 @@ import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import Button from './Button'
 import styled from 'styled-components'
-import { fontWeight, spacing } from 'core/theme'
 import jsonp from 'jsonp'
 
 export default function NewsletterMC({ locale }: { locale?: any }) {

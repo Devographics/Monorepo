@@ -5,7 +5,6 @@ import FiltersPanel from '../FiltersPanel'
 import Button from 'core/components/Button'
 import { JSONTrigger } from 'core/blocks/block/BlockData'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
 import { DynamicDataLoaderProps } from './DynamicDataLoader'
 import newGithubIssueUrl from 'new-github-issue-url'
 import { EditionMetadata } from '@devographics/types'
@@ -134,7 +133,7 @@ const Contents_ = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: ${spacing(2)};
+    gap: var(--doubleSpacing);
     & > * {
         margin: 0;
     }

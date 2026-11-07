@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq } from 'core/theme'
 
 export const SidebarLogo = () => (
     <Container>

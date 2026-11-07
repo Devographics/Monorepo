@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing } from 'core/theme'
+import { mq } from 'core/theme'
 import Button from 'core/components/Button'
 import { DeleteIcon, PlusIcon } from '@devographics/icons'
 import cloneDeep from 'lodash/cloneDeep.js'

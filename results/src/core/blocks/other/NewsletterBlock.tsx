@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import Newsletter from 'core/components/Newsletter'
 import { useI18n } from '@devographics/react-i18n'
-import { spacing } from 'core/theme'
 import NewsletterMC from 'core/components/NewsletterMC'
 import NewsletterPOST from 'core/components/NewsletterPOST'
 
@@ -23,8 +22,8 @@ const NewsletterBlock = () => {
 }
 
 const Container = styled.div`
-    padding: ${spacing(1.5)};
-    margin-bottom: ${spacing(2)};
+    padding: calc(var(--spacing) * 1.5);
+    margin-bottom: var(--doubleSpacing);
     border: var(--separationBorder);
     max-width: 700px;
     margin-left: auto;

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { mq, fontSize, fontWeight, spacing } from 'core/theme'
+import { mq } from 'core/theme'
 import ButtonGroup from './ButtonGroup'
 import { getThemeColor } from 'core/theme_new/colors'
 
@@ -62,33 +62,33 @@ const Button = styled.button.attrs(
                     if (props.size === 'small') {
                         return css`
                             font-size: var(--fontSizeSmall);
-                            padding: ${spacing(0.2)} var(--halfSpacing);
+                            padding: calc(var(--spacing) * 0.2) var(--halfSpacing);
                         `
                     }
 
                     if (props.size === 'large') {
                         return css`
                             @media ${mq.small} {
-                                font-size: ${fontSize('large')};
-                                padding: ${spacing(0.75)};
+                                font-size: var(--fontSizeLarge);
+                                padding: calc(var(--spacing) * 0.75);
                             }
 
                             @media ${mq.mediumLarge} {
-                                font-size: ${fontSize('larger')};
-                                padding: ${spacing(1)};
+                                font-size: var(--fontSizeLarger);
+                                padding: var(--spacing);
                             }
                         `
                     }
 
                     return css`
-                        padding: var(--halfSpacing) ${spacing(1)};
+                        padding: var(--halfSpacing) var(--spacing);
 
                         @media ${mq.small} {
                             font-size: var(--fontSizeSmall);
                         }
 
                         @media ${mq.mediumLarge} {
-                            font-size: ${fontSize('medium')};
+                            font-size: var(--fontSizeMedium);
                         }
                     `
                 }}
@@ -121,7 +121,7 @@ const Button = styled.button.attrs(
         @media ${mq.small} {
             width: 100%;
             flex-basis: 100%;
-            /* font-size: ${fontSize('smallest')}; */
+            /* font-size: var(--fontSizeSmallest); */
             &:first-child {
                 border-top-width: 1px;
             }

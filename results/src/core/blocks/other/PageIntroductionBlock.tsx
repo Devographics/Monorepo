@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing } from 'core/theme'
+import { mq } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from '@devographics/react-i18n'
 
@@ -34,7 +34,7 @@ const PageIntroductionBlock = ({ block }) => {
 
 const Introduction = styled.div`
     @media ${mq.smallMedium} {
-        margin-bottom: ${spacing(2)};
+        margin-bottom: var(--doubleSpacing);
     }
 
     @media ${mq.large} {

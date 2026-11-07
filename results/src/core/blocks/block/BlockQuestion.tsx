@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { fontSize, spacing } from 'core/theme'
 import { useBlockQuestion } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
 import { QuestionIcon } from '@devographics/icons'

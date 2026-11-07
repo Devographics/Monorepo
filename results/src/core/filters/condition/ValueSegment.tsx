@@ -11,7 +11,6 @@ import {
     OptionsOperatorEnum
 } from '../types'
 import styled from 'styled-components'
-import { mq, spacing } from 'core/theme'
 import { DeleteIcon, PlusIcon } from '@devographics/icons'
 import { Input_, Label_, Select_ } from './FieldSegment'
 import { OptionGroup, OptionMetadata, QuestionMetadata } from '@devographics/types'

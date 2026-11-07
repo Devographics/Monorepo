@@ -4,7 +4,7 @@ import Table from '../table/Table'
 import ModalTrigger from 'core/components/ModalTrigger'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getThemeColor } from 'core/theme_new/colors'
 

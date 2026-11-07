@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize, secondaryFontMixin } from 'core/theme'
+import { mq, secondaryFontMixin } from 'core/theme'
 
 export const Logo = props => (
     <LogoWrapper>

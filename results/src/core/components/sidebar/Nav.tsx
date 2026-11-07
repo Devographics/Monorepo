@@ -3,7 +3,7 @@ import { useMatch } from '@reach/router'
 import get from 'lodash/get'
 import styled, { css } from 'styled-components'
 import sitemap from 'Config/raw_sitemap.yml'
-import { mq, fancyLinkMixin, spacing, fontSize, fontWeight } from 'core/theme'
+import { mq, fancyLinkMixin } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import PageLink from 'core/pages/PageLink'
 import LanguageSwitcher, { LanguageSwitcherContents } from 'core/i18n/LanguageSwitcher'
@@ -29,10 +29,10 @@ const filteredNav =
 const getStyledLink = component => styled(component)`
     display: flex;
     /* white-space: nowrap; */
-    margin: 0 0 ${spacing(0.33)} 0;
+    margin: 0 0 calc(var(--spacing) * 0.33) 0;
     font-size: ${props =>
         props.depth > 0 ? 'var(--fontSizeSmallish)' : 'var(--fontSizeMedium)'};
-    font-weight: ${props => (props.depth === 0 ? fontWeight('bold') : fontWeight('medium'))};
+    font-weight: ${props => (props.depth === 0 ? 'var(--fontBold)' : 'var(--fontMedium)')};
 
     /* & > span {
 
@@ -52,7 +52,7 @@ const getStyledLink = component => styled(component)`
             max-width: 100%;
             display: inline-block;
         }
-        margin-left: ${props => (props.depth > 0 ? spacing() : 0)};
+        margin-left: ${props => (props.depth > 0 ? 'var(--spacing)' : 0)};
         ${props => {
             if (props.isHidden) {
                 return css`
@@ -298,10 +298,10 @@ const InternalLinks_ = styled.div`
 const InternalLinkWrapper_ = styled.div`
     @media ${mq.large} {
         .internal-links-depth-0 & {
-            margin-left: ${spacing(1)};
+            margin-left: var(--spacing);
         }
         .internal-links-depth-1 & {
-            margin-left: ${spacing(1.9)};
+            margin-left: calc(var(--spacing) * 1.9);
         }
     }
 `
@@ -321,7 +321,7 @@ const InternalLink_ = styled.a`
         &:visited {
             color: ${getThemeColor('text.default')};
         }
-        font-weight: ${fontWeight('bold')};
+        font-weight: var(--fontBold);
     }
 `
 
@@ -352,7 +352,7 @@ const NavContainer = styled.nav`
     flex-grow: 1;
     /* display: flex; */
     /* flex-direction: column; */
-    padding: ${spacing(1.5)} var(--spacing);
+    padding: calc(var(--spacing) * 1.5) var(--spacing);
     overflow-y: auto;
 
     @media ${mq.smallMedium} {

@@ -4,7 +4,6 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from '@devographics/react-i18n'
 import Link from 'core/components/LocaleLink'
 import Button from 'core/components/Button'
-import { spacing } from 'core/theme'
 
 const SurveyStartBlock = () => {
     const context = usePageContext()
@@ -25,7 +24,7 @@ const SurveyStartBlock = () => {
 }
 
 const Container = styled.div`
-    margin: ${spacing(2)} 0;
+    margin: var(--doubleSpacing) 0;
 `
 
 export default SurveyStartBlock

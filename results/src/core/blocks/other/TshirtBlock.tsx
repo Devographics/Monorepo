@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useI18n } from '@devographics/react-i18n'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq } from 'core/theme'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import take from 'lodash/take'
@@ -113,19 +113,19 @@ const Image = styled.div`
 
 const DescriptionContainer = styled.div`
     @media ${mq.small} {
-        padding: ${spacing(1)};
+        padding: var(--spacing);
     }
     @media ${mq.mediumLarge} {
-        padding: ${spacing(1.5)};
+        padding: calc(var(--spacing) * 1.5);
     }
 `
 
 const Description = styled.div`
     h2 {
-        margin-bottom: ${spacing(0.25)};
+        margin-bottom: var(--quarterSpacing);
     }
     h3 {
-        font-size: ${fontSize('medium')};
+        font-size: var(--fontSizeMedium);
     }
 `
 
@@ -142,10 +142,10 @@ const TshirtButton = styled(Button)`
 const Designer = styled.div`
     margin-top: var(--spacing);
     background: ${getThemeColor('background.alt')};
-    padding: ${spacing(1)};
+    padding: var(--spacing);
     h5,
     h3 {
-        margin-bottom: ${spacing(0.25)};
+        margin-bottom: var(--quarterSpacing);
     }
     p {
         font-size: var(--fontSizeSmallish);

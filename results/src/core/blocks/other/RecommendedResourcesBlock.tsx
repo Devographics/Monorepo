@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import Link from 'core/components/LocaleLink'
 import resources from 'Config/recommended_resources.yml'
-import { mq, spacing, fontSize, fontWeight } from 'core/theme'
+import { mq } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import { RecommendedResource, RecommendedResourceJob } from 'core/types/other'
@@ -121,7 +121,7 @@ const Job = ({ job }: { job: RecommendedResourceJob }) => {
 const List = styled.div`
     background: ${getThemeColor('background.alt')};
     padding: var(--spacing);
-    /* margin-top: ${spacing(1)}; */
+    /* margin-top: var(--spacing); */
     @media ${mq.large} {
         display: grid;
         grid-template-columns: auto auto;
@@ -155,7 +155,7 @@ const ResourceImage = styled.div`
 
     @media ${mq.mediumLarge} {
         width: 100px;
-        margin-right: ${spacing(1.5)};
+        margin-right: calc(var(--spacing) * 1.5);
         ${({ isWide }) =>
             isWide &&
             css`
@@ -186,7 +186,7 @@ const ResourceContent = styled.div`
 
 export const Sponsoring = styled.div`
     font-weight: var(--fontBold);
-    font-size: ${fontSize('smaller')};
+    font-size: var(--fontSizeSmaller);
     text-align: center;
     margin-top: var(--spacing);
 `
@@ -200,8 +200,8 @@ const ResourceTeacher = styled.div`
 
 const ResourceCompany = styled.div`
     text-align: center;
-    margin-top: ${spacing(0)};
-    font-size: ${fontSize('smaller')};
+    margin-top: 0;
+    font-size: var(--fontSizeSmaller);
     text-transform: uppercase;
     color: ${getThemeColor('text.alt')};
 `

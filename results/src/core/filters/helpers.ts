@@ -49,8 +49,7 @@ import {
     QuestionMetadata
 } from '@devographics/types'
 import { runQuery } from 'core/helpers/data'
-// import { spacing, mq, fontSize } from 'core/theme'
-import get from 'lodash/get'
+// import get from 'lodash/get'
 import { getBlockDataPath } from 'core/helpers/data'
 import { AllQuestionData } from '@devographics/types'
 import { INSUFFICIENT_DATA, NO_ANSWER } from '@devographics/constants'

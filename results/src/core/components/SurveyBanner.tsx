@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { mq, spacing, color } from 'core/theme'
+import { mq } from 'core/theme'
 import config from 'Config/config.yml'
 import T from 'core/i18n/T'
 import { CloseIcon } from '@devographics/icons'

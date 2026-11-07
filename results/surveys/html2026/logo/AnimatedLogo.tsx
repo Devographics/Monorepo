@@ -1,6 +1,5 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
 
 interface LogoProps {
     className?: string
@@ -385,7 +384,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
 
 const Wrapper = styled.div`
     margin: 0 auto;
-    margin-bottom: ${spacing()};
+    margin-bottom: var(--spacing);
     width: 100%;
 
     [hidden] {

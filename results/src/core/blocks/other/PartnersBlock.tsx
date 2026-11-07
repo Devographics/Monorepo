@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import { trackClick } from 'core/helpers/trackClick'
@@ -45,8 +45,8 @@ const PartnersBlock = ({ data }) => {
 }
 
 const Container = styled.div`
-    margin-top: ${spacing(2)};
-    margin-bottom: ${spacing(2)};
+    margin-top: var(--doubleSpacing);
+    margin-bottom: var(--doubleSpacing);
 `
 
 const Header = styled.h3`

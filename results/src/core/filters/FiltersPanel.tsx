@@ -3,7 +3,6 @@ import './FiltersPanel.scss'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
-import { spacing } from 'core/theme'
 import Button from 'core/components/Button'
 import {
     CreateVariantType,
@@ -373,7 +372,7 @@ export const Tab_ = styled(Tabs.Content)`
 
 const CopyLink_ = styled(Button)`
     display: flex;
-    gap: ${spacing(0.25)};
+    gap: var(--quarterSpacing);
     align-items: center;
 `
 

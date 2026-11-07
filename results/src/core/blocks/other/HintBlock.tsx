@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css, keyframes } from 'styled-components'
-import { mq, spacing, fontSize, color } from 'core/theme'
 import T from 'core/i18n/T'
 import { useInView } from 'react-intersection-observer'
 import './HintBlock.scss'
@@ -114,7 +113,7 @@ const HintBulbInner = styled.div`
     position: relative;
     .bulb {
         display: block;
-        font-size: ${fontSize('largest')};
+        font-size: var(--fontSizeLargest);
         text-shadow: 0px 2px 4px #fce49100;
         transform: scale(0.6);
         ${animate(glow)}
