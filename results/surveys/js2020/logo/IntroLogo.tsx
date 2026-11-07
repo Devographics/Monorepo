@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useSpring, animated, config } from 'react-spring'
 import styled from 'styled-components'
+import colors from '../theme/colors'
 
 interface CellProps {
     x0?: number
@@ -87,26 +88,26 @@ const Cell = ({
 }
 
 const CellRect = styled.rect`
-    fill: ${(props) => props.theme.colors.background};
+    fill: ${colors.background};
     stroke-width: 1px;
-    stroke: ${(props) => props.theme.colors.border};
+    stroke: ${colors.border};
     cursor: pointer;
 
     &:hover {
-        fill: ${(props) => props.theme.colors.backgroundAlt};
+        fill: ${colors.backgroundAlt};
     }
 `
 
 const CellText = styled.text<{
     color: Exclude<CellProps['color'], undefined>
 }>`
-    fill: ${(props) => props.theme.colors[props.color]};
+    fill: ${(props) => colors[props.color]};
     font-weight: 500;
     pointer-events: none;
 `
 
 const CellIndex = styled.text`
-    fill: ${(props) => props.theme.colors.text};
+    fill: ${colors.text};
     font-weight: 300;
     pointer-events: none;
     opacity: 0.5;

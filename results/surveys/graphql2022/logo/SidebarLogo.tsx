@@ -28,7 +28,7 @@ const Container = styled.div`
 
 const StyledSVG = styled.svg`
     width: 45%;
-    color: ${({ theme }) => theme.colors.text};
+    color: var(--textColor);
 `
 
 export default SidebarLogo

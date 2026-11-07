@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, color } from 'core/theme'
+import { mq } from 'core/theme'
+import colors from '../theme/colors'
 
 interface LogoCellProps {
     index: number
@@ -23,17 +24,17 @@ const Container = styled.span`
     justify-content: center;
     font-size: 26px;
     position: relative;
-    border-left: ${(props) => props.theme.separationBorder};
-    background: ${color('background')};
+    border-left: var(--separationBorder);
+    background: ${colors.background};
     text-decoration: none;
 
     .Logo:hover & {
-        background: ${color('backgroundAlt')};
+        background: ${colors.backgroundAlt};
     }
 
     @media ${mq.smallMedium} {
         &:last-child {
-            border-right: ${(props) => props.theme.separationBorder};
+            border-right: var(--separationBorder);
         }
     }
 
@@ -51,7 +52,7 @@ const Index = styled.span`
     font-size: 12px;
     line-height: 12px;
     padding: 6px 8px;
-    color: ${color('text')};
+    color: ${colors.text};
     opacity: 0.35;
     font-weight: 300;
 `
