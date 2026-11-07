@@ -58,9 +58,9 @@ const ThemedLayout = (props: LayoutProps) => {
         '--zIndexPopover': 5000,
         '--zIndexModal': 6000,
         '--sidebarWidth': `${dimensions.sidebarWidth}px`,
-        '--border': theme.border,
-        '--separationBorder': theme.separationBorder,
-        '--blockShadow': theme.blockShadow
+        '--border': '1px solid var(--borderColor)',
+        '--separationBorder': '1px dashed var(--borderColor)',
+        '--blockShadow': '0px 16px 24px rgba(0, 0, 0, 0.4), 0px 2px 6px rgba(0, 0, 0, 0.3)'
     }
     // one --fontSizeXyz variable for each shared font size
     for (const [size, value] of Object.entries(fontSizes)) {

@@ -10,9 +10,6 @@ import {
 
 declare module 'styled-components' {
     export interface DefaultTheme {
-        separationBorder: string
-        blockShadow: string
-        border: string
         typography: {
             fontFamily: string
             fontFamily2: string
