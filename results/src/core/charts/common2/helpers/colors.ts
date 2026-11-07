@@ -11,7 +11,6 @@ import {
 } from '@devographics/constants'
 import { QuestionMetadata } from '@devographics/types'
 import { getThemeColor } from 'core/theme_new/colors'
-import surveyTheme from 'Theme/index'
 
 export const neutralColor = '#ffffff44'
 export const neutralColor2 = '#ffffff22'
@@ -82,44 +81,36 @@ export const useColorScale = ({
     if (!question) {
         colorScale = defaultColors
     } else {
-        // older surveys can define a color range per question in their theme
-        const ranges = surveyTheme.colors?.ranges as Record<string, ColorScale> | undefined
-        const questionScale = ranges?.[question.id]
-
-        if (questionScale) {
-            colorScale = { ...questionScale, ...defaultColors }
-        } else {
-            colorScale = defaultColors as { [key: string]: string[] }
-            if (question.options) {
-                if (question.optionsAreSequential || question.optionsAreNumeric) {
-                    question.options.forEach((option, index) => {
-                        const color = getSequentialColor({
-                            colorScale: getThemeColor('velocity'),
-                            itemsCount: question.options!.length,
-                            i: index
-                        })
-                        colorScale[option.id] = [color, color]
+        colorScale = defaultColors as { [key: string]: string[] }
+        if (question.options) {
+            if (question.optionsAreSequential || question.optionsAreNumeric) {
+                question.options.forEach((option, index) => {
+                    const color = getSequentialColor({
+                        colorScale: getThemeColor('velocity'),
+                        itemsCount: question.options!.length,
+                        i: index
                     })
-                } else {
-                    question.options.forEach((option, index) => {
-                        if (otherBucketIds.includes(String(option.id))) {
-                            colorScale[option.id] = [neutralColor, neutralColor]
-                        } else {
-                            const color = getDistinctColor(getThemeColor('distinct'), index)
-                            colorScale[option.id] = [color, color]
-                        }
-                    })
-                }
-            } else if (bucketIds) {
-                bucketIds.forEach((id, index) => {
-                    if (otherBucketIds.includes(String(id))) {
-                        colorScale[id] = [neutralColor, neutralColor]
+                    colorScale[option.id] = [color, color]
+                })
+            } else {
+                question.options.forEach((option, index) => {
+                    if (otherBucketIds.includes(String(option.id))) {
+                        colorScale[option.id] = [neutralColor, neutralColor]
                     } else {
                         const color = getDistinctColor(getThemeColor('distinct'), index)
-                        colorScale[id] = [color, color]
+                        colorScale[option.id] = [color, color]
                     }
                 })
             }
+        } else if (bucketIds) {
+            bucketIds.forEach((id, index) => {
+                if (otherBucketIds.includes(String(id))) {
+                    colorScale[id] = [neutralColor, neutralColor]
+                } else {
+                    const color = getDistinctColor(getThemeColor('distinct'), index)
+                    colorScale[id] = [color, color]
+                }
+            })
         }
     }
     return colorScale
