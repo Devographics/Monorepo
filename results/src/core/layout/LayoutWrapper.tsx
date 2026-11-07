@@ -13,6 +13,8 @@ import MainLayout from 'core/layout/MainLayout'
 import theme from 'Theme/index.ts'
 import { PageContextValue } from 'core/types'
 import { getThemeColor } from 'core/theme_new/colors'
+import { fontSizes } from 'core/theme_new/fontSizes'
+import { dimensions } from 'core/theme_new/dimensions'
 
 interface LayoutProps {
     context: any
@@ -40,12 +42,12 @@ const ThemedLayout = (props: LayoutProps) => {
         '--experienceHeardColor': getThemeColor('experience.heard'),
         '--experienceNeverHeardColor': getThemeColor('experience.never_heard'),
         '--linkColor': getThemeColor('primary.default'),
-        '--spacing': `${theme.dimensions.spacing}px`,
-        '--halfSpacing': `${theme.dimensions.spacing / 2}px`,
-        '--quarterSpacing': `${theme.dimensions.spacing / 4}px`,
-        '--doubleSpacing': `${theme.dimensions.spacing * 2}px`,
-        '--tripleSpacing': `${theme.dimensions.spacing * 3}px`,
-        '--quadrupleSpacing': `${theme.dimensions.spacing * 4}px`,
+        '--spacing': `${dimensions.spacing}px`,
+        '--halfSpacing': `${dimensions.spacing / 2}px`,
+        '--quarterSpacing': `${dimensions.spacing / 4}px`,
+        '--doubleSpacing': `${dimensions.spacing * 2}px`,
+        '--tripleSpacing': `${dimensions.spacing * 3}px`,
+        '--quadrupleSpacing': `${dimensions.spacing * 4}px`,
         '--fontFamily': theme.typography.fontFamily,
         '--secondaryFontFamily': `${theme.typography.fontFamily2}`,
         '--rootSizeMobile': theme.typography.rootSize.mobile,
@@ -53,17 +55,16 @@ const ThemedLayout = (props: LayoutProps) => {
         '--fontLight': theme.typography.weight.light,
         '--fontMedium': theme.typography.weight.medium,
         '--fontBold': theme.typography.weight.bold,
-        '--zIndexPopover': theme.zIndexes.popover,
-        '--zIndexModal': theme.zIndexes.modal,
-        '--sidebarWidth': `${theme.dimensions.sidebar.width}px`,
+        '--zIndexPopover': 5000,
+        '--zIndexModal': 6000,
+        '--sidebarWidth': `${dimensions.sidebarWidth}px`,
         '--border': theme.border,
         '--separationBorder': theme.separationBorder,
         '--blockShadow': theme.blockShadow
     }
-    // one --fontSizeXyz variable for each size the survey's theme defines
-    for (const size of Object.keys(theme.typography.size)) {
-        variables[`--fontSize${size.charAt(0).toUpperCase()}${size.slice(1)}`] =
-            theme.typography.size[size]
+    // one --fontSizeXyz variable for each shared font size
+    for (const [size, value] of Object.entries(fontSizes)) {
+        variables[`--fontSize${size.charAt(0).toUpperCase()}${size.slice(1)}`] = value
     }
     return (
         <>

@@ -13,28 +13,12 @@ declare module 'styled-components' {
         separationBorder: string
         blockShadow: string
         border: string
-        dimensions: {
-            spacing: number
-            sidebar: {
-                width: number
-            }
-        }
         typography: {
             fontFamily: string
             fontFamily2: string
             rootSize: {
                 mobile: string
                 desktop: string
-            }
-            size: {
-                smaller: string
-                small: string
-                smallish: string
-                medium: string
-                large: string
-                larger: string
-                largest: string
-                huge: string
             }
             weight: {
                 light: number
@@ -137,10 +121,6 @@ declare module 'styled-components' {
                     fill: string
                 }
             }
-        }
-        zIndexes: {
-            popover: number
-            modal: number
         }
     }
 }
