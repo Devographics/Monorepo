@@ -13,6 +13,8 @@ export const GlobalStyle = createGlobalStyle`
 
         font-family: var(--fontFamily);
         
+        font-weight: var(--fontLight);
+        
         @media ${mq.small} {
             font-size: var(--rootSizeMobile);
         }

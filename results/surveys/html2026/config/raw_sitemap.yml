@@ -414,8 +414,6 @@
 
       - id: html_pain_points_freeform
         template: nested_pain_points
-        variants:
-            - template: nested_pain_points_features
 
       - id: usage_resources
         items: [fm-homepage]

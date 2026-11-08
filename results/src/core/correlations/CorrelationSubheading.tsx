@@ -18,7 +18,10 @@ export const CorrelationSubheading = ({
             <h4 className="correlation-item-breadcrumbs">
                 <span>
                     {/* <span className="correlation-item-index">{index + 1}.</span> */}
-                    <span data-key={questionKey}>{questionName}</span>
+                    <span
+                        data-key={questionKey}
+                        dangerouslySetInnerHTML={{ __html: questionName }}
+                    />
                 </span>
 
                 {optionLabel && (

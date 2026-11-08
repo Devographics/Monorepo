@@ -3,7 +3,7 @@
 .helpnote {
     background: var(--backgroundAlt2Color);
     padding: var(--spacing);
-    color: var(--textColorInverted);
+    color: var(--textColor);
     display: grid;
     @include breakpoints.small {
         grid-template-columns: 40px 1fr;
@@ -19,7 +19,7 @@
     a:hover,
     a:visited,
     a:active {
-        color: var(--textColorInverted);
+        color: var(--textColor);
         text-decoration: underline;
     }
 }
@@ -44,7 +44,7 @@
 .helpnote-dismiss {
     background: none;
     border: none;
-    color: var(--textColorInverted);
+    color: var(--textColor);
     font-size: 2rem;
     line-height: 1;
     position: relative;
