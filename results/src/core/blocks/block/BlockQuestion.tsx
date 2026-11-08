@@ -18,7 +18,6 @@ export const BlockQuestion = ({
     question?: QuestionMetadata
 }) => {
     const blockQuestion = block && useBlockQuestion({ block })
-    const isFreeformQuestion = ['multiple_options2_freeform'].includes(block.template)
     const isMultipleQuestion = question?.allowMultiple
     const limit = question?.limit
     const hasOptionLimit = limit !== undefined
@@ -29,7 +28,7 @@ export const BlockQuestion = ({
                 <div className="block-question-inner">
                     <div className="block-question-left">{blockQuestion}</div>
                     <div className="block-question-right">
-                        {isFreeformQuestion && <FreeformIndicator showLabel={true} />}
+                        {question?.isFreeform && <FreeformIndicator showLabel={true} />}
                         {isMultipleQuestion && <MultipleIndicator showLabel={true} />}
                         {hasOptionLimit && <OptionLimitIndicator showLabel={true} limit={limit} />}
                     </div>
