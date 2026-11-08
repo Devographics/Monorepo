@@ -93,6 +93,7 @@ query {
                                 allowMultiple
                                 allowComment
                                 allowOther
+                                isFreeform
                                 yearAdded
                                 limit
                                 doNotCorrelateWith

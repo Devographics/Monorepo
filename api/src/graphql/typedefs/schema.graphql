@@ -236,6 +236,8 @@ type QuestionMetadata {
     hidden: Boolean
     # textarea vs input for freeform questions
     longText: Boolean
+    # whether the question's input is freeform text (set by the template)
+    isFreeform: Boolean
     # for numerical questions, specify value units
     units: String
     # translations

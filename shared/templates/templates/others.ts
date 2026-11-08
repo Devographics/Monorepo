@@ -35,6 +35,7 @@ export const others: TemplateFunction = options => {
     const output: QuestionTemplateOutput = {
         rawPaths,
         normPaths,
+        isFreeform: true,
         ...question
     }
     return output

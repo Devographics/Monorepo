@@ -402,6 +402,8 @@ export interface QuestionTemplateOutput extends QuestionWithId {
     extends?: string
     filterFunction?: (value: any) => boolean
     templateMissing?: boolean
+    // whether the question's input is freeform text (set by the template)
+    isFreeform?: boolean
 }
 
 export interface QuestionTemplateOutputWithSection extends QuestionTemplateOutput {
