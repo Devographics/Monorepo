@@ -21,7 +21,7 @@ import { VerticalBarSerieWrapper } from '../verticalBar2/VerticalBarSerieWrapper
 import T from 'core/i18n/T'
 import './RatiosByEdition.scss'
 import SubsetControls from './SubsetControls'
-import { getSubsetIds } from './helpers/subsets'
+import { getLargestIncrease, getSubsetIds } from './helpers/subsets'
 import {
     BlockHeader,
     BlockHeaderRight_,
@@ -33,22 +33,57 @@ import {
 import * as Tabs from '@radix-ui/react-tabs'
 import { useI18n } from '@devographics/react-i18n'
 import Tooltip from 'core/components/Tooltip'
+import { getItemLabel } from 'core/helpers/labels'
+import { formatPercentage } from '../common2/helpers/format'
+import { usePageContext } from 'core/helpers/pageContext'
 
 export interface RatiosByEditionProps extends BlockComponentProps {
     series: MultiRatioSerie[]
 }
 
 export const RatiosByEdition = (props: RatiosByEditionProps) => {
+    const { getString } = useI18n()
     // const { getString } = useI18n()
     const { block, series, question, pageContext, variant } = props
     const { variables } = block
+    const { localeId } = usePageContext()
     const enableMultiSection = variables?.enableMultiSection
 
     const { i18nNamespace } = block
 
     const chartState = useChartState(getDefaultState({ block, series, question }))
 
-    const legendItems = uniqBy(series.map(serie => serie.data).flat(), item => item.id)
+    const { subset } = chartState
+
+    const { getLineItems } = viewDefinition
+
+    const legendItems = uniqBy(
+        series
+            .map(serie => getLineItems({ serie, question, chartState }))
+            .flat()
+            .map(lineItem => {
+                const { id, entity, points } = lineItem
+                const labelObject = getItemLabel({
+                    id,
+                    entity,
+                    getString,
+                    i18nNamespace,
+                    html: true
+                })
+                const delta = ((points?.at(-1)?.value || 0) - (points?.at(-2)?.value || 0)) * 100
+                const deltaFormatted = formatPercentage({
+                    value: delta,
+                    localeId
+                })
+                let label = labelObject?.label
+                if (subset === 'largest_increase' || subset === 'largest_decrease') {
+                    const prefix = subset === 'largest_increase' ? '+' : ''
+                    label = `<span class="label-withValue"><span class="label-label">${labelObject?.label}</span> <span class="label-value">${prefix}${deltaFormatted}</span></span>`
+                }
+                return { ...lineItem, label }
+            }),
+        item => item.id
+    )
 
     const commonProps: CommonProps<MultiRatiosChartState> = {
         variant,
@@ -288,6 +323,7 @@ export const RatiosByEditionSerie = (
                     chartState={chartState}
                     items={legendItemsSubset}
                     i18nNamespace={i18nNamespace}
+                    html={true}
                 />
             )}
         </div>

@@ -10,11 +10,13 @@ import T from 'core/i18n/T'
 export const Legend = <ChartStateType extends ChartStateWithHighlighted>({
     items,
     chartState,
-    i18nNamespace
+    i18nNamespace,
+    html = false
 }: {
     items: LegendItemType[]
     chartState: ChartStateType
     i18nNamespace?: string
+    html?: boolean
 }) => {
     const { highlighted } = chartState
     const hasHighlight = highlighted !== null
@@ -71,6 +73,7 @@ export const Legend = <ChartStateType extends ChartStateWithHighlighted>({
                           lineIndex={i}
                           chartState={chartState}
                           i18nNamespace={i18nNamespace}
+                          html={html}
                       />
                   ))}
         </div>
@@ -81,12 +84,14 @@ const LegendItem = <ChartStateType extends ChartStateWithHighlighted>({
     item,
     lineIndex,
     chartState,
-    i18nNamespace
+    i18nNamespace,
+    html = false
 }: {
     item: LegendItemType
     lineIndex: number
     chartState: ChartStateType
     i18nNamespace?: string
+    html?: boolean
 }) => {
     const { getString } = useI18n()
 
@@ -125,9 +130,17 @@ const LegendItem = <ChartStateType extends ChartStateWithHighlighted>({
             }}
         >
             <div className="legend-item-color" />
-            <span className="legend-item-label" data-key={labelObject.key}>
-                {label}
-            </span>
+            {html ? (
+                <span
+                    className="legend-item-label"
+                    data-key={labelObject.key}
+                    dangerouslySetInnerHTML={{ __html: label }}
+                />
+            ) : (
+                <span className="legend-item-label" data-key={labelObject.key}>
+                    {label}
+                </span>
+            )}
         </div>
     )
 }

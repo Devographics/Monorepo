@@ -26,7 +26,7 @@
         }
         @include breakpoints.large {
             display: grid;
-            grid-template-columns: 1fr minmax(400px, min-content);
+            grid-template-columns: 1fr 1fr;
             grid-template-areas: 'content sidebar';
             gap: var(--doubleSpacing);
             .chart-legend {
@@ -34,6 +34,19 @@
             }
             .chart-wrapper-single {
                 grid-area: content;
+            }
+        }
+    }
+    .chart-legend-2 {
+        grid-template-columns: 1fr;
+        .legend-item-label:has(.label-withValue) {
+            flex-grow: 1;
+        }
+        .label-withValue {
+            display: flex;
+            justify-content: space-between;
+            .label-value {
+                font-weight: var(--fontBold);
             }
         }
     }
