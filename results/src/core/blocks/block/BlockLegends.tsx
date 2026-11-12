@@ -4,7 +4,6 @@ import { mq } from 'core/theme'
 import BlockLegendsItem, { BlockLegendSharedProps } from './BlockLegendsItem'
 import T from 'core/i18n/T'
 import { BlockLegend } from 'core/types'
-import { getThemeColor } from 'core/theme_new/colors'
 
 const BlockLegends = ({
     legends = [],
@@ -91,7 +90,7 @@ const Container = styled.table`
     ${props => {
         if (props.withFrame) {
             return css`
-                border: 1px solid ${getThemeColor('border.default')};
+                border: 1px solid var(--borderColor);
                 padding: var(--halfSpacing);
 
                 @media ${mq.small} {

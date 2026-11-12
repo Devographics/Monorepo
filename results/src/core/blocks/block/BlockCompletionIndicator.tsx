@@ -1,7 +1,6 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 import { useI18n } from '@devographics/react-i18n'
-import { getThemeColor } from 'core/theme_new/colors'
 import Tooltip from 'core/components/Tooltip'
 
 const BlockCompletionIndicator = ({
@@ -12,8 +11,7 @@ const BlockCompletionIndicator = ({
     variant: 'grey' | 'pink' | string
 }) => {
     const { translate } = useI18n()
-    const colorName1 = variant === 'pink' ? 'primary.default' : 'text.default'
-    const colorName2 = variant === 'pink' ? 'primary.default' : 'text.alt'
+    const color = variant === 'pink' ? 'var(--primaryColor)' : 'var(--textAltColor)'
     return (
         <Container className="CompletionIndicator">
             <Tooltip
@@ -25,9 +23,9 @@ const BlockCompletionIndicator = ({
                             {completion.count && <span>({completion.count})</span>}
                         </div>
                         <Chart height="16" width="16" viewBox="0 0 20 20">
-                            <ChartBackground r="10" cx="10" cy="10" colorName={colorName2} />
+                            <ChartBackground r="10" cx="10" cy="10" $color={color} />
                             <ChartForeground
-                                colorName={colorName2}
+                                $color={color}
                                 r="5"
                                 cx="10"
                                 cy="10"
@@ -65,13 +63,13 @@ const Chart = styled.svg`
     display: block;
 `
 
-const ChartBackground = styled.circle`
-    fill: ${({ colorName }) => getThemeColor(colorName)};
+const ChartBackground = styled.circle<{ $color: string }>`
+    fill: ${({ $color }) => $color};
     opacity: 0.5;
 `
 
-const ChartForeground = styled.circle`
-    stroke: ${({ colorName }) => getThemeColor(colorName)};
+const ChartForeground = styled.circle<{ $color: string }>`
+    stroke: ${({ $color }) => $color};
 `
 
 export default memo(BlockCompletionIndicator)

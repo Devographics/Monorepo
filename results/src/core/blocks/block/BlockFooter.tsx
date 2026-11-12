@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import T from 'core/i18n/T'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 import { usePageContext } from 'core/helpers/pageContext'
-import { getThemeColor } from 'core/theme_new/colors'
 
 const Footer = styled.div`
     .rawchartmode & {
@@ -15,7 +14,7 @@ const Footer = styled.div`
 const Respondents = styled.div`
     font-size: var(--fontSizeSmall);
     text-align: center;
-    color: ${getThemeColor('text.alt')};
+    color: var(--textAltColor);
     margin-bottom: var(--halfSpacing);
 `
 

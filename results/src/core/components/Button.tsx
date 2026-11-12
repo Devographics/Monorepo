@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components'
 import { mq } from 'core/theme'
 import ButtonGroup from './ButtonGroup'
-import { getThemeColor } from 'core/theme_new/colors'
 
 const Button = styled.button.attrs(
     ({ className, size = 'medium', variant = 'default', ...props }) => {
@@ -44,17 +43,17 @@ const Button = styled.button.attrs(
                 &:link,
                 &:visited {
                     text-decoration: none;
-                    border-color: ${getThemeColor('text.default')};
-                    color: ${getThemeColor('text.default')};
+                    border-color: var(--textColor);
+                    color: var(--textColor);
                 }
 
                 &:hover,
                 &:focus {
                     border-style: solid;
-                    border-color: ${getThemeColor('primary.default')};
-                    color: ${getThemeColor('primary.default')};
+                    border-color: var(--primaryColor);
+                    color: var(--primaryColor);
                     svg {
-                        color: ${getThemeColor('primary.default')} !important;
+                        color: var(--primaryColor) !important;
                     }
                 }
                 // sizing
@@ -105,7 +104,7 @@ const Button = styled.button.attrs(
                     pointer-events: none;
                     border-style: solid;
                     .secondary-bg & {
-                        background: ${getThemeColor('background.alt2')};
+                        background: var(--backgroundAlt2Color);
                     }
                 }
             `
@@ -128,14 +127,14 @@ const Button = styled.button.attrs(
 
             &:hover,
             &:focus {
-                border-top-color: ${getThemeColor('border.default')};
-                border-bottom-color: ${getThemeColor('border.default')};
+                border-top-color: var(--borderColor);
+                border-bottom-color: var(--borderColor);
 
                 &:first-child {
-                    border-top-color: ${getThemeColor('primary.default')};
+                    border-top-color: var(--primaryColor);
                 }
                 &:last-child {
-                    border-bottom-color: ${getThemeColor('primary.default')};
+                    border-bottom-color: var(--primaryColor);
                 }
             }
         }
@@ -149,14 +148,14 @@ const Button = styled.button.attrs(
 
             &:hover,
             &:focus {
-                border-left-color: ${getThemeColor('border.default')};
-                border-right-color: ${getThemeColor('border.default')};
+                border-left-color: var(--borderColor);
+                border-right-color: var(--borderColor);
 
                 &:first-child {
-                    border-left-color: ${getThemeColor('border.hover')};
+                    border-left-color: var(--borderHoverColor);
                 }
                 &:last-child {
-                    border-right-color: ${getThemeColor('border.hover')};
+                    border-right-color: var(--borderHoverColor);
                 }
             }
         }

@@ -6,7 +6,6 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
-import { getThemeColor } from 'core/theme_new/colors'
 
 import { parse } from 'graphql'
 import { print } from 'graphql-print'
@@ -174,7 +173,7 @@ export const TextArea = styled.textarea`
     border: 0;
     border-radius: 2px;
     background: var(--backgroundColor);
-    color: ${getThemeColor('text.default')};
+    color: var(--textColor);
 
     &:focus {
         outline: 0;

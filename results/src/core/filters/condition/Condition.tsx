@@ -9,7 +9,6 @@ import { ValueSegment } from './ValueSegment'
 import { OperatorSegment } from './OperatorSegment'
 import { CustomizationFiltersCondition, FilterItem, PanelState } from '../types'
 import { BlockVariantDefinition } from 'core/types'
-import { getThemeColor } from 'core/theme_new/colors'
 
 interface ConditionProps {
     seriesIndex: number
@@ -106,7 +105,7 @@ export const Condition_ = styled.div`
 `
 
 const DeleteWrapper_ = styled.div`
-    border-left: 1px dashed ${getThemeColor('border.alt')};
+    border-left: 1px dashed var(--borderAltColor);
     padding: 0 var(--spacing);
     display: flex;
     align-items: center;
@@ -123,7 +122,7 @@ const ActiveCondition_ = styled(Condition_)`
 
 const DeleteCondition_ = styled(Button)`
     background: none;
-    border-color: ${getThemeColor('border.alt')};
+    border-color: var(--borderAltColor);
     border-radius: 100%;
     aspect-ratio: 1/1;
     padding: 0px;
@@ -137,7 +136,7 @@ const And_ = styled.div`
     bottom: 0px;
     left: 50%;
     transform: translateX(-50%) translateY(50%);
-    background: ${getThemeColor('background.alt')};
+    background: var(--backgroundAltColor);
     padding: 6px;
     border-radius: 100%;
     text-transform: uppercase;

@@ -139,7 +139,7 @@ export const getItemLabel = (options: {
         ]) as string
         if (entityLabel) {
             label = entityLabel
-            key = 'entity'
+            key = `entity__${entity.id}`
             source = LabelSourcesEnum.ENTITY
         }
         const entityDescription = getFields(entity, [

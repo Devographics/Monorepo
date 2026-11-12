@@ -1,4 +1,3 @@
-import { getThemeColor } from 'core/theme_new/colors'
 import React, { useEffect, useState } from 'react'
 import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import * as Tabs from '@radix-ui/react-tabs'
@@ -317,8 +316,8 @@ export const TabsList = styled(Tabs.List)`
 
 export const Tab_ = styled.div`
     border: var(--border);
-    background: ${getThemeColor('background.default')};
-    /* border: 1px solid ${getThemeColor('border.default')}; */
+    background: var(--backgroundColor);
+    /* border: 1px solid var(--borderColor); */
     border-radius: 3px 3px 0 0;
     cursor: pointer;
     margin-right: var(--halfSpacing);

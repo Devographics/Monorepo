@@ -3,7 +3,6 @@ import T from 'core/i18n/T'
 import React from 'react'
 import { TableData } from 'core/helpers/datatables'
 import round from 'lodash/round.js'
-import { getThemeColor } from 'core/theme_new/colors'
 
 const Tables = ({ tables = [] }: { tables: TableData[] }) => {
     return (
@@ -60,7 +59,7 @@ const TableHeading = ({ id, colSpan, labelId }) => (
 )
 
 const TH_ = styled.th`
-    background: ${getThemeColor('background.alt')};
+    background: var(--backgroundAltColor);
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;

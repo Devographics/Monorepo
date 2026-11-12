@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { mq } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
-import { getThemeColor } from 'core/theme_new/colors'
 
 const PicksBlock = ({ block, data: entity }) => {
     const pageContext = usePageContext()
@@ -92,7 +91,7 @@ const PickContentWrapper = styled.div`
     position: relative;
 `
 const PickContent = styled.div`
-    background: ${getThemeColor('background.invertedAlt')};
+    background: var(--backgroundInvertedAltColor);
     color: var(--textColorInverted);
     position: relative;
     margin-bottom: calc(var(--spacing) * 0.75);
@@ -105,7 +104,7 @@ const PickContent = styled.div`
     &:after {
         content: ' ';
         clip-path: polygon(0 0, 100% 0, 50% 100%);
-        background: ${getThemeColor('background.invertedAlt')};
+        background: var(--backgroundInvertedAltColor);
         position: absolute;
         width: calc(var(--spacing) * ${triangleWidth});
         height: calc(var(--spacing) * ${triangleWidth / 2});
@@ -126,7 +125,7 @@ const PickTitle = styled.h3`
     a:link,
     a:visited,
     a:hover {
-        color: ${getThemeColor('text.inverted')};
+        color: var(--textColorInverted);
     }
 `
 
@@ -145,7 +144,7 @@ const PicksIntroMobile = styled.div`
     font-size: var(--fontSizeSmall);
     text-align: center;
     margin-bottom: var(--halfSpacing);
-    color: ${getThemeColor('text.alt')};
+    color: var(--textAltColor);
     @media ${mq.mediumLarge} {
         display: none;
     }
@@ -156,7 +155,7 @@ const PicksIntro = styled.div`
     position: absolute;
     bottom: -30px;
     right: 0;
-    color: ${getThemeColor('text.alt')};
+    color: var(--textAltColor);
     @media ${mq.small} {
         display: none;
     }

@@ -9,7 +9,6 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { getSiteTitle } from 'core/helpers/pageHelpers'
 import SurveyPopover from './SurveyPopover'
 import './Sidebar.scss'
-import { getThemeColor } from 'core/theme_new/colors'
 
 const CloseIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -81,7 +80,7 @@ const SidebarContainer = styled.div`
         bottom: 0;
         left: 0;
         right: 0;
-        background: ${getThemeColor('background.default')};
+        background: var(--backgroundColor);
         z-index: 1000;
         text-align: center;
         position: fixed;
@@ -114,7 +113,7 @@ const SidebarCloseButton = styled.button`
     height: 68px;
 
     svg {
-        stroke: ${getThemeColor('primary.default')};
+        stroke: var(--primaryColor);
     }
 
     @media ${mq.large} {
@@ -123,6 +122,6 @@ const SidebarCloseButton = styled.button`
 
     &:hover,
     &:focus {
-        background-color: ${getThemeColor('background.alt')};
+        background-color: var(--backgroundAltColor);
     }
 `

@@ -1,12 +1,11 @@
 import { createGlobalStyle } from 'styled-components'
 import { textShadowHighlightMixin } from './mixins'
 import mq from './mq'
-import { getThemeColor } from 'core/theme_new/colors'
 
 export const GlobalStyle = createGlobalStyle`
     body {
-        background: ${getThemeColor('background.default')};
-        color: ${getThemeColor('text.default')};
+        background: var(--backgroundColor);
+        color: var(--textColor);
         padding: 0;
         font-feature-settings: 'liga' 0;
         line-height: 1.7;
@@ -54,7 +53,7 @@ export const GlobalStyle = createGlobalStyle`
         &:visited,
         &:active,
         &:focus {
-            color: ${getThemeColor('primary.default')};
+            color: var(--primaryColor);
         }
         
         &:hover, &:focus {
@@ -154,7 +153,7 @@ export const GlobalStyle = createGlobalStyle`
     
     .hint-completion-indicator{
         display: inline-block;
-        color: ${getThemeColor('primary.default')};
+        color: var(--primaryColor);
         font-size: 1.4rem;
     }
 `

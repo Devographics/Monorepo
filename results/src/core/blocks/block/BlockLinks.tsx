@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
-import { getThemeColor } from 'core/theme_new/colors'
 
 import { TwitterIcon, MDNIcon, NpmIcon } from '@devographics/icons'
 import Button from 'core/components/Button'
@@ -104,7 +103,7 @@ const Link = styled(Button)`
     padding: 2px 12px;
     border-radius: 20px;
     border: 1px solid transparent;
-    background: ${getThemeColor('background.alt')};
+    background: var(--backgroundAltColor);
     background: rgba(255, 255, 255, 0.1);
 `
 

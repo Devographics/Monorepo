@@ -85,7 +85,8 @@ export const CorrelationItemComponent = ({
             id: optionId2,
             getString,
             entity: optionEntity,
-            i18nNamespace: question.optionsNamespace || questionId2
+            i18nNamespace: question.optionsNamespace || questionId2,
+            html: true
         })
         optionLabel = optionLabelObject?.shortLabel
     }

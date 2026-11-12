@@ -1,4 +1,3 @@
-import { getThemeColor } from 'core/theme_new/colors'
 import './FiltersPanel.scss'
 import React, { useState } from 'react'
 import styled from 'styled-components'
@@ -348,8 +347,8 @@ export const FiltersExport = ({
 
 export const TabsTrigger_ = styled(Tabs.Trigger)`
     border: var(--border);
-    background: ${getThemeColor('background.alt')};
-    /* border: 1px solid ${getThemeColor('border.default')}; */
+    background: var(--backgroundAltColor);
+    /* border: 1px solid var(--borderColor); */
     border-radius: 3px 3px 0 0;
     padding: var(--halfSpacing);
     cursor: pointer;

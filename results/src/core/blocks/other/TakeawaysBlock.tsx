@@ -5,7 +5,6 @@ import { Entity } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import T from 'core/i18n/T'
 import { useI18n } from '@devographics/react-i18n'
-import { getThemeColor } from 'core/theme_new/colors'
 
 /**
  * All awards categories
@@ -61,14 +60,14 @@ const Wrapper = styled.div`
 
 const Takeaway_ = styled.section`
     font-size: var(--fontSizeLarge);
-    background: ${getThemeColor('background.alt')};
+    background: var(--backgroundAltColor);
     border-radius: 30px;
     padding: var(--spacing);
 `
 
 const Heading_ = styled.h3`
     text-transform: uppercase;
-    color: ${getThemeColor('text.alt')};
+    color: var(--textAltColor);
     margin-bottom: var(--quarterSpacing);
     font-weight: var(--fontMedium);
     font-size: var(--fontSizeLarge);

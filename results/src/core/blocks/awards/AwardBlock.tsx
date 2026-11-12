@@ -1,7 +1,6 @@
 import React, { memo, useState, useCallback } from 'react'
 import styled, { keyframes } from 'styled-components'
 import Confetti from 'react-confetti'
-import tinycolor from 'tinycolor2'
 import { useI18n } from '@devographics/react-i18n'
 import AwardIcon from './AwardIcon'
 import T from 'core/i18n/T'
@@ -126,41 +125,42 @@ AwardBlock.propTypes = {
 }
 */
 
-const getGlowColor = (color: any, alpha: number) => tinycolor(color).setAlpha(alpha).toRgbString()
+const getGlowColor = (alpha: number) =>
+    `color-mix(in srgb, var(--primaryColor) ${alpha * 100}%, transparent)`
 
 const glowSoft = keyframes`
     from {
-        box-shadow: 0px 1px 1px 1px ${getGlowColor(getThemeColor('primary.default'), 0.1)};
+        box-shadow: 0px 1px 1px 1px ${getGlowColor(0.1)};
     }
     50% {
-        box-shadow: 0px 1px 20px 1px ${getGlowColor(getThemeColor('primary.default'), 0.4)};
+        box-shadow: 0px 1px 20px 1px ${getGlowColor(0.4)};
     }
     to {
-        box-shadow: 0px 1px 1px 1px ${getGlowColor(getThemeColor('primary.default'), 0.1)};
+        box-shadow: 0px 1px 1px 1px ${getGlowColor(0.1)};
     }
 `
 
 const glow = keyframes`
     from {
-        box-shadow: 0px 1px 2px 1px ${getGlowColor(getThemeColor('primary.default'), 0.5)};
+        box-shadow: 0px 1px 2px 1px ${getGlowColor(0.5)};
     }
     50% {
-        box-shadow: 0px 1px 30px 2px ${getGlowColor(getThemeColor('primary.default'), 0.9)};
+        box-shadow: 0px 1px 30px 2px ${getGlowColor(0.9)};
     }
     to {
-        box-shadow: 0px 1px 2px 1px ${getGlowColor(getThemeColor('primary.default'), 0.5)};
+        box-shadow: 0px 1px 2px 1px ${getGlowColor(0.5)};
     }
 `
 
 const burst = keyframes`
     from {
-        box-shadow: 0px 0px 0px 0px ${getGlowColor(getThemeColor('primary.default'), 0)};
+        box-shadow: 0px 0px 0px 0px ${getGlowColor(0)};
     }
     50% {
-        box-shadow: 0px 0px 30px 30px ${getGlowColor(getThemeColor('primary.default'), 0.9)};
+        box-shadow: 0px 0px 30px 30px ${getGlowColor(0.9)};
     }
     to {
-        box-shadow: 0px 0px 60px 60px ${getGlowColor(getThemeColor('primary.default'), 0)};
+        box-shadow: 0px 0px 60px 60px ${getGlowColor(0)};
     }
 `
 

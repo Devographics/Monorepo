@@ -17,7 +17,6 @@ import Avatar, { AvatarNotLink } from '../Avatar'
 import './Nav.scss'
 import { NewQuestionIndicator } from 'core/blocks/block/NewQuestionIndicator'
 import { getAllQuestions } from 'core/helpers/options'
-import { getThemeColor } from 'core/theme_new/colors'
 
 interface PageConfig {
     is_hidden?: boolean
@@ -81,9 +80,9 @@ const getStyledLink = component => styled(component)`
 
     ${props =>
         fancyLinkMixin({
-            color: props.depth === 0 ? getThemeColor('primary.default') : getThemeColor('text.default'),
+            color: props.depth === 0 ? 'var(--primaryColor)' : 'var(--textColor)',
             // activeColor: props.theme.colors.linkActive,
-            activeColor: getThemeColor('text.default')
+            activeColor: 'var(--textColor)'
         })}
 `
 
@@ -309,17 +308,17 @@ const InternalLink_ = styled.a`
     &,
     &:link,
     &:visited {
-        color: ${getThemeColor('text.alt')};
+        color: var(--textAltColor);
     }
     &:hover {
-        color: ${getThemeColor('text.default')};
+        color: var(--textColor);
     }
     font-size: 0.9rem;
     &._is-active {
         &,
         &:link,
         &:visited {
-            color: ${getThemeColor('text.default')};
+            color: var(--textColor);
         }
         font-weight: var(--fontBold);
     }

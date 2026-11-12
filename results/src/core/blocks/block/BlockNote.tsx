@@ -5,7 +5,6 @@ import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockNote } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
-import { getThemeColor } from 'core/theme_new/colors'
 
 const BlockNote = ({ block }: { block: BlockVariantDefinition }) => {
     const pageContext = usePageContext()
@@ -30,7 +29,7 @@ export const Note_ = styled.div`
     .rawchartmode & {
         display: none;
     }
-    background: ${getThemeColor('background.alt')};
+    background: var(--backgroundAltColor);
     padding: var(--spacing);
     margin-top: var(--doubleSpacing);
     font-size: var(--fontSizeSmall);

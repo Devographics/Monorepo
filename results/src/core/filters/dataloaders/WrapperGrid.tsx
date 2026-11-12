@@ -8,7 +8,6 @@ import T from 'core/i18n/T'
 import { DataSeries } from 'core/filters/types'
 import { AllQuestionData } from '@devographics/types'
 import { mq } from 'core/theme'
-import { getThemeColor } from 'core/theme_new/colors'
 
 type WrapperGridProps = {
     layout: any
@@ -92,7 +91,7 @@ const GridItem_ = styled.div`
 `
 
 const Legend_ = styled.h4`
-    background: ${getThemeColor('background.alt')};
+    background: var(--backgroundAltColor);
     padding: var(--quarterSpacing) var(--halfSpacing);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -113,7 +112,7 @@ const EmptySeries = () => (
 )
 
 const EmptySeries_ = styled.div`
-    background: ${getThemeColor('background.alt')};
+    background: var(--backgroundAltColor);
     display: grid;
     place-items: center;
     height: 100%;

@@ -2,7 +2,6 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { mq } from 'core/theme'
 import { BlockLegend } from 'core/types'
-import { getThemeColor } from 'core/theme_new/colors'
 
 type BlockEventHandler = ({ id, label, color }: Pick<BlockLegend, 'id' | 'label' | 'color'>) => void
 
@@ -122,7 +121,7 @@ const Container = styled.tr`
             return css`
                 cursor: pointer;
                 &:hover {
-                    background: ${getThemeColor('background.alt')};
+                    background: var(--backgroundAltColor);
                 }
             `
         }
@@ -131,7 +130,7 @@ const Container = styled.tr`
     ${({ state }) => {
         if (state === 'active') {
             return css`
-                /* background: ${getThemeColor('background.alt')}; */
+                /* background: var(--backgroundAltColor); */
             `
         } else if (state === 'inactive') {
             return css`

@@ -27,7 +27,11 @@ export const CorrelationSubheading = ({
                 {optionLabel && (
                     <>
                         {' '}
-                        &gt; <span data-key={optionLabelObject?.key}>{optionLabel}</span>
+                        &gt;{' '}
+                        <span
+                            data-key={optionLabelObject?.key}
+                            dangerouslySetInnerHTML={{ __html: optionLabel }}
+                        />
                     </>
                 )}
             </h4>

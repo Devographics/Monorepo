@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { mq } from 'core/theme'
 import { useI18n } from '@devographics/react-i18n'
 import Button from 'core/components/Button'
-import { getThemeColor } from 'core/theme_new/colors'
 
 const Link = styled.a`
     display: block;
@@ -21,7 +20,7 @@ const Link = styled.a`
 
         circle,
         path {
-            fill: ${getThemeColor('text.default')};
+            fill: var(--textColor);
         }
     }
 
@@ -45,7 +44,7 @@ const Link = styled.a`
 
         &:hover,
         &:focus {
-            background: ${getThemeColor('background.alt')};
+            background: var(--backgroundAltColor);
         }
 
         span,
@@ -79,8 +78,8 @@ const LinkWithLabel = styled(Button)`
     &:hover {
         path,
         circle {
-            fill: ${getThemeColor('primary.default')};
-            stroke: ${getThemeColor('primary.default')};
+            fill: var(--primaryColor);
+            stroke: var(--primaryColor);
         }
     }
 `

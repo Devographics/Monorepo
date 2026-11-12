@@ -4,7 +4,6 @@ import { stripMarkdown } from 'core/helpers/stripMarkdown'
 import { stripHtml } from 'core/helpers/utils'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
-import { getThemeColor } from 'core/theme_new/colors'
 
 const Container = styled.div`
     border-radius: 3px;
@@ -12,8 +11,8 @@ const Container = styled.div`
 `
 
 const Meta = styled.div`
-    background: ${getThemeColor('background.invertedAlt')};
-    color: ${getThemeColor('text.inverted')};
+    background: var(--backgroundInvertedAltColor);
+    color: var(--textColorInverted);
     padding: calc(var(--spacing) * 0.75);
 `
 
@@ -39,7 +38,7 @@ const Legend = styled.div`
     font-size: var(--fontSizeSmall);
     text-align: center;
     margin-top: var(--halfSpacing);
-    color: ${getThemeColor('text.alt')};
+    color: var(--textAltColor);
 `
 
 const getUrl = url => {

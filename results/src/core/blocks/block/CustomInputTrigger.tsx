@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { getThemeColor } from 'core/theme_new/colors'
 import ModalTrigger from 'core/components/ModalTrigger'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
@@ -116,7 +115,7 @@ const GraphQLTextArea = styled(AutoSelectText)`
 `
 
 const Error = styled.p`
-    color: ${getThemeColor('text.error')};
+    color: var(--textErrorColor);
     margin-top: var(--spacing);
 `
 export default CustomInputTrigger

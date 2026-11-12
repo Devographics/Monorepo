@@ -7,7 +7,6 @@ import classNames from 'classnames'
 import Hamburger from 'core/components/Hamburger'
 import { useI18n } from '@devographics/react-i18n'
 import SurveyBanner from 'core/components/SurveyBanner'
-import { getThemeColor } from 'core/theme_new/colors'
 
 const MainLayout = ({
     context,
@@ -139,13 +138,13 @@ const MenuToggle = styled.button`
     }
 
     &:focus {
-        border: 2px solid ${getThemeColor('primary.default')};
+        border: 2px solid var(--primaryColor);
         outline: 5px auto -webkit-focus-ring-color;
     }
 
     &:hover,
     &:focus {
-        background: ${getThemeColor('background.alt')};
+        background: var(--backgroundAltColor);
     }
 `
 

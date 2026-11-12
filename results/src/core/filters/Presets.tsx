@@ -1,4 +1,3 @@
-import { getThemeColor } from 'core/theme_new/colors'
 import React from 'react'
 import styled from 'styled-components'
 import Button from 'core/components/Button'
@@ -285,7 +284,7 @@ const SavePreset_ = styled(Button)`
 
 const DeletePreset_ = styled(Button)`
     background: none;
-    border-color: ${getThemeColor('border.alt')};
+    border-color: var(--borderAltColor);
     border-radius: 100%;
     aspect-ratio: 1/1;
     padding: 2px;

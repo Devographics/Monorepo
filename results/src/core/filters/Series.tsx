@@ -109,11 +109,11 @@ const Series = ({ allFilters, series, index, block, stateStuff }: SeriesProps) =
 }
 
 export const Series_ = styled.div`
-    border: 1px solid ${getThemeColor('border.alt')};
+    border: 1px solid var(--borderAltColor);
     border-radius: 3px;
     padding: var(--spacing);
     position: relative;
-    background: ${getThemeColor('background.alt')};
+    background: var(--backgroundAltColor);
 `
 
 const ActiveSeries_ = styled(Series_)`
@@ -129,8 +129,8 @@ const DeleteSeries_ = styled(Button)`
     transform: translateX(50%);
     aspect-ratio: 1/1;
     border-radius: 100%;
-    background: ${getThemeColor('background.alt')};
-    border: 1px solid ${getThemeColor('border.alt')};
+    background: var(--backgroundAltColor);
+    border: 1px solid var(--borderAltColor);
     display: grid;
     place-items: center;
 `
