@@ -26,7 +26,7 @@ type NormalizationJSONPayload = {
   matches: AnswerMatch[];
 };
 
-function splitRight(str: string, sep: string): string[] {
+export function splitRight(str: string, sep: string): string[] {
   if (sep === "") return [...str];
 
   const parts: string[] = [];
