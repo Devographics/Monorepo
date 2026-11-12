@@ -48,17 +48,22 @@ export const getRawData = async ({
             editionId: edition.id,
             [metadataPath]: { $exists: true, $ne: '' }
         }
+        const normalizedCondition: { $eq?: string; $nin?: string[] } = {}
         if (token && token !== OTHER_ANSWERS) {
             // if token is specified, only get responses that contain it
-            selector[normalizedPath] = token
+            normalizedCondition.$eq = token
         }
         if (excludedTokens) {
             // if excludedTokens is specified, only get responses that *don't* contain them
-            selector[normalizedPath] = { $nin: excludedTokens }
+            normalizedCondition.$nin = excludedTokens
+        }
+        if (Object.keys(normalizedCondition).length > 0) {
+            selector[normalizedPath] = normalizedCondition
         }
         const projection = { _id: 1, [metadataPath]: 1, [normalizedPath]: 1, createdAt: 1 }
 
         const results = await collection.find(selector, { projection }).toArray()
+
         let data: RawDataAnswer[] = results
             .map(response => {
                 const answers = get(response, metadataPath) as NormalizationMetadata[]
@@ -84,18 +89,24 @@ export const getRawData = async ({
             })
             .flat()
 
+        let filteredData = data
         if (token && token !== OTHER_ANSWERS) {
             // since we can have multiple answers per response, some of them might
             // not contain the token we're filtering by, or even no tokens at all
-            data = data.filter(answer => {
+            filteredData = data.filter(answer => {
                 if (token === NO_MATCH) {
+                    // return answer with no tokens
                     return !answer.tokens
                 } else {
-                    return answer.tokens && answer.tokens.map(t => t.id).includes(token)
+                    // return answer which contain the token either as a direct match or parent token
+                    return (
+                        (answer.tokens && answer.tokens.map(t => t.id).includes(token)) ||
+                        (answer.parentTokens && answer.parentTokens.map(t => t.id).includes(token))
+                    )
                 }
             })
         }
 
-        return data
+        return filteredData
     }
 }

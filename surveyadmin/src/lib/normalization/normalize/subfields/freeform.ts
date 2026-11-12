@@ -202,6 +202,16 @@ export const freeform: SubfieldProcessFunction = async ({
             if (tokens.length > 0) {
               item.tokens = tokens.map((t) => pick(t, ["id", "pattern"]));
 
+              // keep track here of which parent token is added
+              // due to which specific answer
+              if (autoAddParentTokens) {
+                const tokenIds = tokens.map((t) => t.id);
+                const parentTokenIds = getParentIds(tokenIds, entities).filter(
+                  (id) => !disallowedTokenIds.includes(id),
+                );
+                item.parentTokens = parentTokenIds.map((id) => ({ id }));
+              }
+
               // only add token ids that are not already in the normalizedIds array
               // and also exclude "DISCARDED_ANSWER" special tokens
               const normalizedIdsToAdd = tokens

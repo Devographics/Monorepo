@@ -6,6 +6,7 @@ import { Entity, Token } from 'entities'
 export interface NormalizationMetadata {
     raw: string
     tokens: NormalizationToken[]
+    parentTokens?: NormalizationToken[]
 }
 
 export interface NormalizationToken {
@@ -39,6 +40,7 @@ export interface RawDataAnswer {
     rawHtml: string
     rawClean: string
     tokens: NormalizationToken[]
+    parentTokens?: NormalizationToken[]
     createdAt: Date
     answerIndex: number
     answerId: string
