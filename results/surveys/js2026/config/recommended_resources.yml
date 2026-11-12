@@ -1,0 +1,85 @@
+- name: Frontend Masters
+  id: fm-homepage
+  description: Advance Your Skills with In-Depth, Modern Front-End Engineering Courses
+  url: https://frontendmasters.com/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  image: https://static.frontendmasters.com/assets/brand/logos/m-black.jpg
+
+- name: Web Performance Fundamentals, v2
+  id: fm-web-perf-v2
+  description: Speed up your websites and web apps by mastering the latest performance metrics and web optimization techniques.
+  image: https://static.frontendmasters.com/assets/teachers/gardner/thumb@2x.webp
+  teacher: Todd Gardner
+  company: Request Metrics
+  url: https://frontendmasters.com/courses/web-perf-v2/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+
+- name: SVG Essentials & Animation, v2
+  id: fm-svg
+  description: |
+      In this course, you'll learn to create immersive graphics and make them alive with animations!
+  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.webp
+  teacher: Sarah Drasner
+  company: Google
+
+- name: Web Security, v2
+  id: fm-web-security-v2
+  description: |
+      Take control of your application's security! Learn how to protect against common vulnerabilities every developer should know.
+  url: https://frontendmasters.com/courses/web-security-v2/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
+  teacher: Steve Kinney
+  company: Temporal
+
+- name: A Tour of Web Capabilities
+  id: fm-web-capabilities
+  description: |
+      Explore APIs you may not realize exist on the web! Get an overview of new Web APIs and their maturities, such as speech recognition, Permissions Policy and security, sensors, geolocation, and more.
+  url: https://frontendmasters.com/courses/device-web-apis/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  image: https://static.frontendmasters.com/assets/teachers/firtman/thumb@2x.webp
+  teacher: Maximiliano Firtman
+  company: Software Engineer & Educator
+
+- name: Website Accessibility, v3
+  id: fm-website-a11y-v3
+  description: |
+      Build content for everyone and become your company's accessibility expert! Learn the importance of semantic HTML and alt text for ensuring screen readers can navigate your site.
+  url: https://frontendmasters.com/courses/accessibility-v3/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  teacher: Jon Kuperman
+  company: Bloomberg
+  image: https://static.frontendmasters.com/assets/teachers/kuperman/thumb@2x.webp
+
+- name: CSS-only Form Validation Hints
+  id: fm-css-form-validation-hints
+  description: |
+      A look at how we can use CSS to add contextual hints to users as they fill out a form, including creating an SVG by hand and animating it based on whether a field is valid or invalid.
+  url: https://frontendmasters.com/tutorials/kevin-powell/styling-contextual-hints/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  teacher: Kevin Powell
+  image: https://static.frontendmasters.com/assets/teachers/powell/thumb@2x.webp
+
+- name: The DOM
+  id: fm-the-dom
+  description: |
+      Brian discusses the DOM (document object model) as where JavaScript, HTML, and CSS interact. The DOM represents the page so that programs can change the document structure, style, and content.
+  url: https://frontendmasters.com/courses/web-development-v3/the-dom/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  teacher: Brian Holt
+  company: Databricks
+  image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.webp
+
+- name: Web Components
+  id: fm-web-components
+  description: |
+      Learn where to find excellent Web Components to build web apps. You’ll also learn how to create your own custom components using JavaScript and libraries like Lit that will help you make them faster!
+  url: https://frontendmasters.com/courses/web-components/?utm_source=stateofhtml&utm_medium=website&utm_campaign=html2023
+  image: https://static.frontendmasters.com/assets/teachers/rupert/thumb@2x.webp
+  teacher: Dave Rupert
+  company: Paravel
+
+- name: |
+      Vanilla JS: You Might Not Need a Framework
+  id: fm-vanilla-js
+  description: |
+      See how you can build rich web apps and websites without depending on libraries or frameworks, using only the core JavaScript language.
+  url: https://frontendmasters.com/courses/vanilla-js-apps/?utm_source=stateofhtml&utm_medium=website&utm_campaign=html2023
+  image: https://static.frontendmasters.com/assets/teachers/firtman/thumb@2x.webp
+  teacher: Maximiliano Firtman
+  company: Software Engineer & Educator
