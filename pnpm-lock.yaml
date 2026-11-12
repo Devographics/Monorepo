@@ -124,8 +124,8 @@ importers:
         specifier: ^1.5.2
         version: 1.29.0
       web-features:
-        specifier: ^3.35.0
-        version: 3.35.0
+        specifier: ^3.45.0
+        version: 3.45.0
     devDependencies:
       '@devographics/types':
         specifier: workspace:*
@@ -278,7 +278,7 @@ importers:
         version: 7.4.0(mongodb-client-encryption@7.1.0)(socks@2.8.9)
       next:
         specifier: 16.0.10
-        version: 16.0.10(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.101.0)
+        version: 16.0.10(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.101.0)
       react:
         specifier: 19.2.3
         version: 19.2.3
@@ -17608,8 +17608,8 @@ packages:
   weak-lru-cache@1.2.2:
     resolution: {integrity: sha512-DEAoo25RfSYMuTGc9vPJzZcZullwIqRDSI9LOy+fkCJPi6hykCnfKaXTuPBDuXAUcqHXyOgFtHNp/kB2FjYHbw==}
 
-  web-features@3.35.0:
-    resolution: {integrity: sha512-/cYBWyzX76WdnvrTiMdmRG0EVZviQfH5U04zvoTrrYRvH7K7pD68YMx8VE3xK2fydaZq0WtEtvuCV30aHl9b1Q==}
+  web-features@3.45.0:
+    resolution: {integrity: sha512-Atp/v77aPEuVIPsw7tYz9IrID8CztDcIleh8n/Z8r7HEkvNt7eYWHF8s4hlWQ0QskFzTPDjq81vjubXXCnBMSg==}
 
   web-namespaces@1.1.4:
     resolution: {integrity: sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==}
@@ -33686,7 +33686,7 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  next@16.0.10(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.101.0):
+  next@16.0.10(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.101.0):
     dependencies:
       '@next/env': 16.0.10
       '@swc/helpers': 0.5.15
@@ -36007,7 +36007,7 @@ snapshots:
     dependencies:
       chokidar: 5.0.0
       immutable: 5.1.9
-      source-map-js: 1.2.1
+      source-map-js: 1.2.2
     optionalDependencies:
       '@parcel/watcher': 2.5.6
 
@@ -38324,7 +38324,7 @@ snapshots:
 
   weak-lru-cache@1.2.2: {}
 
-  web-features@3.35.0: {}
+  web-features@3.45.0: {}
 
   web-namespaces@1.1.4: {}
 
