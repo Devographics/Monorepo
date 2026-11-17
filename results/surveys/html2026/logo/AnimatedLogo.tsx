@@ -372,7 +372,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                                 <tspan data-year-char={1}>{'2'}</tspan>
                                 <tspan data-year-char={2}>{'0'}</tspan>
                                 <tspan data-year-char={3}>{'2'}</tspan>
-                                <tspan data-year-char={4}>{'5'}</tspan>
+                                <tspan data-year-char={4}>{'6'}</tspan>
                             </text>
                         </g>
                     </g>
@@ -398,29 +398,28 @@ const Wrapper = styled.div`
         font-display: swap;
         src: url(./BebasNeue-STATEOFDIGITS.woff2) format('woff2');
     }
-
     .soh-logo__wrapper {
-        --color-text: #1f473e;
-        --color-bg: #4a564b;
-        --color-slash-one-a: #6ebc60;
-        --color-slash-one-b: #15e595;
-        --color-slash-one-c: #3595ec;
-        --color-slash-two-a: #6ebc60;
-        --color-slash-two-b: #15e595;
+        --color-text: #9f0d47;
+        --color-bg: #4a564b00;
+        --color-slash-one-a: #52b384;
+        --color-slash-one-b: #1595e7;
+        --color-slash-one-c: #953dff;
+        --color-slash-two-a: #5f9b9d;
+        --color-slash-two-b: #228ce9;
         --color-slash-two-c: #4872f1;
-        --color-slash-two-d: #3595ec;
-        --color-slash-three-a: #6ebc60;
-        --color-slash-three-b: #15e595;
-        --color-slash-three-c: #3595ec;
-        --color-slash-three-d: #3595ec;
-        --color-chevron-back-a: #4a8da4;
+        --color-slash-two-d: #8855e6;
+        --color-slash-three-a: #6d84b5;
+        --color-slash-three-b: #2f83ec;
+        --color-slash-three-c: #3b7bee;
+        --color-slash-three-d: #7a6cce;
+        --color-chevron-back-a: #4fa0b9;
         --color-chevron-back-b: #190941;
-        --color-chevron-front-a: #8bee7d;
-        --color-chevron-front-b: #fff873;
+        --color-chevron-front-a: #7b2de0;
+        --color-chevron-front-b: #c6f0ff;
         --color-grad-shape-a: #fff6e6;
         --color-grad-shape-b: #ffdea4;
         --color-shape-shadow-bg: #040823;
-        --color-shape-shadow-stroke: #b5ebad;
+        --color-shape-shadow-stroke: #f7b457;
         --timeline-base-delay: 100ms;
         --timeline-chevron-front-anim: 600ms;
         --timeline-chevron-front-delay: var(--timeline-base-delay);
@@ -458,7 +457,7 @@ const Wrapper = styled.div`
         --ease-bouncy-in-out: cubic-bezier(0.25, -0.25, 0.1, 1.25);
         --ease-true-bounce-out: var(--ease-bouncy-out);
         --ease-linear-soft-out: cubic-bezier(0.5, 0.5, 0.5, 1);
-        /* background: var(--color-bg); */
+        background: var(--color-bg);
     }
 
     @supports (transition-timing-function: linear(0.1 1%, 0.9 99%)) {
@@ -501,10 +500,10 @@ const Wrapper = styled.div`
         position: relative;
         display: grid;
         width: 100vmin;
-        max-width: 400px;
+        max-width: 600px;
         aspect-ratio: 1;
         margin: auto;
-        /* background: var(--color-bg, midnightblue); */
+        background: var(--color-bg, midnightblue);
     }
 
     .soh-logo * {

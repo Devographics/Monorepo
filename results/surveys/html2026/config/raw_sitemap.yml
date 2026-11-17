@@ -2,6 +2,11 @@
   path: /
   showTitle: false
   blocks:
+      - id: survey_stats
+        blockType: SurveyStatsBlock
+        disableExport: true
+        wrapBlock: false
+
       - id: survey_intro
         blockType: SurveyIntroBlock
         disableExport: true
@@ -65,11 +70,11 @@
   blocks:
       - template: page_introduction
 
-      - id: figure_lazy_loading_usage
-        template: figure
-        variables:
-            value: 70
-            unit: percentage
+      # - id: figure_lazy_loading_usage
+      #   template: figure
+      #   variables:
+      #       value: 70
+      #       unit: percentage
 
       - id: all_features
         template: multi_items_experience
@@ -88,11 +93,11 @@
                 - accessibility
                 - system_capabilities
 
-      - id: figure_content_security_usage
-        template: figure
-        variables:
-            value: 10
-            unit: percentage
+      # - id: figure_content_security_usage
+      #   template: figure
+      #   variables:
+      #       value: 10
+      #       unit: percentage
 
       # - id: knowledge_score
       #   template: demographics
@@ -119,10 +124,10 @@
         blocks:
             - template: page_introduction
 
-            - id: highlight_forms_features
-              template: highlight
-              variables:
-                  itemId: customizable_select
+            # - id: highlight_forms_features
+            #   template: highlight
+            #   variables:
+            #       itemId: customizable_select
 
             # - id: figure_forms_features
             #   template: figure
@@ -175,10 +180,10 @@
         blocks:
             - template: page_introduction
 
-            - id: highlight_content_features
-              template: highlight
-              variables:
-                  itemId: hidden_until_found
+            # - id: highlight_content_features
+            #   template: highlight
+            #   variables:
+            #       itemId: hidden_until_found
 
             - id: content_features
               template: multi_items_experience
@@ -200,10 +205,10 @@
         blocks:
             - template: page_introduction
 
-            - id: highlight_interactivity_features
-              template: highlight
-              variables:
-                  itemId: popover_api
+            # - id: highlight_interactivity_features
+            #   template: highlight
+            #   variables:
+            #       itemId: popover_api
 
             - id: interactivity_features
               template: multi_items_experience
@@ -235,10 +240,10 @@
         blocks:
             - template: page_introduction
 
-            - id: highlight_performance_features
-              template: highlight
-              variables:
-                  itemId: blocking_render
+            # - id: highlight_performance_features
+            #   template: highlight
+            #   variables:
+            #       itemId: blocking_render
 
             - id: performance_features
               template: multi_items_experience
@@ -265,10 +270,10 @@
         blocks:
             - template: page_introduction
 
-            - id: highlight_web_components_features
-              template: highlight
-              variables:
-                  itemId: element_internals
+            # - id: highlight_web_components_features
+            #   template: highlight
+            #   variables:
+            #       itemId: element_internals
 
             - id: web_components_features
               template: multi_items_experience
@@ -290,10 +295,10 @@
         blocks:
             - template: page_introduction
 
-            - id: highlight_system_capabilities_features
-              template: highlight
-              variables:
-                  itemId: payment_request_api
+            # - id: highlight_system_capabilities_features
+            #   template: highlight
+            #   variables:
+            #       itemId: payment_request_api
 
             - id: system_capabilities_features
               template: multi_items_experience
@@ -331,10 +336,10 @@
         blocks:
             - template: page_introduction
 
-            - id: highlight_accessibility_features
-              template: highlight
-              variables:
-                  itemId: search_element
+            # - id: highlight_accessibility_features
+            #   template: highlight
+            #   variables:
+            #       itemId: search_element
 
             - id: accessibility_features
               template: multi_items_experience
@@ -602,7 +607,7 @@
         template: conclusion
         blockType: ConclusionBlock
         variables:
-            author: lea_verou
+            author: kilian_valkhof
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
@@ -782,6 +787,13 @@
   is_hidden: true
   blocks:
       - id: support
+        template: page_introduction
+
+- id: download
+  path: /download
+  is_hidden: true
+  blocks:
+      - id: download
         template: page_introduction
 
 - id: notfound

@@ -10,7 +10,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 const TshirtBlock = () => {
     const { translate } = useI18n()
     const context = usePageContext()
-    const { currentEdition } = context
+    const { currentSurvey, currentEdition } = context
     const { tshirt } = currentEdition
     if (!tshirt) {
         return <div>no tshirt</div>
@@ -40,7 +40,11 @@ const TshirtBlock = () => {
                         <T k="tshirt.about" />
                     </h2> */}
                     <DescriptionIntro>
-                        <T k="tshirt.description" md={true} escapeHtml={false} />
+                        <T
+                            k={`tshirt.description.${currentSurvey.id}`}
+                            md={true}
+                            escapeHtml={false}
+                        />
                     </DescriptionIntro>
                     <TshirtButton
                         as="a"
