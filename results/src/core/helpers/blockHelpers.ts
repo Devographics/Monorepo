@@ -242,7 +242,10 @@ export const getBlockImage = ({
     pageContext: PageContextValue
 }) => {
     const capturesUrl = `${process.env.GATSBY_ASSETS_URL}/captures/${pageContext.currentEdition.id}`
-    return `${capturesUrl}/${get(pageContext, 'locale.id')}/${block.id}.png`
+    // const localeId = pageContext.locale.id
+    // always use en-US to avoid having to generate too many images
+    const localeId = 'en-US'
+    return `${capturesUrl}/${localeId}/${block.id}.png`
 }
 
 interface UrlParams {
