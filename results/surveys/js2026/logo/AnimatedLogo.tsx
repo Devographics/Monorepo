@@ -9,7 +9,7 @@ interface LogoProps {
 }
 
 export const Logo = ({ className, animated = true, showText = true, size = 'l' }: LogoProps) => (
-    <Wrapper aria-label="State of JS 2025" className="logo__wrapper">
+    <Wrapper aria-label="State of JS 2026" className="logo__wrapper">
         <div className="soj-logo__wrapper">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +19,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                 viewBox="0 0 1620 740"
                 className="soj-logo"
             >
-                <title>{'State of JS 2025'}</title>
+                <title>{'State of JS 2026'}</title>
                 <defs>
                     <symbol id="soj-shape-js">
                         <path
@@ -561,7 +561,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                                 y={330}
                                 data-year-char={4}
                             >
-                                {'\n          5\n        '}
+                                {'\n          6\n        '}
                             </text>
                         </g>
                     </g>
@@ -604,36 +604,36 @@ const Wrapper = styled.div`
         src: url(./BebasNeue-STATEOFDIGITS.woff2) format('woff2');
     }
     .soj-logo__wrapper {
-        --color-frame: #ffe337;
+        --color-frame: #8ac6ff;
         --color-text: #ded5c6;
-        --color-bg: #272325;
-        --color-grad-shade: #787511;
-        --color-grad-inner-cube-a: #f77f57;
-        --color-grad-inner-cube-b: #ffe337;
-        --color-grad-inner-cube-c: #c6ae10;
-        --color-grad-inner-cube-d: #c2ad24;
-        --color-grad-inner-cube-e: #f5e57a;
-        --color-grad-inner-cube-f: #f4e371;
+        --color-bg: #27232500;
+        --color-grad-shade: #72c0da;
+        --color-grad-inner-cube-a: #1695da;
+        --color-grad-inner-cube-b: #77c4ee;
+        --color-grad-inner-cube-c: #3db5f5;
+        --color-grad-inner-cube-d: #51a5d2;
+        --color-grad-inner-cube-e: #46abe2;
+        --color-grad-inner-cube-f: #1595e7;
         --color-grad-logo-shape-a: #544d40;
         --color-grad-logo-shape-b: #aca495;
         --color-grad-logo-shape-c: #dbd2c3;
         --color-grad-logo-shape-d: #e9e0d1;
-        --color-grad-logo-cube-shape-a: #333110;
-        --color-grad-logo-cube-shape-b: #656629;
-        --color-grad-cube-lighting-left-a: #ffd724;
-        --color-grad-cube-lighting-left-b: #faea3c;
-        --color-grad-cube-lighting-left-c: #edf550;
-        --color-grad-cube-lighting-left-d: #daf260;
-        --color-grad-cube-lighting-left-e: #e7ef6b;
-        --color-grad-cube-lighting-left-f: #cbee6d;
-        --color-grad-cube-lighting-left-g: #e5ee72;
-        --color-grad-cube-lighting-left-h: #bfba31;
-        --color-grad-cube-lighting-right-a: #f1e900;
-        --color-grad-cube-lighting-right-b: #e1ff00;
-        --color-grad-cube-lighting-right-c: #baff24;
-        --color-grad-cube-lighting-top-a: #bfba32;
-        --color-grad-cube-lighting-top-b: #eed372;
-        --color-grad-cube-lighting-top-c: #fff824;
+        --color-grad-logo-cube-shape-a: #d2f5fe;
+        --color-grad-logo-cube-shape-b: #4881db;
+        --color-grad-cube-lighting-left-a: #2496ff;
+        --color-grad-cube-lighting-left-b: #3c8afa;
+        --color-grad-cube-lighting-left-c: #5080f5;
+        --color-grad-cube-lighting-left-d: #6078f2;
+        --color-grad-cube-lighting-left-e: #6b73ef;
+        --color-grad-cube-lighting-left-f: #726fee;
+        --color-grad-cube-lighting-left-g: #746eed;
+        --color-grad-cube-lighting-left-h: #4693ba;
+        --color-grad-cube-lighting-right-a: #00d2f1;
+        --color-grad-cube-lighting-right-b: #00b7ff;
+        --color-grad-cube-lighting-right-c: #2496ff;
+        --color-grad-cube-lighting-top-a: #4693ba;
+        --color-grad-cube-lighting-top-b: #746eed;
+        --color-grad-cube-lighting-top-c: #2496ff;
         --timeline-base-delay: 100ms;
         --timeline-logo-anim: 800ms;
         --timeline-logo-delay: var(--timeline-base-delay);
