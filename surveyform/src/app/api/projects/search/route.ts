@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
       return await error.toNextResponse(req);
     } else {
       return NextResponse.json(
-        { error: `projects/search: could not load projects` },
+        { error: `projects/search: could not load projects!` },
         { status: 500 },
       );
     }
