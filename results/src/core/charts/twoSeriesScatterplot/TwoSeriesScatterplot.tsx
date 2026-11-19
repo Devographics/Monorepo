@@ -8,7 +8,12 @@ import { DataSeries } from 'core/filters/types'
 import { ChartFooter, ChartWrapper, Legend, Note } from '../common2'
 import ChartShare from '../common2/ChartShare'
 import { BlockComponentProps } from 'core/types'
-import { useChartState, ScatterplotChart, GetNodeProps } from '../scatterplot'
+import {
+    useChartState,
+    ScatterplotChart,
+    GetNodeProps,
+    ScatterplotChartState
+} from '../scatterplot'
 import { NodeData } from '../scatterplot/types'
 import { formatQuestionValue } from '../common2/helpers/format'
 import { useQuestionById } from 'core/helpers/options'
@@ -19,6 +24,7 @@ import uniq from 'lodash/uniq.js'
 import Help from 'core/components/Help'
 import FacetHeading from '../horizontalBar2/FacetHeading'
 import { FacetTitle } from '../common2/FacetTitle'
+import { ValueFormatter } from '../common2/types'
 
 const useNodes = ({
     items,
@@ -27,7 +33,8 @@ const useNodes = ({
     data,
     chartState,
     axis1Formatter,
-    axis2Formatter
+    axis2Formatter,
+    localeId
 }: GetNodeProps) => {
     const { highlighted, currentItem } = chartState
 
@@ -52,8 +59,8 @@ const useNodes = ({
         const xValue = bucket1Item?.averageByFacet || 0
         const yValue = bucket2Item?.averageByFacet || 0
 
-        const formattedX = axis1Formatter({ value: xValue })
-        const formattedY = axis2Formatter({ value: yValue })
+        const formattedX = axis1Formatter({ value: xValue, localeId })
+        const formattedY = axis2Formatter({ value: yValue, localeId })
 
         const serieIndex = 0
         const serieId = 'dummy_serie_id'
@@ -115,9 +122,9 @@ export const TwoSeriesScatterplot = (
         throw new Error(`Could not find question2 with id ${question2Id}`)
     }
 
-    const axis1Formatter = ({ value }: { value: number }) =>
+    const axis1Formatter: ValueFormatter<ScatterplotChartState> = ({ value }) =>
         formatQuestionValue({ value, question: question1, localeId })
-    const axis2Formatter = ({ value }: { value: number }) =>
+    const axis2Formatter: ValueFormatter<ScatterplotChartState> = ({ value }) =>
         formatQuestionValue({ value, question: question2, localeId })
 
     const q1Label = getQuestionLabel({ getString, question: question1 })?.questionName
@@ -129,7 +136,6 @@ export const TwoSeriesScatterplot = (
     const axis2Label = getString(`charts.axis_legends.average_value`, {
         values: { axis: q2Label }
     })?.t
-
 
     const chartState = useChartState({
         defaultXMetric: 'averageByFacet',

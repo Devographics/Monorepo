@@ -13,6 +13,7 @@ import { NodeData } from './types'
 import { BlockVariantDefinition } from 'core/types'
 import { useChartValues } from './chartValues'
 import { LegendItemType, ValueFormatter } from '../common2/types'
+import { usePageContext } from 'core/helpers/pageContext'
 
 export type GetNodeProps = {
     items: LegendItemType[]
@@ -22,6 +23,7 @@ export type GetNodeProps = {
     block: BlockVariantDefinition
     axis1Formatter: ValueFormatter<ScatterplotChartState>
     axis2Formatter: ValueFormatter<ScatterplotChartState>
+    localeId: string
 }
 
 type ScatterplotChartProps = {
@@ -33,8 +35,8 @@ type ScatterplotChartProps = {
     chartState: ScatterplotChartState
     data: StandardQuestionData[]
     useNodes: (props: GetNodeProps) => NodeData[]
-    axis1Formatter: (v: number) => string
-    axis2Formatter: (v: number) => string
+    axis1Formatter: ValueFormatter<ScatterplotChartState>
+    axis2Formatter: ValueFormatter<ScatterplotChartState>
     axis1Label: string
     axis2Label: string
 }
@@ -53,6 +55,7 @@ export const ScatterplotChart = ({
     axis1Label,
     axis2Label
 }: ScatterplotChartProps) => {
+    const { localeId } = usePageContext()
     const { chartOptions = {} } = block
     const { showTrendLine } = chartOptions
 
@@ -69,7 +72,8 @@ export const ScatterplotChart = ({
         data,
         chartState,
         axis1Formatter,
-        axis2Formatter
+        axis2Formatter,
+        localeId
     })
 
     const chartValues = useChartValues({

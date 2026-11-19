@@ -16,12 +16,14 @@ import {
 } from '../scatterplot'
 import { NodeData } from '../scatterplot/types'
 import { formatNumber, formatPercentage } from '../common2/helpers/format'
+import { ValueFormatter } from '../common2/types'
 
 const useNodes = ({
     items,
     question,
     block,
     data,
+    localeId,
     chartState,
     axis1Formatter,
     axis2Formatter
@@ -43,8 +45,8 @@ const useNodes = ({
         const xValue = responses?.currentEdition?.buckets?.find(b => b.id === 'used')?.count || 0
         const yValue = responses?.currentEdition?.ratios?.['retention'] || 0
 
-        const formattedX = axis1Formatter(xValue)
-        const formattedY = axis2Formatter(yValue)
+        const formattedX = axis1Formatter({ value: xValue, localeId })
+        const formattedY = axis2Formatter({ value: yValue, localeId })
 
         // const x = xScale(xValue)
         // const y = yScale(yValue * 100)
@@ -106,6 +108,11 @@ export const ToolsScatterplotBlock = (
     const axis1Label = getString(`charts.axis_legends.users_count`)?.t
     const axis2Label = getString(`charts.axis_legends.satisfaction_percentage`)?.t
 
+    const axis1Formatter: ValueFormatter<ScatterplotChartState> = ({ value }) =>
+        formatNumber({ value, localeId })
+    const axis2Formatter: ValueFormatter<ScatterplotChartState> = ({ value }) =>
+        formatPercentage({ value: value * 100, localeId })
+
     return (
         <ChartWrapper {...props} chartState={chartState}>
             <>
@@ -117,8 +124,8 @@ export const ToolsScatterplotBlock = (
                     chartState={chartState}
                     data={data}
                     useNodes={useNodes}
-                    axis1Formatter={value => formatNumber({ value, localeId })}
-                    axis2Formatter={value => formatPercentage({ value: value * 100, localeId })}
+                    axis1Formatter={axis1Formatter}
+                    axis2Formatter={axis2Formatter}
                     axis1Label={axis1Label}
                     axis2Label={axis2Label}
                 />
