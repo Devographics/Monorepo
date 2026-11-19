@@ -44,7 +44,7 @@ export const ToolsArrowsChart = ({
     const { translate } = useI18n()
     const allEntities = useEntities()
     const toolSections = useToolSections()
-    const getColor = (id: string) => getThemeColor(`tools.sections.${id}`)
+    const getColor = (id: string) => getThemeColor(`sections.${id}`)
 
     const categoryColorMap: ColorMap = {}
     const categoryColorScales: ColorScales = {}
@@ -205,7 +205,6 @@ export const ToolsArrowsChart = ({
                 const velocity = getVelocity(points)
                 const color = getVelocityColor(velocity)
                 const colorScale = getVelocityColorScale(velocity)
-
                 // const colorStart = colorScale(i / points.length)
                 const colorStart = colorScale(i / points.length)
                 const colorEnd = colorScale((i + 1) / points.length)
@@ -456,7 +455,9 @@ export const ToolsArrowsChart = ({
                 <div
                     className="legend_colors"
                     style={{
-                        backgroundImage: `linear-gradient(90deg, ${getVelocityColor(-100)}, ${getVelocityColor(0)}, ${getVelocityColor(100)})`,
+                        backgroundImage: `linear-gradient(90deg, ${getVelocityColor(
+                            -100
+                        )}, ${getVelocityColor(0)}, ${getVelocityColor(100)})`,
                         borderLeftColor: getVelocityColor(-80),
                         borderRightColor: getVelocityColor(90)
                     }}

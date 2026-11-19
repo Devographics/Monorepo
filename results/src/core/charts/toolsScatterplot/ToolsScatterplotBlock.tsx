@@ -55,7 +55,7 @@ const useNodes = ({
             }) || ({ id: 'no_category_found' } as SectionMetadata)
         const categoryId = category.id
 
-        const color = getThemeColor(`tools.sections.${categoryId}`)
+        const color = getThemeColor(`sections.${categoryId}`)
 
         const serieIndex = 0
         const serieId = 'dummy_serie_id'
@@ -100,7 +100,7 @@ export const ToolsScatterplotBlock = (
     const legendItems = toolSections.map((section: SectionMetadata) => ({
         id: section.id,
         label: getString(`sections.${section.id}.title`)?.t,
-        color: getThemeColor(`tools.sections.${section.id}`)
+        color: getThemeColor(`sections.${section.id}`)
     }))
 
     const axis1Label = getString(`charts.axis_legends.users_count`)?.t

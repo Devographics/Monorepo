@@ -44,6 +44,19 @@ export const surveyColorTheme: SurveyColorTheme = {
             back_end_frameworks: baseColors.red,
             testing: baseColors.green,
             build_tools: baseColors.yellow
-        }
+        },
+        arrowsVelocity: [
+            '#AD84EF',
+            '#CAAAFF',
+            '#DCC7FF',
+            '#E9DCFF',
+            '#C9FFF2',
+            '#A1FFE8',
+            '#75FBDA',
+            '#51F2CB',
+            '#34E1B7',
+            '#23D2A8',
+            '#16AF8A'
+        ]
     }
 }

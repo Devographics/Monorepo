@@ -62,7 +62,7 @@ export const TierListChart = ({ data, currentCategory }: TierListProps) => {
 }
 
 const Tier = ({ letter, items, lowerBound, upperBound, index, currentCategory }: TierProps) => {
-    const color = getThemeColor(`tools.tiers[${index}]`)
+    const color = getThemeColor(`tiers[${index}]`)
     return (
         <div className="tier-row">
             <div className="tier-letter" style={{ '--letterColor': color }}>
@@ -119,7 +119,7 @@ const TierItem = ({
                 </span>
             </div>
             <a className="tier-item-name" href={entity.homepage?.url} color={color}>
-                {entity?.name}
+                {entity?.nameClean}
             </a>
         </div>
     )

@@ -68,6 +68,7 @@ export const defaultColorTheme: ColorTheme = {
             '#d7e7fe',
             '#E9DCFF',
             '#DCC7FF'
-        ]
+        ],
+        tiers: [baseColors.red, '#ffc38a', '#feff8e', '#c3ff89']
     }
 }

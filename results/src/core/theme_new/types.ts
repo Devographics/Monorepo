@@ -33,6 +33,7 @@ export type ColorScheme = {
         neutral: string
     }
     velocity: string[]
+    tiers?: string[]
     // optional per-survey color for each section, keyed by section id
     // (sections differ between surveys, so the default theme doesn't define any)
     sections?: Record<string, string>

@@ -135,6 +135,13 @@
     line-height: 0;
     text-align: center;
     font-size: var(--fontSizeSmall);
+    // pick black or white depending on the background's lightness:
+    // (threshold - l) * infinity is either hugely positive (→ white) or negative (→ black)
+    color: white;
+    color: oklch(from var(--itemColor) clamp(0, (0.62 - l) * infinity, 1) 0 0);
+    @supports (color: contrast-color(red)) {
+        color: contrast-color(var(--itemColor));
+    }
     @include breakpoints.small {
         font-size: var(--fontSizeSmaller);
     }

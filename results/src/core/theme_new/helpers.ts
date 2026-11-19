@@ -15,7 +15,8 @@ export const getColorFromThemes = (surveyColorTheme: SurveyColorTheme, colorPath
     const surveyColor = get(surveyColorTheme, 'lightOnDark.' + colorPath)
     const color = surveyColor || defaultColor
     if (!color) {
-        throw new Error(`Could not find color for path ${colorPath}`)
+        console.warn(`Could not find color for path ${colorPath}`)
+        return 'limegreen'
     }
     return color
 }

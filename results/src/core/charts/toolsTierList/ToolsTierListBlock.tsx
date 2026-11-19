@@ -58,7 +58,7 @@ const getChartData = (
             throw Error(`Could not find section for tool id ${tool.id}`)
         }
         const sectionId = section.id
-        const color = sectionId ? getThemeColor(`tools.sections.${sectionId}`) : '#cccccc'
+        const color = sectionId ? getThemeColor(`sections.${sectionId}`) : '#cccccc'
         if (userCount >= cutoff) {
             sortedData.forEach(tier => {
                 if (satisfactionRatio >= tier.lowerBound && satisfactionRatio <= tier.upperBound) {
@@ -91,7 +91,7 @@ const TierListBlock = (props: TierListBlockProps) => {
     const legendItems = toolsSections.map(({ id }: SectionMetadata) => ({
         id,
         label: getString(`sections.${id}.title`)?.t,
-        color: getThemeColor(`tools.sections.${id}`)
+        color: getThemeColor(`sections.${id}`)
     }))
 
     return (
