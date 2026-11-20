@@ -42,17 +42,19 @@
         background: var(--backgroundColor) !important;
     }
     position: relative;
-    &::after {
-        content: '⏶';
-        display: block;
-        line-height: 1;
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        // background-color: red;
-        width: 10px;
-        height: 10px;
+    @include breakpoints.medium-large {
+        &::after {
+            content: '⏶';
+            display: block;
+            line-height: 1;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            // background-color: red;
+            width: 10px;
+            height: 10px;
+        }
     }
 }
 .chart-toggle-item {

@@ -3,9 +3,9 @@ import { baseColors } from 'core/theme_new/base_colors'
 
 export const surveyColorTheme: SurveyColorTheme = {
     lightOnDark: {
-        primary: { default: '#8AC6FF', darker: '#3B81C4' },
+        primary: { default: '#94cbff', darker: '#3B81C4' },
         background: {
-            default: '#2E3134',
+            default: '#28292b',
             alt: '#3A4957',
             alt2: '#3F5D79'
         },
